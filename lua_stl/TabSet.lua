@@ -171,8 +171,8 @@ function TabSet:FindPos( val )
 	return nil
 end
 
---任意pos 插入(触发table重新排序)
-function TabSet:Insert( Pos, val )
+--根据pos 位置值, 插入元素(触发table重新排序)
+function TabSet:InsertPos( Pos, val )
 	local Insert = table.insert
 	local Body = self.body
 	local Pos = self.Pos
@@ -180,13 +180,35 @@ function TabSet:Insert( Pos, val )
 	self.Pos = Pos + 1
 end
 
---任意pos 删除(触发table重新排序)
-function TabSet:Remove( Pos )
+--根据pos 位置值, 删除元素(触发table重新排序)
+--成功返回true, 失败返回false
+function TabSet:Remove( val )
+	local Remove = table.remove
+	local Body = self.body
+	local pos = self:FindPos(val)
+	local Pos = self.Pos
+	if pos ~= nil then
+		Remove(Body, pos)
+		self.Pos = Pos - 1
+		return true
+	else
+		return false
+	end
+end
+
+--根据pos 位置值, 删除元素(触发table重新排序) [这个函数少用!! 不安全]
+--成功返回true, 失败返回false
+function TabSet:RemovePos( pos )
 	local Remove = table.remove
 	local Body = self.body
 	local Pos = self.Pos
-	Remove(Body, Pos)
-	self.Pos = Pos - 1
+	if Pos >= pos then
+		Remove(Body, pos)
+		self.Pos = Pos - 1
+		return true
+	else
+		return false
+	end
 end
 
 --自测函数(不对外公开)
@@ -196,7 +218,7 @@ local function Test(t_set_num)
 	t_set_num:PushBack(1)
 	t_set_num:PushFront(1900)
 	t_set_num:PushBack(222)
-	t_set_num:Insert(2, 666)
+	t_set_num:InsertPos(2, 666)
 	print("t_set_num.Pos\t=",t_set_num.Pos)
 	for i=1,t_set_num.Pos,1 do
 		print(t_set_num.body[i])
@@ -211,7 +233,9 @@ local function Test(t_set_num)
 	print(t_set_num:Front())
 	print(t_set_num:Back())
 	print(t_set_num:Len())
-	t_set_num:Remove(2)
+	print(t_set_num:Remove(2))
+	print(t_set_num:Remove(19))
+	print(t_set_num:RemovePos(1))
 	print(t_set_num:PopFront())
 	print(t_set_num:PopBack())
 	print(t_set_num:Len())
