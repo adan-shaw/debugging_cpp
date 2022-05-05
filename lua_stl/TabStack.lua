@@ -30,7 +30,7 @@ end
 function TabStack:Top()
 	local Pos = self.Pos
 	local Body = self.body
-	return ((Pos == 0)  and  nil  or  Body[Pos])
+	return ((Pos <= 0)  and  nil  or  Body[Pos])
 end
 
 --入栈
@@ -50,7 +50,7 @@ function TabStack:Push( val )
 	--更新Pos
 	self.Pos = Pos
 	Body[Pos] = val
-	return true
+	--return true
 end
 
 --出栈(pop 出时, 为了防止访问越界, 这里不能省if)
@@ -58,7 +58,7 @@ end
 function TabStack:Pop()
 	local Pos = self.Pos
 	local Body = self.body
-	if Pos == 0 then
+	if Pos <= 0 then
 		return nil
 	else
 		Pos = Pos - 1
@@ -68,11 +68,20 @@ function TabStack:Pop()
 	end
 end
 
+--Pop出整个Stack
+--成功返回一个装满所有元素的table, 失败返回nil
+function TabStack:PopAll()
+	local Body = self.body
+	self.Pos = 0
+	self.body = {}
+	return Body
+end
+
 --栈空?
 --成功返回true, 失败返回false
 function TabStack:Empty()
 	local Pos = self.Pos
-	return ((Pos == 0)  and  true  or  false)
+	return ((Pos <= 0)  and  true  or  false)
 end
 
 --返回栈当前元素的长度
@@ -88,21 +97,32 @@ function TabStack:Clear()
 end
 
 --自测函数(不对外公开)
-local function Test(stack_num)
-	stack_num:Push(19)
-	stack_num:Push(1)
-	stack_num:Push(1900)
-	print(stack_num:Top())
-	print(stack_num:Len())
-	print(stack_num:Pop())
-	print(stack_num:Len())
-	print(stack_num:Empty())
-	stack_num:Clear()
-	print(stack_num:Empty())
-	print(stack_num:Top())
+local function Test(t_stack_num)
+	local t = nil
+	local i, tmp = 1, 0
+	t_stack_num:Push(19)
+	t_stack_num:Push(1)
+	t_stack_num:Push(1900)
+	print(t_stack_num:Top())
+	print(t_stack_num:Len())
+	print(t_stack_num:Pop())
+	print(t_stack_num:Len())
+	print(t_stack_num:Empty())
+	t_stack_num:Clear()
+	print(t_stack_num:Empty())
+	t_stack_num:Push(19)
+	t_stack_num:Push(1)
+	t_stack_num:Push(1900)
+	print(t_stack_num:Top())
+	print("PopAll:")
+	t = t_stack_num:PopAll()
+	tmp = #t
+	for i=1,tmp,1 do
+		print(t[i])
+	end
 end
 
 --启动自测
-local stack_num=TabStack:New("number"); if stack_num ~= nil then Test(stack_num) end
+local t_stack_num=TabStack:New("number"); if t_stack_num ~= nil then Test(t_stack_num) end
 
 return TabStack
