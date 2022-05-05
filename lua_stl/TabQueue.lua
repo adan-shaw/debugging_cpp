@@ -54,7 +54,7 @@ end
 function TabQueue:Front()
 	local Pos = self.Pos
 	local Body = self.body
-	return ((Pos == 0)  and  nil  or  Body[1])
+	return ((Pos <= 0)  and  nil  or  Body[1])
 end
 
 --查看队尾元素(不操作, 只查看)
@@ -62,7 +62,7 @@ end
 function TabQueue:Back()
 	local Pos = self.Pos
 	local Body = self.body
-	return ((Pos == 0)  and  nil  or  Body[Pos])
+	return ((Pos <= 0)  and  nil  or  Body[Pos])
 end
 
 --从Back队尾插入
@@ -82,7 +82,7 @@ function TabQueue:PushBack( val )
 	--更新Pos
 	self.Pos = Pos
 	Body[Pos] = val
-	return true
+	--return true
 end
 
 --从Back队尾弹出
@@ -90,7 +90,7 @@ end
 function TabQueue:PopBack()
 	local Pos = self.Pos
 	local Body = self.body
-	if Pos == 0 then
+	if Pos <= 0 then
 		return nil
 	else
 		Pos = Pos - 1
@@ -117,7 +117,7 @@ function TabQueue:PushFront( val )
 	--更新Pos
 	self.Pos = Pos + 1
 	Insert(Body, 1, val)
-	return true
+	--return true
 end
 
 --从Front队头弹出
@@ -127,7 +127,7 @@ function TabQueue:PopFront()
 	local ret = nil
 	local Remove = table.remove
 	local Body = self.body
-	if Pos == 0 then
+	if Pos <= 0 then
 		return nil
 	else
 		ret = Body[1]
@@ -138,11 +138,52 @@ function TabQueue:PopFront()
 	end
 end
 
+--从Back队尾插入装有n 个元素的连续table(必须保证元素类型一致性, 遵守number/string/anything 原则)
+function TabQueue:PushBack_TN( t )
+	local Pos = self.Pos
+	local Body = self.body
+	--必须是'从下标1 开始的连续table', 否则#t 失败
+	local tLen = #t
+	local i = 1
+	local pos = Pos
+	for i=1,tLen,1 do
+		pos = pos + 1
+		Body[pos] = t[i]
+	end
+	--更新Pos
+	self.Pos = pos
+end
+
+--从Front队头弹出装有n 个元素的连续table
+--成功返回table, 失败返回nil
+function TabQueue:PopFront_TN( n )
+	local t1, t2 = {}, {}
+	local Pos = self.Pos
+	local Body = self.body
+	local i = 1
+	local tmp = 1
+	--拒绝传入错误值, 要导出全部元素, 请先调用Len()
+	if n > Pos or n <= 0 or Pos <= 0 then
+		return nil
+	end
+	for i=1,n,1 do
+		t1[i] = Body[i]
+	end
+	for i=n+1,Pos,1 do
+		t2[tmp] = Body[i]
+		tmp = tmp + 1
+	end
+	--self.body = nil
+	self.body = t2
+	self.Pos = Pos - n
+	return t1
+end
+
 --栈空?
 --成功返回true, 失败返回false
 function TabQueue:Empty()
 	local Pos = self.Pos
-	return ((Pos == 0)  and  true  or  false)
+	return ((Pos <= 0)  and  true  or  false)
 end
 
 --返回栈当前元素的长度
@@ -157,41 +198,82 @@ function TabQueue:Clear()
 	self.Pos = 0
 end
 
---重新排序, 打乱TabQueue 原来的顺序[先进先出TabQueue禁用](直接使用table.sort()进行排序)
+--重新排序, 打乱TabQueue 原来的顺序, 按照从小到大排列[先进先出TabQueue禁用]
 function TabQueue:Sort()
+	--(直接使用table.sort()进行排序)
 	local Sort = table.sort
 	local Body = self.body
 	Sort(Body)
 end
 
+--洗牌乱序, 打乱TabQueue 原来的顺序, 随机排序
+function TabQueue:Shuffle()
+	local Pos = self.Pos
+	local Body = self.body
+	local Random = math.random
+	local i, count = 1, Pos
+	--n 个元素, 乱序n 次(不行可以增加乱序次数)
+	--local i, count = 1, Pos*2
+	local r1, r2 = 0, 0
+	local tmp = nil
+	for i=1,count,1 do
+		r1 = Random(1, Pos)
+		r2 = Random(1, Pos)
+		--不管r1 是否等于r2, 坚决不用if, 直接交换, 相等也不碍事
+		tmp = Body[r1]
+		Body[r1] = Body[r2]
+		Body[r2] = tmp
+	end
+end
+
 --自测函数(不对外公开)
-local function Test(queue_num)
+local function Test(t_queue_num)
 	local i = 0
-	queue_num:PushFront(19)
-	queue_num:PushBack(1)
-	queue_num:PushFront(1900)
-	queue_num:PushBack(222)
-	print("queue_num.Pos\t=",queue_num.Pos)
-	for i=1,queue_num.Pos,1 do
-		print(queue_num.body[i])
+	local t0 = { 99, 88, 6, 7, 33, 1 }
+	t_queue_num:PushFront(19)
+	t_queue_num:PushBack(1)
+	t_queue_num:PushFront(1900)
+	t_queue_num:PushBack(222)
+	print("t_queue_num.Pos\t=",t_queue_num.Pos)
+	for i=1,t_queue_num.Pos,1 do
+		print(t_queue_num.body[i])
 	end
-	queue_num:Sort()
-	print("queue_num.Pos\t=",queue_num.Pos)
-	for i=1,queue_num.Pos,1 do
-		print(queue_num.body[i])
+	t_queue_num:Shuffle()
+	print("t_queue_num.Pos\t=",t_queue_num.Pos)
+	for i=1,t_queue_num.Pos,1 do
+		print(t_queue_num.body[i])
 	end
-	print(queue_num:Front())
-	print(queue_num:Back())
-	print(queue_num:Len())
-	print(queue_num:PopFront())
-	print(queue_num:PopBack())
-	print(queue_num:Len())
-	print(queue_num:Empty())
-	queue_num:Clear()
-	print(queue_num:Empty())
+	t_queue_num:Sort()
+	print("t_queue_num.Pos\t=",t_queue_num.Pos)
+	for i=1,t_queue_num.Pos,1 do
+		print(t_queue_num.body[i])
+	end
+	print(t_queue_num:Front())
+	print(t_queue_num:Back())
+	print(t_queue_num:Len())
+	print(t_queue_num:PopFront())
+	print(t_queue_num:PopBack())
+	print(t_queue_num:Len())
+	print(t_queue_num:Empty())
+	t_queue_num:Clear()
+	print(t_queue_num:Empty())
+	t_queue_num:PushBack_TN(t0)
+	print("t_queue_num.Pos\t=",t_queue_num.Pos)
+	for i=1,t_queue_num.Pos,1 do
+		print(t_queue_num.body[i])
+	end
+	t0 = t_queue_num:PopFront_TN(3)
+	print("t_queue_num.Pos\t=",t_queue_num.Pos)
+	for i=1,t_queue_num.Pos,1 do
+		print(t_queue_num.body[i])
+	end
+	print("t0:")
+	for i=1,#t0,1 do
+		print(t0[i])
+	end
 end
 
 --启动自测
-local queue_num=TabQueue:New("number"); if queue_num ~= nil then Test(queue_num) end
+local t_queue_num=TabQueue:New("number"); if t_queue_num ~= nil then Test(t_queue_num) end
 
 return TabQueue
