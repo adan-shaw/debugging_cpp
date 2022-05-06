@@ -1,6 +1,6 @@
 --[[
 说明:
-	Queue = 先进后出
+	TabStack = 先进后出
 --]]
 
 
@@ -99,7 +99,7 @@ end
 --自测函数(不对外公开)
 local function Test(t_stack_num)
 	local t = nil
-	local i, tmp = 1, 0
+	local i = 1
 	t_stack_num:Push(19)
 	t_stack_num:Push(1)
 	t_stack_num:Push(1900)
@@ -116,8 +116,7 @@ local function Test(t_stack_num)
 	print(t_stack_num:Top())
 	print("PopAll:")
 	t = t_stack_num:PopAll()
-	tmp = #t
-	for i=1,tmp,1 do
+	for i=1,#t,1 do
 		print(t[i])
 	end
 end
