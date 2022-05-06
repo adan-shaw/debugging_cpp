@@ -245,7 +245,7 @@ function List:New( Type )
 end
 
 --返回第一个元素
---成功返回节点元素值, 失败返回nil
+--成功返回节点的val元素值, 失败返回nil
 function List:Front()
 	local firstNode = self.Next
 	if nil ~= firstNode then
