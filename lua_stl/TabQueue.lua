@@ -35,6 +35,7 @@ TabQueue.__index = TabQueue
 
 --创建队列(Type = number/string/anything)
 --成功返回table, 失败返回nil
+--[自己保证元素的一致性, 否则没办法排序]
 function TabQueue:New( Type )
 	local t = {}
 	local Setmetatable = setmetatable
