@@ -6,6 +6,7 @@
 #include<iostream>
 #include<vector>
 #include"twoSpace.h"
+#include"alloc.h"
 
 
 
@@ -28,6 +29,40 @@ private:
 	int b;
 };
 
+
+
+//测试my_alloc[alloc.h]
+void test_my_alloc(void){
+	my_alloc<int> space;
+	my_alloc<AA> sp;
+	my_alloc<std::vector<int>> sp_vec;
+
+	int* arr = space.allocate(10);
+	int* oneArr = space.allocate();
+
+	//class AA 测试
+	AA* pAA = sp.allocate();
+	sp.construct(pAA);
+	sp.destroy(pAA);
+
+	//std::vector 测试
+	std::vector<int>* pvec = sp_vec.allocate();
+	sp_vec.construct(pvec);
+	sp_vec.destroy(pvec);
+
+
+
+	//int 数组测试
+	arr[8] = 10;
+	std::cout << sizeof(arr) / sizeof(arr[0]) << std::endl;
+	*oneArr = 3;
+	std::cout << sizeof(oneArr) / sizeof(oneArr[0]) << std::endl;
+
+	space.deallocate(oneArr);
+	space.deallocate(arr, 10);
+
+	return;
+}
 
 
 int main(void){
@@ -85,5 +120,13 @@ int main(void){
 	}
 	std::cout << "print info:" << std::endl;
 	m_twoSpace.print_pool_info();
+
+
+
+
+
+	//测试my_alloc[alloc.h]
+	test_my_alloc();
+
 	return 0;
 }
