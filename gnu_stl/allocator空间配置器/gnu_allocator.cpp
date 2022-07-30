@@ -3,7 +3,7 @@
 
 
 
-//gun 公版的allocator 十分简陋, 没有二级重用; (推荐使用自己封装的my_alloc)
+//gun 默认allocator 十分简陋, 没有二级重用, 低级封装, 等于new/delete, 没啥用;
 
 
 
@@ -20,25 +20,25 @@ class Animal{
 	public:
 	//即使为0, 没有默认构造也是可以
 	#if 1
-			Animal() : num(0){
-				cout << "Animal constructor default" << endl;
-			}
+		Animal() : num(0){
+			cout << "Animal constructor default" << endl;
+		}
 	#endif
 
-			Animal(int _num) : num(_num){
-				cout << "Animal constructor param" << endl;
-			}
+		Animal(int _num) : num(_num){
+			cout << "Animal constructor param" << endl;
+		}
 
-			~Animal(){
-				cout << "Animal destructor" << endl;
-			}
+		~Animal(){
+			cout << "Animal destructor" << endl;
+		}
 
-			void show(){
-				cout << this->num << endl;
-			}
+		void show(){
+			cout << this->num << endl;
+		}
 
 	private:
-			int num;
+		int num;
 };
 
 
