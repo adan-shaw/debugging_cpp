@@ -1,4 +1,5 @@
 #!/bin/sh
+###!/data/data/com.termux/files/usr/bin/sh
 
 ##############################################################
 # 扫描'指定网段'的所有活跃ip
@@ -9,7 +10,13 @@
 
 # 本shell 的名字
 SHELL_NAME=$0
-default_ip="18.18.18.0"
+if [ -n "$1" ];then
+	default_ip="$1"
+else
+	default_ip="192.168.148.0"
+fi
+
+
 ip_max="254"
 
 # 帮助函数
@@ -126,7 +133,7 @@ mkdir $test_home_dir
 try_ping_count="4"
 # 每次ping超时时间为2秒
 ping_timeout="2"
-function fork_son(){
+fork_son(){
 	# 组建ping 命令-原型
 	#comm_tmp=$(ping -c $try_ping_count -W $ping_timeout $default_ip &)
 	count_tmp="0"
@@ -161,7 +168,8 @@ function fork_son(){
 	err_unknow="0"
 	alive_count="0"
 	cant_conn_count="0"
-	for tmp in ${ping_results[@]};
+	#for tmp in ${ping_results[@]};
+	for tmp in $ping_results;
 	do
 		#echo $tmp
 		comm_tmp=$(cat "$test_home_dir/$tmp")
@@ -169,46 +177,46 @@ function fork_son(){
 			*"4 packets transmitted, 0 received, 100% packet loss"*)
 				# 关闭不显示loss 主机
 				#echo "`basename $tmp` 100% packet loss."
-				let cant_conn_count=$cant_conn_count+1
+				cant_conn_count=$((cant_conn_count+1))
 				;;
 			*"4 packets transmitted, 4 received, 0% packet loss"*)
 				echo "host `basename $tmp` 0% packet loss, this host alive!!"
-				let alive_count=$alive_count+1
+				alive_count=$((alive_count+1))
 				#echo $comm_tmp
 				;;
 			*"4 packets transmitted, 3 received, 25% packet loss"*)
 			#*"4 packets transmitted, 3 received, +1 errors, 25% packet loss"*)
 				echo "host `basename $tmp` 25% packet loss, this host alive!!"
-				let alive_count=$alive_count+1
+				alive_count=$((alive_count+1))
 				#echo $comm_tmp
 				;;
 			*"4 packets transmitted, 2 received, 50% packet loss"*)
 			#*"4 packets transmitted, 2 received, +2 errors, 50% packet loss"*)
 				echo "host `basename $tmp` 50% packet loss, this host alive!!"
-				let alive_count=$alive_count+1
+				alive_count=$((alive_count+1))
 				#echo $comm_tmp
 				;;
 			*"4 packets transmitted, 1 received, 75% packet loss"*)
 			#*"4 packets transmitted, 1 received, +3 errors, 75% packet loss"*)
 				echo "host `basename $tmp` 75% packet loss, this host alive!!"
-				let alive_count=$alive_count+1
+				alive_count=$((alive_count+1))
 				#echo $comm_tmp
 				;;
 			*"4 packets transmitted, 0 received, +1 errors, 100% packet loss"*)
-				let err_net_count=$err_net_count+1
+				err_net_count=$((err_net_count+1))
 				;;
 			*"4 packets transmitted, 0 received, +2 errors, 100% packet loss"*)
-				let err_net_count=$err_net_count+1
+				err_net_count=$((err_net_count+1))
 				;;
 			*"4 packets transmitted, 0 received, +3 errors, 100% packet loss"*)
-				let err_net_count=$err_net_count+1
+				err_net_count=$((err_net_count+1))
 				;;
 			*"4 packets transmitted, 0 received, +4 errors, 100% packet loss"*)
-				let err_net_count=$err_net_count+1
+				err_net_count=$((err_net_count+1))
 				;;
 			*)
 				echo "host `basename $tmp` alive, but network performance is not so good."
-				let err_unknow=$err_unknow+1
+				err_unknow=$((err_unknow+1))
 				echo $comm_tmp
 				;;
 		esac
