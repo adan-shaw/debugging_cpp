@@ -2,35 +2,15 @@
 	-nostartfiles = 没有开始函数的.c 源文件file, 
 	-e 表示自定义开始函数(需要用exit(0) 结束自定义开始函数, 否则必然会Segmentation fault溢出)
 	局部编译(方便局部调试):
-		gcc -g3 -nostartfiles arr_stack_debug.h arr_stack_debug.c -e test_as -o x
+		gcc -g3 -nostartfiles arr_stack.h arr_stack.c -e test_as -o x
 */
 
 
 
-#include "arr_stack_debug.h"
+#include "arr_stack.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-
-
-//初始化栈
-inline void as_init(as_t* pas){
-	pas->errno = 0;
-	pas->cur_size = 0;
-}
-
-//压一个元素入栈
-inline void as_push(as_t* pas, as_type val){
-	if(pas->cur_size<as_buf_max)
-		pas->buf[pas->cur_size++] = val;
-}
-
-//弹一个元素出栈(先进后出)
-inline as_type as_pop(as_t* pas){
-	if(pas->cur_size>as_buf_min)
-		return pas->buf[--pas->cur_size];
-}
 
 
 
@@ -100,32 +80,32 @@ bool as_popN(as_t* pas, unsigned int N){
 
 void test_as(void){
 	unsigned int tmp, count, err_count=0;
-	as_t as;
+	as_t* pas = malloc(sizeof(as_t));
 
 
 
-	as_init(&as);
+	as_init(pas);
 
 	//填满栈
 	for(tmp=0; tmp<as_buf_max; tmp++)
-		as_push(&as, tmp);
-	printf("填满栈: cur_size=%d\n", as.cur_size);
+		as_push(pas, tmp);
+	printf("填满栈: cur_size=%d\n", pas->cur_size);
 
 	//弹空栈
 	for(tmp=as_buf_max; tmp>0; tmp--)
-		printf("%d, ", as_pop(&as));
-	printf("\n弹空栈: cur_size=%d\n", as.cur_size);
+		printf("%d, ", as_pop(pas));
+	printf("\n弹空栈: cur_size=%d\n", pas->cur_size);
 
 
 
 	//测试批量压入
 	for(tmp=0; tmp<as_cache_max; tmp++)
-		as.cache[tmp]=tmp;
+		pas->cache[tmp]=tmp;
 	count = as_buf_max/as_cache_max;
 	tmp = as_cache_max;
 	do{
-		if(as_pushN(&as, tmp)){
-			printf("测试批量压入: cur_size=%d\n", as.cur_size);
+		if(as_pushN(pas, tmp)){
+			printf("测试批量压入: cur_size=%d\n", pas->cur_size);
 			count--;
 		}
 		else{
@@ -134,8 +114,8 @@ void test_as(void){
 		}
 	}while(count > 0);
 	for(tmp=0; tmp<as_buf_max; tmp++)
-		printf("%d, ", as.buf[tmp]);
-	printf("\n测试批量压入: cur_size=%d\n", as.cur_size);
+		printf("%d, ", pas->buf[tmp]);
+	printf("\n测试批量压入: cur_size=%d\n", pas->cur_size);
 
 
 
@@ -143,14 +123,14 @@ void test_as(void){
 	count = as_buf_max/as_cache_max;
 	tmp = as_cache_max;
 	do{
-		memset(as.cache, '\0', as_cache_max);
-		if(as_popN(&as, tmp)){
-			printf("测试批量弹出: cur_size=%d\n", as.cur_size);
+		memset(pas->cache, '\0', as_cache_max);
+		if(as_popN(pas, tmp)){
+			printf("测试批量弹出: cur_size=%d\n", pas->cur_size);
 			for(tmp=0; tmp<as_cache_max; tmp++)
-				printf("%d, ", as.cache[tmp]);
+				printf("%d, ", pas->cache[tmp]);
 			printf("\n");
-			if(as.cache[0] != 0){
-				printf("*** as.cache[0] != 0: tmp=%d, count=%d\n", tmp, count);
+			if(pas->cache[0] != 0){
+				printf("*** pas->cache[0] != 0: tmp=%d, count=%d\n", tmp, count);
 				err_count++;
 			}
 			count--;
@@ -160,26 +140,27 @@ void test_as(void){
 			break;
 		}
 	}while(count > 0);
-	printf("测试批量弹出: cur_size=%d\n", as.cur_size);
+	printf("测试批量弹出: cur_size=%d\n", pas->cur_size);
 
 
 
 	//批量'压入1, 弹出1'测试
-	memset(as.cache, '\0', as_cache_max);
-	as.cache[0] = 9999;
-	if(!as_pushN(&as, 1))
+	memset(pas->cache, '\0', as_cache_max);
+	pas->cache[0] = 9999;
+	if(!as_pushN(pas, 1))
 		printf("批量'压入1' failed\n");
 
-	as.cache[0] = 0;
-	if(!as_popN(&as, 1))
+	pas->cache[0] = 0;
+	if(!as_popN(pas, 1))
 		printf("批量'弹出1' failed\n");
 
-	if(as.cache[0] != 9999)
-		printf("批量'压入1, 弹出1'测试 failed, as.cache[0]=%d\n", as.cache[0]);
+	if(pas->cache[0] != 9999)
+		printf("批量'压入1, 弹出1'测试 failed, pas->cache[0]=%d\n", pas->cache[0]);
 	else
-		printf("批量'压入1, 弹出1'测试 okay, as.cache[0]=%d\n", as.cache[0]);
+		printf("批量'压入1, 弹出1'测试 okay, pas->cache[0]=%d\n", pas->cache[0]);
 
 
 	printf("test_as() finished, err_count=%d\n",err_count);
+	free(pas);
 	exit(0);
 }
