@@ -22,6 +22,7 @@
 /*
 	* row_max 必须大于0, 必须为二维数组单行line_max;
 	* row_count 必须大于0[一般是unsigned int 类型], 必须为二维数组的列数;
+	* height 必须大于0, 必须为三维数组的height(height*面积=立方);
 */
 
 
