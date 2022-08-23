@@ -92,7 +92,7 @@
 // get IPPROTO_IP 
 //*****************
 
-int get_sockopt_opts_ip(int sfd, const int sock_opt){
+inline int get_sockopt_opts_ip(int sfd, const int sock_opt){
 	int opt_val = -1;
 	int opt_len = sizeof(int);
 	if(getsockopt(sfd,IPPROTO_IP,sock_opt,&opt_val,&opt_len)==-1){
