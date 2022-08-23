@@ -74,19 +74,19 @@
 
 
 //对二维数组进行优化[面积=row_max*row_count]
-#define memsetEx2(p,c,row_max,row_count) ( memset(p,c,row_max*row_count) )
+#define memsetEx2(p,c,size,row_max,row_count) ( memset(p,c,size*row_max*row_count) )
 
-#define memcpyEx2(pdest,psrc,row_max,row_count) ( memcpy(pdest,psrc,row_max*row_count) )
+#define memcpyEx2(pdest,psrc,size,row_max,row_count) ( memcpy(pdest,psrc,size*row_max*row_count) )
 
 
 //对三维数组进行优化[体积=row_max*row_count*height]
-#define memsetEx3(p,c,row_max,row_count,height) ( memset(p,c,row_max*row_count*height) )
+#define memsetEx3(p,c,size,row_max,row_count,height) ( memset(p,c,size*row_max*row_count*height) )
 
-#define memcpyEx3(pdest,psrc,row_max,row_count,height) ( memcpy(pdest,psrc,row_max*row_count*height) )
+#define memcpyEx3(pdest,psrc,size,row_max,row_count,height) ( memcpy(pdest,psrc,size*row_max*row_count*height) )
 
 
 //对n维数组进行优化[必须是连续内存, 才能用]
-void* memsetExn(void* p, int c, unsigned short val_count, ...){
+void* memsetExn(void* p, int c, unsigned int size, unsigned short val_count, ...){
 	va_list valist;
 	unsigned int len,tmp;
 	unsigned short i;
@@ -99,10 +99,10 @@ void* memsetExn(void* p, int c, unsigned short val_count, ...){
 	}
 
 	va_end(valist);								//释放valist
-	return memset(p,c,len);
+	return memset(p,c,len*size);
 }
 
-void* memcpyExn(void* pdest, void* psrc, unsigned short val_count, ...){
+void* memcpyExn(void* pdest, void* psrc, unsigned int size, unsigned short val_count, ...){
 	va_list valist;
 	unsigned int len,tmp;
 	unsigned short i;
@@ -115,5 +115,5 @@ void* memcpyExn(void* pdest, void* psrc, unsigned short val_count, ...){
 	}
 
 	va_end(valist);
-	return memcpy(pdest,psrc,len);
+	return memcpy(pdest,psrc,len*size);
 }
