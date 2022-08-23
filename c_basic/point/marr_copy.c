@@ -12,7 +12,7 @@ void parr2(void* p,unsigned int row_max,unsigned int row_count){
 	char* pc = (char*)p;
 	for(tmp=0;tmp<row_count;tmp++)
 		for(tmp2=0;tmp2<row_max;tmp2++)
-			if(*pc != 'A')
+			if(*pc == 'A')
 				printf("err: %d-%d-%c\n",tmp,tmp2,*pc);
 }
 
@@ -23,7 +23,7 @@ void parr3(void* p,unsigned int row_max,unsigned int row_count,unsigned int heig
 	for(tmp=0;tmp<height;tmp++)
 		for(tmp2=0;tmp2<row_count;tmp2++)
 			for(tmp3=0;tmp3<row_max;tmp3++)
-				if(*pc != 'A')
+				if(*pc == 'A')
 					printf("err: %d-%d-%d-%c\n",tmp,tmp2,tmp3,*pc);
 }
 
@@ -61,54 +61,54 @@ int main(void){
 
 
 	//源二维,三维数组, 全部初始化'A'
-	memsetEx2(&c2,65,row_max,row_count);
-	memsetEx2(&i2,'A',row_max,row_count);
-	memsetEx2(&d2,'A',row_max,row_count);
-	memsetEx2(&v2,'A',row_max,row_count);
-	memsetEx3(&c3,'A',row_max,row_count,height);
-	memsetEx3(&i3,'A',row_max,row_count,height);
-	memsetEx3(&d3,'A',row_max,row_count,height);
-	memsetEx3(&v3,'A',row_max,row_count,height);
+	memsetEx2(&c2,65,sizeof(char),row_max,row_count);
+	memsetEx2(&i2,'A',sizeof(int),row_max,row_count);
+	memsetEx2(&d2,'A',sizeof(double),row_max,row_count);
+	memsetEx2(&v2,'A',sizeof(void*),row_max,row_count);
+	memsetEx3(&c3,'A',sizeof(char),row_max,row_count,height);
+	memsetEx3(&i3,'A',sizeof(int),row_max,row_count,height);
+	memsetEx3(&d3,'A',sizeof(double),row_max,row_count,height);
+	memsetEx3(&v3,'A',sizeof(void*),row_max,row_count,height);
 
 	//目标二维,三维数组, 全部初始化'B'
-	memsetEx2(&copy_c2,'B',row_max,row_count);
-	memsetEx2(&copy_i2,'B',row_max,row_count);
-	memsetEx2(&copy_d2,'B',row_max,row_count);
-	memsetEx2(&copy_v2,'B',row_max,row_count);
-	memsetEx3(&copy_c3,'B',row_max,row_count,height);
-	memsetEx3(&copy_i3,'B',row_max,row_count,height);
-	memsetEx3(&copy_d3,'B',row_max,row_count,height);
-	memsetEx3(&copy_v3,'B',row_max,row_count,height);
+	memsetEx2(&copy_c2,'B',sizeof(char),row_max,row_count);
+	memsetEx2(&copy_i2,'B',sizeof(int),row_max,row_count);
+	memsetEx2(&copy_d2,'B',sizeof(double),row_max,row_count);
+	memsetEx2(&copy_v2,'B',sizeof(void*),row_max,row_count);
+	memsetEx3(&copy_c3,'B',sizeof(char),row_max,row_count,height);
+	memsetEx3(&copy_i3,'B',sizeof(int),row_max,row_count,height);
+	memsetEx3(&copy_d3,'B',sizeof(double),row_max,row_count,height);
+	memsetEx3(&copy_v3,'B',sizeof(void*),row_max,row_count,height);
 
 	//目标n 维数组, 全部初始化'B'
-	memsetExn(&copy_n_c2,'B',2,row_max,row_count);
-	memsetExn(&copy_n_i2,'B',2,row_max,row_count);
-	memsetExn(&copy_n_d2,'B',2,row_max,row_count);
-	memsetExn(&copy_n_v2,'B',2,row_max,row_count);
-	memsetExn(&copy_n_c3,'B',3,row_max,row_count,height);
-	memsetExn(&copy_n_i3,'B',3,row_max,row_count,height);
-	memsetExn(&copy_n_d3,'B',3,row_max,row_count,height);
-	memsetExn(&copy_n_v3,'B',3,row_max,row_count,height);
+	memsetExn(&copy_n_c2,'B',sizeof(char),2,row_max,row_count);
+	memsetExn(&copy_n_i2,'B',sizeof(int),2,row_max,row_count);
+	memsetExn(&copy_n_d2,'B',sizeof(double),2,row_max,row_count);
+	memsetExn(&copy_n_v2,'B',sizeof(void*),2,row_max,row_count);
+	memsetExn(&copy_n_c3,'B',sizeof(char),3,row_max,row_count,height);
+	memsetExn(&copy_n_i3,'B',sizeof(int),3,row_max,row_count,height);
+	memsetExn(&copy_n_d3,'B',sizeof(double),3,row_max,row_count,height);
+	memsetExn(&copy_n_v3,'B',sizeof(void*),3,row_max,row_count,height);
 
 
 	//执行拷贝
-	memcpyEx2(&copy_c2,&c2,row_max,row_count);
-	memcpyEx2(&copy_i2,&i2,row_max,row_count);
-	memcpyEx2(&copy_d2,&d2,row_max,row_count);
-	memcpyEx2(&copy_v2,&v2,row_max,row_count);
-	memcpyEx3(&copy_c3,&c3,row_max,row_count,height);
-	memcpyEx3(&copy_i3,&i3,row_max,row_count,height);
-	memcpyEx3(&copy_d3,&d3,row_max,row_count,height);
-	memcpyEx3(&copy_v3,&v3,row_max,row_count,height);
+	memcpyEx2(&copy_c2,&c2,sizeof(char),row_max,row_count);
+	memcpyEx2(&copy_i2,&i2,sizeof(int),row_max,row_count);
+	memcpyEx2(&copy_d2,&d2,sizeof(double),row_max,row_count);
+	memcpyEx2(&copy_v2,&v2,sizeof(void*),row_max,row_count);
+	memcpyEx3(&copy_c3,&c3,sizeof(char),row_max,row_count,height);
+	memcpyEx3(&copy_i3,&i3,sizeof(int),row_max,row_count,height);
+	memcpyEx3(&copy_d3,&d3,sizeof(double),row_max,row_count,height);
+	memcpyEx3(&copy_v3,&v3,sizeof(void*),row_max,row_count,height);
 
-	memcpyExn(&copy_n_c2,&c2,2,row_max,row_count);
-	memcpyExn(&copy_n_i2,&i2,2,row_max,row_count);
-	memcpyExn(&copy_n_d2,&d2,2,row_max,row_count);
-	memcpyExn(&copy_n_v2,&v2,2,row_max,row_count);
-	memcpyExn(&copy_n_c3,&c3,3,row_max,row_count,height);
-	memcpyExn(&copy_n_i3,&i3,3,row_max,row_count,height);
-	memcpyExn(&copy_n_d3,&d3,3,row_max,row_count,height);
-	memcpyExn(&copy_n_v3,&v3,3,row_max,row_count,height);
+	memcpyExn(&copy_n_c2,&c2,sizeof(char),2,row_max,row_count);
+	memcpyExn(&copy_n_i2,&i2,sizeof(int),2,row_max,row_count);
+	memcpyExn(&copy_n_d2,&d2,sizeof(double),2,row_max,row_count);
+	memcpyExn(&copy_n_v2,&v2,sizeof(void*),2,row_max,row_count);
+	memcpyExn(&copy_n_c3,&c3,sizeof(char),3,row_max,row_count,height);
+	memcpyExn(&copy_n_i3,&i3,sizeof(int),3,row_max,row_count,height);
+	memcpyExn(&copy_n_d3,&d3,sizeof(double),3,row_max,row_count,height);
+	memcpyExn(&copy_n_v3,&v3,sizeof(void*),3,row_max,row_count,height);
 
 
 	//校验结果
