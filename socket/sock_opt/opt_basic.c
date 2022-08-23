@@ -57,7 +57,7 @@
 // set SOL_SOCKET 
 //****************
 
-//s1.SO_RCVBUF 设置接收缓冲区(默认上限8kb)
+//s1.SO_RCVBUF 设置接收缓冲区(默认上限8kb) [内存不足的情况下, 可能会因为申请缓冲区而出错]
 #define __set_sockopt_revbuf(sfd,rbuf_max) {setsockopt(sfd, SOL_SOCKET, SO_RCVBUF, &rbuf_max,sizeof(int));}
 
 //s2.SO_SNDBUF 设置发送缓冲区(默认上限8kb)
@@ -73,7 +73,7 @@
 #define __set_sockopt_revtimeout(sfd,ptimeval) {setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, ptimeval,sizeof(struct timeval));}
 
 //s6.SO_SNDTIMEO 设置发送超时(linux默认最高是70s)
-#define __set_sockopt_revtimeout(sfd,ptimeval) {setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, ptimeval,sizeof(struct timeval));}
+#define __set_sockopt_sndtimeout(sfd,ptimeval) {setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, ptimeval,sizeof(struct timeval));}
 
 //s7.SO_REUSERADDR 设置ip地址重用(默认关闭)
 //(正常情况下: ip地址释放后2分钟后, 才能被再次使用; 但设置SO_REUSEADDR, ip地址释放后, 可以马上再次使用)
@@ -100,7 +100,7 @@
 // get SOL_SOCKET 
 //*****************
 
-int get_sockopt_opts(int sfd, const int sock_opt){
+inline int get_sockopt_opts(int sfd, const int sock_opt){
 	int opt_val = -1;
 	int opt_len = sizeof(int);
 	if(getsockopt(sfd,SOL_SOCKET,sock_opt,&opt_val,&opt_len)==-1){
