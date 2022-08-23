@@ -162,7 +162,7 @@
 	TCP_CORK
 	TCP_QUICKACK
 */
-int get_sockopt_opts_tcp(int sfd, const int sock_opt){
+inline int get_sockopt_opts_tcp(int sfd, const int sock_opt){
 	int opt_val = -1;
 	int opt_len = sizeof(int);
 	if(getsockopt(sfd,IPPROTO_TCP,sock_opt,&opt_val,&opt_len)==-1){
@@ -175,7 +175,7 @@ int get_sockopt_opts_tcp(int sfd, const int sock_opt){
 
 //g2.TCP_INFO 获取tcp 相信信息(引用返回struct tcp_info* ptcp_info)
 //详情, 查看: ./web网文/getsockopt.html
-int get_sockopt_opts_tcpinfo(int sfd, struct tcp_info* ptcp_info){
+inline int get_sockopt_opts_tcpinfo(int sfd, struct tcp_info* ptcp_info){
 	int len = sizeof(struct tcp_info);
 	if(getsockopt(sfd,IPPROTO_TCP,TCP_INFO,ptcp_info,&len)==-1){
 		perror("getsockopt");
