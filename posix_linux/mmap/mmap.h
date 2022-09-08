@@ -25,10 +25,10 @@
 
 //如果mmap 设置了MAP_SHARED 共享属性, 就可以通过查看/proc 里面的信息, 找到这个共享mmap
 //如果mmap 设置了MAP_PRIVATE 私有属性, 在/proc 就看不到任何信息(私有mmap 不可查询)
-#define CHECK_MMAP_SHARED_CMD "cat /proc/%ld/maps | grep zero"
+#define CHECK_MMAP_SHARED_CMD "cat /proc/%ld/maps|grep zero"
 
 //使用system() shell命令的方式, 查询打印mmap 信息(buf_cmd 理应大于等于 32bit, 绝对不能少于32bit)
-#define CHECK_MMAP_SHARED(buf_cmd) { snprintf(buf_cmd, sizeof(buf_cmd), "cat /proc/%ld/maps | grep zero", (long) getpid()); system(buf_cmd); }
+#define CHECK_MMAP_SHARED(buf_cmd) { snprintf(buf_cmd, sizeof(buf_cmd), "cat /proc/%ld/maps|grep zero", (long) getpid()); system(buf_cmd); }
 
 
 
