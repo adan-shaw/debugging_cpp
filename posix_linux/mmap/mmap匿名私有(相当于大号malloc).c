@@ -1,5 +1,5 @@
 //编译:
-//		gcc -g3 my_mmap.h ./mmap匿名私有\(相当于大号malloc\).c -o x 
+//		gcc -g3 ./mmap匿名私有\(相当于大号malloc\).c -o x 
 
 
 
@@ -29,10 +29,7 @@ void mmap_noname_private(void){
 	}
 
 	//改变mmap 映射属性, 允许读写
-	if(mprotect(pmap, PAGE_COUNT, PROT_READ | PROT_WRITE) == -1){
-		perror("mprotect()");
-		return;
-	}
+	mprotect(pmap, PAGE_COUNT, PROT_READ | PROT_WRITE);
 
 	strncpy(pmap, "hello fuckers", sizeof("hello fuckers"));
 	printf("%s\n", pmap);
