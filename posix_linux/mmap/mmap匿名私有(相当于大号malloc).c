@@ -2,6 +2,8 @@
 //		gcc -g3 ./mmap匿名私有\(相当于大号malloc\).c -o x 
 
 
+//说明: malloc() 在申请大块内存的时候, 超过ptmalloc 内存管理器的勘值, 就会用mmap 分配内存;
+
 
 #include <stdio.h>
 #include <stdlib.h>
