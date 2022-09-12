@@ -48,17 +48,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <errno.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
-#include <sys/wait.h>
-#include <assert.h>
+#include <unistd.h>
 #include "fcntl_lock4fd.h"
 
 
+
 #define TEST_FILE_PATH "./lock_file_test_data"
+
+
+
 void fcntl_lock_test(void);
 
 
@@ -170,4 +171,6 @@ void fcntl_lock_test(void){
 	fclose(pfs);
 	return;
 }
+
+
 
