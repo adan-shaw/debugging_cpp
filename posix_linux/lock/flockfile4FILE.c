@@ -2,13 +2,14 @@
 //		gcc -g3 -lpthread ./flockfile4FILE.c -o x 
 
 
-//flockfile() 对文件加锁的使用:
+//flockfile() 对'FILE文件流'加锁的使用:
 /*
-	flockfile()互斥属性的, 加锁之后就是独占rw;
+	flockfile()互斥属性的, 加锁之后就是对'FILE文件流'独占rw;
+
 	flockfile() 系列的api 主要包括:
-		void flockfile(FILE *filehandle);		//对文件加'安全共享'锁
-		int ftrylockfile(FILE *filehandle);	//nonblocking 版flockfile()
-		void funlockfile(FILE *filehandle);	//释放文件加'安全共享'锁
+		void flockfile(FILE *filehandle);		//对'FILE文件流'加锁, 阻塞等待, 直接抢到锁为止;
+		int ftrylockfile(FILE *filehandle);	//询问性加锁, 如果可以加速, 则返回0, 并执行加锁;
+		void funlockfile(FILE *filehandle);	//解锁
 	以上3 个函数都是线程安全的, 放心使用.
 
 
@@ -68,7 +69,7 @@ void flockfile_test(void){
 		return;
 	}
 
-	//主线程直接抢夺加锁
+	//主线程直接阻塞加锁
 	flockfile(pfs);
 
 	//常见子线程, 尝试是否可以抢占pfs 的使用权
@@ -80,9 +81,9 @@ void flockfile_test(void){
 	}
 	pthread_detach(tpid);
 
+	sleep(1);//等子线程结束, main线程才继续运行
 	printf("main 线程再次'询问加锁'ftrylockfile() = %d\n",ftrylockfile(pfs));
 
-	sleep(1);					//for test
 	funlockfile(pfs);
 
 	fclose(pfs);
@@ -95,5 +96,3 @@ int main(void){
 	flockfile_test();
 	return 0;
 }
-
-
