@@ -1,0 +1,54 @@
+//1.select 操作宏
+/*
+	#include <sys/select.h>
+
+	void FD_CLR(int fd, fd_set *set);		//从fd_set 中删除fd
+																				FD_CLR()会自动先查询fd是否存在,存在才执行删除,不存在则忽略操作;
+	void FD_SET(int fd, fd_set *set);		//向fd_set 中添加fd(不允许重复fd)
+																				FD_SET()会自动先查询fd是否存在,不存在才执行添加,存在则忽略操作;
+	void FD_ZERO(fd_set *set);					//清空fd_set 中所有的fd
+	int  FD_ISSET(int fd, fd_set *set);	//判断fd 是否在fd_set 中, 存在返回1, 不存在返回0
+
+	int select(int nfds, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval *timeout);
+	int pselect(int nfds, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, const struct timespec *timeout,const sigset_t *sigmask);
+
+	参数:
+		nfds 总是赋值为fd_set中最大数值的fd
+		readfds = 读io事件fd_set
+		writefds = 写io事件fd_set
+		exceptfds = 异常io事件fd_set
+		timeout 控制异步/阻塞时长
+*/
+
+
+
+//2.select()/pselect() 的区别:
+/*
+	select()/pselect() 在异步模式下, 没有区别;
+		当struct timeval *timeout; 设置为0时, 就是异步模式;
+		此时select()/pselect()是一致的;
+
+	select()/pselect() 在阻塞模式下, 有区别:
+		当struct timeval *timeout; 设置不为0时, 就是阻塞模式;
+		此时:
+			select() 阻塞, 会被'SIG系统信号'中断;
+			pselect() 阻塞, 不会被'SIG系统信号'中断;
+			但pselect() 只能屏蔽一个指定的'SIG系统信号', 并不是屏蔽所有的'SIG系统信号';
+*/
+
+
+
+//3.select()/pselect() 的优劣
+/*
+	select()/pselect() 都是'LT 水平模式'的, 
+	只要'io事件'没有被操作消除, 就会一直通知, 直到进行io操作, 'io事件通知'才会被消除;
+
+	select() 是轮询式询问fd 事件的, 在fd 数量不多的情况下(16/32 个fd 以下, 性能优越);
+	fd 数量越小, select() 的性能越好, 实时效率越高;
+
+	但是, 当fd 数量超过16/32 个fd的情况下, select() 的性能开始下跌, 实时效率也会开始下跌;
+
+	综合:
+		fd 数量少的情况下, select() 比epoll 性能更好, 通用性更强, 毫无疑问;
+		fd 数量到了一定程度, select() 性能开始暴跌, 远不如epoll了;
+*/
