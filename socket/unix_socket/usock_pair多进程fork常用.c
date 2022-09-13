@@ -47,122 +47,113 @@
 
 
 #include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
 #include <sys/socket.h>
+
 
 
 #define USOCK_BUF_MAX (64)
 
-struct usock_tcp_t{
+struct usock_frame{
 	short int type;								//信息类型编号
 	short int buf_len;						//信息长读buf_len
 	char buf[USOCK_BUF_MAX];
 };
 
-//1.socketpair() 简单双向通信测试 -- 传递数据结构体
+typedef struct usock_frame usock_frame_t;
+
+const char *msg2son = "我是父亲\n";
+const char *msg2father = "我是孩子\n";
+
+//1.socketpair() 简单双向通信测试(传递数据结构体)
 void socketpair_test_tcp(void);
 
-//2.socketpair() 简单双向通信测试
+//2.socketpair() 简单双向通信测试(传递数据结构体)
 void socketpair_test_udp(void);
 
 
 
 int main(void){
-	printf("1.socketpair_test_tcp() 简单双向通信测试 -- 传递数据结构体\n");
 	socketpair_test_tcp();
-	sleep(3);
-	printf("\n\n\n");
-
-	printf("2.socketpair_test_udp() 简单双向通信测试\n");
+	sleep(1);
 	socketpair_test_udp();
 	return 0;
 }
 
 
 
-//2.socketpair() 简单双向通信测试 -- 传递数据结构体
+//1.socketpair() 简单双向通信测试(传递数据结构体)
 void socketpair_test_tcp(void){
 	int sv[2];
-	int tmp;
+	int tmp, count = 2;
 	pid_t id;
-	const char *msg2son = "我是父亲\n";
-	const char *msg2father = "我是孩子\n";
-	struct usock_tcp_t mbuf,mbuf2,re_mbuf,re_mbuf2;
-	ssize_t size;
+	usock_frame_t mbuf;
 
-
-
-	//0.填充usock_tcp_t 数据
-	mbuf.type = 1;
-	mbuf.buf_len = 1;
-	memset(mbuf.buf,'\0',sizeof(mbuf.buf));
-	strncpy(mbuf.buf,msg2father,sizeof(mbuf.buf));
-
-	mbuf2.type = 1;
-	mbuf2.buf_len = 999;
-	memset(mbuf2.buf,'\0',sizeof(mbuf2.buf));
-	strncpy(mbuf2.buf,msg2son,sizeof(mbuf2.buf));
-
-
-	//1.创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
+	//创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
 	tmp = socketpair(PF_LOCAL,SOCK_STREAM,0,sv);
 	if(tmp == -1){
-		perror("socketpair() failed");
+		perror("socketpair()");
 		return ;
 	}
 
-	//3.执行fork() 创建子进程
+	//执行fork() 创建子进程
 	id = fork();
 	if(id == -1){
-		perror("fork() failed");
+		perror("fork()");
 		close(sv[0]);
 		close(sv[1]);
 		return;
 	}
-	if(id == 0){			//子进程
-		//close(sv[0]);	//关闭一个端, 是sv[0],sv[1]都是可写可读的
-		close(sv[1]);		//子进程-关闭sv[1]
+	if(id == 0){					//子进程
+		//close(sv[0]);			//关闭一个端, 是sv[0],sv[1]都是可写可读的
+		close(sv[1]);				//子进程-关闭sv[1]
 
-		while(1){
-			write(sv[0],&mbuf2,sizeof(mbuf2));//阻塞write()
-			write(sv[0],&mbuf2,sizeof(mbuf2));//阻塞write()
-			write(sv[0],&mbuf2,sizeof(mbuf2));//阻塞write()
-			sleep(1);
+		mbuf.type = 1;
+		mbuf.buf_len = 999;
+		strncpy(mbuf.buf,msg2father,sizeof(mbuf.buf));
 
-			memset(&re_mbuf2,0,sizeof(re_mbuf2));
-			size = read(sv[0],&re_mbuf2,sizeof(re_mbuf2)*3);//阻塞read()
-			if(size > 0){
-				printf("tcp: read() from 父亲 : \n%s\n",re_mbuf2.buf);
-				printf("tcp: type = %d, buf_len = %d\n",re_mbuf2.type,re_mbuf2.buf_len);
-				close(sv[0]);		//只接收一个回覆便退出
-				//close(sv[1]);	//子进程-关闭sv[1]
-				break;
+		write(sv[0],&mbuf,sizeof(mbuf));							//阻塞write()
+		write(sv[0],&mbuf,sizeof(mbuf));							//阻塞write()
+		sleep(1);
+
+		while(count > 0){
+			tmp = read(sv[0],&mbuf,sizeof(mbuf));			//阻塞read()
+			if(tmp > 0){
+				printf("tcp: read() from 父亲(%d bit): \n%s\n",tmp,mbuf.buf);
+				printf("tcp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
+				count--;
 			}
 		}
-		exit(EXIT_SUCCESS);
+		close(sv[0]);				//只接收一个回覆便退出
+		//close(sv[1]);			//子进程-关闭sv[1]
+		exit(EXIT_SUCCESS);	//子进程结束
 	}
-	else{						//父进程
+	else{									//父进程
 		//close(sv[1]);
-		close(sv[0]);	//父进程-关闭sv[0]
+		close(sv[0]);				//父进程-关闭sv[0]
 
-		while(1){
-			memset(&re_mbuf,0,sizeof(re_mbuf));
-			size = read(sv[1],&re_mbuf,sizeof(re_mbuf)*2);//阻塞read()
-			if(size > 0){
-				printf("tcp: read() from 孩子 : \n%s\n",re_mbuf.buf);
-				printf("tcp: type = %d, buf_len = %d\n",re_mbuf.type,re_mbuf.buf_len);
-				sleep(1);
+		while(count > 0){
+			tmp = read(sv[1],&mbuf,sizeof(mbuf));			//阻塞read()
+			if(tmp > 0){
+				printf("tcp: read() from 孩子(%d bit): \n%s\n",tmp,mbuf.buf);
+				printf("tcp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
+				count--;
 			}
-			write(sv[1],&mbuf,sizeof(mbuf));//阻塞write()
-			write(sv[1],&mbuf,sizeof(mbuf));//阻塞write()
-			write(sv[1],&mbuf,sizeof(mbuf));//阻塞write()
-			close(sv[1]);		//只接收一个回覆便退出
-			//close(sv[0]);	//父进程-关闭sv[0]
-			break;
 		}
+		sleep(1);
+
+		mbuf.type = 1;
+		mbuf.buf_len = 999;
+		strncpy(mbuf.buf,msg2son,sizeof(mbuf.buf));
+
+		write(sv[1],&mbuf,sizeof(mbuf));							//阻塞write()
+		write(sv[1],&mbuf,sizeof(mbuf));							//阻塞write()
+
+		close(sv[1]);				//只接收一个回覆便退出
+		//close(sv[0]);			//父进程-关闭sv[0]
 	}
 	return;
 }
@@ -171,82 +162,75 @@ void socketpair_test_tcp(void){
 
 
 
-//3.socketpair() 简单双向通信测试
+//2.socketpair() 简单双向通信测试(传递数据结构体)
 void socketpair_test_udp(void){
 	int sv[2];
-	int tmp;
+	int tmp, count = 2;
 	pid_t id;
-	const char *msg2son = "我是父亲\n";
-	const char *msg2father = "我是孩子\n";
-	struct usock_tcp_t mbuf,mbuf2,re_mbuf,re_mbuf2;
-	ssize_t size;
+	usock_frame_t mbuf;
 
-
-
-	//0.填充usock_tcp_t 数据
-	mbuf.type = 1;
-	mbuf.buf_len = 1;
-	memset(mbuf.buf,'\0',sizeof(mbuf.buf));
-	strncpy(mbuf.buf,msg2father,sizeof(mbuf.buf));
-
-	mbuf2.type = 1;
-	mbuf2.buf_len = 999;
-	memset(mbuf2.buf,'\0',sizeof(mbuf2.buf));
-	strncpy(mbuf2.buf,msg2son,sizeof(mbuf2.buf));
-
-
-	//1.创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
+	//创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
 	tmp = socketpair(PF_LOCAL,SOCK_DGRAM,0,sv);
 	if(tmp == -1){
-		perror("socketpair() failed");
+		perror("socketpair()");
 		return ;
 	}
 
-
-	//2.执行fork() 创建子进程
+	//执行fork() 创建子进程
 	id = fork();
 	if(id == -1){
-		perror("fork() failed");
+		perror("fork()");
 		close(sv[0]);
 		close(sv[1]);
 		return;
 	}
-	if(id == 0){			//子进程
-		//close(sv[0]);	//关闭一个端, 是sv[0],sv[1]都是可写可读的
-		close(sv[1]);		//子进程-关闭sv[1]
+	if(id == 0){					//子进程
+		//close(sv[0]);			//关闭一个端, 是sv[0],sv[1]都是可写可读的
+		close(sv[1]);				//子进程-关闭sv[1]
 
-		while(1){
-			write(sv[0],&mbuf2,sizeof(mbuf2));						//阻塞write()
-			sleep(1);
-			memset(&re_mbuf2,0,sizeof(re_mbuf2));
-			size = read(sv[0],&re_mbuf2,sizeof(re_mbuf2));//阻塞read()
-			if(size > 0){
-				printf("udp: read() from 父亲 : \n%s\n",re_mbuf2.buf);
-				printf("udp: type = %d, buf_len = %d\n",re_mbuf2.type,re_mbuf2.buf_len);
-				close(sv[0]);		//只接收一个回覆便退出
-				//close(sv[1]);	//子进程-关闭sv[1]
-				break;
+		mbuf.type = 1;
+		mbuf.buf_len = 999;
+		strncpy(mbuf.buf,msg2father,sizeof(mbuf.buf));
+
+		write(sv[0],&mbuf,sizeof(mbuf));							//阻塞write()
+		write(sv[0],&mbuf,sizeof(mbuf));							//阻塞write()
+		sleep(1);
+
+		while(count > 0){
+			tmp = read(sv[0],&mbuf,sizeof(mbuf));			//阻塞read()
+			if(tmp > 0){
+				printf("udp: read() from 父亲(%d bit): \n%s\n",tmp,mbuf.buf);
+				printf("udp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
+				count--;
 			}
 		}
-		exit(EXIT_SUCCESS);
+		close(sv[0]);				//只接收一个回覆便退出
+		//close(sv[1]);			//子进程-关闭sv[1]
+		exit(EXIT_SUCCESS);	//子进程结束
 	}
-	else{						//父进程
+	else{									//父进程
 		//close(sv[1]);
-		close(sv[0]);	//父进程-关闭sv[0]
-		while(1){
-			memset(&re_mbuf,0,sizeof(re_mbuf));
-			size = read(sv[1],&re_mbuf,sizeof(re_mbuf));//阻塞read()
-			if(size > 0){
-				printf("udp: read() from 孩子 : \n%s\n",re_mbuf.buf);
-				printf("udp: type = %d, buf_len = %d\n",re_mbuf.type,re_mbuf.buf_len);
-				sleep(1);
-			}
-			write(sv[1],&mbuf,sizeof(mbuf));						//阻塞write()
-			close(sv[1]);		//只接收一个回覆便退出
-			//close(sv[0]);	//父进程-关闭sv[0]
-			break;
-		}
-	}
+		close(sv[0]);				//父进程-关闭sv[0]
 
+		while(count > 0){
+			tmp = read(sv[1],&mbuf,sizeof(mbuf));			//阻塞read()
+			if(tmp > 0){
+				printf("udp: read() from 孩子(%d bit): \n%s\n",tmp,mbuf.buf);
+				printf("udp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
+				count--;
+			}
+		}
+		sleep(1);
+
+		mbuf.type = 1;
+		mbuf.buf_len = 999;
+		strncpy(mbuf.buf,msg2son,sizeof(mbuf.buf));
+
+		write(sv[1],&mbuf,sizeof(mbuf));							//阻塞write()
+		write(sv[1],&mbuf,sizeof(mbuf));							//阻塞write()
+
+		close(sv[1]);				//只接收一个回覆便退出
+		//close(sv[0]);			//父进程-关闭sv[0]
+	}
 	return;
 }
