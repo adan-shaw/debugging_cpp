@@ -95,20 +95,20 @@ void select_test_tcp(void){
 		while(count > 0){
 			FD_SET(sv[0],&rset);											//把fd 添加进fd_set
 			tmp = pselect(sv[0]+1,&rset,NULL,NULL,&timeout,&sig_set);
-			if(tmp == -1){														//select(): 错误
-				perror("select()");
-				break;
-			}
-			else if(tmp == 0){													//select(): 超时
-				count--;
-				continue;
-			}
-			else{																			//select(): 有io 事件
+			if(tmp > 0){															//select(): 有io 事件
 				tmp = read(sv[0],&buf,sizeof(buf));
 				if(tmp > 0){
 					printf("tcp: read() from 父亲(%d): \n%s\n",tmp,buf);
 					count--;
 				}
+			}
+			else if(tmp == 0){												//select(): 超时
+				count--;
+				continue;
+			}
+			else{																			//select(): 错误(tmp == -1)
+				perror("select()");
+				break;
 			}
 		}
 		close(sv[0]);				//只接收一个回覆便退出
@@ -130,5 +130,3 @@ void select_test_tcp(void){
 	}
 	return;
 }
-
-
