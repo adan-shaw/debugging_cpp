@@ -93,13 +93,7 @@ void select_test(void){
 				FD_SET(fds[0][tmp],&rset);
 
 			tmp = select(sfd_max+1,&rset,NULL,NULL,&timeout);
-			if(tmp == -1){													//select(): 错误
-				perror("select()");
-				break;
-			}
-			else if(tmp == 0)												//select(): 超时
-				continue;
-			else{																		//select(): 有io 事件
+			if(tmp > 0){														//select(): 有io 事件
 				for(tmp = 0; tmp < MAX_FD_BUF; tmp++){
 					if(FD_ISSET(fds[0][tmp],&rset)){		//sfd 还在fd_set 中, 表明有io 事件发生
 						tmp2 = read(fds[0][tmp],&buf,sizeof(buf));
@@ -107,6 +101,12 @@ void select_test(void){
 							printf("tcp-%d: read() from 父亲(%d): \n%s\n",tmp,tmp2,buf);
 					}
 				}
+			}
+			else if(tmp == 0)												//select(): 超时
+				continue;
+			else{																		//select(): 错误(tmp == -1)
+				perror("select()");
+				break;
 			}
 		}//while end
 	}
