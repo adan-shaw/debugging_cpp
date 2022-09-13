@@ -105,11 +105,11 @@ void son_lock(void){
 		return ;
 	}
 
-	if(flock(fd, LOCK_SH | LOCK_NB) == -1)			//阻塞加共享锁
+	if(flock(fd, LOCK_SH | LOCK_NB) == -1)			//非阻塞加共享锁
 		perror("flock() LOCK_SH");
 	if(flock(fd, LOCK_UN | LOCK_NB) == -1)			//解锁
 		perror("flock()");
-	if(flock(fd, LOCK_EX | LOCK_NB) == -1)			//阻塞加互斥锁
+	if(flock(fd, LOCK_EX | LOCK_NB) == -1)			//非阻塞加互斥锁
 		perror("flock() LOCK_EX");
 	if(flock(fd, LOCK_UN | LOCK_NB) == -1)			//解锁
 		perror("flock()");
