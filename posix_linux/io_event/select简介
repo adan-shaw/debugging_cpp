@@ -4,10 +4,15 @@
 
 	void FD_CLR(int fd, fd_set *set);		//从fd_set 中删除fd
 																				FD_CLR()会自动先查询fd是否存在,存在才执行删除,不存在则忽略操作;
+
 	void FD_SET(int fd, fd_set *set);		//向fd_set 中添加fd(不允许重复fd)
 																				FD_SET()会自动先查询fd是否存在,不存在才执行添加,存在则忽略操作;
+
 	void FD_ZERO(fd_set *set);					//清空fd_set 中所有的fd
-	int  FD_ISSET(int fd, fd_set *set);	//判断fd 是否在fd_set 中, 存在返回1, 不存在返回0
+
+	int  FD_ISSET(int fd, fd_set *set);	//判断fd 是否在fd_set 中, 存在返回1, 不存在返回0;
+																				执行select/pselect 之后, 还在fd_set中的fd, 即有io 事件;
+
 
 	int select(int nfds, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval *timeout);
 	int pselect(int nfds, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, const struct timespec *timeout,const sigset_t *sigmask);
@@ -31,9 +36,9 @@
 	select()/pselect() 在阻塞模式下, 有区别:
 		当struct timeval *timeout; 设置不为0时, 就是阻塞模式;
 		此时:
-			select() 阻塞, 会被'SIG系统信号'中断;
-			pselect() 阻塞, 不会被'SIG系统信号'中断;
-			但pselect() 只能屏蔽一个指定的'SIG系统信号', 并不是屏蔽所有的'SIG系统信号';
+			select() 阻塞, 阻塞期间不会被'任何信号'中断;
+			pselect() 阻塞, 阻塞期间可以被'SIG系统信号'中断;
+			但pselect() 只能指定一个'SIG系统信号'集合, 并不能屏蔽9和19'必杀信号';
 */
 
 
