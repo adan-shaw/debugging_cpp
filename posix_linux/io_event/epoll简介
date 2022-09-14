@@ -1,0 +1,127 @@
+//max_user_watches 上限:
+/*
+	查看方式(需要root 权限):
+		cat /proc/sys/fs/inotify/max_user_watches
+	临时修改方式(需要root 权限):
+		echo 8192000 > /proc/sys/fs/inotify/max_user_watches
+*/
+
+
+//linux 进程打开文件fd 数量上限:
+/*
+	查看方式:
+		ulimit -n
+	临时修改方式(重启失效):
+		ulimit -HSn 2048
+	查看整个linux 可打开的fd 数量:
+		cat /proc/sys/fs/file-max
+*/
+
+
+//epoll 的应用场景:
+/*
+	epoll 一般只用来处理多个fd 的情况, 
+	在fd 数量少的情况下, select, poll 反而更快更方便;
+	所以epoll 基本上只用来处理fd 很多的情况, epoll 可以分为ET边缘模式, LT水平模式;
+*/
+
+
+//epoll 原理
+/*
+	epoll是通过内核与用户空间mmap同一块内存实现的. 
+	mmap将用户空间的一块地址和内核空间的一块地址, 同时映射到相同的一块物理内存地址上,
+	(不管是用户空间还是内核空间都是虚拟地址, 最终要通过地址映射映射到物理地址)
+	使得这块物理内存对内核&用户均可见, 减少用户态和内核态之间的数据交换. 
+	内核可以直接看到epoll监听的句柄, 效率高. 
+
+	而在mmap 上, epoll 使用红黑树进行存储;
+	红黑树将存储epoll所监听的套接字;
+	上面mmap出来的内存如何保存epoll所监听的套接字, 必然也得有一套数据结构, 
+	epoll在实现上采用红黑树去存储所有套接字, 
+	当添加或者删除一个套接字时(epoll_ctl), 都在红黑树上去处理, 
+	红黑树本身插入和删除性能比较好, 时间复杂度O(logN). 
+	而通过epoll_ctl函数添加进来的事件都会被放在红黑树的某个节点内, 
+	所以, 重复添加是没有用的. 
+
+	当把事件添加进来的时候时候会完成关键的一步, 
+	那就是该事件都会与相应的设备(网卡)驱动程序建立回调关系, 
+	当相应的事件发生后, 就会调用这个回调函数, 该回调函数在内核中被称为: ep_poll_callback,
+	这个回调函数其实就所把这个事件添加到rdllist这个双向链表中. 
+	**一旦有事件发生, epoll就会将该事件添加到双向链表中**
+	那么当我们调用epoll_wait时, epoll_wait只需要检查rdlist双向链表中是否有存在注册的事件, 效率非常可观. 
+	这里也需要将发生了的事件复制到用户态内存中即可. 
+*/
+
+
+//epoll的优点:
+/*
+	1)没有最大并发连接的限制:
+			能打开FD的上限远大于1024(1G的内存上能监听约10万个端口);
+
+	2)效率提升:
+			不是轮询的方式, 不会随着FD数目的增加效率下降;
+			只有活跃可用的FD才会调用callback函数; 
+			即epoll最大的优点就在于它只管你"活跃"的连接, 而跟连接总数无关, 
+			因此在实际的网络环境中, epoll的效率就会远远高于select和poll;
+			传统的select以及poll的效率会因为在线人数的线形递增而导致呈二次乃至三次方的下降;
+
+	3)内存拷贝:
+			epoll通过内核和用户空间共享一块内存来实现消息传递的;
+			利用mmap()文件映射内存加速与内核空间的消息传递; 
+			即epoll使用mmap 减少复制开销;
+			epoll保证了每个fd在整个过程中只会拷贝一次;
+			(select, poll每次调用都要把fd集合从用户态往内核态拷贝一次);
+*/
+
+
+//epoll 结构体:
+/*
+	typedef union epoll_data {
+		void *ptr;
+		int fd;							//被监视的fd
+		__uint32_t u32;
+		__uint64_t u64;
+	}epoll_data_t;				//保存触发事件的某个文件描述符相关的数据
+	struct epoll_event {
+		__uint32_t events;	//epoll event [EPOLLIN|EPOLLOUT|EPOLLPRI|EPOLLERR|EPOLLHUP|EPOLLET]
+		epoll_data_t data;	//User data variable
+	};
+*/
+
+//epoll 只有3个系统调用:
+/*
+	int epoll_create(int size);
+			size: 用户输入的监听的数目;
+			返回一个epfd, 唯一的epoll 句柄;
+	int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)
+			epfd: epoll句柄
+			fd:		被操作的文件描述符
+			event:指向epoll_event集的指针, 其中events的值可以为:
+							EPOLLIN		表示对应的文件描述符可以读
+							EPOLLOUT	表示对应的文件描述符可以写
+							EPOLLPRI	表示对应的文件描述符有紧急的数可读
+							EPOLLERR	表示对应的文件描述符发生错误
+							EPOLLHUP	表示对应的文件描述符被挂断
+							EPOLLET		ET边缘模式(epoll默认使用LT水平模式,使用EPOLLET可以命令单个fd使用ET模式)
+			op:		操作:
+							EPOLL_CTL_ADD 如果fd不存在, 则新增到epoll_event集
+							EPOLL_CTL_MOD 修改epoll_event属性
+														[一般用来修改:EPOLLIN|EPOLLOUT|...等属性,
+														 如果fd不存在, 则等同新增]
+							EPOLL_CTL_DEL 如果fd存在, 则从epoll_event集中删除
+			成功返回0, 失败返回-1;
+
+	int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout)
+			epfd:				epoll文件描述符
+			epoll_event:用于回传代处理事件的数组
+			maxevents:	每次能处理的事件数
+			timeout:		等待I/O事件发生的超时值ms, -1:永不超时(阻塞); 0:立即返回(异步)
+
+
+	events常见的搭配:
+		EPOLLIN								等价于普通读事件(不包含优先读取事件)
+		EPOLLIN|EPOLLPRI			等价于select()的读事件
+		EPOLLOUT							等价于select()的写事件
+		EPOLLOUT|EPOLLET			ET模式下的EPOLLOUT
+		...
+*/
