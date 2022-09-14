@@ -1,5 +1,5 @@
 //编译
-//		gcc ./select监听一个fd.c -g3 -o x 
+//		gcc ./select监视一个fd.c -g3 -o x 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +19,7 @@
 
 
 
-//只监听一个fd
+//只监视一个fd
 void select_test_tcp(void);
 
 
@@ -31,7 +31,7 @@ int main(void){
 
 
 
-//只监听一个fd
+//只监视一个fd
 void select_test_tcp(void){
 	int sv[2];
 	int tmp, count = 2;
@@ -74,7 +74,7 @@ void select_test_tcp(void){
 			if(tmp > 0){															//select(): 有io 事件
 				tmp = read(sv[0],&buf,sizeof(buf));
 				if(tmp > 0){
-					printf("tcp: read() from 父亲(%d): \n%s\n",tmp,buf);
+					printf("tcp: read() from 父亲(%d bit): \n%s\n",tmp,buf);
 					count--;
 				}
 			}
