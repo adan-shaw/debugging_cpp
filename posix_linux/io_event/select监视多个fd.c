@@ -1,5 +1,5 @@
 //编译
-//		gcc ./select监听多个fd.c -g3 -w -o x 
+//		gcc ./select监视多个fd.c -g3 -w -o x 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,8 +22,8 @@
 
 
 
-//fds buf max(最多用select 监听n 个fd)
-//[一般select 只监听1个fd, 也有监听几个fd 的需求, client 很常用]
+//fds buf max(最多用select 监视n 个fd)
+//[一般select 只监视1个fd, 也有监视几个fd 的需求, client 很常用]
 #define MAX_FD_BUF (8)
 
 //求fd max
@@ -33,7 +33,7 @@
 #define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
 
 //unix socket 对的sfd 池
-static int usfd_li = -1;									//监听sfd
+static int usfd_li = -1;									//监视sfd
 static int fds[2][MAX_FD_BUF];						//fds[0][]=客户端sfd, fds[1][]=服务器接待者
 static unsigned short fds_count = 0;			//实际初始化的unix socket对(应当等于MAX_FD_BUF)
 
@@ -85,8 +85,13 @@ void select_test(void){
 		count = 0;
 		sleep(1);																	//等父进程开始后, 再执行
 		while(1){
+			/*
+				这里很有意思,如果不执行count++,父进程退出之后,
+				子进程被init进程收养之后,就会在init进程的监管下,继续陷入死循环, 
+				这样子会很卡机, 永远退出不了, 一定不停死循环里面的操作;
+			*/
 			//printf("%d\n",count++);
-			if(count > 1024)												//最多循环1024次
+			if(count++ > 1024)											//最多循环1024次
 				break;
 
 			for(tmp = 0; tmp < MAX_FD_BUF; tmp++)		//将所有客户端sfd 压入fd_set
@@ -98,7 +103,7 @@ void select_test(void){
 					if(FD_ISSET(fds[0][tmp],&rset)){		//sfd 还在fd_set 中, 表明有io 事件发生
 						tmp2 = read(fds[0][tmp],&buf,sizeof(buf));
 						if(tmp2 > 0)
-							printf("tcp-%d: read() from 父亲(%d): \n%s\n",tmp,tmp2,buf);
+							printf("tcp-%d: read() from 父亲(%d bit): \n%s\n",fds[0][tmp],tmp2,buf);
 					}
 				}
 			}
@@ -209,7 +214,7 @@ int unix_sock_tcp_listener(void){
 		return 0;
 	}
 
-	//5.listen() 开始监听
+	//5.listen() 开始监视
 	listen(usfd_li,UNIX_TCP_LISTEN_MAX);
 	return usfd_li;
 }
