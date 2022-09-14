@@ -1,5 +1,5 @@
 //编译
-//		gcc ./poll监听一个fd.c -g3 -o x 
+//		gcc ./poll监视一个fd.c -g3 -o x 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,20 +19,20 @@
 
 
 
-//只监听一个fd
-void select_test_tcp(void);
+//只监视一个fd
+void poll_test_tcp(void);
 
 
 
 int main(void){
-	select_test_tcp();
+	poll_test_tcp();
 	return 0;
 }
 
 
 
-//只监听一个fd
-void select_test_tcp(void){
+//只监视一个fd
+void poll_test_tcp(void){
 	int sv[2];
 	int tmp, count = 2;
 	pid_t id;
@@ -68,10 +68,10 @@ void select_test_tcp(void){
 		while(count > 0){
 			tmp = poll(&poll_fd,1,-1);
 			if(tmp > 0){															//poll调用ok
-				if(poll_fd.revents & POLLIN){						//判断pfds[0] 是否有'io读事件'
+				if(poll_fd.revents & (POLLIN|POLLPRI)){	//判断pfds[0] 是否有'io读事件'
 					tmp = read(sv[0],&buf,sizeof(buf));
 					if(tmp > 0){
-						printf("tcp: read() from 父亲(%d): \n%s\n",tmp,buf);
+						printf("tcp: read() from 父亲(%d bit): \n%s\n",tmp,buf);
 						count--;
 					}
 				}
