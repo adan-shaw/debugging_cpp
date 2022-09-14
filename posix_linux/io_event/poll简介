@@ -1,0 +1,68 @@
+/*
+	1、poll基本知识
+		poll的底层实现, 与select类似, 都是使用线性结构, 将fd 集合提交到内核轮询, 实现io复用;
+		不同点是:
+			poll   不需要重复'set指认fd', 返回值存放在struct pollfd *fds中的revents 值里面, 不会产生覆盖;
+			select 则需要'set指认fd', '返回值与提交数组'相同, 会产生覆盖;
+
+			poll   底层的线性结构是链表;
+			select 底层的线性结构是数组;
+
+			poll   没有限制fd 上限, 理论上可以监视无限个fd;
+			select 监视上限: x86=1024, amd64=2048;
+
+		相同点:
+			poll   同样需要顺序遍历struct pollfd *fds, 
+						 查看里面每一个fd所在的struct pollfd *fds, 里面的revents值, 是否发生了io事件;
+			select 需要遍历'返回值与提交数组'相同的数组, 使用FD_ISSET()顺序遍历, 查看哪个fd发生了io事件;
+
+
+
+	2、poll函数格式:
+	int poll(struct pollfd *fds, unsigned int nfds, int timeout);
+		fds     pollfd 描述结构体的集合
+		nfds    pollfd 描述结构体的数量
+		timeout 指定等待超时(单位: 毫秒)
+						'负数值', 表示无限等待, 阻塞;
+						'正整数', 有限等待, 阻塞;
+						0, 表示异步询问模式, poll()马上返回;
+
+		返回值:
+			成功时,poll()返回发生io事件的fd个数;
+			失败时,poll()返回-1,并设置errno为下列值之一:
+						EBADF			一个或多个结构体中指定的文件描述符无效;
+						EFAULTfds	指针指向的地址超出进程的地址空间;
+						EINTR			请求的事件之前产生一个信号, 调用可以重新发起;
+						EINVAL		nfds参数超出PLIMIT_NOFILE值;
+						ENOMEM		可用内存不足, 无法完成请求;
+
+
+
+	3、pollfd结构体定义如下:
+	struct pollfd{
+		int fd;				//fd文件句柄
+		short events;	//指定关注的io 事件类型
+		short revents;//实际发生的io 事件类型(返回值)
+	};
+
+	events合法的事件如下:
+		POLLIN					有数据可读
+		POLLRDNORM			有普通数据可读
+		POLLRDBAND			有优先数据可读
+		POLLPRI					有紧迫数据可读
+		POLLOUT					写数据不会导致阻塞
+		POLLWRNORM			写普通数据不会导致阻塞
+		POLLWRBAND			写优先数据不会导致阻塞
+		POLLMSGSIGPOLL	消息可用
+
+	此外, revents域中还可能返回下列事件:
+		POLLER					指定的文件描述符发生错误
+		POLLHUP					指定的文件描述符挂起事件
+		POLLNVAL				指定的文件描述符非法
+
+	revents常见的搭配:
+		POLLIN								等价于POLLRDNORM|POLLRDBAND
+		POLLOUT								等价于POLLWRNORM
+		POLLIN|POLLPRI				等价于select()的读事件, 等价于[POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI]
+		POLLOUT|POLLWRBAND		等价于select()的写事件, 等价于[POLLOUT|POLLWRNORM|POLLWRBAND]
+*/
