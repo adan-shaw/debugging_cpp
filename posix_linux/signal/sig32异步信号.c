@@ -76,9 +76,9 @@ int main(void){
 		perror("signal()");		//改变SIGALRM 闹钟信号的处理方式
 		return -1;
 	}
+	alarm(alarm_wait_time);	//启动第一个alarm(), 后续会自动递归alarm()
 
 	printf("alarm begin: %d\n",time(NULL));
-	alarm(alarm_wait_time);	//等待一个闹钟
 
 	raise(SIGALRM);					//手动触发一个闹钟
 
