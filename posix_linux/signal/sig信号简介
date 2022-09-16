@@ -1,0 +1,279 @@
+//1.查看系统信号列表: kill -l 
+/*
+	编号为1~31的信号为传统UNIX支持的信号, 是不可靠信号(非实时的),
+	编号为32~63的信号是后来扩充的, 称做可靠信号(实时信号). 
+
+	进程只能容纳一个正在处理的信号&一个等待信号, 超过2 个信号, 后续发来的信号就会被丢弃;
+	因此, 虽然进程内发送信号, 实时性很高;
+	但如果信号处理函数陷入阻塞, 或者处理函数太大, 导致信号堆积, 
+	那么后续发来的信号就会被丢弃, 造成信号丢失;
+*/
+
+
+
+//2.linux 系统信号简析:
+/*
+	系统信号产生后<默认的动作>主要有:
+		*忽略信号:		ignore (内核将信号丢弃,不将信号发送给进程)
+		*杀死进程:		term
+		*产生核心转存:core
+		*停止进程: 		stop (也叫暂停进程)
+		*恢复进程: 		cont
+
+	默认行为列表:
+		num  信号名		行为			描述
+		 0)  无				无				空信号(可用来检索进程是否存在)
+		 1) SIGHUP:		term		挂起
+		 2) SIGINT:		term		终端中断
+		 3) SIGQUIT:	core		终端退出
+		 4) SIGILL:		core		非法指令
+		 5) SIGTRAP:	core		跟踪/<断点陷阱>
+		 6) SIGABRT:	core		中止进程
+		 7) SIGBUS:		core		内存访问错误
+		 8) SIGFPE:		core		算术异常
+		 9* SIGKILL:	term		必杀信号
+		10) SIGUSR1:	term		用户自定义信号1
+		11) SIGSEGV:	core		无效内存引用(指针溢出)
+		12) SIGUSR2:	term		用户自定义信号2
+		13) SIGPIPE:	term		管道断开
+		14) SIGALRM:	term		实时[定时器]过期
+		15) SIGTERM:	term		终止进程
+		16) SIGSTKFLT:term		协处理器栈错误<协处理器很少有, passed>
+		17) SIGCHLD:	ignore	终止/停止<子进程>
+		18) SIGCONT:	cont		恢复进程运行
+		19* SIGSTOP:	stop		确保停止
+		20) SIGTSTP:	stop		终端停止
+		21) SIGTTIN:	stop		BG 从终端读取(BG = 后台进程组)
+		22) SIGTTOU:	stop		BG 向终端写
+		23) SIGURG:		ignore	套接字上的紧急数据
+		24) SIGXCPU:	core		突破对CPU 时间的限制
+		25) SIGXFSZ:	core		突破对文件大小的限制
+		26) SIGVTALRM:term		虚拟[定时器]过期
+		27) SIGPROF:	term		性能分析[定时器]过期
+		28) SIGWINCH:	ignore	终端窗口尺寸发生变化
+		29) SIGIO:		term		IO 时可能产生的中断信号
+		30) SIGPWR:		term		电量行将耗尽
+		31) SIGSYS:		core		非法的系统调用
+
+
+	信号规则约定如下:
+		程序不可捕获、阻塞或忽略的信号有:SIGKILL,SIGSTOP. 
+		不能恢复至默认动作的信号有:			SIGILL,SIGTRAP
+		默认会导致进程流产的信号有:			SIGABRT,SIGBUS,SIGFPE,SIGILL,SIGIOT,SIGQUIT,
+																SIGSEGV,SIGTRAP,SIGXCPU,SIGXFSZ
+		默认会导致进程退出的信号有:			SIGALRM,SIGHUP,SIGINT,SIGKILL,SIGPIPE,SIGPOLL,
+																SIGPROF,SIGSYS,SIGTERM,SIGUSR1,SIGUSR2,SIGVTALRM
+		默认会导致进程停止的信号有:			SIGSTOP,SIGTSTP,SIGTTIN,SIGTTOU
+		默认进程忽略的信号有:						SIGCHLD,SIGPWR,SIGURG,SIGWINCH
+*/
+
+
+
+//3.信号相关函数:
+/*
+	//结构体
+	struct sigaction {
+		void (*sa_handler)(int);
+		void (*sa_sigaction)(int, siginfo_t *, void *);
+		sigset_t sa_mask;
+		int sa_flags;
+		void (*sa_restorer)(void);
+	};
+
+	//sigset_t信号集, 其实就是一个数组;
+	# define _SIGSET_NWORDS (1024 / (8 * sizeof (unsigned long int)))
+	typedef struct{
+		unsigned long int __val[_SIGSET_NWORDS];
+	} sigset_t;
+
+	//发送实时信号时才会用的结构体(只能传递整形数, 如果想共享数据, 直接传递mmap指针和mmap缓冲区长度)
+	//本进程内, 也可以共享malloc() 创建的堆指针;
+	typedef union sigval{
+		int sival_int;
+		void *sival_ptr;
+	} sigval_t;
+
+	sig_t signal(int signum,sig_t handler);	//绑定信号的sig_func()处理函数
+	int kill(pid_t pid, int sig);						//给指定进程发送信号
+	int raise(int sig);											//向自身进程发送信号[等价于kill(getpid(), sig)]
+	int pause(void);												//使得进程暂停运行,进入休眠状态;直到进程捕获到一个信号,并执行了信号处理函数后,才返回;
+	void abort(void);												//调用abort(),内核会向进程发送SIGABRT信号(SIGABRT信号会终止进程,并生成核心转储文件)
+	unsigned int alarm(unsigned int seconds);//设置一个定时器(闹钟),当定时器时间到,内核会向进程发送SIGALRM信号;
+																					 //(每个进程只能设置一个alarm闹钟)
+																					 //alarm闹钟只能触发一次,若想循环触发,可在SIGALRM信号处理函数中,再次调用alarm()重置定时器
+
+
+	int sigemptyset(sigset_t *set);										//清空信号集
+	int sigfillset(sigset_t *set);										//自动填充信号集,使其包含64个信号
+	int sigaddset(sigset_t *set,int signum);					//向信号集中添加一个信号
+	int sigdelset(sigset_t *set,int signum);					//向信号集中删除一个信号
+	int sigismember(const sigset_t *set,int signum);	//测试某个信号是否存在于一个信号集中
+	char *strsignal(int sig);													//获取信号的string描述信息
+
+	//绑定信号处理函数:
+		如果参数act不为NULL,则表示设置新的struct sigaction; 
+		如果参数act为NULL,则忽略参数act;
+		如果参数oldact不为NULL,则旧的struct sigaction信息将通过参数oldact返回;
+		如果参数oldact不为NULL,则忽略参数oldact;
+		(如果参数act/oldact都为NULL,则成为空操作,不推荐这样做)
+	int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+
+	int sigqueue(pid_t pid,int sig,const union sigval value);				//发送实时信号
+	int sigsuspend(const sigset_t *mask);														//挂起等待实时信号(阻塞)
+	int sigpending(sigset_t *set);																	//获取等待中的信号
+	int sigprocmask(int how,const sigset_t *set,sigset_t *oldset);	//将sigset_t 信号集, 设置为新的实时信号集
+			how 参数:
+				SIG_BLOCK: 		将set信号集中的信号, 添加到oldset信号掩码中;
+				SIG_UNBLOCK:	将set信号集中的信号, 从oldset信号掩码中移除;
+				SIG_SETMASK:	直接将set信号集设置为新的信号掩码;
+			内核为每一个进程维护了一个sigset_t信号集, 作为信号掩码;
+			(进程信号掩码是唯一的, 进程要接收那些信号, 屏蔽那些信号, 以信号掩码为准)
+
+	ps:
+		实时信号, 信号不会丢;
+		先到先执行, 进程没法执行sig_func信号处理函数, 存储起来;
+		一个信号集, 有(1024*8*unsigned long int)个数据, 应该可以存储1024 个实时信号;
+
+		后续发来的信号, 可以通过sigpending() 返回;
+
+		你自己设计信号处理函数的时候, 尽量不要阻塞, 
+		尽量快速完成信号处理函数, 这样才是不会导致'信号集溢出错误';
+		(大量信号发送过来, 处理不完, 也会导致信号溢出而丢弃信号)
+*/
+
+
+
+//4.各个系统信号详解(不懂可以看看, 废话较多)
+/*
+	1)SIGHUP:
+		本信号在用户终端连接(<正常/非正常>结束)时发出, 
+		当用户退出Linux登录时, 前台&后台进程将会收到SIGHUP信号, 
+		这个信号的默认操作为终止前台&后台进程. 
+		这个信号篡改和忽略, 比如wget能捕获SIGHUP信号, 并忽略它, 
+		这样就算退出了Linux登录, wget也能继续下载. 
+		此外, 对于与终端脱离关系的守护进程, 
+		这个信号用于通知它重新读取配置文件. 
+
+	2) SIGINT: 
+		程序终止(interrupt)信号, 
+		在用户键入INTR字符(通常是Ctrl-C)时发出, 
+		用于通知前台进程组终止进程. 
+
+	3) SIGQUIT:
+		和SIGINT类似, 但由QUIT字符(通常是Ctrl-/)来控制. 
+		进程在因收到SIGQUIT退出时会产生core文件,
+		在这个意义上类似于一个程序错误信号. 
+
+	4) SIGILL: 
+		执行了非法指令. 通常是因为可执行文件本身出现错误, 
+		或者试图执行数据段. 堆栈溢出时也有可能产生这个信号. 
+
+	5) SIGTRAP:
+		由断点指令或其它trap指令产生. 由debugger使用. 
+
+	6) SIGABRT:
+		调用abort函数生成的信号. 
+
+	7) SIGBUS:
+		非法地址, 包括内存地址对齐(alignment)出错. 
+		比如访问一个四个字长的整数, 但其地址不是4的倍数. 
+		它与SIGSEGV的区别在于:
+		后者是由于对<合法存储地址>的非法访问触发的
+		(如访问不属于自己存储空间或只读存储空间). 
+
+	8) SIGFPE:
+		在发生致命的算术运算错误时发出. 
+		不仅包括浮点运算错误, 还包括溢出及除数为0等其它所有的算术的错误. 
+
+	9) SIGKILL:
+		用来立即结束程序的运行. <本信号不能被阻塞、处理和忽略>. 
+		如果管理员发现某个进程终止不了, 可尝试发送这个信号. 
+		@@@不能修改的信号@@@
+
+	10) SIGUSR1:
+		留给用户使用
+
+	11) SIGSEGV:
+		试图访问未分配给自己的内存, 
+		或试图往没有写权限的内存地址写数据.(指针越界)
+
+	12) SIGUSR2:
+		留给用户使用
+
+	13) SIGPIPE:
+		管道破裂. 这个信号通常在进程间通信产生. 
+		比如采用FIFO(管道)通信的两个进程, 
+		读管道没打开或者意外终止就往管道写, 写进程会收到SIGPIPE信号. 
+		此外用Socket通信的两个进程, 
+		写进程在写Socket的时候, 读进程已经终止. 
+
+	14) SIGALRM:
+		时钟定时信号, 计算的是实际的时间或时钟时间. alarm函数使用该信号.
+
+	15) SIGTERM:
+		程序结束(terminate)信号, 
+		与SIGKILL不同的是该信号可以被阻塞和处理. 
+		通常用来要求程序自己正常退出, shell命令kill缺省产生这个信号. 
+		如果进程终止不了, 我们才会尝试SIGKILL. 
+
+	17) SIGCHLD:
+		子进程结束时, 父进程会收到这个信号. 
+		如果父进程没有处理这个信号, 也没有等待(wait)子进程, 
+		子进程虽然终止, 但是还会在内核进程表中占有表项, 
+		这时的子进程称为僵尸进程. 
+		这种情况我们应该避免
+		(父进程或者忽略SIGCHILD信号, 或者捕捉它, 
+		或者wait它派生的子进程, 或者父进程先终止, 
+		这时子进程的终止自动由init进程来接管). 
+
+	18) SIGCONT:
+		让一个停止(stopped)的进程继续执行. 本信号不能被阻塞. 
+		可以用一个handler 来让程序在由stopped状态变为继续执行时,
+		完成特定的工作. 例如: 重新显示提示符
+
+	19) SIGSTOP:
+		停止(stopped)进程的执行. 
+		注意它和terminate以及interrupt的区别:
+		该进程还未结束,只是暂停执行. 
+		<本信号不能被阻塞, 处理或忽略>. @@@不能修改的信号@@@
+
+	20) SIGTSTP:
+		停止进程的运行, 但该信号可以被处理和忽略. 
+		用户键入SUSP字符时(通常是Ctrl-Z)发出这个信号
+
+	21) SIGTTIN:
+		当后台作业要从用户终端读数据时, 
+		该作业中的所有进程会收到SIGTTIN信号. 缺省时这些进程会停止执行.
+
+	22) SIGTTOU:
+		类似于SIGTTIN, 但在写终端(或修改终端模式)时收到.
+
+	23) SIGURG:
+		有"紧急"数据或out-of-band数据到达socket时产生.
+
+	24) SIGXCPU:
+		超过CPU时间资源限制. 
+		这个限制可以由getrlimit/setrlimit来读取/改变. 
+
+	25) SIGXFSZ:
+		当进程企图扩大文件以至于超过文件大小资源限制. 
+
+	26) SIGVTALRM:
+		虚拟时钟信号. 类似于SIGALRM, 但是计算的是该进程占用的CPU时间.
+
+	27) SIGPROF:
+		类似于SIGALRM/SIGVTALRM, 
+		但包括该进程用的CPU时间以及系统调用的时间.
+
+	28) SIGWINCH:
+		窗口大小改变时发出.
+
+	29) SIGIO:
+		文件描述符准备就绪, 可以开始进行输入/输出操作.
+
+	30) SIGPWR:
+		Powerfailure
+
+	31) SIGSYS:
+		非法的系统调用. 
+*/
