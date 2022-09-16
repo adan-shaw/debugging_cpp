@@ -1,7 +1,6 @@
 //编译:
 //		gcc ./sig32异步信号.c -g3 -o x
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -44,11 +43,11 @@ void sig_func(int sig){
 	return;
 }
 
-#define alarm_wait_time (2)
+#define alarm_wait_time (1)
 //alarm循环闹钟函数(单位:秒)
 void alarm_func(int sig){
 	printf("alarm signal number: %d\n",sig);
-	//alarm(alarm_wait_time);//递归调用自身, 实现循环闹钟
+	alarm(alarm_wait_time);//递归调用自身, 实现循环闹钟
 	return;
 }
 
@@ -85,7 +84,9 @@ int main(void){
 
 	raise(SIGALRM);					//手动触发一个闹钟
 
-	sleep(10);							//主进程陷入阻塞(但会被alarm()闹钟唤醒, 实际只会阻塞2 秒)
+	sleep(10);							//主进程陷入阻塞(但会被alarm()闹钟唤醒, 实际只会阻塞1 秒)
+	sleep(10);							//测试循环alarm()
+	sleep(10);
 	printf("alarm end: %d\n",time(NULL));
 	return 0;
 }
