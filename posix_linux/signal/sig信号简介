@@ -1,12 +1,26 @@
-//1.查看系统信号列表: kill -l 
+//0.查看信号列表: kill -l 
 /*
 	编号为1~31的信号为传统UNIX支持的信号, 是不可靠信号(非实时的),
-	编号为32~63的信号是后来扩充的, 称做可靠信号(实时信号). 
+	编号为32~63的信号是后来扩充的, 称做可靠信号(实时信号);
+*/
 
+
+
+//1.信号函数设计
+/*
 	进程只能容纳一个正在处理的信号&一个等待信号, 超过2 个信号, 后续发来的信号就会被丢弃;
+	(未决信号集只能多存储一个信号, 只存储最后一个信号, 前面被阻塞的信号全部被覆盖掉)
 	因此, 虽然进程内发送信号, 实时性很高;
-	但如果信号处理函数陷入阻塞, 或者处理函数太大, 导致信号堆积, 
+	但如果信号处理函数陷入阻塞, 或者处理函数太大, 执行时间太久, 
 	那么后续发来的信号就会被丢弃, 造成信号丢失;
+
+	设计信号函数的时候, 应该是用最高速的处理方式最好(防止信号丢失);
+	而且你不应该用信号来做复杂的功能, 很不可靠;
+
+	daemon server 后续用来打印一些系统信息, 可以;
+	可以在daemon server 启动时, 指定输出到哪个tty(固定tty 更可靠, 更简洁)
+	[用户启动daemon server 的时候, 
+	 可以根据客户端当地需求, 指定将daemon server 的输出, 输出到指定tty or 文件]
 */
 
 
@@ -98,9 +112,10 @@
 	int raise(int sig);											//向自身进程发送信号[等价于kill(getpid(), sig)]
 	int pause(void);												//使得进程暂停运行,进入休眠状态;直到进程捕获到一个信号,并执行了信号处理函数后,才返回;
 	void abort(void);												//调用abort(),内核会向进程发送SIGABRT信号(SIGABRT信号会终止进程,并生成核心转储文件)
-	unsigned int alarm(unsigned int seconds);//设置一个定时器(闹钟),当定时器时间到,内核会向进程发送SIGALRM信号;
+	unsigned int alarm(unsigned int seconds);//设置一个定时器(闹钟),当定时器时间到,内核会向进程发送SIGALRM信号;(单位:秒)
 																					 //(每个进程只能设置一个alarm闹钟)
 																					 //alarm闹钟只能触发一次,若想循环触发,可在SIGALRM信号处理函数中,再次调用alarm()重置定时器
+																					 //alarm闹钟可以打断进程sleep()挂起,让进程继续运行;
 
 
 	int sigemptyset(sigset_t *set);										//清空信号集
@@ -118,32 +133,43 @@
 		(如果参数act/oldact都为NULL,则成为空操作,不推荐这样做)
 	int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
 
-	int sigqueue(pid_t pid,int sig,const union sigval value);				//发送实时信号
-	int sigsuspend(const sigset_t *mask);														//挂起等待实时信号(阻塞)
-	int sigpending(sigset_t *set);																	//获取等待中的信号
-	int sigprocmask(int how,const sigset_t *set,sigset_t *oldset);	//将sigset_t 信号集, 设置为新的实时信号集
+	int sigqueue(pid_t pid,int sig,const union sigval value);						//发送实时信号
+	int sigsuspend(const sigset_t *mask);																//挂起等待实时信号(阻塞)
+	int sigpending(sigset_t *set);																			//获取等待中的信号
+	int pthread_sigmask(int how, const sigset_t *set, sigset_t *oldset);//sigprocmask() 多线程版
+	int sigprocmask(int how,const sigset_t *set,sigset_t *oldset);			//将sigset_t 信号集, 设置为新的实时信号集
 			how 参数:
-				SIG_BLOCK: 		将set信号集中的信号, 添加到oldset信号掩码中;
-				SIG_UNBLOCK:	将set信号集中的信号, 从oldset信号掩码中移除;
-				SIG_SETMASK:	直接将set信号集设置为新的信号掩码;
+				SIG_BLOCK: 		阻塞set信号集中的存在信号
+				SIG_UNBLOCK:	解除阻塞set信号集中的存在信号
+				SIG_SETMASK:	将set信号集设置为新的信号掩码(set信号集中所有元素同样被阻塞)
 			内核为每一个进程维护了一个sigset_t信号集, 作为信号掩码;
-			(进程信号掩码是唯一的, 进程要接收那些信号, 屏蔽那些信号, 以信号掩码为准)
+			(进程信号掩码是唯一的, 信号掩码=未决信号集合? 可以多存一个信号?)
 
 	ps:
-		实时信号, 信号不会丢;
-		先到先执行, 进程没法执行sig_func信号处理函数, 存储起来;
-		一个信号集, 有(1024*8*unsigned long int)个数据, 应该可以存储1024 个实时信号;
-
-		后续发来的信号, 可以通过sigpending() 返回;
-
-		你自己设计信号处理函数的时候, 尽量不要阻塞, 
-		尽量快速完成信号处理函数, 这样才是不会导致'信号集溢出错误';
-		(大量信号发送过来, 处理不完, 也会导致信号溢出而丢弃信号)
+		使用sigpending() 可以获取未决信号集合中的信号;
 */
 
 
 
-//4.各个系统信号详解(不懂可以看看, 废话较多)
+//4.实时定时器(也是定期发送SIGALRM 信号)
+/*
+	int getitimer(int which, struct itimerval *curr_value);
+	int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value);
+	一共支持以下3中计数器形式:
+		ITIMER_REAL:[ITIMER_REAL = SIGALRM]
+			数值为0, 计时器的值实时递减, 发送的信号是SIGALRM;
+			实时, 就是真实时间减少出发的;
+		ITIMER_VIRTUAL:
+			数值为1, 进程执行时递减计时器的值, 发送的信号是SIGVTALRM;
+			进程计时器, 就是进程运行命令所消耗的时间做统计;
+		ITIMER_PROF:
+			数值为2, 进程和系统执行时都递减计时器的值;
+			发送的信号是SIGPROF, 进程和系统联合消耗时间, 做统计;
+*/
+
+
+
+//5.各个系统信号详解(不懂可以看看, 废话较多)
 /*
 	1)SIGHUP:
 		本信号在用户终端连接(<正常/非正常>结束)时发出, 
@@ -277,3 +303,4 @@
 	31) SIGSYS:
 		非法的系统调用. 
 */
+
