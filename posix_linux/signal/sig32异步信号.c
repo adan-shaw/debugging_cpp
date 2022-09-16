@@ -53,8 +53,6 @@ void alarm_func(int sig){
 
 
 int main(void){
-	int tmp;
-
 	ignore_sig32();
 	reset_sig32();
 	ignore_sig32();
