@@ -48,7 +48,7 @@
 //打印子进程的退出状态(显示子进程为什么退出)
 void print_wait_stat(int status, const char *attach_msg){
 	if(attach_msg != NULL)						//打印附带msg
-		printf("%s", attach_msg);
+		printf("%s\n", attach_msg);
 
 	if(WIFEXITED(status)){						//子进程正常退出, 退出statue码=WEXITSTATUS(status)
 		printf("child exited, status=%d\n", WEXITSTATUS(status));
