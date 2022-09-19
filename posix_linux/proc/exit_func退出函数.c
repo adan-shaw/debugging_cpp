@@ -7,7 +7,8 @@
 	int atexit(void (*function)(void));											//无参数传递,直接执行'atexit()函数指针'指向的函数
 	void _exit(int status);																	//参数status的值一般情况下不超过128
 	void _Exit(int status);																	//_exit()总是会成功的,不会失败的
-	
+
+	void exit(int status);																	//常见用法: exit(EXIT_SUCCESS); exit(EXIT_FAILURE);
 */
 
 //进程终止行为概述:
@@ -129,3 +130,4 @@ int main(void){
 	exit_func_test();
 	return 0;
 }
+
