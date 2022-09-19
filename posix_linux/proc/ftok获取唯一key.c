@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <errno.h>
 
+//ftok()-key 简介:
 /*
 	ftok函数原型:
 		key_t ftok(const char *pathname, int proj_id);
@@ -25,6 +26,17 @@
 		* proj_id是可以根据自己的约定, 随意设置;
 			这个数字, 有的称之为project ID; 
 			在UNIX系统上, 它的取值是1到255;
+
+*/
+
+//ftok()-key 与ipc 的关系:
+/*
+	ipc 多进程通信, 基本都需要依赖ftok()-key,
+	因为一个进程结束, 会回收该进程的所有资源, 但不能影响其他进程继续使用ipc,
+	所以, ipc 基本都依赖ftok()-key, 直接驻留在内核层;
+
+	结束时, 还需要unlink() or 使用ipcrm 删除ipc 通过ftok()-key 驻留在内核的资源, 
+	才算是真正100% 归还计算机资源, 释放所有资源;
 */
 
 
