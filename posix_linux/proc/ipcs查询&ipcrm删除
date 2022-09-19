@@ -1,0 +1,72 @@
+# ftok()-key 与ipc 的关系:
+:<<!
+	ipc 多进程通信, 基本都需要依赖ftok()-key,
+	因为一个进程结束, 会回收该进程的所有资源, 但不能影响其他进程继续使用ipc,
+	所以, ipc 基本都依赖ftok()-key, 直接驻留在内核层;
+
+	结束时, 还需要unlink() or 使用ipcrm 删除ipc 通过ftok()-key 驻留在内核的资源, 
+	才算是真正100% 归还计算机资源, 释放所有资源;
+!
+
+
+
+#
+# ipcs 查询
+#
+# 参数list:
+:<<!
+	Options:
+	 -i, --id <id>  print details on resource identified by <id>
+	 -h, --help     display this help
+	 -V, --version  display version
+
+	Resource options:
+	 -m, --shmems      shared memory segments
+	 -q, --queues      message queues
+	 -s, --semaphores  semaphores
+	 -a, --all         all (default)
+
+	Output options:
+	 -t, --time        show attach, detach and change times
+	 -p, --pid         show PIDs of creator and last operator
+	 -c, --creator     show creator and owner
+	 -l, --limits      show resource limits
+	 -u, --summary     show status summary
+		   --human       show sizes in human-readable format
+	 -b, --bytes       show sizes in bytes
+!
+
+# 查看系统有多少个ftok()-key
+ipcs -a
+
+# 打印该ftok()-key的具体细节
+ipcs -i <ftok()-key值>
+
+
+
+#
+# ipcrm 删除(只有删除, 没有创建, 不能用命令创建ipc: 共享内存,mmap,有名信号量,消息队列...)
+#
+:<<!
+	Options:
+	 -m, --shmem-id <id>        remove shared memory segment by id
+	 -M, --shmem-key <key>      remove shared memory segment by key
+	 -q, --queue-id <id>        remove message queue by id
+	 -Q, --queue-key <key>      remove message queue by key
+	 -s, --semaphore-id <id>    remove semaphore by id
+	 -S, --semaphore-key <key>  remove semaphore by key
+	 -a, --all[=shm|msg|sem]    remove all (in the specified category)
+	 -v, --verbose              explain what is being done
+
+	 -h, --help                 display this help
+	 -V, --version              display version
+!
+# 删除当前系统所有ipc 资源
+ipcrm -a
+
+# 根据id 来删除共享内存
+ipcrm -m <id>
+
+# 根据key 来删除共享内存
+ipcrm -M <key>
+
