@@ -25,25 +25,6 @@
 		* proj_id是可以根据自己的约定, 随意设置;
 			这个数字, 有的称之为project ID; 
 			在UNIX系统上, 它的取值是1到255;
-
-
-
-	查看系统目前有多少个ftok()-key被占用(文件名+proj_id=唯一key,不能是文件名一样,proj_id也一样):
-		-m, --shmems      shared memory segments
-		-q, --queues      message queues
-		-s, --semaphores  semaphores
-		# 查看系统有多少个ftok()-key
-		ipcs -a
-
-		-t, --time        show attach, detach and change times
-		-p, --pid         show PIDs of creator and last operator
-		-c, --creator     show creator and owner
-		-l, --limits      show resource limits
-		-u, --summary     show status summary
-				--human       show sizes in human-readable format
-		-b, --bytes       show sizes in bytes
-		# 打印该ftok()-key的具体细节(只能打印, 不能删除)
-		ipcs -i <key值>
 */
 
 
