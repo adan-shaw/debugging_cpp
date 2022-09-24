@@ -29,7 +29,7 @@
 	实际上, 你并不需要自己编写start-stop-daemon server, 
 	你只需要设计(int argc, char **argv), 保留一个-s 接口, 负责给daemon server 发送操作命令即可;
 
-	程序收到-s 发送过来的信号后, 马上重载daemon conf配置文件, 使用mmap 对配置文件进行重载, 是最好的;
+	程序收到-s 发送过来的信号后, 马上重载daemon conf配置文件(使用mmap 对配置文件进行映射重载, 是最好的);
 	(不要打算用mque posix消息队列来做, 这样做更复杂, 更傻逼)
 	不能在daemon 运行工具中实现信号处理函数, 但可以在被运行的程序中, 实现信号处理函数;
 	例如:
