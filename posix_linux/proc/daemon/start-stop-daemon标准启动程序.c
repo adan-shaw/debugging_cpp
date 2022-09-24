@@ -1,5 +1,6 @@
 //编译:
 //		gcc -g start-stop-daemon标准启动程序.c -o x
+
 //测试:
 //		./x --nicelevel 5 --exec ./sig4test --start 
 //		./x --user adan --group adan --exec ./sig4test --start -- -l
@@ -37,7 +38,25 @@
 	编写符合systemd 家族命令标准的daemon server 比较麻烦, 
 	如果不能符合systemd 家族命令标准, 则会像postgresql 一样, 只能用nohup 运行, 比较麻烦;
 	不过仍然可以挂在后台运行;
+
+	为了提高daemon 程序的可靠性, 你可以屏蔽多余的信号, 来实现daemon server 的可靠性,
+	但请记住:
+		daemon 运行工具, 会通过fork() + execv() 来最终替换exe 可执行文件的所有段内容,
+		因此, 你不需要理会'daemon 运行工具'的具体实现过程,
+		只要这个'daemon 运行工具'可以编译通过即可, 能编译通过, 基本都可以用;
+		关键是fork() + execv() 替换exe 程序段之后,
+		你设计的程序是怎样设计的, 怎样运行的;
+
+	这是一个跨平台, 通用的daemon server 模板, 适用于大部分daemon server 程序;
+	只不过功能有些简单而已, 实际更详细的内容, 你也无需理会, 因为最终:
+		fork() + execv() 会替换所有exe 程序段的内容,
+		因此, 原来的一切都会被替换掉,
+		因此, 这个标准daemon 程序, 算是帮你省掉了大量工作, 让你更舒服更简单地写daemon 程序;
+
+		你甚至不用去理解, 这个daemon 运行工具的详细实现过程, 直接用就是了, 
+		反正最终都会被fork() + execv() 替换所有exe 程序段的内容;
 */
+
 
 //原版简介:
 /*
