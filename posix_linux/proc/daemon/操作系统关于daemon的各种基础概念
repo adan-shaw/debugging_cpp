@@ -1,0 +1,76 @@
+//操作系统关于daemon的各种基础概念
+/*
+	tty:
+		物理终端, 一般在/dev/tty0, tty1, tty2 ... [默认有6 个];
+	pts-tty:
+		虚拟终端, 一般在/dev/pts/*, 一个xfce4-terminal 即一个pts-tty;
+	用户登录:
+		拥有登录权限的Linux 系统用户, 可以登录任意tty, 多个tty;(pts-tty同理, 可以任意登录)
+		登录后, 运行什么权限, 在哪些区域活动, 由/etc/passwd 文件指定;
+	ps:
+		当用户登录tty之后, 会自动创建一个会话;
+		当一个用户登录了某个tty/pts-tty, 则stdin,stdout,stderr 都输出到这个tty/pts-tty中;
+		登录tty/pts-tty, 实际上是等价的, 系统层默认tty等价于pts-tty;
+		(具体tty与pts-tty, 有何区别, 这里不必深究)
+
+	systemd:
+		systemd daemon 管理模块, 是linux 内核功能的一部分, 旧版是service 命令;
+		要实现被systemd 管理的daemon 比较麻烦, 不过仍然可以通过简单的:
+			start-stop-daemon标准启动程序.c + .exe 信号设计来实现;
+			(实际上不会很难, 标准启动程序已经帮你实现了大部分功能,
+			只要--user adan --group adan --background --chuid adan:adan --make-pidfile --pidfile ./pidfile --exec 
+			等几个关键options 实现了, 随时可以自己编写daemon shell 启动这个daemon 程序;
+			剩下的只是.exe 信号设计了, 通过信号来实现:
+					.exe conf 配置重载, 
+					.exe 启动, 
+					.exe 停止, 
+					.exe help打印命令信息&运行关键信息,
+			只要这四个关键service 命令实现了, 就可以用systemd/service 命令进行管理, daemon shell 自己写)
+
+	会话:
+		一个用户登录一个tty/pts-tty, 默认就是创建一个会话, 属于最高级的pid, 其他都是子进程;
+		会长组 > 进程组 > 父进程 > 子进程 > 孙进程;
+
+		在会话中, 可以创建新的会话;
+		创建会话的进程组, 默认就是会长进程组;
+		会长进程组结束, 会话回默认地结束;
+		会话结束, 会终止会话内所有的进程组, 统一发终止信号:kill -s 9;
+
+		每个会话, 有一个jobs control;
+		jobs control可以控制进程组的前后台切换;
+		前台进程组结束, 后台进程组自动结束, 剩下未结束的进程, 由init收为孤儿进程.
+
+		每个进程组, 都有一个组长进程, 组长进程即父进程本身, 进程组PID默认是父进程PID;
+		父进程结束, 进程组会默认地结束;
+		进程组结束, 子进程都会被init进程收养, 成为孤儿进程(running)or 僵尸进程(dead);
+
+		操作系统通过一个tty/pts-tty, 一个会话的模式, 对操作系统进程组进行管理的;
+		一旦'会长进程/父进程'结束, 子进程未结束, 那么子进程马上会被init进程收养;
+
+	daemon 程序:
+		daemon 程序一般关闭stdin, stdout, stderr, 输出导入到log 日志;
+		daemon 程序一般后台运行, 开机启动, systemd/service 命令控制, 管理;
+		daemon 程序一般开机启动, 用户未登录前就已经启动了;
+		daemon 程序一般屏蔽无关信号, 防止信号干扰中断;
+		daemon 程序一般通过信号控制: stop 停止 / reload 重载配置 / help打印命令信息&运行关键信息, 启动不需要信号处理函数;
+		daemon 程序一般通过mmap 重载conf 文件, 实现配置更新;
+		daemon 程序一般需要有pidfile, 才能在后台重新找回daemon 程序, 才能进行二次操作;
+		daemon 程序一般'运行过程中崩溃', 只能通过log 日志查错, 或者查看核心转存;
+					 (启动&结束调试, 可以通过systemd/service命令+daemon shell编写来查看初始错误)
+*/
+
+
+
+//常用的tty 查看命令
+/*
+	# 查看操作系统有多少个物理tty
+	ls /dev/tty*
+
+	# 查看pts 自身的编号
+	tty
+
+	# 查看有多少个pts
+	ls -l /dev/pts
+*/
+
+
