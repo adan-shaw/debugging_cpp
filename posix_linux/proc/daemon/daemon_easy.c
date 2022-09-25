@@ -157,7 +157,7 @@ void exec_daemon(const char *path, const unsigned int argc, ...){
 		perror("execv()");
 		exit(-1);
 	}
-	write(open("./text", O_RDWR),"fuck you",sizeof("fuck you"));
+	//子进程已终止, 切换到execv 的新进程了
 }
 
 
