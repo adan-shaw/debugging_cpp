@@ -84,7 +84,8 @@
 
 #define memcpyEx3(pdest,psrc,size,row_max,row_count,height) ( memcpy(pdest,psrc,size*row_max*row_count*height) )
 
-//对四维数组进行优化[体积*时间=row_max*row_count*height*t] -- 现在'宇宙学家'将时间看作第四维
+
+//对四维数组进行优化[体积*时间=row_max*row_count*height*t] -- 现在'宇宙学家'将时间看作第四维度
 #define memsetEx4(p,c,size,row_max,row_count,height,t) ( memset(p,c,size*row_max*row_count*height*t) )
 
 #define memcpyEx4(pdest,psrc,size,row_max,row_count,height) ( memcpy(pdest,psrc,size*row_max*row_count*height) )
@@ -116,8 +117,9 @@
 		(现在卫星跟地面雷达通信, 耗电量也不小)
 */
 
-//对n维数组进行优化[必须是连续内存, 才能用]
-void* memsetExn(void* p, int c, unsigned int size, unsigned short val_count, ...){
+//对n维数组进行优化[必须是连续内存, 才能用], 参数size=粒度, 参数val_count=维度
+//元素类型可以是任意的, 指定粒度size=sizeof(val_type)即可, 该函数面向任意类型的数组设计的;
+void* memsetExn(void* p, int c, unsigned int type_size, unsigned short val_count, ...){
 	va_list valist;
 	unsigned int len,tmp;
 	unsigned short i;
@@ -130,10 +132,10 @@ void* memsetExn(void* p, int c, unsigned int size, unsigned short val_count, ...
 	}
 
 	va_end(valist);								//释放valist
-	return memset(p,c,len*size);
+	return memset(p,c,len*type_size);
 }
 
-void* memcpyExn(void* pdest, void* psrc, unsigned int size, unsigned short val_count, ...){
+void* memcpyExn(void* pdest, void* psrc, unsigned int type_size, unsigned short val_count, ...){
 	va_list valist;
 	unsigned int len,tmp;
 	unsigned short i;
@@ -146,5 +148,5 @@ void* memcpyExn(void* pdest, void* psrc, unsigned int size, unsigned short val_c
 	}
 
 	va_end(valist);
-	return memcpy(pdest,psrc,len*size);
+	return memcpy(pdest,psrc,len*type_size);
 }
