@@ -4,27 +4,24 @@
 //实时调度策略:
 /*
 	策略					描述
-	SCHED_FIFO	 实时-抢占式策略(先进先出)
-	SCHED_RR		 实时-时间片轮转
+	SCHED_OTHER	分时时间片策略(linux 不允许使用SCHED_NORMAL这个别名, Invalid argument)
+	SCHED_FIFO	实时-抢占式策略
+	SCHED_RR		实时-时间片轮转
 
-	(下面都是不常用, 不是实时调度策略, 但也是posix标准的调度策略)
-	SCHED_BATCH/SCHED_OTHER 频繁调用则不会衰减, 热度策略(两个别名都是同一种功能)
-	SCHED_IDLE							忽略'nice值'(降到最低),适合于运行超级低优先级的进程
+	(下面都是不常用, 不是进程调度策略, 但也是posix标准的调度策略)
+	SCHED_BATCH			批处理模式(此策略与SCHED_OTHER类似)
+	SCHED_IDLE			忽略'nice值'(降到最低),适合于运行超级低优先级的进程
 
-	一般系统并不需要修改'实时调度策略', 更不需要用到非'实时调度策略'
-	但也有例外:
-		当外部输入的互交进程数据显得很重要的情况下, 外部一个情况就可以影响整个主进程的工作状态的系统,
-		如交通系统, 抢占性能就显得很重要.
-		操作台抢占系统控制权, 以应对突发事件, 优先分配等需求, 这时候就需要做实时优先级抢占了.
-
-	Linux allows the static priority range 1 to 99 for the SCHED_FIFO and SCHED_RR policies
+	一般系统并不需要修改'进程调度策略', 尤其是分时系统, 但也有例外:
+		当外部输入的互交进程数据显得很重要的情况下, 如交通系统, 抢占性能就显得很重要;
+		操作台抢占系统控制权, 以应对突发事件, 优先分配等需求, 这时候就需要做实时优先级抢占了;
 
 	实时调度策略api:
-		* 根据调度策略type, 获取调度权重
-		int sched_get_priority_min(int policy);//获取'调度权重'起点min
-		int sched_get_priority_max(int policy);//获取'调度权重'终点max
+		* 根据调度策略type, 获取'调度权值'
+		int sched_get_priority_min(int policy);//获取'调度权值'起点min
+		int sched_get_priority_max(int policy);//获取'调度权值'终点max
 				policy参数(指定调度策略type):
-					#define SCHED_NORMAL		0		//Invalid argument linux不允许使用这个值
+					#define SCHED_OTHER			0
 					#define SCHED_FIFO			1
 					#define SCHED_RR				2
 					#define SCHED_BATCH			3
@@ -50,15 +47,15 @@
 	***************************废弃***************************
 	实时调度策略结构体(废弃, 最新版linux已禁用这个结构体):
 		struct sched_param{
-			int32_t sched_priority;								//设置的调度权重(可获取, 可设置, 范围:1-99)
-			int32_t sched_curpriority;						//当前调度权重(设置时忽略该参数, 只能获取时返回)
+			int32_t sched_priority;								//设置的'调度权值'(可获取, 可设置, 范围:1-99)
+			int32_t sched_curpriority;						//当前'调度权值'(设置时忽略该参数, 只能获取时返回)
 			union{
 				int32_t reserved[8];
 				struct{
-					int32_t __ss_low_priority;				//线程的最低优先级(不能高于sched_priority)
-					int32_t __ss_max_repl;						//线程降级的最大阻塞次数(一个线程多次阻塞之后,会自动降级运行,直到后续运行热度了,才会恢复正常的优先级)
+					int32_t __ss_low_priority;				//线程的最低权值(不能高于sched_priority)
+					int32_t __ss_max_repl;						//线程降级的最大阻塞次数(一个线程多次阻塞之后,会自动降级运行,直到后续运行热度了,才会恢复正常的权值)
 					struct timespec __ss_repl_period;	//降级恢复的等待时间
-					struct timespec __ss_init_budget;	//最高优先级使用时间
+					struct timespec __ss_init_budget;	//最高权值使用时间
 				}__ss;
 			}__ss_un;
 		}
@@ -93,22 +90,18 @@ int main(void){
 
 	pid = getpid();
 
-	min = sched_get_priority_min(SCHED_FIFO);
-	max = sched_get_priority_max(SCHED_FIFO);
-	printf("SCHED_FIFO调度策略下, 当前权值: min=%d, max=%d\n",min,max);
+	min = sched_get_priority_min(SCHED_RR);
+	max = sched_get_priority_max(SCHED_RR);
+	printf("SCHED_RR调度策略下, 调度权值的范围: min=%d, max=%d\n",min,max);
 
 
-	m_param.sched_priority = 18;													//设置线程正常权重(默认为最低值1)
-	if(sched_setscheduler(pid,SCHED_FIFO,&m_param) == -1){//需要root权限
+	m_param.sched_priority = 18;													//设置实时权重(默认为最低值1)
+	if(sched_setscheduler(pid,SCHED_RR,&m_param) == -1){	//需要root权限
 		perror("sched_setscheduler()");
 		return -1;
 	}
 
-	printf("sched_getscheduler() = %d\n",sched_getscheduler(pid));
-
-
-	printf("SCHED_FIFO调度策略下, 当前权值: min=%d, max=%d\n",\
-		sched_get_priority_min(SCHED_FIFO),sched_get_priority_max(SCHED_FIFO));
+	printf("获取实时权重sched_getscheduler() = %d\n",sched_getscheduler(pid));
 
 	printf("sizeof(struct sched_param)=%d\n",sizeof(struct sched_param));
 
