@@ -8,8 +8,8 @@
 	#define _GNU_SOURCE (1)
 	#define __USE_GNU (1)
 	#include <sched.h>
-	sched_setaffinity(pid_t pid,size_t cpusetsize,const cpu_set_t *mask);//失败返回-1
-	sched_getaffinity(pid_t pid,size_t cpusetsize,cpu_set_t *mask);
+	int sched_setaffinity(pid_t pid,size_t cpusetsize,const cpu_set_t *mask);
+	int sched_getaffinity(pid_t pid,size_t cpusetsize,cpu_set_t *mask);//失败返回-1
 
 	void CPU_ZERO(cpu_set_t *set);
 	void CPU_SET(int cpu, cpu_set_t *set);
