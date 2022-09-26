@@ -1,0 +1,139 @@
+//进程调度scheduling简介
+/*
+	进程scheduling = 进程的行程安排 = 进程的实时调度
+
+	scheduling包括:
+		* 进程nice优先级
+		* sched_setaffinity亲和力(绑定cpu内核,提高缓存命中率)
+		* 实时调度策略的修改
+		* 手动挂起/抢占
+*/
+
+
+
+//
+/*
+	1.进程'nice值'优先级(非实时调度, 执行优先级的倾向权值)
+		'nice值'间接地影响内核对进程的运行优先级调度算法,
+		每个进程都有一个'nice值', 其范围[-20,+19],
+		-20 为最高优先级, +19 为最低优先级, 默认值为0;
+
+		进程的调度并不是严格按照'nice值'的层次进行划分的,
+		相反, 'nice值'只是一个权衡因素
+
+		api 也很简单:
+			int getpriority(int which, id_t who);						//失败返回-1
+			int setpriority(int which, id_t who, int prio);	//失败返回-1
+		which 参数:
+			which = PRIO_PROCESS, who = 0, 则作用对象是当前调用进程
+			which = PRIO_PGRP,    who = 0, 则作用对象是当前调用进程组
+			which = PRIO_USER,    who = 0, 则作用对象是当前调用进程的用户
+		prio:
+			设置优先级时, 指定的'nice值'
+
+
+
+	2.CPU 亲和力(非实时调度优化手段, cpu缓存倾向调度, 作用: 减少进程/线程切换时的消耗)
+		ps: 不同进程的线程, 都可以绑定到cpu 内核上, 一个内核允许多次绑定;
+		#define _GNU_SOURCE (1)
+		#define __USE_GNU (1)
+		#include <sched.h>
+		sched_setaffinity(pid_t pid,size_t len,cpu_set_t *set);//失败返回-1
+		sched_getaffinity(pid_t pid,size_t len,cpu_set_t *set);
+
+		void CPU_ZERO(cpu_set_t *set);
+		void CPU_SET(int cpu, cpu_set_t *set);
+		void CPU_CLR(int cpu, cpu_set_t *set);
+		int CPU_ISSET(int cpu, cpu_set_t *set);//成功返回1, 失败返回0
+
+		cpu绑定时, 需要看cpu类型和架构, 看看缓存设计机制, 是否值得绑定;
+		一般绑定之后, 只能提高二级缓存, 三级缓存的命中率, 并不能提高一级缓存的命中率;
+		一级缓存, 每次切换线程都会清空;
+
+
+
+	3.实时调度策略
+		策略					描述
+		SCHED_FIFO	 实时-抢占式策略(先进先出)
+		SCHED_RR		 实时-时间片轮转
+
+		(下面都是不常用, 不是实时调度策略, 但也是posix标准的调度策略)
+		SCHED_BATCH/SCHED_OTHER 频繁调用则不会衰减, 热度策略(两个别名都是同一种功能)
+		SCHED_IDLE							忽略'nice值'(降到最低),适合于运行超级低优先级的进程
+
+		一般系统并不需要修改'实时调度策略', 更不需要用到非'实时调度策略'
+		但也有例外:
+			当外部输入的互交进程数据显得很重要的情况下, 外部一个情况就可以影响整个主进程的工作状态的系统,
+			如交通系统, 抢占性能就显得很重要.
+			操作台抢占系统控制权, 以应对突发事件, 优先分配等需求, 这时候就需要做实时优先级抢占了.
+
+		Linux allows the static priority range 1 to 99 for the SCHED_FIFO and SCHED_RR policies
+
+		实时调度策略api:
+			* 根据调度策略type, 获取调度权重
+			int sched_get_priority_min(int policy);//获取'调度权重'起点min
+			int sched_get_priority_max(int policy);//获取'调度权重'终点max
+					policy参数(指定调度策略type):
+						#define SCHED_NORMAL		0		//Invalid argument linux不允许使用这个值
+						#define SCHED_FIFO			1
+						#define SCHED_RR				2
+						#define SCHED_BATCH			3
+						// SCHED_ISO: reserved but not implemented yet(保留但尚未实现)
+						#define SCHED_IDLE			5
+						#define SCHED_DEADLINE	6
+
+			* 根据调度策略type, 修改'实时调度策略结构体'(修改操作需要root权限)
+			int sched_setscheduler(pid_t pid,int policy,const struct *sched_param);
+			int sched_getscheduler(pid_t pid);		 //获取当前的权重值
+
+			* 直接修改'实时调度策略结构体'(废弃, 少用)
+			int sched_setparam(pid_t pid, const struct *sched_param);
+			int sched_getparam(pid_t pid, const struct *sched_param);
+
+
+		默认版的实时调度策略结构体struct sched_param:
+			struct sched_param {
+				int sched_priority;
+			};
+		sizeof(struct sched_param)=4; 只有一个int 了, 现在禁止手动修改线程调度策略;
+
+		***************************废弃***************************
+		实时调度策略结构体(废弃, 最新版linux已禁用这个结构体):
+			struct sched_param{
+				int32_t sched_priority;								//设置的调度权重(可获取, 可设置, 范围:1-99)
+				int32_t sched_curpriority;						//当前调度权重(设置时忽略该参数, 只能获取时返回)
+				union{
+					int32_t reserved[8];
+					struct{
+						int32_t __ss_low_priority;				//线程的最低优先级(不能高于sched_priority)
+						int32_t __ss_max_repl;						//线程降级的最大阻塞次数(一个线程多次阻塞之后,会自动降级运行,直到后续运行热度了,才会恢复正常的优先级)
+						struct timespec __ss_repl_period;	//降级恢复的等待时间
+						struct timespec __ss_init_budget;	//最高优先级使用时间
+					}__ss;
+				}__ss_un;
+			}
+			sched_priority			必须总是高于sched_ss_low_priority
+			sched_ss_max_repl		必须小于SS_REPL_MAX
+			sched_ss_init_budget必须大于sched_ss_repl_period
+
+			struct timespec{
+				time_t tv_sec; // seconds秒
+				long tv_nsec;	 // nanoseconds纳秒(1s=10^9ns)
+			};
+
+		实时调度策略宏定义:
+			#define sched_ss_low_priority   __ss_un.__ss.__ss_low_priority
+			#define sched_ss_max_repl       __ss_un.__ss.__ss_max_repl
+			#define sched_ss_repl_period    __ss_un.__ss.__ss_repl_period
+			#define sched_ss_init_budget    __ss_un.__ss.__ss_init_budget
+		***************************废弃***************************
+
+
+
+	4.进程主动挂起(一般是SCHED_FIFO 策略的时候使用)
+		//主动挂起进程, 放弃CPU使用权, 失败返回-1
+		int sched_yield(void);
+
+		//获取系统cpu 的时间片长度(SCHED_RR 策略时有效, SCHED_FIFO为0)
+		int sched_rr_get_interval(pid_t pid, struct timespec *tp);
+*/
