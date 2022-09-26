@@ -3,48 +3,93 @@
 	进程scheduling = 进程的行程安排 = 进程的实时调度
 
 	scheduling包括:
-		* 进程nice优先级
+		* 进程nice优先级(对SCHED_OTHER/SCHED_RR 有效)
 		* sched_setaffinity亲和力(绑定cpu内核,提高缓存命中率)
-		* 实时调度策略的修改
+		* 进程调度策略的修改
 		* 手动挂起/抢占
+		* 等待io资源陷入阻塞(等同挂起)
 
-	由于cpu 架构更新速度较快, linux 内核对'线程/进程'调度策略的更新, 波动也很大;
-	现在基本只剩下这两种模式:
-		SCHED_FIFO	抢占模式(手动控制切换)
-		SCHED_RR		时间片模式(默认, 自动切换, 等额分片, 简单权重, 禁止手动修改权重策略细节)
 
-	其实不让修改权重策略也好, 大部分程序员基本都不会深刻的linux 内核细节, 也不会cpu 架构,
-	在SCHED_RR 模式下, 胡乱修改权重策略细节, 很傻逼, 禁用了更好;
+	由于cpu架构更新速度较快, linux内核对线程调度策略的更新, 波动也很大, 现在只剩下这三种模式:
+		SCHED_OTHER		分时模式(等同于SCHED_NORMAL, 默认调度策略)
+		SCHED_FIFO		实时抢占模式(手动挂起/等待io陷入阻塞)
+		SCHED_RR			实时分片模式(时间片)
 
-	保留SCHED_FIFO 抢占模式, 方便有些程序, 需要抢占的, 比较好用;
 
-	剩下的都是SCHED_RR + 简单权重调控 + nice值 + cpu 绑定, 比较好用;
-	彻底杜绝程序员在SCHED_RR 模式下, 各种不切实际的调度幻想(以为自己很会优化, 实则在做无用功, 甚至是乱来)
+	SCHED_RR 实时分片模式, 现在禁止修改分片细节了;
+	struct sched_param{} 结构体, 只剩下一个int 实时权值了, 细节全部不让改了;
 
-	SCHED_FIFO模式有一定应用场景;
+	SCHED_RR 相当于高级一点的SCHED_FIFO 模式,
+	即同级权值, 可以均衡分配时间片;
+	SCHED_FIFO 是先到先得, 同级继续抢占, 直到自己主动挂起/陷入io阻塞/高级权值抢占;
+
+
+
+	总结:
+		* nice 值:
+			nice 越小, 权值计算结果越大(counter+20-nice), 时间片越大, 适用于'非抢占式'的SCHED_OTHER/SCHED_RR
+
+		* sched_setaffinity亲和力(对所有模式有效, 仅提高缓存命中率)
+
+		* 实时进程优先级, 永远大于分时进程;
+
+		* 实时进程的优先级,不是nice值,而是修改进程调度策略时,自己指定进去的sched_priority值(1-99),仅对实时进程有效;
+
+		* 等待io 资源(io 阻塞), 一定会被扔进等待队列, 释放使用权;
+
+		* sleep() 系列函数, 同样会自动释放使用权, 等同挂起;
+
+		* counter 值(仅在分时模式中出现, 不可调整修改):
+			每次'就绪队列'中选择一个任务执行, 被选中的任务, 执行完之后, counter就会被重置为0;
+			没有被选中的任务, counter += 1;
+			使用了cpu最少的进程, counter值会越来越大, 强得cpu使用权的权值, 也会越来越大;
+			一旦抢到使用权, 使用结束后, counter=0;
+			counter 值越大, 被执行的概率越大, 但不影响进程本身拥有的时间片大小;
+
+		* SCHED_RR 实时分片模式, 现在禁止修改分片细节了;
+			struct sched_param{} 结构体, 只剩下一个int 实时权值了, 细节全部不让改了;
+
+		* SCHED_RR 相当于高级一点的SCHED_FIFO 模式,
+			即同级权值, 可以均衡分配时间片;
+			SCHED_FIFO 是先到先得, 同级继续抢占, 直到自己主动挂起/陷入io阻塞/高级权值抢占;
 */
 
+
+
+//前置说明:
+/*
+	调度类型							内核归一化优先级范围	user可设置优先级/NICE范围	设置函数							调度算法
+	SCHED_OTHER/NORMAL	100~139						-20~19									sched_setpriority		CFS
+	SCHED_IDLE					100~139						-20~19									sched_setpriority		CFS
+	SCHED_BATCH					100~139						-20~19									sched_setpriority		CFS
+	SCHED_RR						0~98							99~1										sched_setparam			RT
+	SCHED_FIFO					0~98							99~1										sched_setparam			RT
+	SCHED_DEADLINE			-1								不可设置									sched_setparam			EDF
+*/
 
 
 //
 /*
 	1.进程'nice值'优先级(非实时调度, 执行优先级的倾向权值)
 		'nice值'间接地影响内核对进程的运行优先级调度算法,
-		每个进程都有一个'nice值', 其范围[-20,+19],
-		-20 为最高优先级, +19 为最低优先级, 默认值为0;
+		每个进程都有一个'nice值', 其范围[-20,+19], -20 为最高优先级, +19 为最低优先级, 默认值为0;
 
-		进程的调度并不是严格按照'nice值'的层次进行划分的,
-		相反, 'nice值'只是一个权衡因素
+		进程的调度并不是严格按照'nice值'的层次进行划分的('nice值'只是一个权衡因素);
 
-		api 也很简单:
-			int getpriority(int which, id_t who);						//失败返回-1
-			int setpriority(int which, id_t who, int prio);	//失败返回-1
-		which 参数:
-			which = PRIO_PROCESS, who = 0, 则作用对象是当前调用进程
-			which = PRIO_PGRP,    who = 0, 则作用对象是当前调用进程组
-			which = PRIO_USER,    who = 0, 则作用对象是当前调用进程的用户
-		prio:
-			设置优先级时, 指定的'nice值'
+		//修改当前进程的nice值(只修改一个进程), 失败返回-1;[该函数貌似已经被弃用, 慎用]
+		int nice(int incr);
+
+
+		//修改nice值Ex(升级版, 实际也是用nice 值实现的, prio 的范围也是[-20,19])
+		int getpriority(int which, id_t who);						//失败返回-1
+		int setpriority(int which, id_t who, int prio);	//失败返回-1
+			which 参数:
+				which = PRIO_PROCESS, who = 0, 则作用对象是当前调用进程
+				which = PRIO_PGRP,    who = 0, 则作用对象是当前调用进程组
+				which = PRIO_USER,    who = 0, 则作用对象是当前调用进程的用户
+			prio:
+				设置优先级时, 指定的'nice值', 对SCHED_OTHER/SCHED_RR 有效;
+				当nice 值小于0 时, 需要root权限;
 
 
 
@@ -53,8 +98,8 @@
 		#define _GNU_SOURCE (1)
 		#define __USE_GNU (1)
 		#include <sched.h>
-		sched_setaffinity(pid_t pid,size_t len,cpu_set_t *set);//失败返回-1
-		sched_getaffinity(pid_t pid,size_t len,cpu_set_t *set);
+		int sched_setaffinity(pid_t pid,size_t cpusetsize,const cpu_set_t *mask);
+		int sched_getaffinity(pid_t pid,size_t cpusetsize,cpu_set_t *mask);//失败返回-1
 
 		void CPU_ZERO(cpu_set_t *set);
 		void CPU_SET(int cpu, cpu_set_t *set);
@@ -67,29 +112,26 @@
 
 
 
-	3.实时调度策略
+	3.进程调度策略
 		策略					描述
-		SCHED_FIFO	 实时-抢占式策略(先进先出)
-		SCHED_RR		 实时-时间片轮转
+		SCHED_OTHER	分时时间片策略(linux 不允许使用SCHED_NORMAL这个别名, Invalid argument)
+		SCHED_FIFO	实时-抢占式策略
+		SCHED_RR		实时-时间片轮转
 
-		(下面都是不常用, 不是实时调度策略, 但也是posix标准的调度策略)
-		SCHED_BATCH/SCHED_OTHER 频繁调用则不会衰减, 热度策略(两个别名都是同一种功能)
-		SCHED_IDLE							忽略'nice值'(降到最低),适合于运行超级低优先级的进程
+		(下面都是不常用, 不是进程调度策略, 但也是posix标准的调度策略)
+		SCHED_BATCH			批处理模式(此策略与SCHED_OTHER类似)
+		SCHED_IDLE			忽略'nice值'(降到最低),适合于运行超级低优先级的进程
 
-		一般系统并不需要修改'实时调度策略', 更不需要用到非'实时调度策略'
-		但也有例外:
-			当外部输入的互交进程数据显得很重要的情况下, 外部一个情况就可以影响整个主进程的工作状态的系统,
-			如交通系统, 抢占性能就显得很重要.
-			操作台抢占系统控制权, 以应对突发事件, 优先分配等需求, 这时候就需要做实时优先级抢占了.
-
-		Linux allows the static priority range 1 to 99 for the SCHED_FIFO and SCHED_RR policies
+		一般系统并不需要修改'进程调度策略', 尤其是分时系统, 但也有例外:
+			当外部输入的互交进程数据显得很重要的情况下, 如交通系统, 抢占性能就显得很重要;
+			操作台抢占系统控制权, 以应对突发事件, 优先分配等需求, 这时候就需要做实时优先级抢占了;
 
 		实时调度策略api:
-			* 根据调度策略type, 获取调度权重
-			int sched_get_priority_min(int policy);//获取'调度权重'起点min
-			int sched_get_priority_max(int policy);//获取'调度权重'终点max
+			* 根据调度策略type, 获取'调度权值'
+			int sched_get_priority_min(int policy);//获取'调度权值'起点min
+			int sched_get_priority_max(int policy);//获取'调度权值'终点max
 					policy参数(指定调度策略type):
-						#define SCHED_NORMAL		0		//Invalid argument linux不允许使用这个值
+						#define SCHED_OTHER			0
 						#define SCHED_FIFO			1
 						#define SCHED_RR				2
 						#define SCHED_BATCH			3
@@ -115,15 +157,15 @@
 		***************************废弃***************************
 		实时调度策略结构体(废弃, 最新版linux已禁用这个结构体):
 			struct sched_param{
-				int32_t sched_priority;								//设置的调度权重(可获取, 可设置, 范围:1-99)
-				int32_t sched_curpriority;						//当前调度权重(设置时忽略该参数, 只能获取时返回)
+				int32_t sched_priority;								//设置的'调度权值'(可获取, 可设置, 范围:1-99)
+				int32_t sched_curpriority;						//当前'调度权值'(设置时忽略该参数, 只能获取时返回)
 				union{
 					int32_t reserved[8];
 					struct{
-						int32_t __ss_low_priority;				//线程的最低优先级(不能高于sched_priority)
-						int32_t __ss_max_repl;						//线程降级的最大阻塞次数(一个线程多次阻塞之后,会自动降级运行,直到后续运行热度了,才会恢复正常的优先级)
+						int32_t __ss_low_priority;				//线程的最低权值(不能高于sched_priority)
+						int32_t __ss_max_repl;						//线程降级的最大阻塞次数(一个线程多次阻塞之后,会自动降级运行,直到后续运行热度了,才会恢复正常的权值)
 						struct timespec __ss_repl_period;	//降级恢复的等待时间
-						struct timespec __ss_init_budget;	//最高优先级使用时间
+						struct timespec __ss_init_budget;	//最高权值使用时间
 					}__ss;
 				}__ss_un;
 			}
@@ -145,10 +187,12 @@
 
 
 
-	4.进程主动挂起(一般是SCHED_FIFO 策略的时候使用)
-		//主动挂起进程, 放弃CPU使用权, 失败返回-1
+	4.进程主动挂起
+		//主动挂起进程, 放弃CPU使用权; (失败返回-1)
+		//io 阻塞类操作, 等同挂起;
+		//sleep 系列操作, 等同挂起;(一切阻塞操作, 等同挂起)
 		int sched_yield(void);
 
-		//获取系统cpu 的时间片长度(SCHED_RR 策略时有效, SCHED_FIFO为0)
+		//获取系统cpu 的时间片长度(仅SCHED_OTHER/SCHED_RR有效, SCHED_FIFO为0)
 		int sched_rr_get_interval(pid_t pid, struct timespec *tp);
 */
