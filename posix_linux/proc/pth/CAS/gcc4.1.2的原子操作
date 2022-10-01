@@ -1,0 +1,108 @@
+//本文只谈论gcc4.1.2的原子操作(编程语言级别), 不谈posix API 层面的原子操作;
+
+
+
+//从gcc4.1.2之后, gcc提供了__sync_*系列的built-in函数, 用于提供加减和逻辑运算的原子操作:
+/*
+	OR		或			|
+	AND		与			&
+	XOR		异或		^
+	NAND	与非		~(a&b)
+
+	NOR		或非		~(a|b)
+	XNOR	异或非	~(a^b)
+*/
+
+
+
+//gcc 的CAS 乐观锁在X86 上面的优化:
+/*
+	在x86平台上, CPU提供了在指令执行期间对总线加锁的手段.
+	CPU芯片上有一条引线#HLOCK pin, 
+	如果汇编语言的程序中在一条指令前面加上前缀"LOCK", 
+	经过汇编以后的机器代码就使CPU在执行这条指令的时候把#HLOCK pin的电位拉低, 持续到这条指令结束时放开, 
+	从而把总线锁住, 这样同一总线上别的CPU就暂时不能通过总线访问内存了, 保证了这条指令在多处理器环境中的原子性. 
+
+	LOCK是一个指令的描述符, 表示后续的指令在执行的时候, 在内存总线上加锁. 
+	总线锁会导致其他几个核在一定时钟周期内无法访问内存. 
+	虽然总线锁会影响其他核的性能, 但比起操作系统级别的锁, 已经轻量太多了. 
+
+	#lock是锁FSB(前端串行总线, front serial bus), 
+	FSB是处理器和RAM之间的总线, 锁住了它, 就能阻止其他处理器或core从RAM获取数据. 
+*/
+
+//其他平台, arm, mips 等, 如果gcc编译器, glibc运行时库, 没有实现__sync_*系列的built-in函数, 则需要自己实现
+/*
+	(一般不可能, 基本都有实现的, 这里只提供实现方案demo)
+	int compare_and_swap(int* reg, int oldval, int newval){
+		int old_reg_val = *reg;
+		if(old_reg_val == oldval)
+			*reg = newval;
+		return old_reg_val;
+	}
+
+	bool compare_and_swap(int *accum, int *dest, int newval){
+		if(*accum == *dest){
+			*dest = newval;
+			return true;
+		}
+		return false;
+	}
+
+	用宏来实现基本不可能, 不能返回, void 的可以用宏来实现;
+*/
+
+
+
+//缺点: 只能操作一个int 变量, 最长64bit; 只能在gcc 编译器中使用;
+
+
+
+//先取出更新前的值, 执行更新, 返回更新前的值
+type __sync_fetch_and_add (type* ptr, type value, ...);	//加
+type __sync_fetch_and_sub (type* ptr, type value, ...);	//减
+type __sync_fetch_and_or (type* ptr, type value, ...);	//或
+type __sync_fetch_and_and (type* ptr, type value, ...);	//与
+type __sync_fetch_and_xor (type* ptr, type value, ...);	//异或
+type __sync_fetch_and_nand (type* ptr, type value, ...);//与非
+
+//先执行更新, 再取出更新后的值, 再将取出的值返回
+type __sync_add_and_fetch (type* ptr, type value, ...);	//加
+type __sync_sub_and_fetch (type* ptr, type value, ...);	//减
+type __sync_or_and_fetch (type* ptr, type value, ...);	//或
+type __sync_and_and_fetch (type* ptr, type value, ...);	//与
+type __sync_xor_and_fetch (type* ptr, type value, ...);	//异或
+type __sync_nand_and_fetch (type* ptr, type value, ...);//与非
+
+//type可以是1,2,4或8字节长度的int类型:
+/*
+	int8_t   /  uint8_t
+	int16_t  /  uint16_t
+	int32_t  /  uint32_t
+	int64_t  /  uint64_t
+	ps:
+		由于都是宏定义, 因此type 并没有具体的值类型, 自己对号入座即可;
+
+
+	(...多参数输入, 可忽略!!)
+	后面的可扩展参数(...)用来指出哪些变量需要memory barrier,
+	因为目前gcc实现的是full barrier;
+	(类似于linux kernel 中的mb(),表示这个操作之前的所有内存操作不会被重排序到这个操作之后),所以可以略掉这个参数;
+*/
+
+
+//原子操作级的比较和交换(如果*ptr == oldval,就将newval写入*ptr)[阻塞死等,不切换线程]
+bool __sync_bool_compare_and_swap (type* ptr, type oldval type newval, ...);	//阻塞死等, 相等并写入成功的情况下返回true
+type __sync_val_compare_and_swap (type* ptr, type oldval type newval, ...);		//阻塞死等, 相等并写入成功的情况下返回操作之前的值
+
+
+
+//先取出更新前的值, 执行更新, 返回更新前的值
+type __sync_lock_test_and_set (type* ptr, type value, ...);	//将*ptr设为value, 返回*ptr操作之前的值
+//不返回, 直接清0
+void __sync_lock_release (type* ptr, ...);									//将*ptr置0
+
+
+
+
+
