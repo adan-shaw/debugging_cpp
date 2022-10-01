@@ -5,6 +5,11 @@
 
 //arr_stack_mini 说明:
 /*
+	* 由于#define 宏只能做简单的字符替换, 没办法区分'.'/'->',
+		因此, arr_stack_mini 基本上只能使用'->' 指针模式;
+		需要在栈上创建arr_stack_mini, 请使用: alloca()
+		需要在堆上创建arr_stack_mini, 请使用: malloc()/new()
+
 	* 没有必要搞批量操作, 更没有必要搞批量copy cache-buffer, 
 		因为你拷贝进copy cache-buffer的时候, 本身就消耗了一个for 循环了, 很不划算, 
 		就算后面直接一次性memcpy, 也抵消不了性能消耗;
