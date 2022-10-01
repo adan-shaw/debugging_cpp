@@ -1,0 +1,56 @@
+//包含c11 原子操作支持的头文件
+#ifdef __STDC_NO_ATOMICS__
+	#include <stdatomic.h>
+#else
+	#error "Not Supported C11 stdatomic.h, please check"
+#endif
+
+
+
+//c11 原子操作API
+/*
+	快速宏								模板宏
+	std::atomic_bool		std::atomic<bool>
+	std::atomic_char		std::atomic<char>
+	std::atomic_schar		std::atomic<signed char>
+	std::atomic_uchar		std::atomic<unsigned char>
+	std::atomic_short		std::atomic<short>
+	std::atomic_ushort	std::atomic<unsigned short>
+	std::atomic_int			std::atomic<int>
+	std::atomic_uint		std::atomic<unsigned int>
+	std::atomic_long		std::atomic<long>
+	...
+
+	虽然通过模板, 你可以将任意类型的变量, 设置为原子变量,
+	但考虑到c11 原子变量的实现, 是基于CAS 实现的, 考虑到性能问题, 你不应将class 类设置为原子变量;
+
+
+
+	初始化原子变量可以使用如下函数[不保证原子性, 当然一般也不会在多线程中进行初始化]:
+		ATOMIC_VAR_INIT
+		atomic_init
+		ATOMIC_FLAG_INIT
+
+	操作原子变量则使用如下函数[保证原子性]:
+		atomic_store()
+		atomic_load()
+		atomic_exchange()
+		atomic_compare_exchange_strong()
+		atomic_compare_exchange_weak()
+
+		atomic_fetch_add()
+		atomic_fetch_sub()
+		atomic_fetch_or()
+		atomic_fetch_xor()
+		atomic_fetch_and()
+		atomic_flag_test_and_set()
+		atomic_flag_clear()
+
+	以上函数还都有xxx_explicit版本, 多出一个memory_order参数, 用来显示指定order.
+
+
+	注意:
+		c11 的原子变量操作, 也跟gcc4.1.2 一样, 需要用特殊的函数进行操作才行;
+		不能直接操作的, 否则不保证原子性;
+		所以其实, 用gcc4.1.2 的API 也可以, 只是跨平台性能差而已;
+*/
