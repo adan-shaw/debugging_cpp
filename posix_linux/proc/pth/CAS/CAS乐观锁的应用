@@ -46,6 +46,11 @@
 		资源争夺不明显的情况下, 优质;
 		资源争夺很明显的情况下, 性能还不如互斥锁;
 
+	证明:
+		在分时系统中, 适当切换线程, 比死等更优质(如果可以切换线程的情况下);
+		适当切换线程, 更能提高cpu 工作效率(时间更快), 更能降低cpu 能耗(cpu占用率更低);
+		所以在允许切换线程的情况下, mutex 互斥锁, rwlock 读写锁, 仍然是首选;
+
 	//简化宏
 	#define CASEx_mutex_entry(CASlock_mutex) { while(!__sync_bool_compare_and_swap(&CASlock_mutex,0,1)){;} }
 	#define CASEx_mutex_leave(CASlock_mutex) { CASlock_mutex=0; }
