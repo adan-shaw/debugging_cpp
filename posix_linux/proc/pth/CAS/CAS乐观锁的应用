@@ -1,0 +1,55 @@
+//CAS乐观锁的应用
+/*
+	CAS,全称Compare And Swap(比较与交换);
+
+	CAS乐观锁, 无论是:
+		posix API, 实现的API层面上的原子操作;
+		C11 C++11 实现的原子变量: std::atomic_long tmp;
+		C11 C++11 实现的CAS乐观锁: std::atomic_flag lock;
+		老式编译器实现的CAS乐观锁(gcc4.1.2原子操作);
+
+	他们的本质上, 都是CAS乐观锁, 都与自旋锁类似, 都是死等锁;
+	有编译器优化, 可能会减少if() while()产生的预测分支, 但改变不了死等, 消耗cpu 的本质;
+
+	CAS乐观锁常用于一些精简资源的同步工作, 也是一种构建内存临界区的手段;
+	但只能操作一个int 变量, 最长64bit; 只能在gcc 编译器中使用;
+
+
+	CAS 常用在无锁编程中 && 跨平台无锁编程中;
+*/
+
+
+
+//CAS乐观锁-常见的使用案例1:
+/*
+	多线程抢夺资源的情况下, 使用:
+		__sync_fetch_and_add(&G_count,1);//多线程加法操作
+		__sync_fetch_and_add(&G_count,n);
+
+		__sync_fetch_and_sub(&G_count,1);//多线程减法操作
+		__sync_fetch_and_sub(&G_count,n);
+
+	详情, 自己看: ./gcc4.1.2原子操作
+	对标C11 的原子变量, std::atomic_long tmp;	//int 原子变量
+	C11 的原子变量, 代码量比较简短些, 标准些;
+*/
+
+
+
+//CAS乐观锁-常见的使用案例2:
+/*
+	自定义的CAS互斥锁操作(乐观锁, 实际上就是乐观)
+	优势:
+		跨平台, 死等, 不用切换线程, 实时;
+
+	劣势:
+		资源争夺不明显的情况下, 优质;
+		资源争夺很明显的情况下, 性能还不如互斥锁;
+
+	//简化宏
+	#define CASEx_mutex_entry(CASlock_mutex) { while(!__sync_bool_compare_and_swap(&CASlock_mutex,0,1)){;} }
+	#define CASEx_mutex_leave(CASlock_mutex) { CASlock_mutex=0; }
+
+	对标C11 的CAS乐观锁, std::atomic_flag lock;//CAS乐观锁
+	C11 的原子变量, 代码量比较简短些, 标准些;
+*/
