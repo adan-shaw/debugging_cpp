@@ -38,7 +38,7 @@
 
 
 
-//从'无序arr'中, 从左往右寻找目标(找到值, 则pos=len[大于0]; 找不到值, 则len=-1)
+//从'无序arr'中, 从右往左寻找目标(找到值, 则pos=len[大于0]; 找不到值, 则len=-1)
 #define arr_seq_find_int(arr, len, target) { while(len >= 0) if(arr[len--] == target) break; }
 
 //浮点版本
