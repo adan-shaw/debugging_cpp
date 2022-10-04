@@ -4,7 +4,7 @@
 
 	#include <stdbool.h>
 
-	//多线程版-cas, 阻塞会切换线程, 实时系统慎用;
+	//多线程版-cas, 阻塞会不切换线程, CPU消耗很高, 竞争冲突较多的场合慎用;
 
 	#ifndef __arr_que_cas
 		#define __arr_que_cas (1)
