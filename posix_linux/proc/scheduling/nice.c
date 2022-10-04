@@ -1,5 +1,5 @@
 //编译:
-//		gcc -g3 ./nice.c -o x 
+//		gcc -g3 ./nice.c -o x
 
 //进程'nice值'优先级修改:
 /*
