@@ -53,8 +53,22 @@
 
 	//简化宏
 	#define CASEx_mutex_entry(CASlock_mutex) { while(!__sync_bool_compare_and_swap(&CASlock_mutex,0,1)){;} }
-	#define CASEx_mutex_leave(CASlock_mutex) { CASlock_mutex=0; }
+	#define CASEx_mutex_leave(CASlock_mutex) { __sync_bool_compare_and_swap(&CASlock_mutex,1,0); }
 
 	对标C11 的CAS乐观锁, std::atomic_flag lock;//CAS乐观锁
 	C11 的原子变量, 代码量比较简短些, 标准些;
 */
+
+
+
+//CAS 常用到的判断宏
+#if __GNUC__ > 4 || \
+		(__GNUC__ == 4 && __GNUC_MINOR__ > 1) || \
+		(__GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ > 1)
+
+		//定义自己的内容
+
+#else
+		#error "must be >= gcc4.1.2, please check your compiler"
+#endif
+
