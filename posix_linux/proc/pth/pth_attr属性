@@ -1,0 +1,152 @@
+//pth线程属性结构体
+/*
+	typedef struct{
+		int detachstate;								//线程的分离状态
+
+		int schedpolicy;								//线程调度策略
+		struct sched_param schedparam;	//线程的调度参数
+
+		int inheritsched;								//线程的继承性
+		int scope;											//线程的作用域
+
+		size_t guardsize;								//线程栈末尾的警戒缓冲区大小
+		int stackaddr_set;							//线程栈的位置
+		void* stackaddr;								//线程栈的指针
+		size_t stacksize;								//线程栈的大小
+	}pthread_attr_t;
+*/
+
+
+
+//pth线程属性操作API
+/*
+	int pthread_atfork(void (*)(void), void (*)(void),void(*)(void));
+	int pthread_attr_init(pthread_attr_t *);
+	int pthread_attr_destroy(pthread_attr_t *);
+
+	int pthread_attr_getdetachstate(const pthread_attr_t *, int *);
+	int pthread_attr_setdetachstate(pthread_attr_t *, int);
+
+	int pthread_attr_getstack(const pthread_attr_t *restrict,void **restrict, size_t *restrict);
+	int pthread_attr_getstacksize(const pthread_attr_t *restrict,size_t *restrict);
+
+	int pthread_attr_setstack(pthread_attr_t *, void *, size_t);
+	int pthread_attr_setstacksize(pthread_attr_t *, size_t);
+
+	int pthread_attr_getguardsize(const pthread_attr_t *restrict,size_t *restrict);
+	int pthread_attr_setguardsize(pthread_attr_t *, size_t);
+
+	int pthread_attr_getinheritsched(const pthread_attr_t *restrict,int *restrict);
+	int pthread_attr_setinheritsched(pthread_attr_t *, int);
+	int pthread_attr_getschedparam(const pthread_attr_t *restrict,struct sched_param *restrict);
+	int pthread_attr_getschedpolicy(const pthread_attr_t *restrict,int *restrict);
+	int pthread_attr_setschedparam(pthread_attr_t *restrict,const struct sched_param *restrict);
+	int pthread_attr_setschedpolicy(pthread_attr_t *, int);
+	int pthread_attr_setscope(pthread_attr_t *, int);
+	int pthread_attr_getscope(const pthread_attr_t *restrict,int *restrict);
+*/
+
+
+
+//pth线程属性attr结构体详述(若成功返回0, 若失败返回-1):
+/*
+	1.pthread_attr_t载体, 使用前需要初始化:
+		int pthread_attr_init(pthread_attr_t *attr);		//初始化函数
+		int pthread_attr_destroy(pthread_attr_t *attr);	//去除初始化函数
+
+		pthread_attr_init()初始化, 会将pthread_attr_t 全部初始化为'默认线程属性'.
+		pthread_attr_init()初始化, 会自动分配线程栈, 因此必须判断是否初始化成功;
+		pthread_attr_destroy()会自动释放线程栈;
+
+		调用pthread_create()函数时, 
+		如果传入pthread_attr_t载体, 则linux 内核不会再创建'默认线程属性'载体, 
+		而是使用传入的pthread_attr_t载体, 作为新的'线程属性载体';
+
+
+	2.设置detach状态, 需要使用专用函数进行操作:
+			int pthread_attr_getdetachstate(const pthread_attr_t * attr, int *detachstate);
+			int pthread_attr_setdetachstate(pthread_attr_t * attr, int detachstate);
+			detachstate参数:
+				PTHREAD_CREATE_DETACHED 分离状态启动
+				PTHREAD_CREATE_JOINABLE 正常启动线程
+
+
+	3.设置线程是否继承父线程调度策略:
+		int pthread_attr_getinheritsched(const pthread_attr_t *attr, int *inheritsched);
+		int pthread_attr_setinheritsched(pthread_attr_t *attr, int inheritsched);
+		inheritsched参数:
+			PTHREAD_EXPLICIT_SCHED 不继承(只有不继承父线程的调度策略, 才可以设置线程的调度策略)
+			PTHREAD_INHERIT_SCHED  继承
+
+
+	4.设置新的调度策略:
+		int pthread_attr_getschedpolicy(const pthread_attr_t *, int * policy)
+		int pthread_attr_setschedpolicy(pthread_attr_*, int policy)
+		policy参数:
+			SCHED_OTHER	分时时间片策略(linux 不允许使用SCHED_NORMAL这个别名, Invalid argument)
+			SCHED_FIFO	实时-抢占式策略
+			SCHED_RR		实时-时间片轮转
+
+
+	5.设置新的调度策略:
+		int pthread_attr_getschedparam(const pthread_attr_t *,struct sched_param *);
+		int pthread_attr_setschedparam(pthread_attr_t *,const struct sched_param *);
+		struct sched_parm参数:
+			//设置的'调度权值'(可获取, 可设置, 范围:1-99)
+			struct sched_param {
+				int sched_priority;
+			};
+			sizeof(struct sched_param)=4; 只有一个int 了, 现在禁止手动修改线程调度策略;
+
+
+	6.设置线程栈的大小
+		int pthread_attr_getstacksize(const pthread_attr_t *,size_t * stacksize);
+		int pthread_attr_setstacksize(pthread_attr_t *attr ,size_t *stacksize);
+		stacksize参数:
+			栈大小(设置对齐内存大小即可, 默认是8MB=8388608=8*1024*1024, 单位byte)
+
+
+	7.设置线程栈的地址
+		int pthread_attr_getstackaddr(const pthread_attr_t *attr,void **stackaddf);
+		int pthread_attr_setstackaddr(pthread_attr_t *attr,void *stackaddr);
+		stackaddr参数:
+			栈pbuf指针
+		注意:
+			pthread_attr_getstackaddr()已过期, 现在用:pthread_attr_getstack()
+
+
+	8.设置线程栈末尾的警戒缓冲区:
+		int pthread_attr_getguardsize(pthread_attr_t *attr, size_t guardsize);
+		int pthread_attr_setguardsize(pthread_attr_t *attr ,size_t *guardsize);
+
+		注意:
+			线程属性guardsize控制着线程栈末尾的buf, 以避免栈溢出;
+			guardsize默认值=PAGESIZE个字节;
+			可以把guardsize 设为0, 节省内存;
+
+			如果修改了线程栈的地址, 系统就会认为我们会自己管理线程栈了, 
+			并使警戒栈缓冲区机制无效, 等同于把guardsize线程属性设为0;
+
+			guardsize=0 的线程, 即轻进程(LWP=Light Weight Process);
+			(linux 无真实的线程, 所有线程都是Process)
+
+
+
+	9.轻进程(LWP=Light Weight Process):
+		轻进程可以理解为内核线程, 
+		系统对线程资源的分配、对线程的控制是通过轻进程来实现的, 它位于用户层和系统层之间;
+
+		一个轻进程可以控制一个或多个线程.
+
+		默认状况下, 启动多少轻进程、哪些轻进程来控制哪些线程是由系统来控制的, 这种状况即称为非绑定的;
+
+		绑定轻进程:
+			int pthread_attr_getscope(const pthread_attr_t * attr, int * scope);
+			int pthread_attr_setscope(pthread_attr_t*, int scope);
+			scope参数:
+				PTHREAD_SCOPE_PROCESS(非绑定的轻进程, 用户级别, 普通进程)
+				PTHREAD_SCOPE_SYSTEM(绑定的轻进程, 系统级别, 内核进程)
+
+		被绑定的线程具有较高的响应速度, 这是因为CPU时间片的调度是面向轻进程的,
+		绑定的线程可以保证在需要的时候它总有一个轻进程可用;
+*/
