@@ -55,7 +55,7 @@ void *thread1(void *arg){
 		pthread_mutex_lock(&G_mutex);
 		pthread_cond_wait(&G_cond,&G_mutex);										//死等
 		pthread_mutex_unlock(&G_mutex);
-		printf("pthread_cond_wait() wake up count=%d\n",count++);
+		printf("pthread_cond_wait() wake up count=%d\n",++count);
 	}
 	printf("thread1 exit\n");
 	return NULL;
@@ -64,20 +64,28 @@ void *thread1(void *arg){
 void *thread2(void *arg){
 	int tmp,count=0;
 	struct timespec timeout;
-	timeout.tv_sec = 1;//1秒timeout
-	timeout.tv_nsec = 0;
-	return NULL;//for test only
+	timeout.tv_sec = 2;	//0秒timeout[不知道为什么超时功能不能用,1秒超时不会阻塞1秒,而是直接返回了
+	timeout.tv_nsec = 0;//					 linux禁用了超时的cond条件变量? 证明: pthread_cond_timedwait()不会切换线程,
+											//					 多运行几次, 可以看到pthread_cond_timedwait() 会被调用]
+	//return NULL;//for test only
 	while(!G_exit){
 		pthread_mutex_lock(&G_mutex);
-		tmp = pthread_cond_timedwait(&G_cond,&G_mutex,&timeout);//超时等待(弃用,使用无效,很诡异)
+		tmp = pthread_cond_timedwait(&G_cond,&G_mutex,&timeout);//超时等待(异步查询用法,不切换线程)
 		pthread_mutex_unlock(&G_mutex);
-		if(tmp == 0)
-			printf("pthread_cond_timedwait() ok\n");							//被signal正确唤醒
-		if(tmp == EINTR)
-			printf("pthread_cond_timedwait() wake up by singal\n");
-		if(tmp == ETIMEDOUT)
-			printf("pthread_cond_timedwait() timeout\n");
-		printf("pthread_cond_timedwait() wake up count=%d\n",count++);
+		switch(tmp){
+			case 0:
+				printf("pthread_cond_timedwait() okay, count=%d\n",++count);
+				break;
+			case EINTR:			//4
+				printf("pthread_cond_timedwait() wake up by singal, count=%d\n",++count);
+				break;
+			case ETIMEDOUT:	//110
+				//printf("pthread_cond_timedwait() timeout\n");
+				break;
+			default:				//EINVAL=22
+				printf("pthread_cond_timedwait() unknow error, tmp=%d\n", tmp);
+				break;
+		}
 	}
 	printf("thread2 exit\n");
 	return NULL;
@@ -133,4 +141,8 @@ int main(void){
 	}
 	return 0;
 }
+
+
+
+
 
