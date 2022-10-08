@@ -45,6 +45,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+//获取&&比较进程pid
 void test_pid_t(void){
 	pid_t pid1 = getpid();
 	pid_t pid2 = getppid();
@@ -53,6 +54,7 @@ void test_pid_t(void){
 	return;
 }
 
+//获取&&比较线程pthread_t
 void test_pthread_t(void){
 	pthread_t thid = pthread_self();
 	pthread_t thid2 = pthread_self();
