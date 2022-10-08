@@ -87,7 +87,7 @@
 			SCHED_RR		实时-时间片轮转
 
 
-	5.设置新的调度策略:
+	5.设置新的调度权值:
 		int pthread_attr_getschedparam(const pthread_attr_t *,struct sched_param *);
 		int pthread_attr_setschedparam(pthread_attr_t *,const struct sched_param *);
 		struct sched_parm参数:
