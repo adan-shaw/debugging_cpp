@@ -1,0 +1,67 @@
+how to start c/c++ programming in linux system?
+
+	* first, install linux system into your laptop/PC computer, get it started;
+		start by install linux system, start by linux basic command,
+		keep using linux system as usually as windows/MacOS system;
+
+	* second, read books, i shared to you my favorite books:
+		* No.0: 单片机原理与应用(第二版) - 北京航空航天大学出版社(次要, 没决心可以忽略不学)
+						主修:8051 汇编, 梦起始的地方
+		* No.1: 标准c++实用教程 - 电子工业出版社(康晓林,汪涛) [十分重要,书本很少,请买正版]
+		* No.2: 数据结构c++语言描述--应用标准模板库(STL)(第二版)[美]William Ford, William Topp - 清华大学出版社
+		* No.3: 程序员的自我修养--链接,装载与库 - 电子工业出版社(俞甲子,石凡,潘爱民) [一阶重点]
+		* No.4: Linux/Unix系统编程手册[德]Michael Kerrisk - 人民邮电出版社
+		* No.5: TCP/IP详解卷1: 协议(必须要会), 卷2: syscall(内核编码,需要可以买), 卷3: TCP进阶(需要买,互联网常用)
+
+	* three, start programming, try how to use it;
+
+	* four, record important data;
+		ps: 鉴于刚开始编码的时候, 一般初学者水平不高, 初级的时候, 注重收集数据, 完善数据, 知识点,
+				让知识树, 理论上支撑稳定之后, 再进行精炼(一般可以一边练手,一边收集资料,一阶段很漫长);
+				等资料, 练手经验, 准备得差不多的时候, 就提炼, 尝试深入了解细节, 尝试步入二阶;
+				注意:
+					不要一开始就做算法, 除非你是应用数学系出身的高材生, 
+					否则容易托慢进度, 打思想空转, 
+					c++数据结构基础扎实即可, 后续具体业务, 具体分析, 老板给钱, 你就学具体行业的算法;
+					学习过程中接触过的算法, 大部分到了后期都惨不忍睹, 不堪直视, 不敢相信自己写的烂代码, 别浪费时间;
+
+	* five, cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, gdb[初级]
+
+
+
+	* 二阶:
+			cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, gdb[高级]
+			(至少熟练编写makefile/CMakeList.txt, 会搭建交叉编译链, 会使用gdb调试)
+			openssl 最基础的两类算法: 校验数/对称加密
+			常用数据库的基础使用: mysql(pgsql)/redis/sqlite
+			常见的序列化: cjson/xml
+			SMP 同构CPU 并行计算[二阶++的基础,多线程调度会用到]
+			常见的芯片架构[intel/arm/mips], 常见的指令集的具体用途(不需要知道细节,但大概知道有什么用), 了解芯片基本的差异性;
+			操作系统拓展: freebsd/openwrt/RT-Thread [拓展了操作系统,视野更广]
+			常用的图片压缩算法+ffmpeg视频压缩,转码,滤镜: 走向多媒体, 进入复合数据流时代;
+
+		++:
+			linux 日常使用[十分熟练]
+			shell 编码
+			systemd家族命令/service命令
+			daemon shell编写
+			使用gdb调试daemon 程序
+			linux kernel 子模块管理
+			syscall入门(可选,可以不搞)
+			最终实现基础的LFS(Linux From Scratch)
+
+		++:
+			NUMA (一般是CUDA, opencl, openMP)异构芯片并行计算
+			MPP (局域网小型分布式系统)
+			理解:
+				同构cpu/异构芯片
+				并行计算/分布式计算/云计算(虚拟化技术,计算资源拆分)=网格计算(新型符合计算网络)
+			nginx/openresty(http方向必学)
+			linux内核+kvm+xen+docker+k8s(云计算,虚拟化方向)
+			openwrt(交叉编译+网络安全方向)
+			ffmpeg 精炼(需要会使用ffmpeg API进行编码,多媒体方向)
+			opencv 视觉计算(需要会算法,人工智能方向)
+			LFS+linux内核子模块编码[syscall API](BSP系统移植方向,操作系统方向)
+
+		++: ...(待续)
+
