@@ -32,6 +32,7 @@
 
 		* 分时线程, 可以选择'继承/不继承'父进程的调度策略
 			实时线程, 必须'继承'父进程的调度策略, 否则调度失败, why??
+			实时线程, pthread_attr_setinheritsched() 必须为: PTHREAD_EXPLICIT_SCHED
 */
 
 
