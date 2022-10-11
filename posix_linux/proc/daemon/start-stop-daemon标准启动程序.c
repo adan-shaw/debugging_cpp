@@ -229,7 +229,7 @@ static struct pid_list *killed = NULL;
 
 struct schedule_item {
 	enum { sched_timeout, sched_signal, sched_goto, sched_forever } type;
-	int value; // seconds, signal no., or index into array sched_forever is only seen within parse_schedule and callees 
+	int value; // seconds, signal no, or index into array sched_forever is only seen within parse_schedule and callees 
 };
 
 static int schedule_length;
@@ -796,7 +796,7 @@ static void do_pidfile(const char *name){
 	return;
 }
 
-// WTA: this	needs to be an autoconf check for /proc/pid existance.
+// WTA: this needs to be an autoconf check for /proc/pid existance.
 
 #if defined(OSLinux) || defined (OSsunos) || defined(OSfreebsd)
 static void do_procinit(void){
