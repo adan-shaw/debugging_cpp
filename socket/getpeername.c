@@ -1,5 +1,5 @@
 //编译:
-//		g++ -g3 ./getpeername.cpp -o x 
+//		gcc -g3 ./getpeername.c -o x 
 
 
 
@@ -34,8 +34,8 @@ bool srv(char *bind_ip, unsigned short port){
 	int tmp, sfd_bind, sfd_conn;
 	struct sockaddr_in addr_srv, addr_bind, addr_conn, addr_peer;
 	socklen_t addr_bind_len = sizeof(addr_bind),
-			addr_conn_len = sizeof(addr_bind),
-			addr_peer_len = sizeof(addr_bind);
+						addr_conn_len = sizeof(addr_bind),
+						addr_peer_len = sizeof(addr_bind);
 	char str_ip[INET_ADDRSTRLEN];
 
 
@@ -160,7 +160,7 @@ int main(void){
 	pid_son = fork();
 	if(pid_son == -1){
 		perror("fork() failed");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	if(pid_son == 0){
@@ -176,5 +176,5 @@ int main(void){
 	printf("爸爸多做点工作\n");
 	if(!cli("127.0.0.1", 8868))
 		printf("父进程启动cli() 失败\n");
-	exit(EXIT_SUCCESS);
+	return 0;
 }
