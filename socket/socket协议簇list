@@ -17,9 +17,9 @@ PF表示PROTOCOL FAMILY 协议族;
 	AF_INET				tcp/ip v4
 	AF_INET6			tcp/ip v6
 
-	AF_ROUTE			原始套接字socket[需要root权限]
-
 	AF_NETLINK		很强大的内核太socket, 常用于组播, 只支持udp/raw模式, 不支持tcp模式[Linux特有,需要root权限]
+
+	AF_ROUTE			路由域套接字socket, 只支持raw模式[需要root权限]
 
 	AF_PACKET			链路层socket(需要自己附上ARP 报文)
 
