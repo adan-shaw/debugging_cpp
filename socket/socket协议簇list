@@ -29,7 +29,7 @@ PF表示PROTOCOL FAMILY 协议族;
 
 	AF_BLUETOOTH	蓝牙(无线电)
 
-	AF_RDS				无线电广播
+	AF_RDS				英国广播电台标准(广播电台专用)
 
 	PF_IPX				IPX-Novell协议
 
