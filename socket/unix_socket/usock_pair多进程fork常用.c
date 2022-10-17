@@ -93,7 +93,7 @@ void socketpair_test_tcp(void){
 	usock_frame_t mbuf;
 
 	//创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
-	tmp = socketpair(PF_LOCAL,SOCK_STREAM,0,sv);
+	tmp = socketpair(AF_UNIX,SOCK_STREAM,0,sv);
 	if(tmp == -1){
 		perror("socketpair()");
 		return ;
@@ -120,7 +120,7 @@ void socketpair_test_tcp(void){
 		sleep(1);
 
 		while(count > 0){
-			tmp = read(sv[0],&mbuf,sizeof(mbuf));			//阻塞read()
+			tmp = read(sv[0],&mbuf,sizeof(mbuf));				//阻塞read()
 			if(tmp > 0){
 				printf("tcp: read() from 父亲(%d bit): \n%s\n",tmp,mbuf.buf);
 				printf("tcp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
@@ -136,7 +136,7 @@ void socketpair_test_tcp(void){
 		close(sv[0]);				//父进程-关闭sv[0]
 
 		while(count > 0){
-			tmp = read(sv[1],&mbuf,sizeof(mbuf));			//阻塞read()
+			tmp = read(sv[1],&mbuf,sizeof(mbuf));				//阻塞read()
 			if(tmp > 0){
 				printf("tcp: read() from 孩子(%d bit): \n%s\n",tmp,mbuf.buf);
 				printf("tcp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
@@ -170,7 +170,7 @@ void socketpair_test_udp(void){
 	usock_frame_t mbuf;
 
 	//创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
-	tmp = socketpair(PF_LOCAL,SOCK_DGRAM,0,sv);
+	tmp = socketpair(AF_UNIX,SOCK_DGRAM,0,sv);
 	if(tmp == -1){
 		perror("socketpair()");
 		return ;
@@ -197,7 +197,7 @@ void socketpair_test_udp(void){
 		sleep(1);
 
 		while(count > 0){
-			tmp = read(sv[0],&mbuf,sizeof(mbuf));			//阻塞read()
+			tmp = read(sv[0],&mbuf,sizeof(mbuf));				//阻塞read()
 			if(tmp > 0){
 				printf("udp: read() from 父亲(%d bit): \n%s\n",tmp,mbuf.buf);
 				printf("udp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
@@ -213,7 +213,7 @@ void socketpair_test_udp(void){
 		close(sv[0]);				//父进程-关闭sv[0]
 
 		while(count > 0){
-			tmp = read(sv[1],&mbuf,sizeof(mbuf));			//阻塞read()
+			tmp = read(sv[1],&mbuf,sizeof(mbuf));				//阻塞read()
 			if(tmp > 0){
 				printf("udp: read() from 孩子(%d bit): \n%s\n",tmp,mbuf.buf);
 				printf("udp: type = %d, buf_len = %d\n",mbuf.type,mbuf.buf_len);
