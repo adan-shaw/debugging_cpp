@@ -14,8 +14,8 @@ PF表示PROTOCOL FAMILY 协议族;
 	AF_LOCAL			等同于AF_UNIX
 	AF_UNIX				等同于AF_LOCAL
 
-	AF_INET				tcp/ip v4
-	AF_INET6			tcp/ip v6
+	AF_INET				互联网 v4
+	AF_INET6			互联网 v6
 
 	AF_NETLINK		很强大的内核太socket, 常用于组播, 只支持udp/raw模式, 不支持tcp模式[Linux特有,需要root权限]
 
