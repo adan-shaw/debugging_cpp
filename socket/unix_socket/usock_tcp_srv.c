@@ -19,7 +19,7 @@ int unix_sock_tcp_listener(void){
 	struct sockaddr_un addr_srv;
 
 	//1.创建unix socket(SOCK_STREAM 流式)
-	usfd_li = socket(PF_UNIX,SOCK_STREAM,0);
+	usfd_li = socket(AF_UNIX,SOCK_STREAM,0);
 	if(usfd_li == -1){
 		perror("socket()");
 		return 0;
