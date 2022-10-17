@@ -1,0 +1,67 @@
+基于AF_INET 的互联网协议汇总:
+	前言:
+		只有AF_INET/AF_INET6 有这么大规模的应用协议, 这部分属于互联网的部分了;
+		其他协议簇, 没有这么丰盛的应用协议划分, 顶多就一两种次级协议划分而已, 
+		互联网基于tcp/udp 划分出n种字协议, 详细原因当然就是庞大, 业务庞大, 所以才会有这么多次级协议产生;
+
+
+
+	异步分时类:
+		HTTP:		超文本传输协议Hyper Text Transfer Protocol
+		FTP:		文件传输协议FileTransferProtocol
+		SMTP:		简单邮件传输协议Simple Mail Transfer Protocol[SMTP已是事实上的E-Mail传输的标准]
+		POP:		POP3, POP4 邮局协议Post Office Protocol[第三,第四版]
+		IMAP:		互联网信息访问协议Internet Message Access Protocol, 以前叫交互邮件访问协议Interactive Mail Access Protocol
+		MIME:		通用互联网邮件扩充协议Multipurpose Internet Mail Extensions
+
+		异步分时协议规律:
+			HTTP/FTP:						资源访问, 文件下载类;
+			SMTP/POP/IMAP/MIME:	邮件类(但邮件也有附件,也有图片,也可以下载文件)
+		所以, 异步分时协议基本上都是:
+			切片分发, 到达目的地后, 重排重组切片, 然后md5校验完整性;
+			都是类似: 文本, 资源共享(图片, 文件)
+
+
+
+	同步实时-非会话类:
+		ps:
+			互联网的同步实时协议, 都是相对来说同步实时而已, 实际都是伪同步, 伪实时, 
+			相对来说, 50ms 以内, 人感觉不出来就行了;
+
+		前言:
+			internet同步实时-非会话类协议, 一般都用来做推流, 即流媒体, 包括: 声音/视频;
+
+		RTP/RTCP:					基于UDP实现的包传输协议/RTP服务质量(QoS)保障协议[Real-time Transport Protocol/Real-time Transport Control Protocol]
+		SRTP/SRTCP:				RTP/RTCP的安全通信增强版[Secure Real-time Transport Protocol/Secure Real-time Transport Control Protocol]
+		RTMP/RTMPT/RTMPS:	实时消息传送协议Real Time Messaging Protocol), Adobe Systems公司为Flash播放器开发的流媒体开放协议;
+											RTMPT = 使用HTTP等装的RTMP;
+											RTMPS = 使用HTTPS等装的RTMP;
+		RTSP:							实时流协议[Real Time Streaming Protocol], 它支持TCP/UDP传输数据;
+		MMS:							微软媒体服务器协议Microsoft Media Server Protocol[微软公司的特产, passed]
+		HLS:							苹果基于HTTP的流媒体传输协议HTTP Live Streaming[苹果公司的特产, passed]
+
+
+
+	同步实时-会话类:
+		SDP会话描述协议(Session Description Protocol), 一般分为:
+			* 前期操作界面, 可能是客户端/web, 涉及到的协议, 略;
+			* 'SAP会话通知'协议
+			* 'SIP会话初始(会话邀请)'协议
+			* 后续会话建立之后, 具体数据的传输方式, 组播方式, 由后续的编程模式决定;
+
+		SAP会话通知,会话邀请和'其它形式的多媒体会话初始化等目的'的协议, 提供了多媒体会话描述.
+		SDP不局限于UDP组播, 也可以是TCP轮流组播, 具体看SDP会话初始化之后, 后续的数据传输方式, 可以有不同的做法;
+
+
+
+	游戏类:
+		端游: 自定义心跳存活协议;
+		页游: 根据http keep alive, 自定义心跳存活协议;
+
+
+
+	远程登录类:
+		telent协议:	明码传输的远程登录协议;
+		ssh协议:			加密传输的远程登录协议, 专为远程登录会话和其他网络服务提供安全性的协议, Secure Shell;
+
+
