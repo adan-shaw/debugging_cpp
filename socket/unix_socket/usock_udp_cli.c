@@ -22,7 +22,7 @@ int main(void){
 
 
 	//1.创建unix socket(SOCK_DGRAM 流式)
-	usfd_conn = socket(PF_UNIX,SOCK_DGRAM,0);
+	usfd_conn = socket(AF_UNIX,SOCK_DGRAM,0);
 	if(usfd_conn == -1){
 		perror("socket()");
 		return -1;
