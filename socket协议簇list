@@ -1,0 +1,45 @@
+AF表示ADDRESS FAMILY 地址族;
+PF表示PROTOCOL FAMILY 协议族;
+
+在Windows中AF_INET/PF_INET完全一样;
+在Unix/Linux系统中, 在不同的版本中这两者有微小差别:
+	对于BSD, 是AF
+	对于POSIX, 是PF
+
+	类似sysv vs posix API
+
+
+
+不同协议簇的用途(以AF 为例):
+	AF_LOCAL			等同于AF_UNIX
+	AF_UNIX				等同于AF_LOCAL
+
+	AF_INET				tcp/ip v4
+	AF_INET6			tcp/ip v6
+
+	AF_ROUTE			原始套接字socket[需要root权限]
+
+	AF_NETLINK		很强大的内核太socket, 常用于组播, 只支持udp/raw模式, 不支持tcp模式[Linux特有,需要root权限]
+
+	AF_PACKET			链路层socket(需要自己附上ARP 报文)
+
+	AF_PPPOX			电话线2跳线转RJ45 网线(model 光猫/电猫)的通信协议簇[很少用]
+
+	AF_CAN				can 实时总线
+
+	AF_BLUETOOTH	蓝牙(无线电)
+
+	AF_RDS				无线电广播
+
+	PF_IPX				IPX-Novell协议
+
+	AF_TIPC				透明进程间通信(不知道有什么用)
+
+
+
+	具体每种协议簇提供哪些syscall/API, 要看芯片公司的封装:
+		芯片公司需要根据物理层设计, 将驱动代码, 打补丁到linux 内核, 
+		然后二级设备商, 才能根据这些syscall/API, 做二级设备;
+		一级=芯片公司 + linux内核驱动/运行时库设计者, 驱动注重定制syscall 标准接口;
+		二级=设备商, linux内核驱动 + 设备行业的标准, 驱动注重使用syscall 接口;
+		三级=应用层软件, API + 应用算法;
