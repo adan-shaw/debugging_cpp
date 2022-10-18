@@ -17,6 +17,7 @@
 		异步分时协议规律:
 			HTTP/FTP:						资源访问, 文件下载类;
 			SMTP/POP/IMAP/MIME:	邮件类(但邮件也有附件,也有图片,也可以下载文件)
+
 		所以, 异步分时协议基本上都是:
 			切片分发, 到达目的地后, 重排重组切片, 然后md5校验完整性;
 			都是类似: 文本, 资源共享(图片, 文件)
@@ -35,8 +36,9 @@
 
 		RTP/RTCP:					基于UDP实现的包传输协议/RTP服务质量(QoS)保障协议[Real-time Transport Protocol/Real-time Transport Control Protocol]
 		SRTP/SRTCP:				RTP/RTCP的安全通信增强版[Secure Real-time Transport Protocol/Secure Real-time Transport Control Protocol]
-		RTMP/RTMPT/RTMPS:	实时消息传送协议Real Time Messaging Protocol), Adobe Systems公司为Flash播放器开发的流媒体开放协议;
-											RTMPT = 使用HTTP等装的RTMP;
+		RTMP/RTMPE:				实时消息传送协议Real Time Messaging Protocol), Adobe Systems公司为Flash播放器开发的流媒体开放协议;
+											RTMPE = RTMP的加密增强版;
+		RTMPT/RTMPS:			RTMPT = 使用HTTP等装的RTMP;
 											RTMPS = 使用HTTPS等装的RTMP;
 		RTSP:							实时流协议[Real Time Streaming Protocol], 它支持TCP/UDP传输数据;
 		MMS:							微软媒体服务器协议Microsoft Media Server Protocol[微软公司的特产, passed]
@@ -65,5 +67,30 @@
 	远程登录类:
 		telent协议:	明码传输的远程登录协议;
 		ssh协议:			加密传输的远程登录协议, 专为远程登录会话和其他网络服务提供安全性的协议, Secure Shell;
+
+
+
+
+
+汇总分析:
+	异步分时类:				大量现成稳定安全的半功能框架方案, 可以在现有的框架上, 做业务开发;
+	同步实时-非会话类:	大量现成稳定安全的半功能框架方案, 可以在现有的框架上, 做业务开发;
+	同步实时-会话类:		大量现成稳定安全的半功能框架方案, 可以在现有的框架上, 做业务开发;
+	游戏类:					大量现成稳定安全的半功能框架方案, 可以在现有的框架上, 做业务开发;
+	远程登录类:				大量现成稳定安全的全功能方案, 不需要自己实现, 直接安装即可;
+
+	互联网项目, 基本上都有大量的'半功能框架方案/全功能方案', 基本上不需要自己实现;
+	一旦集成了框架, 也就意味着:
+		基本不用c/c++ 了, 而是全部用脚本来节约时间;
+		只有部分刁钻的需求, 才会特别设计一些c/c++ 中间件, 解决特殊需求;
+		所以, c/c++ 正在渐渐退到互联网幕后, 是行业趋势;
+		只有互联网比较核心, 顶尖的部分, 才会用到c/c++, 新人上手, 基本上从脚本开始;
+
+	整个互联网, 包括重数据流, 有实时性要求的'流媒体/会话通信', 
+	这些行业都推荐使用go 语言了, 重数据流, 高实时性的server, 都在尽力抛弃c/c++ 了;
+	游戏行业, 也在这么做, 所以c/c++ 基本都从事工业类比较好;
+
+	但互联网高层, 还是需要学c/c++的, 但比较偏向系统API应用层, 
+	懂c/c++, 才能真正比较好掌握计算机的各种细节, 即便是脚本横行的互联网行业也不例外;
 
 
