@@ -1,6 +1,116 @@
 //编译:
 //		gcc -g3 ./getaddrinfo.c -o x 
 
+//getaddrinfo() 可以知道某个服务器的公开服务类型, 如www.baidu.com 提供: tcp/udp/raw 服务, 还有两台网关server
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
+
+
+
+//1.打印单个struct addrinfo*结构体
+void print_addrinfo(const struct addrinfo* addr){
+	char str[INET6_ADDRSTRLEN];
+	short port;
+	struct sockaddr_in* in4;
+	struct sockaddr_in6* in6;
+
+	printf("ai_family: ");
+	switch(addr->ai_family){															//打印协议簇类型
+		case AF_INET:
+			printf("ipv4\n");
+			in4 = (struct sockaddr_in *)(addr->ai_addr);			//直接赋值提取struct sockaddr_in地址信息
+			port = ntohs(in4->sin_port);											//提取port
+			inet_ntop(AF_INET,&in4->sin_addr,str,sizeof(str));//带截断转换ip
+			printf("addr4: %s, port: %d\n", str, port);
+			break;
+		case AF_INET6:
+			printf("ipv6\n");
+			in6 = (struct sockaddr_in6 *)(addr->ai_addr);
+			port = ntohs(in6->sin6_port);
+			inet_ntop(AF_INET6,&in6->sin6_addr,str,sizeof(str));
+			printf("addr6: %s, port: %d\n", str, port);
+			break;
+		default:
+			printf("Unknown\n");
+			break;
+	}
+	//printf("canonical name: %s\n", addr->ai_canonname);	//规范名称服务位置(一般没有的, 弃用)
+
+	printf("ai_socktype: ");															//打印socket 类型
+	switch(addr->ai_socktype){
+		case SOCK_STREAM:			printf("TCP\n");			break;
+		case SOCK_DGRAM:			printf("UDP\n");			break;
+		case SOCK_RAW:				printf("RAW\n");			break;
+		case SOCK_SEQPACKET:	printf("SEQPACKET\n");break;
+		case SOCK_PACKET:			printf("PACKET\n");		break;
+		default:							printf("others\n");		break;
+	}
+
+	printf("protocol: ");																	//打印'传输协议'类型
+	switch(addr->ai_protocol){
+		case IPPROTO_IP:		printf("ip\n");			break;
+		case IPPROTO_TCP:		printf("tcp\n");		break;
+		case IPPROTO_UDP:		printf("udp\n");		break;
+		case IPPROTO_RAW:		printf("raw\n");		break;
+		case IPPROTO_SCTP:	printf("sctp\n");		break;
+		case IPPROTO_ICMP:	printf("icmp\n");		break;
+		case IPPROTO_IGMP:	printf("igmp\n");		break;
+		default:						printf("others\n");	break;
+	}
+
+	printf("\n");
+	return;
+}
+
+
+
+//2.getaddrinfo()测试函数
+void getaddrinfo_test(void){
+	const char* serv = "80";							//可以直接写端口号
+	//const char* serv = "http";					//也可以直接写'高层协议名'
+	const char* host = "www.baidu.com";		//可以直接写url链接(主机域名)
+	//const char* host = "180.101.49.14";	//可以直接写ip 地址
+	struct addrinfo hint,*res,*res_save;
+	int tmp;
+
+	//使用getaddrinfo()前必须先初始化, 否则Segmentation fault
+	bzero(&hint, sizeof(hint));
+	hint.ai_family = AF_INET;
+
+	//执行getaddrinfo()
+	if(getaddrinfo(host, serv, &hint, &res) != 0){
+		perror("getaddrinfo()");
+		return;
+	}
+
+	//保存addrinfo{}结果链表的首地址, 方便释放内存.
+	res_save = res;
+
+	//遍历打印addrinfo{}结果链表(遍历的时候, struct addrinfo* 指针会移动, 请先保存!!)
+	while(res != NULL){
+		print_addrinfo(res);
+		res = res->ai_next;
+	}
+
+	//释放内存
+	freeaddrinfo(res_save);
+
+	return;
+}
+
+
+
+int main(void){
+	getaddrinfo_test();
+	return 0;
+}
+
 
 
 /*
@@ -71,141 +181,3 @@
 		struct addrinfo *ai_next;		// Pointer to next in list.
 	};
 */
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <sys/types.h>
-#include <arpa/inet.h>
-
-
-
-//1.打印单个struct addrinfo*结构体
-void print_addrinfo(const struct addrinfo*);
-
-//2.getaddrinfo()测试函数
-void getaddrinfo_test(void);
-
-
-
-int main(void){
-	getaddrinfo_test();
-	return 0;
-}
-
-
-
-//1.打印单个struct addrinfo*结构体
-void print_addrinfo(const struct addrinfo* addr){
-	char str[INET6_ADDRSTRLEN];
-	short port;
-	struct sockaddr_in* in4;
-	struct sockaddr_in6* in6;
-
-
-
-	//1.打印协议簇类型
-	//	顺便根据协议簇类型, 选择ipv4 or ipv6进行‘socket地址信息转换’
-	printf("ai_family: ");
-	switch (addr->ai_family){
-		case AF_INET:
-			printf("ipv4\n");
-			//ipv4 socket 地址信息提取
-			in4 = (struct sockaddr_in *)(addr->ai_addr);
-			port = ntohs(in4->sin_port);											//提取port
-			inet_ntop(AF_INET,&in4->sin_addr,str,sizeof(str));//带截断转换ip
-			break;
-		case AF_INET6:
-			printf("ipv6\n");
-			in6 = (struct sockaddr_in6 *)(addr->ai_addr);
-			port = ntohs(in6->sin6_port);
-			inet_ntop(AF_INET6,&in6->sin6_addr,str,sizeof(str));
-			break;
-		default:
-			printf("Unknown\n");
-			break;
-	}
-
-
-	//2.打印socket 类型
-	printf("ai_socktype: ");
-	switch (addr->ai_socktype){
-		case SOCK_STREAM:			printf("stream-TCP\n");			break;
-		case SOCK_DGRAM:			printf("dgram-UDP\n");			break;
-		case SOCK_RAW:				printf("raw-IP/ICMP/IGMP\n");break;
-		case SOCK_SEQPACKET:	printf("seqpacket-SCTP\n");	break;
-		case SOCK_PACKET:			printf("packet-PACKET\n");	break;
-		default:							printf("others\n");					break;
-	}
-
-
-	//3.打印'传输协议'类型
-	printf("protocol: ");
-	switch(addr->ai_protocol){
-		case IPPROTO_IP:		printf("ip\n");			break;
-		case IPPROTO_TCP:		printf("tcp\n");		break;
-		case IPPROTO_UDP:		printf("udp\n");		break;
-		case IPPROTO_RAW:		printf("raw\n");		break;
-		case IPPROTO_SCTP:	printf("sctp\n");		break;
-		case IPPROTO_ICMP:	printf("icmp\n");		break;
-		case IPPROTO_IGMP:	printf("igmp\n");		break;
-		default:						printf("others\n");	break;
-	}
-
-
-	//4.打印地址, 端口等其它信息
-	printf("address: %s\n", str);			//打印之前存储的ip 字符串
-	printf("port: %d\n", port);				//打印之前存储的port
-	printf("canonical name: %s\n\n", addr->ai_canonname);//规范名称服务位置
-
-	return;
-}
-
-
-
-//2.getaddrinfo()测试函数
-void getaddrinfo_test(void){
-	//char* serv = "http";//也可以直接写'高层协议名'
-	const char* serv = "80";							//可以直接写端口号
-	const char* host = "www.baidu.com";		//可以直接写url链接(主机域名)
-	//const char* host = "14.215.177.39";	//可以直接写ip 地址
-	struct addrinfo hint,*res,*res_save;
-	int tmp;
-
-
-
-	//1.初始化struct addrinfo{} 实体
-	bzero(&hint, sizeof(hint));
-	//hint.ai_family = AF_UNSPEC;//初始化协议簇为0,自动化,未知(可省略)
-
-
-	//2.getaddrinfo()
-	tmp = getaddrinfo(host, serv, &hint, &res);
-	if(tmp != 0){
-		printf("Cannot get information for URL:%s%s\n\terror:%s\n\n",\
-				serv, host, gai_strerror(tmp));
-		return;
-	}
-
-
-	//3.保存addrinfo{}结果链表的首地址, 方便释放内存.
-	res_save = res;
-
-
-	//4.遍历打印addrinfo{}结果链表
-	while(res != NULL){
-		print_addrinfo(res);
-		res = res->ai_next;
-	}
-
-
-	//5.释放内存
-	freeaddrinfo(res_save);
-
-	return;
-}
-
-
