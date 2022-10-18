@@ -10,16 +10,20 @@ void getnameinfo_test(void){
 	int tmp;
 	struct sockaddr_in addr_in;
 	char host_buf[16], port_buf[16];
+	const char* ip = "127.0.0.1";
 
 	addr_in.sin_family = AF_INET;
 	addr_in.sin_port = htons(6666);
-	inet_pton(AF_INET, "127.0.0.1", &addr_in.sin_addr);
+	inet_pton(AF_INET, ip, &addr_in.sin_addr);
 
 	//执行getnameinfo(), 获取srv 信息, 并打印
-	if(getnameinfo((struct sockaddr*)&addr_in,sizeof(struct sockaddr_in),\
+	tmp = getnameinfo((struct sockaddr*)&addr_in,sizeof(struct sockaddr_in),\
 			host_buf,sizeof(host_buf),\
-			port_buf,sizeof(port_buf),NI_NAMEREQD) != 0)
-		perror("getnameinfo()");
+			port_buf,sizeof(port_buf),NI_NAMEREQD);
+	if(tmp != 0){
+		printf("getnameinfo(%s:%d) error:%s\n", ip, 6666, gai_strerror(tmp));
+		return;
+	}
 	else{
 		printf("host name: %s\n",host_buf);
 		printf("service port: %s\n",port_buf);
