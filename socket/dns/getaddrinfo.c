@@ -84,8 +84,9 @@ void getaddrinfo_test(void){
 	hint.ai_family = AF_INET;
 
 	//执行getaddrinfo()
-	if(getaddrinfo(host, serv, &hint, &res) != 0){
-		perror("getaddrinfo()");
+	tmp = getaddrinfo(host, serv, &hint, &res);
+	if(tmp != 0){
+		printf("getaddrinfo(%s:%s) error:%s\n", host, serv, gai_strerror(tmp));
 		return;
 	}
 
