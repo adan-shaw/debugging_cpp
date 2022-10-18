@@ -5,6 +5,5 @@
 #   extern_lib   = 第三方软件库
 #   gnu_stl      = gnu stl库
 #   socket       = posix socket编码库
-#   proc_pth     = posix 多进程/多线程编码库
-#   posix_linux  = posix 其他编码库
+#   posix_linux  = posix 多进程/多线程编码库
 # 2022/07/25
