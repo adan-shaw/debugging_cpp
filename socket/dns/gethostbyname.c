@@ -45,101 +45,54 @@
 
 
 
-//1.打印单个网络协议信息
-void printhost(struct hostent* h);
-
-//2.gethostbyname() 测试函数
-//	遍历<本地dns解析-记录文件>所有的host 主机信息, 测试<URL dns 解析>出'所有地址信息'
-void gethostbyname_test(void);
-
-//3.gethostbyhost() 测试函数
-//	根据ip 反向解析出'所有地址信息'(只能解析出/etc/services 中的ip 地址??)
-void gethostbyhost_test(void);
-
-
-
-int main(void){
-	gethostbyname_test();
-	gethostbyhost_test();
-	return 0;
-}
-
-
-
-//1.打印单个网络协议信息
 void printhost(struct hostent* h){
 	char** p;
-	int tmp;
 
-	//1.打印URL主机名称
-	//official host name(url 地址下的官方主机名)
 	printf("URL主机名称(official host name): %s.\n", h->h_name);
-
-	p = h->h_aliases;
-	while(*p != NULL){
-		printf("	URL主机别名(alias name): %s;\n", *p);
-		p++;
-	}
-
-	//2.打印通信协议簇类型, AF_INET = 2
 	printf("协议簇类型AF_INET(addr type): %d.\n", h->h_addrtype);
-
-	//3.打印ip 地址信息(错误打印方式)
-	//	h->h_addr_list 是以"字符串存储"的(struct in_addr*)结构,
-	//	并不是真的是ip addr 字符串,
-	//	所以, 未经转换, 直接打印, 都是错误的.
 	printf("ip地址长度(addr len): %d.\n", h->h_length);
-	printf("start print() URL解析出来的所有'网关ip地址:'\n");//即打印ip地址链
-	p = h->h_addr_list;
-	tmp = 1;
-	while(*p != NULL){
 
-		//将h->h_addr_list转换为(struct in_addr*)地址信息描述体, 然后打印出ip地址.
-		//你怎么肯定它是ipv4地址？如果是ipv6呢？
-		//不重要!!只要是AF_INET, ipv4 or ipv6 都可以直接转换??
-		//所以, 需要加判断:
-		if(h->h_addrtype == AF_INET)
-			printf("	URL网关主机ip addr-%d : %s;\n", \
-					tmp, inet_ntoa(*((struct in_addr*)*p)));
-		else
-			printf("	h->h_addrtype==%d, it's not AF_INET=%d, cant print;\n",\
-					h->h_addrtype,AF_INET);
+	if(h->h_addrtype == AF_INET){
+		printf("打印解析结果-URL主机别名链表(alias name):'\n");
+		p = h->h_aliases;
+		while(*p != NULL)
+			printf("	URL主机别名(alias name): %s;\n", *p++);
 
-		//直接打印字符串, 是错误的
-		//printf("URL网关主机ip-%d: %s\n", tmp, *p);
-		p++;
-		tmp++;
+		printf("打印解析结果-URL主机ip链表:'\n");
+		p = h->h_addr_list;
+		while(*p != NULL)
+			printf("	URL网关主机ip: %s;\n",inet_ntoa(*((struct in_addr*)*p++)));
 	}
+	printf("\n");
 	return;
 }
 
 
 
-//2.gethostbyname() 测试函数
-void gethostbyname_test(void){
+//gethostent() 查询本地dns记录文件
+void gethostent_test(void){
 	struct hostent* h;
 
-
-
-	//1.遍历<本地dns解析-记录文件>所有的host 主机信息
-	printf("1.遍历<本地dns解析-记录文件>所有的host 主机信息\n\n");
-
-	sethostent(1);	//打开并’挟持‘本地dns解析-记录文件
+	printf("* 遍历'本地dns记录文件'所有的host 主机信息\n");
+	sethostent(1);		//打开并'挟持'本地dns记录文件
 	while(1){
 		h = gethostent();
 		if(h == NULL)
-			break;			//读取结束or 遇到意外终止
-
-		printhost(h);	//打印单个struct hostent 节点
-		printf("\n");
+			break;				//读取结束or 遇到意外终止
+		else
+			printhost(h);	//打印单个struct hostent 节点
 	}
-	endnetent();		//关闭并‘释放’本地dns解析-记录文件
-	printf("\n\n\n");
+	endnetent();			//关闭并'释放'本地dns记录文件
+	return;
+}
 
 
 
-	//2.测试<URL dns 解析>出'所有地址信息'
-	printf("2.测试<URL dns 解析>出'所有地址信息'\n\n");
+//gethostbyname() 测试函数
+void gethostbyname_test(void){
+	struct hostent* h;
+
+	printf("* 测试<URL dns 解析>出'所有地址信息'\n");
 	//只有第一个hostent 地址有效, 其它都是空的, 访问就会指针越界
 	//h = gethostbyname("127.0.0.1");			//环回地址ok
 	//h = gethostbyname("192.168.0.100");	//网卡地址ok
@@ -149,32 +102,24 @@ void gethostbyname_test(void){
 	//h = gethostbyname("handsome");			//主机别名 测试->失败
 	if(h != NULL)
 		printhost(h);
-	else{
-		printf("gethostbyname() failed!!or 找不到目标主机, 输入的URL有误\n");
-		printf("hstrerror(%d)=%s\n",h_errno,hstrerror(h_errno));
-	}
-	printf("\n\n\n");
+	else
+		printf("gethostbyname() failed, hstrerror(%d)=%s\n",h_errno,hstrerror(h_errno));
 
-
-
-	//3.释放资源(struct hostent* h 是内置静态变量, 不能释放!)
-	//free(h);//证明gethostbyname()函数内置了static struct hostent* h;
-						//gethostbyname()函数不是线程安全的,会产生覆盖, 第二次的结果覆盖第一次的结果.
+	//释放资源( struct hostent* h 是内置静态变量, 不能释放! 
+	//free(h); 同时说明gethostbyname()函数不是线程安全函数,第二次的操作结果, 会覆盖第一次的结果)
 	return ;
 }
 
 
 
-//3.gethostbyhost() 测试函数
+//gethostbyhost() 测试函数
 void gethostbyhost_test(void){
 	struct hostent* h;
 	struct in_addr inAddr;
 
-
-
 	//根据ip 反向解析出'所有地址信息'
 	//(只能解析出/etc/services 中的ip 地址??)
-	printf("x.根据ip 反向解析出'所有地址信息'\n\n");
+	printf("* 根据ip 反向解析出'所有地址信息'\n");
 	inAddr.s_addr = inet_addr("127.0.0.1");
 	//inAddr.s_addr = inet_addr("192.168.1.102");	//失败？
 
@@ -185,11 +130,20 @@ void gethostbyhost_test(void){
 	h = gethostbyaddr(&inAddr, sizeof(inAddr), AF_INET);
 	if(h != NULL)
 		printhost(h);
-	else{
-		printf("gethostbyaddr() failed!!or 找不到目标主机, 输入的URL有误\n");
-		printf("hstrerror(%d)=%s\n",h_errno,hstrerror(h_errno));
-	}
-	printf("\n\n\n");
+	else
+		printf("gethostbyaddr() failed, hstrerror(%d)=%s\n",h_errno,hstrerror(h_errno));
 
 	return ;
 }
+
+
+
+int main(void){
+	gethostent_test();
+	gethostbyname_test();
+	gethostbyhost_test();
+	return 0;
+}
+
+
+
