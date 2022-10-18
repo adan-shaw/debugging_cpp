@@ -2,14 +2,9 @@
 //		gcc -g3 ./getnameinfo.c -o x 
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
 #include <netdb.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
-#include <unistd.h>
-#include <assert.h>
 
 void getnameinfo_test(void){
 	int tmp;
@@ -21,13 +16,14 @@ void getnameinfo_test(void){
 	inet_pton(AF_INET, "127.0.0.1", &addr_in.sin_addr);
 
 	//执行getnameinfo(), 获取srv 信息, 并打印
-	tmp = getnameinfo((struct sockaddr*)&addr_in,sizeof(struct sockaddr_in),\
+	if(getnameinfo((struct sockaddr*)&addr_in,sizeof(struct sockaddr_in),\
 			host_buf,sizeof(host_buf),\
-			port_buf,sizeof(port_buf),NI_NAMEREQD);
-
-	printf("host name: %s\n",host_buf);
-	printf("service port: %s\n",port_buf);
-
+			port_buf,sizeof(port_buf),NI_NAMEREQD) != 0)
+		perror("getnameinfo()");
+	else{
+		printf("host name: %s\n",host_buf);
+		printf("service port: %s\n",port_buf);
+	}
 	return;
 }
 
