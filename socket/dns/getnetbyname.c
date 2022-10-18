@@ -33,22 +33,6 @@
 
 
 
-//1.打印单个struct netent;
-void printnet(struct netent* net);
-
-//2.打印本地所有的net 网络信息
-void getnetbyname_test(void);
-
-
-
-int main(void){
-	getnetbyname_test();
-	return 0;
-}
-
-
-
-//1.打印单个struct netent;
 void printnet(struct netent* net){
 	char** p;
 
@@ -57,54 +41,54 @@ void printnet(struct netent* net){
 	printf("net number(网络识别码): %u\n", net->n_net);
 
 	p = net->n_aliases;
-	while(*p != NULL){
-		printf("alias name(网络别名): %s\n", *p);
-		p++;
-	}
+	while(*p != NULL)
+		printf("alias name(网络别名): %s\n", *p++);
+
 	return;
 }
 
 
 
-//2.打印本地所有的net 网络信息
-void getnetbyname_test(void){
+void getnetent_test(void){
 	struct netent* net;
-	const char *net_name = "loopback";
 
-
-
-	//1.遍历<记录文件> 里面所有的网络信息(暂时还不知道net 具体指向/etc 哪个记录文件)
-	printf("1.遍历<记录文件> 里面所有的网络信息\n\n");
+	printf("遍历'本地记录文件'里面所有的网络信息\n");
 	setnetent(1);			//打开<记录文件> 并挟持
 
 	while(1){
 		net = getnetent();
 		if(net == NULL)
 			break;				//读取结束or 遇到意外终止.
-
-		printnet(net);	//打印单个struct netent 节点
-		printf("\n");
+		else
+			printnet(net);//打印单个struct netent 节点
 	}
 
 	endnetent();			//关闭<记录文件> 并释放
-	printf("\n\n\n");
+	return;
+}
 
 
 
-	//2.单次获取测试
-	printf("2.单次获取测试: getnetbyname(\"loopback\")\n\n");
+void getnetbyname_test(void){
+	struct netent* net;
+	const char *net_name = "loopback";
+
+	printf("单次获取测试: getnetbyname(\"loopback\")\n");
 	net = getnetbyname(net_name);
 	if(net != NULL)
 		printnet(net);
-	else{
-		printf("getnetbyname() failed!!or cant found network'%s'\n",net_name);
-		printf("hstrerror(%d)=%s\n",h_errno,hstrerror(h_errno));
-	}
-	printf("\n\n\n");
+	else
+		printf("getnetbyname(%s) failed, hstrerror(%d)=%s\n",net_name,h_errno,hstrerror(h_errno));
 
-
-
-	//3.不需要释放struct netent*,证明getnetbyname()实现过程, struct netent*是内置static变量的.
+	//不需要释放struct netent*, 证明getnetbyname()实现过程, struct netent*是内置static变量的.
 	//free(net);
 	return ;
+}
+
+
+
+int main(void){
+	getnetent_test();
+	getnetbyname_test();
+	return 0;
 }
