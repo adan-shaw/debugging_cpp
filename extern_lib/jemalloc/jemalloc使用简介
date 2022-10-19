@@ -1,0 +1,109 @@
+//
+//jemalloc使用方式:
+//
+
+//0.jemalloc API 替换ptmalloc API
+/*
+	如果未定义JEMALLOC_NO_RENAME, 就用je_malloc 替换malloc
+	定义了JEMALLOC_NO_RENAME,就只能用静态编译!!
+
+	-DJEMALLOC_NO_RENAME != -DJEMALLOC_NO_DEMANGLE
+	这是两个不同的宏, 看清楚!!
+*/
+
+
+
+//1.静态链接:
+/*
+	包含头文件:
+		#include <jemalloc/jemalloc.h>
+
+	这种方式, 只适合使用显式的jemalloc 专属api, 才有效:
+		je_malloc()
+		je_realloc()
+		je_free()
+		//je_new() -- 不存在je_new/je_delete
+		//je_delete()
+	不使用以上api, 静态编译会失效, malloc/new/free/delete 还是会自动使用ptmalloc, 无法切换;
+
+	然后添加编译选项:
+		-Bstatic -DJEMALLOC_NO_DEMANGLE -ljemalloc
+
+	ps:
+		使用je_malloc/je_realloc/je_free, 必须添加编译选项-DJEMALLOC_NO_DEMANGLE !!
+		否则找不到API, 函数未定义;
+
+	缺点:
+		完全不具备迁移能力, 锁定jemalloc 不能更换'内存管理器', 不推荐;
+
+	重点:
+		使用je_malloc/je_realloc/je_free 的同时, 如果你又使用malloc/realloc/free,
+		则进程会有两个内存管理器, jemalloc/ptmalloc,
+		这种情况, 是极其不允许出现的!!
+		最好还是用动态链接比较好!!
+*/
+
+
+
+
+
+//2.动态链接:
+/*
+	包含头文件:
+		#include <jemalloc/jemalloc.h>
+
+	然后添加编译选项:
+		-Bdynamic -ljemalloc
+
+	运行(重置了LD_PROLOAD, 还要重置LD_LIBRARY_PATH):
+		LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/tarball/jemalloc/lib" LD_PROLOAD=/home/tarball/jemalloc/lib/libjemalloc.so ./x
+
+	优点:
+		具备迁移能力, 可以随意更换'内存管理器', 十分好用;
+		但运行.exe 的时候, 需要hijacked 劫持一下, 
+		强行修改LD_PROLOAD 进程运行变量, 强行载入libjemalloc.so 动态链接库, 这样才真正将进程内存管理器改为jemalloc
+*/
+
+
+
+
+
+//3.汇总分析:
+/*
+	什么是hijacked 劫持, 怎样实现hijacked?
+	答:
+		运行.exe 的时候, 通过修改LD_PROLOAD 进程变量, 实现Hijacked 劫持.so 动态链接库, 
+		让.exe 强行运行我们指定的.so 库, 就可以将.exe 的运行依赖链接库, 指定为jemalloc 的.so 动态链接库;
+
+
+
+	如何将内存管理器, 切换为jemalloc?
+	答:
+		first, 推荐使用动态链接;
+		second, 编译程序时, 添加编译选项: -Bdynamic -ljemalloc
+		three, 运行时, 修改LD_PROLOAD, 实现hijacked劫持: LD_PROLOAD=/home/tarball/jemalloc/lib/libjemalloc.so ./x
+
+
+
+	jemalloc && pcmalloc 都提供相同的内存分配api: 
+		malloc/realloc/free, new/delete, 
+	谁先加载就用谁的, 可以用jemalloc的API替换ptmalloc的API, 而且支持c++的new/delete;
+	[仅动态链接时, 适用, 静态链接无法hijacked, 代码都直接写进.exe二进制程序了, 无法修改动态链接库]
+
+
+
+	尽量不要包含<stdlib.h> / <string.h> 头文件, 以避免使用malloc()冲突 ??
+	那new/delete, 你又怎么避免?
+	那如果是redis 项目用jemalloc, 你又怎么避免? 人家写好的代码, 你一一去修改??
+	这显然不是解决问题的办法!!
+	所以, 动态编译 + hijacked 才是最好的, 最方便, 最轻松的办法!! hijacked 才是高招!!
+
+	如果显式指定为je_malloc, 就不具备迁移性, 完全锁定了jemalloc 库;(no a good idea)
+
+
+
+	如何查看有没有使用libjemalloc.so 动态链接库?
+	答:
+		ldd ./x
+		LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/tarball/jemalloc/lib" ldd ./x
+*/
