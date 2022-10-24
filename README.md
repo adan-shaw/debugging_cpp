@@ -1,5 +1,6 @@
 # debugging_cpp
 # just some demo i written in this few months
+#   AI人工智能    = 人工智能方面的基础bullshit
 #   c_basic      = c语言基础库
 #   cpp_basic    = cpp基础库
 #   extern_lib   = 第三方软件库
