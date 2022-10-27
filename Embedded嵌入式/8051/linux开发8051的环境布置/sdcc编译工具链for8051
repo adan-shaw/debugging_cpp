@@ -1,0 +1,10 @@
+sdcc仿真器安装:
+	apt-get install sdcc
+
+	ps:
+		等同于gcc, 8051 版本的gcc, 可以编译大量8051 系列的单片机程序;
+		自动匹配8051指令集 && 寄存器布局?
+
+		anyway, 这个编译工具链, 比较简单, 小型的gcc, 
+		也可以编写makefile, 直接切换gcc 为sdcc 即可, 只需切换编译器, 
+		autoconf 只是一个编译脚本工具, 是哪个编译器, autoconf并不关心;
