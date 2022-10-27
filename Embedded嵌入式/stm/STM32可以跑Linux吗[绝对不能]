@@ -1,0 +1,26 @@
+STM32为什么不可以跑Linux:
+	stm32不可以跑linux!!
+	linux系统是运行单位是进程, 而ucos运行单位是线程, 要实现进程芯片必须有MMU, 也即存储管理单元, 
+	而stm32是不带存储管理单元的, 
+	所以不能运行进程的操作系统, 也就不能运行linux;
+
+
+
+arm CPU有两种: 带MMU的/不带MMU的
+	带MMU的有 Cortex-A系列, ARM9, ARM11系列
+	不带MMU的有 Cortex-M系列
+	STM32是M系列, 所以不可能运行Linux
+
+
+
+STM32一般跑:
+	RT-Thread
+
+
+
+STM32 能做什么?
+只要RT-Thread 支持STM32, 那么一般情况下, RT-Thread上面的API, STM32 都支持,
+也就是RT-Thread 上面有的功能, STM32 基本上都可以实现,
+具体看芯片+操作系统的组成的整体系统, 具体支持些什么功能;
+
+可以看/usr/include 来判断, 支持那些syscall/posix API;
