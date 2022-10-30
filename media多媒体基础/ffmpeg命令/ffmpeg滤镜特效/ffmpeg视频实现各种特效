@@ -1,0 +1,56 @@
+# 渐入
+ffmpeg -i ./IN.mp4 -vf fade=in:0:90 ./OUT.mp4
+
+
+# 黑白
+ffmpeg -i ./IN.mp4 -vf lutyuv="u=128:v=128" ./OUT.mp4
+
+
+# 锐化
+ffmpeg -i ./IN.mp4 -vf unsharp=luma_msize_x=7:luma_msize_y=7:luma_amount=2.5 ./OUT.mp4
+
+
+# 反锐化
+ffmpeg -i ./IN.mp4 -vf unsharp=7:7:-2:7:7:-2 ./OUT.mp4
+
+
+# 渐晕
+ffmpeg -i ./IN.mp4 -vf vignette=PI/4 ./OUT.mp4
+
+
+# 闪烁渐晕
+ffmpeg -i ./IN.mp4 -vf vignette='PI/4+random(1)*PI/50':eval=frame ./OUT.mp4
+
+
+# 视频颤抖
+ffmpeg -i ./IN.mp4 -vf crop="in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(n/10):(in_h-out_h)/2+((in_h-out_h)/2)*sin(n/7)" ./OUT.mp4
+
+
+# 色彩变幻
+ffmpeg -i ./IN.mp4 -vf hue="H=2*PI*t:s=sin(2*PI*t)+1" ./OUT.mp4
+
+
+# 模糊处理
+ffmpeg -i ./IN.mp4 -vf boxblur=5:1:cr=0:ar=0 ./OUT.mp4
+
+
+# 镜像翻转
+ffmpeg -i ./IN.mp4 -vf crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left]pad=iw*2[a];[a][right]overlay=w ./OUT.mp4
+
+
+# 水平翻转
+ffmpeg -i ./IN.mp4 -vf geq=p(W-X\,Y) ./OUT.mp4
+
+
+# 垂直翻转
+ffmpeg -i ./IN.mp4 -vf vflip ./OUT.mp4
+
+
+# 浮雕效果
+ffmpeg -i ./IN.mp4 -vf format=gray,geq=lum_expr='(p(X,Y)+(256-p(X-4,Y-4)))/2' ./OUT.mp4
+
+
+# 均匀噪声
+ffmpeg -i ./IN.mp4 -vf noise=alls=20:allf=t+u ./OUT.mp4
+
+
