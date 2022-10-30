@@ -1,0 +1,27 @@
+# 查看ffmpeg, 看看是否支持video4linux2 模块, pixel_format, yuyv422 等等
+ffmpeg -version
+
+
+
+
+
+#
+# 1.一句命令执行录制功能
+#
+# ffmpeg 占用PC摄像头, 进行视频录制(需要先匹配PC摄像头信息, 然后在命令中, 代入对应的值)
+# 日志级别: -loglevel debug (需要详细info, 可以开启)
+ffmpeg -f video4linux2 -s 640x480 -pixel_format yuyv422 -i /dev/video0 out.mp4 -loglevel debug
+
+
+
+
+
+
+#
+# 2.播放已录制的视频
+#
+# 使用ffplay播放yuyv422格式数据
+ffplay -i test.yuv -pix_fmt yuyv422 -s 1280x720
+
+# 使用ffplay播放mp4格式数据
+ffplay -i out.mp4 -pix_fmt mp4 -s 1280x720
