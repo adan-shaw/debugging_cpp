@@ -1,0 +1,27 @@
+ffmpeg设置曝光度/对比度, 可以提高视频亮度, 
+解决因'黑暗环境下拍摄的视频'导致的亮度不足的问题,
+(ps: 只能轻度优化, 但挽救不了太黑, 根本看不清的视频, 具体视频拍摄得如何, 还得看拍摄者的技术)
+
+
+
+
+
+对比度contrast:
+	默认值: 0
+	值域: [-2.0,2.0]
+
+brightness曝光度:
+	默认值: 0
+	值域: [-1.0,1.0]
+	ps:
+		曝光度=-1.0, 则得到一个全黑视频;
+		曝光度=1.0, 则得到一个全白视频;
+
+
+
+# 对比度contrast增加1.0, brightness曝光度减少-0.2(20%)
+ffmpeg.exe -i record.mp4 -vf eq=contrast=1:brightness=-0.2 output.mp4
+
+
+# 对比度contrast增加1.0, brightness曝光度增加0.2(20%)
+ffmpeg.exe -i record.mp4 -vf eq=contrast=1:brightness=0.2 output.mp4
