@@ -1,0 +1,15 @@
+rotate第一个参数angle的单位是: 弧度
+	1°   = π/180
+	360° = 2π
+	π    = PI(π 是希腊字母, 英文表示元周率用PI)
+
+
+
+
+
+# T为旋转一周的时长, 如果为视频的时长, 则旋转一圈, 正好可以播放完
+ffmpeg -i a3.mp4 -vf rotate=PI*2/T*t rotate8.mp4
+
+
+# 将视频旋转90°(一边播放, 一边旋转, 转完之后, 卡住在最后的镜头角度, 继续播放)
+ffmpeg -i a3.mp4 -vf rotate=PI/2 rotate9.mp4
