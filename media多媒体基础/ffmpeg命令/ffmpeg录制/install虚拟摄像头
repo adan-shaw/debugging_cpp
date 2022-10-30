@@ -1,0 +1,25 @@
+# 安装关键软件
+sudo apt install v4l2loopback-dkms v4l2loopback-utils
+sudo apt install  ffmpeg
+
+
+
+# 加载到内核
+sudo modprobe v4l2loopback
+
+
+
+# 查看设备(路径存在, 则虚拟摄像头设备可用)
+ls /dev/video0
+
+
+
+# 使用ffmpeg向虚拟摄像头设备推流(将$DISPLAY 显示屏的信号, 推入虚拟摄像头, 虚拟摄像头才有数据流输出)[放心, 这部只消耗内存, 不消耗disk磁盘]
+# 参数说明:
+# 	(echo $DISPLAY; 是一个shell 宏定义替换, 字符串是":0.0", 带冒号)
+ffmpeg -f x11grab -r 15 -s 1280x720 -i $DISPLAY -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
+
+
+
+# ffmpeg 占用虚拟摄像头, 进行视频录制
+ffmpeg -f video4linux2 -s 640x480 -pixel_format yuyv422 -i /dev/video0 out.mp4
