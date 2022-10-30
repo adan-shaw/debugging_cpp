@@ -1,0 +1,17 @@
+画面-上下翻转:
+ffmpeg -i xxx.mp4 -vf vflip a.mp4
+
+
+
+画面-左右翻转:
+ffmpeg -i xxx.mp4 -vf hflip b.mp4
+
+
+
+画面-顺时针旋转90度:
+ffmpeg -i xxx.mp4 -vf transpose=1 c.mp4
+
+
+
+画面-逆时针旋转90度:
+ffmpeg -i xxx.mp4 -vf transpose=2 d.mp4
