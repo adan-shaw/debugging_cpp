@@ -1,0 +1,72 @@
+0.查看视频封装格式:
+	* file 命令查看:
+		file ./video.mp4
+	* ffmpeg 查看:
+		ffmpeg -formats ./video.mp4
+
+
+
+
+
+1.拆分'字幕轨道'与'视频&音频轨道'(提取字幕轨道):
+	拆分前, 必须先使用:
+		ffmpeg -i <媒体文件>
+	查看, 该文件, 有多少个轨道.
+	如果没有字幕轨道, 拆不出来的, 数据是打印到视频文件中的.
+
+
+	正常可拆分字幕的媒体文件, 应该是这样的:
+Stream #0:0(und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p, 720x572 [SAR 64:45 DAR 256:143], 1341 kb/s, 25 fps, 25 tbr, 90k tbn, 180k tbc
+Stream #0:1(eng): Audio: aac (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 191 kb/s
+Stream #0:2(fra): Audio: aac (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 191 kb/s
+Stream #0:3(eng): Subtitle: dvd_subtitle (mp4s / 0x7334706D)
+Stream #0:4(und): Subtitle: mov_text (text / 0x74786574)
+
+
+	拆分方法:
+		1.提取视频 (Extract Video)
+		ffmpeg -i xxx.mkv -map 0:0 -vcodec copy -an video.mp4
+
+		2.提取音频(Extract Audio)
+		ffmpeg -i xxx.mkv -map 0:1 -vn -acodec copy audio.ac3
+		ffmpeg -i xxx.mkv -map 0:2 -vn -acodec copy audio2.ac3
+
+		3.提取字幕(Extract Subtitle)
+		ffmpeg -i xxx.mkv -map 0:3 sub.srt
+		ffmpeg -i xxx.mkv -map 0:4 sub2.srt
+
+
+	ps:
+		一般, 使用:
+			ffmpeg -i <媒体文件>
+		查看之后, 没有看到字幕轨道Stream #0:3(eng): Subtitle
+		而且视频中, 又已经有字幕了.
+		这时候, 如果出现字幕不同步的情况, 你都不用搞了, 浪费时间.
+		这种字幕, 是直接打印到视频文件中的, 没办法修改.
+		mp4 一般是这种格式, 但是mp4 也可以插入字幕!!
+		mkv 有时候, 也可能会没有sub字幕轨道, 而是直接打印到视频文件中.
+		详细, 以:
+			ffmpeg -i <媒体文件>
+		命令, 生成的结果为准!!
+		有字幕轨道, 就有" Stream #0:4(und): Subtitle: " 等信息.
+		自己区别对待!!
+
+
+
+
+
+2.往mp4 视频文件中, 插入字幕(套入字幕):
+	ffmpeg -i infile.mp4 -i infile.srt -c copy -c:s mov_text outfile.mp4
+	ffmpeg -i output.mp4 -i jb.ass -c copy -c:s mov_text outfile.mp4
+
+
+
+
+
+3.aegisub 字幕编辑工具, 并不是用来合成新的字幕的, 而是用来编辑字幕的.
+	合成新的字幕, 用ffmpeg 直接操作, 又快又稳定, 命令操作, 简单方便.
+	如果用aegisub 操作, 反而很麻烦.
+	所以:
+		aegisub 一般是翻译者, 用来翻译影视作品时, 用的专业工具.
+
+
