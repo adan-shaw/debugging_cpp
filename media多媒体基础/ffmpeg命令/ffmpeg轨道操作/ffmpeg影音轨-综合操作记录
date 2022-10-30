@@ -1,0 +1,123 @@
+ffmpeg轨道操作准备工作:
+	* 1.一般都需要转码, 压缩, 以方便统一编码格式操作;
+	* 2.如果需要合并, 需要保证帧率, 像素匹配
+
+
+
+
+
+1.音视频合成(bilibili.com 缓存合成):
+	ffmpeg -i video.m4s -i audio.m4s -map 0:v -map 1:a -c copy -shortest output.mp4
+
+	合成之后, ffmpeg -i output.mp4:
+	Metadata:
+		Stream #0:0(und): Video: 
+	Metadata:
+		Stream #0:1(und): Audio:
+
+	-map 0:v ==> 轨道0, video数据.
+	-map 1:a ==> 轨道1, audio数据.
+
+
+
+
+
+2.往mp4 视频文件中, 插入字幕(套入字幕):
+	ffmpeg -i infile.mp4 -i infile.srt -c copy -c:s mov_text outfile.mp4
+	ffmpeg -i output.mp4 -i jb.ass -c copy -c:s mov_text outfile.mp4
+
+
+
+
+
+3.mp4转mkv:
+	ffmpeg -i output.mp4 output.mkv
+
+
+
+
+
+4.调整字幕顺序(前提是'字幕'与'视频&音频'已经拆分了):
+	先拆分开:
+		视频, 音频, 字幕.
+
+	一般, 如果是视频, 音频同步, 则人物对嘴, 镜头+声音对嘴.
+	这时候你只需要修改字幕轨道!!
+		* 字幕跑在后面:
+			视频&音频, 剪断开头, 减少一秒(or n秒). 然后再套入字幕.
+			# 从视频中, 剔除1秒(-ss 开始时间, 不是从00开始, 而是从01 开始, 就是剔除一秒):
+				ffmpeg -ss 00:00:01 -i output.mp4 -vcodec copy -acodec copy output-1s.mp4
+
+		* 字幕跑在前面:
+			往'视频&音频'前面插入一段空白视频, 增加一秒(or n秒). 然后再套入字幕.
+			# 从视频中, 剪出1秒(拷贝出1秒):
+				ffmpeg -ss 00:00:00 -t 00:00:01 -i output.mp4 -vcodec copy -acodec copy output+1s.mp4
+			# 拼接两端视频:
+				list.txt:
+					file output+1s.mp4
+					file output.mp4
+				command:
+					ffmpeg -f concat -i list.txt -c copy concat.mp4
+
+	此时, 视频&音频, 已经同步了, 这时候直接插入字幕!!
+	ps:
+		你确定是'剪头减少n秒'？ 还是'插头增加n秒'？ 
+		你首先, 要将字幕插入'视频&音频'轨道中, 或者用aegisub 自己先看一边.
+		确定字幕轨道的同步性. 前进了多少秒, 或者后退了多少秒.
+		如果字幕完全不对准, 那你不用搞了.
+		重写一套字幕十分艰难!!
+	# 插入字幕操作
+	ffmpeg -i output-1s.mp4 -i jb.ass -c copy -c:s mov_text outfile2.mp4
+
+	注意:
+		千万不能修改字幕轨道!!
+		字幕每一句, 都有时间轴定位, 字幕整体向前倾斜, 是很难做到的.
+		但是你可以通过'视频&音频'进行相位.
+
+		修改视频, 音频轨道容易, 修改字幕轨道难.
+		字幕轨道编写也很难.
+
+
+
+
+
+5.拆分'字幕轨道'与'视频&音频轨道'(提取字幕轨道):
+	拆分前, 必须先使用:
+		ffmpeg -i <媒体文件>
+	查看, 该文件, 有多少个轨道.
+	如果没有字幕轨道, 拆不出来的, 数据是打印到视频文件中的.
+
+	正常可拆分字幕的媒体文件, 应该是这样的:
+		Stream #0:0(und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p, 720x572 [SAR 64:45 DAR 256:143], 1341 kb/s, 25 fps, 25 tbr, 90k tbn, 180k tbc
+		Stream #0:1(eng): Audio: aac (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 191 kb/s
+		Stream #0:2(fra): Audio: aac (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 191 kb/s
+		Stream #0:3(eng): Subtitle: dvd_subtitle (mp4s / 0x7334706D)
+		Stream #0:4(und): Subtitle: mov_text (text / 0x74786574)
+
+
+	拆分方法:
+		1.提取视频 (Extract Video)
+		ffmpeg -i xxx.mkv -vcodec copy -an video.mp4
+
+		2.提取音频(Extract Audio)
+		ffmpeg -i xxx.mkv -vn -acodec copy audio.ac3
+
+		3.提取字幕(Extract Subtitle)
+		ffmpeg -i xxx.mkv -map 0:s:0 sub1.srt
+
+
+	ps:
+		一般, 使用:
+			ffmpeg -i <媒体文件>
+		查看之后, 没有看到字幕轨道Stream #0:3(eng): Subtitle...
+		而且视频中, 又已经有字幕了.
+		这时候, 如果出现字幕不同步的情况, 你都不用搞了, 浪费时间.
+		这种字幕, 是直接打印到视频文件中的, 没办法修改.
+		mp4 一般是这种格式, 但是mp4 也可以插入字幕!!
+		mkv 有时候, 也可能会没有sub字幕轨道, 而是直接打印到视频文件中.
+		详细, 以:
+			ffmpeg -i <媒体文件>
+		命令, 生成的结果为准!!
+		有字幕轨道, 就有" Stream #0:4(und): Subtitle: " 等信息.
+		自己区别对待!!
+
