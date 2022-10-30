@@ -1,0 +1,46 @@
+#
+# 1.版本组合1(失败, 编译成功, 不能运行)
+#
+nvcc --version:
+	release 9.2
+
+ls /etc/nvidia
+	legacy-390xx
+
+ffnvcodec:
+	11.1 (头文件, 不能改变)
+
+ffmpeg:
+	ffmpeg-4.2.4-Ada-2019-07-21.tar.xz
+
+
+
+失败原因:
+	Driver does not support the required nvenc API version. Required: 11.1 Found: 9.0
+	cuda 版本要求: 11.1
+	但是debian 默认安装的是9.2, 
+	所以没办法, 你用不了这么新的cuda, 你就用不了这么新的ffmpeg
+
+
+	ffmpeg4.x版本开始,nvidia库更新了,第一个4.0就已经更新了
+	ffmpeg3.4已经有足够的nvidia库可用,不用担心,只是功能没有那么多而已
+
+
+
+
+
+#
+# 2.版本组合2(成功)
+#
+nvcc --version:
+	release 9.2
+
+ls /etc/nvidia
+	legacy-390xx
+	legacy-340xx
+
+ffnvcodec:
+	9.1 (头文件, 不能改变)
+
+ffmpeg:
+	ffmpeg-3.4.8-Cantor-2017-10-11.tar.xz
