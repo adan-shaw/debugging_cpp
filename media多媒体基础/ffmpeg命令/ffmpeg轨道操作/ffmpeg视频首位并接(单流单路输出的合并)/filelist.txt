@@ -1,0 +1,19 @@
+# 被合并的视频文件list
+# 所有路径, 不能有中文!! ffmpeg 不支持任何中文路径
+file 'venom-cd1.mp4'
+file 'venom-cd2.mp4'
+
+
+
+# 合并命令:
+# ffmpeg -f concat -i ./filelist.txt -c copy ./venom1.mp4
+
+# 拼接顺序:
+# 	根据这个列表, 从上到下, 逐个拼接.
+
+# 拼接视频数量:
+# 	不限视频数量, 按照filelist.txt进行拼接的, 允许多个视频拼接.
+
+
+
+
