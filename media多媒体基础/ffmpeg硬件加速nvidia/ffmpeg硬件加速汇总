@@ -1,0 +1,193 @@
+#
+# 1.ffmpeg 硬件加速简介
+#
+ffmpeg 硬件加速, 会涉及到具体的media 媒体文件的格式问题, 是哪个格式??
+
+不同格式, 硬件加速方式就不一样, 不会自动选择硬件加速方式, 需要手动添加?? (有带考证)
+
+
+
+由于媒体文件, 格式有很多种, 差异也很大, 
+所以, 每一种硬件加速, 只会对应一种, 或者几种media 特定媒体文件,
+而且, 由于硬件加速算法, 一般是操作系统公司搞出来的, 
+所以, 硬件加速算法, 基本上都会绑定某些平台, 才能使用.
+
+
+
+平台专用的ffmpeg 硬件加速算法, 例如:
+	DXVA2:
+		DXVA2硬件加速仅适用于Windows,
+		要启用DXVA2, 请使用--enable-dxva2 ffmpeg 编译选项
+
+		直接-X视频加速API, 由微软开发的(支持Windows和Xbox360). 
+		目前支持几种解码器, 特别是H.264, MPEG-2, VC-1和WMV 3. 
+
+		要测试解码, 请使用以下命令:
+		ffmpeg -hwaccel dxva2 -threads 1 -i INPUT.mp4 -f null - -benchmark
+
+
+
+
+
+
+
+
+
+#
+# 2.ffmpeg + nvidia 硬件加速(常用): NVENC / NVDEC
+#
+NVENC和NVDEC是NVIDIA的硬件加速编码和解码API, 
+他们曾经被称为CUVID, 它们可用于Windows和Linux上的编码和解码.
+NVENC = 编码加速
+NVDEC = 解码加速
+CUVID = 两者总和
+
+
+
+# 查看nvidia 驱动版本:
+cat /proc/driver/nvidia/version
+
+# 看到340xx 就是安装了340xx 版本:
+ls /etc/nvidia
+
+apt 安装nvidia 支持库:
+	apt-get install libnvcuvid1 
+	apt-get install libnvidia-encode1
+
+	apt-cache search nvidia cuvid
+		apt-get install libnvcuvid1
+		libnvidia-legacy-340xx-nvcuvid1
+		libnvidia-legacy-390xx-nvcuvid1
+	apt-cache search nvidia nvenc
+		apt-get install libnvidia-encode1
+		libnvidia-legacy-340xx-encode1
+		libnvidia-legacy-390xx-encode1
+	apt-cache search nvidia nvdnc
+		无
+
+编译选项:
+	--enable-cuda-nvcc       enable Nvidia CUDA compiler [no]
+	--disable-cuda-llvm      disable CUDA compilation using clang [autodetect]
+	--disable-cuvid          disable Nvidia CUVID support [autodetect]
+	--disable-nvdec          disable Nvidia video decoding acceleration (via hwaccel) [autodetect]
+	--disable-nvenc          disable Nvidia video encoding code [autodetect]
+	--disable-ffnvcodec      disable dynamically linked Nvidia code [autodetect]
+
+	--enable-libnpp          enable Nvidia Performance Primitives-based code [no]
+	--enable-libdrm          enable DRM code (Linux) [no]
+	--enable-libmfx          enable Intel MediaSDK (AKA Quick Sync Video) code via libmfx [no]
+
+汇总:
+	--enable-cuda-nvcc
+	--disable-cuda-llvm
+	--enable-cuvid
+	--enable-nvdec
+	--enable-nvenc
+	--enable-ffnvcodec
+	--enable-libnpp
+	--enable-libdrm
+	--disable-libmfx -- debian apt找不到这个库, 不用了
+
+
+
+2.1 NVENC:
+	NVENC可用于H.264和HEVC编码. 
+	FFmpeg通过h264_nvenc和hevc_nvenc编码器支持NVENC. 
+	要在FFmpeg中启用它, 您需要:
+		一个支持NVENC 的nvidia GPU
+		支持您的操作系统的驱动程序
+		在NVIDIA编解码器SDK
+
+	ffmpeg使用--enable-nvenc 编译选项(如果在编译时, 检测到驱动程序, 则为默认值)
+	注意:
+		FFmpeg对NVIDIA的CUDA / NVENC / NVDEC相关库,
+		使用了自己稍微修改过的运行时加载程序.
+		如果你从一个错误配置抱怨缺少ffnvcodec, 这个项目是你所需要的. 
+		它有一个带有安装目标的工作Makefile:make install PREFIX = / usr.
+		FFmpeg将查找名为ffnvcodec.pc的 pkg-config文件. 
+		确保它在PKG_CONFIG_PATH中. 
+
+	这意味着在编译ffmpeg之前运行以下内容应该足够了:
+		git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+		cd nv-codec-headers
+		sudo make 
+		sudo make install
+		编译后, 您可以使用NVENC.
+
+
+NVENC 用法示例:
+	ffmpeg -i input.mp4 -c:v h264_nvenc -profile high444p -pixel_format yuv444p -preset default output.mp4
+	您可以使用:
+		ffmpeg -h encoder = h264_nvenc
+		或ffmpeg -h encoder = hevc_nvenc,
+		来查看可用的预设, 其他选项和编码器信息. 
+
+	注意:
+		如果您发现无NVENC功能设备错误, 
+		请确保您使用支持的像素格式进行编码, 
+		请参阅上面显示的编码器信息. 
+
+
+
+
+
+2.2 NVDEC / CUVID:
+	NVDEC为H.264, HEVC, MJPEG, MPEG-1/2/4, VP8 / VP9, VC-1提供解码器. 
+	编解码器支持硬件变化(见GPU兼容性表). 
+
+	请注意:
+		FFmpeg提供NVDEC和CUVID hwaccel.
+		它们在帧中如何解码和转发在内存中有所不同. 
+
+		全套编解码器仅在Pascal硬件上可用, 它增加了VP9和10位支持. 
+		关于NVENC缺少ffnvcodec的说明也适用于NVDEC. 
+
+
+	使用NVDEC进行样本解码:
+		ffmpeg -hwaccel nvdec input.mp4 output.mp4
+
+	使用CUVID进行样本解码:
+		ffmpeg -hwaccel cuvid -c:v h264_cuvid -i input.mp4 output.mp4
+
+	CUVID和NVENC的全硬件转码:
+		ffmpeg -hwaccel cuvid -c:v h264_cuvid -i input.mp4 -c:v h264_nvenc -preset slow output.mp4
+
+
+	如果编译了ffmpeg并支持libnpp, 则可以使用它将基于GPU的缩放器插入到链中:
+		ffmpeg -hwaccel_device 0 -hwaccel cuvid -i input.mp4 -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow output.mkv
+		该-hwaccel_device选项可用于指定要通过的ffmpeg的hwaccel的使用的GPU. 
+
+
+
+	编译成功, 运行错误:
+		Driver does not support the required nvenc API version. Required: 11.1 Found: 9.0
+		意思就是, 设备不支持nvenc API, 版本不对, 请求的是11.1 版本, 实际设备只支持9.0 版本.
+
+		原因1:
+			更换头文件版本, 使用版本对的头文件, 重新编译
+			编译前, 请确定你的cuda 库版本
+			nvcc --version
+
+		原因2:
+			其次还要, ffmpeg 源码版本, 要对得上, 除了头文件, 还要有ffmpeg 源码版本对的上.
+			FFmpeg 3.4.8 "Cantor" -- 3 系列最新版本是, 启动于2017-10-11.
+
+			FFmpeg 2.8.17 "Feynman" -- 2 系列最新版本是, 启动于2015-08-28.
+
+			你现在用的是:
+			FFmpeg 4.3.2 "4:3" -- 4 系列, 最早的FFmpeg 4.0.6 "Wu", 启动于2018-04-16
+
+
+		最后, 你要找会与cuda-nvcc 对应的ffmpeg 版本和头文件, 然后重新编译.
+		才能编译出, 可执行的ffmpeg
+
+
+
+	my 测试命令:
+		# (转码)-preset slow 慢转码, 画质好
+		ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i input.mp4 -c:v h264_nvenc -preset slow output.mp4
+		# (转码)直接减帧fps
+		ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i input.mp4 -c:v h264_nvenc -r 23 output.mp4
+
+
+
