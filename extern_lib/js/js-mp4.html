@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>js-mp4播放器</title>
+	<style>
+		.videoEx{
+			border: 12px dashed lightskyblue;
+			width: auto;
+			height: auto;
+			min-width: 640px;
+			min-height: 360px;
+			max-width: 1280px;
+			max-height: 720px;
+		}
+		.buttonEx{
+			background-color: lightskyblue;
+			width: 96px;
+			height: 32px;
+			font-size: 24px;
+		}
+	</style>
+	<script type="text/javascript">
+		var v;
+		var display;
+		window.onload = function(){
+			v = document.getElementById("videoPlayer");
+			display = document.getElementById("displayStatus");
+		}
+		function play(){ v.play(); }
+		function pause(){ v.pause(); }
+		function stop(){ v.pause(); v.currentTime=0; }
+		function progressUpdate(){ display.innerHTML = "* " + Math.round(v.currentTime) + " 秒 *"; }
+	</script>
+</head>
+<body>
+<div align="center">
+	<video class="videoEx" id="videoPlayer" ontimeupdate="progressUpdate()" controls="controls">
+		<source src="./恶搞龙珠.mp4" type="video/mp4" >
+	</video>
+</div>
+<div align="center">
+	<span id="displayStatus" style="font-size:32px">* 进度条 *</span>
+	<button class="buttonEx" onclick="play()">播放</button>
+	<button class="buttonEx" onclick="pause()">暂停</button>
+	<button class="buttonEx" onclick="stop()">重置</button>
+</div>
+</body>
+</html>
