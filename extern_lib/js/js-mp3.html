@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>js-mp3播放器</title>
+	<style>
+		.audioEx{
+			border: 12px dashed lightskyblue;
+			width: auto;
+			height: auto;
+			min-width: 640px;
+			min-height: 360px;
+			max-width: 1280px;
+			max-height: 720px;
+		}
+		.buttonEx{
+			background-color: lightskyblue;
+			width: 96px;
+			height: 32px;
+			font-size: 24px;
+		}
+	</style>
+	<script type="text/javascript">
+		var a;
+		var display;
+		window.onload = function(){
+			a = document.getElementById("audioPlayer");
+			a.preload = true;
+			a.controls = true;
+			a.loop = true;
+			a.src = "./心愿便利贴.mp3";
+			display = document.getElementById("displayStatus");
+		}
+		function play(){ a.play(); }
+		function pause(){ a.pause(); }
+		function stop(){ a.pause(); a.currentTime=0; }
+		function progressUpdate(){ display.innerHTML = "* " + Math.round(a.currentTime) + " 秒 *"; }
+	</script>
+</head>
+
+
+
+<body>
+<div align="center">
+	<audio class="audioEx" id="audioPlayer" ontimeupdate="progressUpdate()" controls="controls">
+		<source src="./心愿便利贴.mp3" type="audio/mp3" >
+	</audio>
+</div>
+<div align="center">
+	<span id="displayStatus" style="font-size:32px">* 进度条 *</span>
+	<button class="buttonEx" onclick="play()">播放</button>
+	<button class="buttonEx" onclick="pause()">暂停</button>
+	<button class="buttonEx" onclick="stop()">重置</button>
+</div>
+</body>
+</html>
