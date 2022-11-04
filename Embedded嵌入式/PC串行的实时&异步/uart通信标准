@@ -53,3 +53,5 @@ uart通信协议主要内容:
 		rs232: 通信主要是由RX、TX、GND三根线组成(必须先做电压转换)
 		rs485: 通信主要是由RX、TX、GND三根线组成(接uart口时: RX接TX, TX接RX, GND接GND)--最好转换一下电压
 		ttl:   通信主要是由RX、TX、GND三根线组成(接uart口时: RX接TX, TX接RX, GND接GND)--可直接接uart口
+
+
