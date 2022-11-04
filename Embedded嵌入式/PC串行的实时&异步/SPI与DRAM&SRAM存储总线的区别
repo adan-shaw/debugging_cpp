@@ -1,0 +1,97 @@
+Flash闪存芯片的总线规格有:
+	SRAM: 
+		Static RAM, 静态随机存取存储器;
+		SRAM存在于MCU内部, 容量比较小一般KB~MB, 速度快;
+
+	DRAM: 
+		Dynamic RAM, 动态随机存取存储器;
+
+	SDRAM: 
+		Synchronous Dynamic RAM, 同步动态随机存取存储器;
+		应用于代码大, 算法复杂, 带操作系统的应用, 
+		SDRAM独立于MPU, 可以根据应用的情况选择RAM的大小, 
+		一般外接用SDRAM, 容量比较大, 一般MB~GB, DDR是SDRAM的一种;
+
+	PSRAM: 
+		Pseudo static RAM, 指的是伪静态随机存储器;
+
+
+	简单来说, SPI/QSPI就用串行来伪造高速RAM总线;
+	传统PSRAM是平行接口的, 需要消耗较多MCU/SoC的I/O管脚资源;
+	IPUS推出了支持SPI/QSPI接口的串行PSRAM, 
+	为没有'并行RAM扩展接口'的MCU/SoC提供了内存扩展方式;
+
+	PSRAM既具有SRAM电路接口简洁的优点, 
+	又具备DRAM容量大的特点,
+	(兼具SRAM的简单易用、DRAM的较大容量的优点)
+	同时将刷新电路集成进芯片内部;
+
+
+
+
+
+Flash闪存芯片规格有:
+	Flash, 按照内部访问接口不同, 分为4种:
+		* 无接口, SRAM 片内集成;
+
+		* 一种是就像访问SDRAM一样, 按照'数据/地址'总线直接访问的Nor Flash;
+			(类似DDR, CPU内集成SDRAM 主控(DDR内存管理器), 不占用主板总线, DDR3 的访问速度大概是10G/s, 100Gbps)
+
+		* 一种是只有8位(X8)/16位(X16)或者更多(X32/...)位宽的总线, 
+			每次访问, 都要将指针地址, 分成几部分, 一点点的分别传入Nand Flash主控,
+			然后合成, 得出访问地址, 才能访问的Nand Flash;
+			(PSRAM 伪静态随机存储器总线, 并口模式, 需要主控)
+
+		* PCIE 串行高速总线, 带始终线, 实时;
+			(PSRAM 伪静态随机存储器总线, 串口模式, 需要主控)
+
+
+	Nor Flash, 根据外部接口分: 
+		普通的接口(多数支持CFI接口, 一般也叫做CFI接口; 也叫parallel并口/CFI/JEDEC接口);
+		普通的接口有很多针脚, 
+		SPI接口(串口)
+		SPI接口可以减少针脚数目, 减少芯片封装大小, 采用了SPI后的Nor Flash, 针脚只有8个;
+
+
+
+
+
+PCIE 串行高速总线(带时钟线):
+	作为点对点连接的总线, 一条 PCIe 链路只能两端各连接一个设备, 
+	分别为数据发送端和数据接收端, 传输数据量的大小由通道数决定, 
+	一般一条链路可以有1-32个通道数, 对应 PCIe 总线接口有 x1、x4、x8、x16 这4种常见的规格尺寸;
+
+	x1  = 2通道(读/写通道) + 时钟线;
+	x4  = 8通道(4组io读写通道) + 时钟线;
+	x8  = 16通道(8组io读写通道) + 时钟线;
+	x16 = 32通道(16组io读写通道) + 时钟线;
+
+	类似PSRAM 伪静态随机存储器总线, 也叫串行高速总线;
+
+	* PCI 并口, 速度: 33-66Mhz(已淘汰) *
+	PCIE1.0 串口, 速度: 2.5Ghz, 250MB/s (2003)
+	PCIE2.0 串口, 速度: 5Ghz, 500MB/s
+	PCIE3.0 串口, 速度: 8Ghz, 1G/s
+	PCIE4.0 串口, 速度: 16Ghz, 2G/s
+	PCIE5.0 串口, 速度: 32Ghz, 4G/s
+	PCIE6.0 串口, 速度: 64Ghz, 8G/s     (2022)
+
+
+
+
+
+总结:
+	SRAM Flash  = CPU 高速缓存(L1/L2/L3/L4), CPU片内集成, 无接口;
+	DRAM Flash  = 异步动态随机存取存储器(由于是异步的, 目前应用比较少, 并口);
+	SDRAM Flash = 同步动态随机存取存储器(即目前的DDR 内存条技术, 并口);
+
+
+Intel于1988年首先开发出NOR Flash 技术, 
+彻底改变了原先由:
+	EPROM(Erasable Programmable Read-Only-Memory电可编程序只读存储器)
+	EEPROM(电可擦只读存储器Electrically Erasable Programmable Read - Only Memory)
+	一统天下的局面;
+
+1989年, 东芝公司发表了NAND Flash 结构, 
+降低每比特的成本, 有更高的性能, 并且像磁盘一样可以通过接口轻松升级;
+
