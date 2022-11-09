@@ -1,0 +1,29 @@
+# 启动RSS(需要预先配置好rtsp-simple-server.yml 文件)
+./rtsp-simple-server
+
+
+
+# 装载虚拟摄像头(物理摄像头, 没有这一步)
+sudo modprobe v4l2loopback
+
+# 向虚拟摄像头, 推流(物理摄像头, 没有这一步)
+# 向虚拟摄像头, 推流屏幕
+ffmpeg -f x11grab -r 15 -s 1920x1080 -i $DISPLAY -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
+# 向虚拟摄像头, 推流文件
+#ffmpeg -f video4linux2 -r 15 -s 1920x1080 -pixel_format yuyv422 -i /dev/video0 ./out.mp4
+
+
+
+# 将摄像头, 推流到RSS-rtsp端口
+ffmpeg -r 15 -i /dev/video0 -preset:v ultrafast -tune:v zerolatency -f rtsp rtsp://127.0.0.1:8554/mystream
+
+# ps:
+# 	camera 摄像头, 不能切片成ts 文件链, 也就不能做时间轴跳点;
+# 	只有对媒体流, 切片成ts 文件链之后, 才能做时间轴跳点, 否则任何时间轴跳点, 都会触发从头开始播放文件;
+# 	摄像头一般也不支持切片成ts 文件链, 所以一般不支持rtmp/hls;
+# 	nginx 一般支持rtmp/hls; 摄像头一般用rtsp;
+
+
+
+# ffplay拉流(太卡了, 这样多次推流, 如果使用smplayer/vlc, 电脑会吃不消, 打不开数据流, 建议使用ffplay 进行拉流, 性能最好)
+ffplay -f rtsp -i rtsp://127.0.0.1:8554/mystream
