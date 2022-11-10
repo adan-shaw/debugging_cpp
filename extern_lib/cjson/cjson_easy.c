@@ -4,6 +4,9 @@
 //运行:
 //		LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/tarball/cjson/lib/" ./x
 
+//debug:
+//		LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/tarball/cjson/lib/" gdb ./x
+
 
 
 #include <stdio.h>
@@ -108,5 +111,6 @@ int main(void){
 	basic_test();
 	return 0;
 }
+
 
 
