@@ -11,6 +11,7 @@
 
 
 //快速将整个文件的数据读入内存, 返回一个mmap 映射-字符串指针(自动根据文件大小,创建一个匹配大小的映射区)
+//后续使用strlen() 来获取文件长度, 不安全, 遇到'\0'字符时, 会返回一个错误的字符串长度, 这个字符串长度不是文件总长;
 char* mmap_file_r(const char* filepath){
 	int fd, len;
 	char* pbuf;
@@ -36,7 +37,7 @@ char* mmap_file_r(const char* filepath){
 	return pbuf;
 }
 
-//快速将整个文件的数据读入内存, 返回一个mmap 映射-字符串指针, 回掉返回文件实际总长(防止文件中出现'\0'字符)
+//快速将整个文件的数据读入内存, 返回一个mmap 映射-字符串指针, 回调返回文件实际总长(可以防止文件中出现'\0'字符)
 char* mmap_fileEx_r(const char* filepath, unsigned int* len){
 	int fd;
 	char* pbuf;
