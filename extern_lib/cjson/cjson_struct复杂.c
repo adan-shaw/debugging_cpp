@@ -47,7 +47,6 @@ Group_t g_Groups[GROUP_COUNT]={
 
 
 
-
 //将pgroup数组, 转换成'cJSON结构体', 再导出json字符串
 void Get_Group_t_Str(Group_t *pgroup, char **pjson){
 	cJSON *pRoot,*pNode,*pSon,*pSon_tmp,*ptmp;
