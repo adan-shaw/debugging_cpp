@@ -1,0 +1,27 @@
+#
+# 1.什么是json, cjson, json-c
+#
+json 即JavaScript Object Notation, 是一种互联网常用的轻量级'应用数据序列化'标准;
+常见的实现方案有:
+	cjson 是应用数据data to 'json文本'的c/c++ 编码库;
+	json-c 同样也是应用数据data to 'json文本'的c/c++ 编码库[弃用];
+	nlohmann json 是一个全新的, 支持反序列化的c++ 库, 比较好用;
+	ConfigLoader 是一个全新的C++静态反射框架[C++17];
+	dsmarshal 网友实现的c++ 反序列化方案[C++98], 支持比较老的c++;
+
+ps:
+	关于json反序列, 目前c语言貌似没有具体的实现方案;
+	这种工具只有在c++/go/java/python 等程序中存在(支持反射), 就是根据数据自动生成编码语言;
+	日后实现人工智能自动编码, 也不是不可能, 只要这种反射机制足够强大, 就有实现的可能;
+
+
+
+
+
+#
+# 2.其他细节
+#
+
+# cjson编译选项: 
+	-DCMAKE_BUILD_TYPE:STRING=RELEASE
+	-DCMAKE_BUILD_TYPE:STRING=DEBUG
