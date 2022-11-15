@@ -9,4 +9,5 @@
 #   media多媒体基础 = 多媒体基础库
 #   socket        = socket编码库
 #   posix_linux   = posix/sysv 多进程/多线程编码库
+# have some fun, young students, good luck.
 # 2022/07/25
