@@ -1,0 +1,100 @@
+安装redis-cli 客户端工具:
+	apt-get install redis-tools
+
+
+
+
+
+# 使用redis-cli 登录redis-server:
+	# 登录127.0.0.1(直接默认配置即可登录, --raw避免中文显示乱码)
+	redis-cli --raw
+
+	# 远程登录(-a 等价于--auth):
+	redis-cli -h 192.168.56.111 -p 6379 -a 123456 --raw
+
+	# 登录简单密码认证(redis也可以用rsa认证, 如果你做redis群集的话, 也需要rsa认证, 一般127.0.0.1加个密码就行)
+	#auth 123456
+
+
+# 查看所有在线的redis-cli
+client list
+
+# 将redis-cli 踢下线
+client kill 127.0.0.1:9213
+
+
+
+
+
+
+
+
+临时设置密码:
+	# 获取密码
+	config get requirepass
+	# 设置密码
+	config set requirepass 123456
+	# 当有密码的时候认证
+	auth 密码
+	# 取消密码
+	config set requirepass ''
+
+永久设置密码(到配置文件redis.conf中, 添加语句):
+	requirepass 密码
+
+
+
+
+
+
+
+
+# 测试redis-server 是否正常(成功返回PONG / 字符串原地返回):
+	PING
+	PING "fuck you"
+
+# 回显命令:
+	echo "bitches"
+
+# 退出redis-cli
+quit
+exit
+
+# 查看redis-server 的配置信息+统计信息
+info
+
+# 只看cpu 相关的统计信息
+info cpu
+
+# 只看clients 相关的统计信息
+info clients
+
+
+
+
+
+
+
+
+# 查看redis 所有配置
+config get *
+
+# 查看redis 所有c 开头的配置
+config get c*
+
+# 查看redis 指定的配置项bind
+config get bind
+
+
+# 动态修改redis 配置(不能使用'*' 进行匹配!! 查询可用, 修改配置不能用)
+config set bind 0.0.0.0
+config set bind 127.0.0.1
+
+# 将动态修改后的redis 配置保存到redis.conf
+config rewrite
+
+
+# 清空redis 统计寄存器中所有的统计数据
+config resetstat
+
+
