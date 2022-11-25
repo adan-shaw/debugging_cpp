@@ -1,0 +1,26 @@
+#
+# 发布订阅相关命令:
+#
+psubscribe:
+	订阅一个或多个符合给定模式的频道, 例如: psubscribe news.* tweet.*
+
+publish:
+	将信息 message 发送到指定的频道 channel, 例如: publish msg "good morning"
+
+pubsub channels:
+	列出当前的活跃频道, 例如: PUBSUB CHANNELS news.i*
+
+pubsub numsub:
+	返回给定频道的订阅者数量, 例如: PUBSUB NUMSUB news.it news.internet news.sport news.music
+
+pubsub numpat:
+	返回客户端订阅的所有模式的数量总和
+
+punsubscribe:
+	指示客户端退订所有给定模式. 
+
+subscribe:
+	订阅给定的一个或多个频道的信息, 例如: subscribe msg chat_room
+
+unsubscribe:
+	指示客户端退订给定的频道. 
