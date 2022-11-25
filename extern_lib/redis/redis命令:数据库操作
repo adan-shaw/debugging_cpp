@@ -1,0 +1,215 @@
+优秀的互联网handbooks:
+	https://www.runoob.com/redis/redis-tutorial.html
+
+
+
+安装redis-cli 客户端工具:
+	apt-get install redis-tools
+
+
+
+redis 单个db本身, 就是一个巨大的'红黑二叉树'结构, key 是'红黑二叉树'下的key, value可以是:
+		integer = long long
+		str = 字符串
+		set = 子红黑树
+		list = 剪裁红黑树
+		hash = 数组向量 = redis_REPLY_ARRAY
+
+所以操作hash 表时, key 只表示哈希表的位置, 
+fields是hash 表(哈希桶)中的key, 用来做索引的,
+value才是最终存储的变量值.
+
+redis 的integer数字类型, 只能存在于list/set/hash 中;
+string 中的数字, 仍然是字符串, 只不过你可以对这种'数字字符串', 进行'+1/-1/+n/-n'操作而已
+'数字字符串'转换为c 语言整形, 需要: atoi()/atol()/atoll() 函数
+
+
+
+
+
+
+
+
+# 查看当前redis-server 下的所有数据库:
+config get databases
+
+# 切换redis-db(不能根据db 名进行切换, 意味着操作之前, 你需要先执行: config get databases, 获取db 编号)
+# 切换redis-db 后, 不需要退出, 要更换redis-db 可以直接再次切换
+# (默认开启15个数据库, 超过16会越界, 最大15, 最小0)
+select 1
+select 15
+
+
+
+
+
+#
+# 1.对KEY操作的命令(对所有数据类型有效)
+#
+exists(key):									判断key是否存在
+del(key):											删除一个key
+type(key):										返回key的类型
+keys(pattern):								根据pattern正则表达式, 返回匹配的所有key(慎用, 效率极低)
+randomkey:										随机返回一个key
+keyrename(oldname, newname):	重命名key
+dbsize:												返回当前redis-db key的总数量
+expire:												设定一个key的存活时间(单位s秒)
+ttl:													获得一个key的存活时间(单位s秒)
+move(key, db_index):					移动当前的key到db_index数据库(db_index=数据库编号)
+flushdb:											删除当前redis-db的所有key(需要先使用select 选定db 才能生效)
+flushall:											删除所有redis-db的所有key
+
+
+
+
+
+#
+# 2.对String操作的命令(对key不等于'非字符串数据'进行操作, 会出错; 请使用对应的命令, 操作不同种类的数据类型)
+#
+get(key):															返回一个key的value
+mget(key1, key2...):									返回n 个key对应的每一个value
+set(key, value):											新增一个key-value 对(如果key 已经存在, 则覆盖)
+mset(key1, value1, key2, value2...):	新增n 个key-value 对
+setnx(key, value):										新增一个key-value 对(原子操作, 如果key 已经存在则报错返回)
+msetnx(key N, value N):								新增n 个key-value 对
+getset(key, value):						key键值名回滚, value值重置, 如果key 没有被修改过, 则返回nil
+setex(key, time, value):			新增一个key-value 对, 设定过期时间time(相当于set + expire 联合操作)
+
+incr(key):										对key中存储的value进行加1(当value中的值不是integer类型即报错)
+decr(key):										对key中存储的value进行减1
+incrby(key, n):								对key中存储的value进行加n
+decrby(key, n):								对key中存储的value进行减n
+append(key, value):						如果key存在数据, 则在尾部追加value数据; 如果key不存在则自动创建;(遇到非字符串数据时报错)
+substr(key, start, end):			从key 指向的字符串中, 截取数据, 然后将截获的数据返回;(不存在or非字符串数据时,报错)
+
+
+
+
+
+#
+# 3.对List操作的命令(对key不等于list的数据进行操作, 会出错; list是简单的字符串列表, 成员可以重复)
+#
+rpush(key, value, value2):					将一个或多个值value插入到list的表尾(最右边), 返回list的长度
+lpush(key, value):									将一个或多个值value插入到list的表头(最左边), 返回list的长度
+llen(key):													返回list的长度
+lrange(key, start, end):						返回list中[start,end]之间的元素, 返回后自己用redisReply{}结构体去解析; -1表示最后一个元素, [0,-1]表示整个list
+ltrim(key, start, end):							对一个list进行修剪(trim), 让list只保留指定区间内的元素, 其他不在指定区间之内的元素, 都将被删除
+lindex(key, index):									返回list中下标为index的元素
+lset(key, index, value):						修改list中下标为index的元素, 值改为value
+lrem(key, count, value):						删除list中count 个值为value 的元素, 当count=0, 即list 中所有值为value 的元素都要被删除
+lpop(key):													移除并返回list 的头元素[阻塞模式, 等价于blpop(key,0)]
+rpop(key):													移除并返回list 的尾元素
+rpoplpush(list1, list2):						将list1的尾元素移出, 插入到list2的表头
+blpop(key, timeout):								移除并返回list 的头元素, 超时版(单位=秒, timeout=0=无限阻塞等待)
+brpop(key, timeout):								移除并返回list 的尾元素, 超时版
+brpoplpush(list1, list2, timeout):	将list1的尾元素移出, 插入到list2的表头, 超时版
+
+
+
+
+
+#
+# 4.对set操作的命令(对key不等于set的数据进行操作, 会出错; set是str类型的无序集合, 成员是唯一的; set是通过哈希表实现的)
+#
+sadd(key, value1, value2...):			向set中添加n个元素
+srem(key, value1, value2...):			移除set中n个元素
+spop(key):												移除并返回set中的一个随机元素
+smove(set1, set2, value):					将value元素从set1移到set2
+scard(key):												返回set的有多少个元素
+sismember(key, value):						判断value是否是set中的元素
+smembers(key):										返回set中所有元素
+srandmember(key):									随机返回一个或多个元素
+sinter(set1, set2, set3...):					求交集
+sunion(set1, set2, set3...):					求并集
+sdiff(set1, set2, set3...):						求差集
+sinterstore(set_new, set1, set2...):	求交集, 结果存到新集合set_new中
+sunionstore(set_new, set1, set2...):	求并集, 结果存到新集合set_new中
+sdiffstore(set_new, set1, set2...):		求差集, 结果存到新集合set_new中
+
+
+
+
+
+#
+# 5.对sorted set有序集合操作的命令(基本与set一致, 不同的是sorted set每个元素都会关联'一个double类型的分数',
+#																redis正是通过'double分数', 来为集合中的成员进行从小到大的排序,
+																有序集合的成员是唯一的,但分数(score)却可以重复)
+zadd(key, value1, value2...):			向zset中添加n个元素
+zcard(key):												返回zset的有多少个元素
+zcount(key, num1, num2):					返回分数值在num1 和num2 之间的成员的数量
+zlexcount(key, value1, value2):		返回元素值在'字典区间'value1 和value2 之间的成员的数量
+zincrby(key, num, value):					对num分数值自动加1, 并修改元素的值为value
+zrange(key, start stop [withscores]								通过索引区间返回有序集合指定区间内的成员
+zrangebylex(key, min max [limit offset count]			通过字典区间返回有序集合的成员
+zrangebyscore(key, min max [withscores] [limit]		通过分数返回有序集合指定区间内的成员
+zrank(key, member																	返回有序集合中指定成员的索引
+zrem(key,  value1, value2...):										移除zset中n个元素
+zremrangebylex(key, min max												移除有序集合中给定的字典区间的所有成员
+zremrangebyrank(key, start stop										移除有序集合中给定的排名区间的所有成员
+zremrangebyscore(key, min max											移除有序集合中给定的分数区间的所有成员
+zrevrange(key, start stop [withscores]						返回有序集中指定区间内的成员, 通过索引, 分数从高到低
+zrevrangebyscore(key, max min [withscores]				返回有序集中指定分数区间内的成员, 分数从高到低排序
+zrevrank(key, member															返回有序集合中指定成员的排名, 有序集成员按分数值递减(从大到小)排序
+zscore(key, member																返回有序集中, 成员的分数值
+zscan(key, cursor [match pattern] [count count]		迭代有序集合中的元素(包括元素成员和元素分值)
+zinterstore(zset_new, zset1, zset2...):						求交集, 结果存到新集合zset_new中
+zunionstore(zset_new, zset1, zset2...):						求并集, 结果存到新集合zset_new中
+
+
+
+
+
+#
+# 6.对Hash操作的命令(对key不等于set的数据进行操作, 会出错; redis中每个hash可以存储2^32 - 1键值对(40多亿);
+#									 hash是一个str类型的field(字段)和value(值)的映射表, hash特别适合用于存储对象.
+hget(key, field):																返回hash中一个field对应的value
+hmget(key, field1, field2...):									返回hash中多个field对应的value
+hset(key, field, value):												向hash中添加一个field, 值为value(非原子操作: 如果field 已存在, 则覆盖)
+hmset(key, field1, value1, field2, value2...):	向hash中添加多个field, 值为value
+hsetnx(key, field, value):											向hash中添加一个field, 值为value(原子操作: 如果field 已存在, 则添加失败)
+hgetall(key):																		以list形式返回哈希表所有的字段及字段值(若key不存在, 返回空list)
+hincrby(key, field ,n):						对hash中'整形field'的值增加n
+hincrbyfloat(key, field ,n):			对hash中'浮点field'的值增加n
+hexists(key, field):							判断hash中是否存在field
+hdel(key, field):									删除hash中一个or多个field
+hlen(key):												返回hash中field的个数
+hkeys(key):												返回hash中所有field
+hvals(key):												返回hash中所有field的value
+hscan(key, pos, "keyword*", 10):	扫描hash表, 查找field || value的值, 哪个与关键字匹配的, 最高匹配10 个元素(慎用, hash遍历, 消耗巨大)
+																	使用命令时, 需要带前序关键字match && count: hscan key 0 match "run*" count 2
+
+
+
+
+
+
+
+
+#
+# 7.redis-server 数据保存操作
+#
+# (同步阻塞)将redis中的RDB持久化数据, 保存到磁盘
+save
+
+
+# (异步非阻塞)将redis中的RDB持久化数据, 保存到磁盘
+bgsave
+
+
+# 查看上次执行RDB持久化的时间
+lastsave
+
+
+# 异步的将数据持久化到磁盘后, 关闭服务器(默认参数save, nosave就是不保存数据直接退出):
+shutdown [NOSAVE|SAVE]
+
+
+
+# 异步AOF重写(数据持久化)
+# 执行一个异步的AOF(append only file)文件重写, [关于AOF和RDB后面的文章中会单开一篇介绍]
+bgrewriteaof
+
+
+
+
+
