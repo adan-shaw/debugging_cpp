@@ -1,0 +1,26 @@
+faster-cpython简介:
+	cpython3.11.x 之后, 官方注重了提升cpython3.11.x 的速度,
+	因此cpython3.12.x, 也将会是一个速度提升版本(减少语法糖的提供);
+	ps:
+		cpython3.9.x cpython3.10.x 提供了很多新的语法糖,
+		基本上, cpython3.11.x cpython3.12.x 侧重提高cpython 的速度;
+
+	因此, 才会有faster-cpython project, 这个project 主要用意是: 
+		为提高cpython 的运行速度, 向大伙征求意见, 最终会将这些建议集成到cpython3.12.x 上面;
+
+
+
+	因此, pypy, 这个cpython 的jit 非官方版本, 凉得更透彻, 哈哈0.0;
+	官方推出加速版, pypy 存在的意义就更尴尬了;
+	(存在意义被极大地打压)
+
+
+
+
+
+	anyway, 对于个人用户来说, 你也不需要太多了解faster-cpython project, 但可以关注一下cpython3.12.x;
+	cpython3.12.x 应该是cpython 的速度最优版本, 而且是官方版的,
+	cpython3.11.x 只是前菜而已, 试水的, 
+	cpython3.12.x 才是主菜, 这说明cpython 应该开始解决运算效率的问题了;
+
+	等cpython3.12.x 退出之后, 可以看看faster-cpython project, 看看怎样编写python, 能提高运行速度;
