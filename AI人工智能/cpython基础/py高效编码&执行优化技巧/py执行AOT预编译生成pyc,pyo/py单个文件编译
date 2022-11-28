@@ -1,0 +1,61 @@
+#
+# 0.默认情况下, .py文件第一次使用时, 会自动生成pyc 文件.
+#
+当.py文件的'文件修改时间'发生改变, python 编译器会自动生成新的.pyc文件(python 机即python 编译器)
+生成的pyc 文件, 默认与py 源码, 存放在同一个路径下.
+
+
+
+
+
+
+
+
+#
+# 1.python 编译原理
+#
+python 解释器, 其实就是python 编译器.
+python 解释器执行命令, 装载文件的时候, 会首先尝试装载同路径下, 同名的pyo/pyc,
+查找失败之后, 就会直接装载py 源文件, 
+然后进行解析编译,
+最后才运行.
+
+
+python 只懂得解释执行字节码, 
+py 文件读入后, 第一件事就是先进行编译,
+编译结果, 会被尝试保存为pyc 文件.
+(编译结果, 默认被存放在python 机内部的pyc/pyo 装载器中, 用一次之后就抛弃;
+ 但是这个解析, 编译的过程, 就十分费时了;
+ 或者编译产生pyc, pyo 的本质, 就是减少编译过程而已, 直接执行二进制块, 
+ 并不会减少解析过程)
+
+python 编译, 实际上是进行文法分析, 生成一个抽象语法树, 然后转储成字节码形式.
+
+
+
+编译后的python, 仍然不算是jit 的, 
+也就是没办法摆脱python 全局解析锁的限制.
+只有把程序逻辑, 也逐渐编译成字节码, 才算是jit
+
+
+
+
+
+
+
+#
+# 2.python 单个文件的编译
+#
+# 编译成pyc文件
+python -m py_compile $filename
+
+
+
+# 编译成pyo文件(优化产生的字节码, 优化程度由PYTHON OPTIMIZE(environment)的值来决定)
+# PYTHON OPTIMIZE 不能修改, 默认即可.
+python -O -m py_compile $filename
+
+
+
+# 编译成pyo文件(在-O优化的基础上移除所有的doc-strings--去掉注释?)
+python -OO -m py_compile $filename
