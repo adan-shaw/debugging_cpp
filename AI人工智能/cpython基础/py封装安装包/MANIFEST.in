@@ -1,0 +1,10 @@
+#
+# MANIFEST.in file 编写:
+#
+'''
+	MANIFEST.in 用来指明封装包中各种资源文件的路径;
+	(需要在setup.py中设置include_package_data=True)
+	例如:
+		# 包含./res 下所有的file
+		recursive-include ./res *
+'''
