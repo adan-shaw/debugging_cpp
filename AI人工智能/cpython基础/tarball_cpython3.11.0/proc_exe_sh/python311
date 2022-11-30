@@ -1,0 +1,26 @@
+#!/bin/sh
+
+
+# 进程环境设置for tarball
+home="/home/tarball/cpython311"
+bin="$home/bin"
+lib="$home/lib"
+c_headfile="$home/include"
+cpp_headfile="$home/include"
+
+
+exe="$bin/.python3.11"
+
+cd $home
+
+# 启动bash
+/bin/sh -c " \
+LANGUAGE=zh_CN \
+HOME="$home" \
+PATH="$PATH:$bin" \
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$lib" \
+C_INCLUDE_PATH="$C_INCLUDE_PATH:$c_headfile" \
+CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:$cpp_headfile" \
+PIP_CONFIG_FILE=$home/pip.conf \
+$exe $* \
+"
