@@ -1,6 +1,6 @@
 # debugging_cpp
 # just some demo i written in this few months
-#   AI人工智能     = 人工智能方面的基础bullshit
+#   AI人工智能     = python & 人工智能的基础
 #   Embedded嵌入式 = 嵌入式基础库
 #   c_basic       = c语言基础库
 #   cpp_basic     = cpp基础库
