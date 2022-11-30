@@ -1,0 +1,42 @@
+1.安装uWSGI
+	cd ~/venv_py311/bin
+	./python3 -m pip install uwsgi -i https://mirrors.aliyun.com/pypi/simple/
+
+	安装之后, 生成路径在:
+		/home/tarball/cpython311/lib/python3.11/wsgiref/
+
+	执行路径bin:
+		/home/tarball/cpython311/bin/uwsgi
+
+	直接创建link to venv(这是一个exe二进制封装包, 不是.py, 所以可以直接创建软链接):
+		ln -s /home/tarball/cpython311/bin/uwsgi /home/adan/venv_py311/bin/uwsgi
+
+
+
+
+
+2.first test:
+	cd /home/adan/venv_py311/bin/
+	./uwsgi --http :8001 --wsgi-file ../lib_py/uwsgi/test_uwsgi.py
+
+	# 测试
+	curl http://127.0.0.1:8001/
+
+
+
+
+
+3.uwsgi 指定config 文件启动:
+	# uWSGI 支持多种配置文件格式, 比如 xml/ini/json 等等都可以;
+	cd /home/adan/venv_py311/bin/
+	#./uwsgi --xml ../lib_py/uwsgi/config.xml --wsgi-file ../lib_py/uwsgi/test_uwsgi.py
+	./uwsgi --ini ../lib_py/uwsgi/config.ini --wsgi-file ../lib_py/uwsgi/test_uwsgi.py
+
+	# 查看uwsgi 有没有启动
+	netstat -lpnt
+
+	# 杀死uwsgi
+	killall uwsgi
+
+	# 测试
+	curl http://127.0.0.1:8001/
