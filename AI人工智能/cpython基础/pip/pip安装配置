@@ -1,0 +1,57 @@
+#
+# 1.pip 包管理器简介
+#
+pip是cpyhon的第三方库管理器, pyhon3.4以后, pip都默认跟cpyhon一块安装, 因此不需要额外再安装pip 管理器;
+
+只有系统自带的python3, 为了系统安全, 才将pip 模块从python3 中拆出来,
+
+否则控制了python3, 即控制了整个操作系统, 还能自由安装cpyhon 软件, 这是操作系统安全设计所不允许的;
+
+pip 不是一个c/c++ 项目, pip 工具是通过cpyhon 实现的,
+所以pip 基本上没有tarball, 直接用就行, pip 运行时, 依赖宿主cpyhon;
+
+安装之后, pip 会存放在: 'cpyhon运行环境'/cpyhon3.11'版本'/site-packages
+
+
+
+
+
+
+
+
+#
+# 2.pip.conf 配置文件
+#
+adan/tarball 低级用户, 没办法执行export 命令, 因此, 通过:
+	export PIP_CONFIG_FILE=/home/tarball/cpython311/pip.conf
+来设置pip.conf, 是比较困难的, 改用进程变量的方式, 设置pip.conf;
+
+在cpyhon 启动文件中, 添加全局变量:
+	PIP_CONFIG_FILE=/home/tarball/cpython311/pip.conf \
+
+
+如果不想指定pip.conf, 可以使用临时指定url 镜像源的方式, 更新pip, 例如:
+	pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ 
+
+
+
+
+
+
+
+
+#
+# 3.操作系统补全pip 功能
+#
+安装pip:
+	apt-get install python-pip
+	apt-get install python3-pip
+
+ps:
+	操作系统自带的cpyhon, 是剪裁过的cpython, 部分功能已被移除(包括pip 包管理工具)
+	所以, 想使用linux 系统自带的cpython, 则需要逐个模块逐个模块补全;
+
+
+
+
+
