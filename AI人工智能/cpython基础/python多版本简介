@@ -1,0 +1,30 @@
+* Cython:
+	使用类似, 解决python 的编码语言, 生成.so 共享链接库的project, 
+	目的是为cpython 提供简易的'高速.so 共享链接库生成方式', 
+	最终生成的.so 共享链接库, 还是需要import 装载进cpython 中运行的;
+	ps:
+		这个版本是生成二进制代码块的, 但一般只用来生成cpython .so共享链接库, 不跑python 逻辑;
+
+	Cython解决的问题:
+		使用c/c++ 来编写python 模块, 将会是非常繁琐的工作,
+		使用Cython 快速, 标准, 无需通过学习, 即可生成.so 共享库, 从而提高cpython 的运行速度,
+		这个project 适合骨灰级的cpython 应用, 大有可图, 比pypy 好多了;
+		可以当成cpython 的拓展工具来使用;
+
+
+
+* pypy:
+	基于rust 语言实现的python JIT 版本, 大部分语法于cpython2/3 兼容,
+	但实际上有不少差异, 难以完全取代cpython;
+
+
+
+* cpython2:
+	已被淘汰, 最新版本cpython 2.7.18(不会再更新了)
+
+
+
+* cpython3:
+	目前的主力版本, cpython 官网出品, 未来可期;
+	cpython3.8 之后, 大撒语法糖, cpython3.9, cpython3.10 都新增了不少语法糖;
+	cpython3.11, cpython3.12 则注重提高cpython3 的执行效率, 性能会渐渐提升的, 比较可观;
