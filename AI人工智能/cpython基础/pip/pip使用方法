@@ -1,0 +1,26 @@
+1.pip安装软件时, 为什么需要root 用户授权?
+	pip 安装软件时, 需要root 权限; 运行时, 其他用户默认拥有执行权限;
+	可在pip install 安装之后, 将整个python_home, 属主改为运行用户, 增加一点系统权限安全;
+
+	失败尝试:
+		使用低级用户tarball 多种尝试后, 仍然没办法使用pip安装软件(有待确认);
+
+
+
+2.使用pip.conf 所设定的默认url 镜像站, 下载安装软件:
+	pip install numpy 
+
+	# 从'指定站点中'安装pip包(速度快):
+	pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ 
+
+
+
+3.pip 卸载编码库:
+	pip uninstall numpy
+
+
+
+4.批量安装pip 软件
+	pip install -r ./ requirements.txt
+
+
