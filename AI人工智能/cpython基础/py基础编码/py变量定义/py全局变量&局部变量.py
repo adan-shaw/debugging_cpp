@@ -3,6 +3,26 @@ import copy
 
 
 
+# python 高效编程与lua 的共性(解析型脚本的通病):
+'''
+	由于python 并没有local 局部变量关键字, 但高效应用内建模块的方法, 和lua 类似;
+	例如:
+		# 这样做最小引用, 是最好的, 有疑问, 请看: py最小引用优化测试.py
+		import time
+		ptime = time.time
+		print(ptime())
+
+	内建全局函数, 不需要引用优化了, 如: type(), max(), globals() 等, 这个lua 上也不需要引用优化的;
+	但内建库/第三方库的函数, 使用最小引用优化后, 性能更好;
+
+	很有意思的是, python 是一个优秀的算法语言, 所以math 数学库, 就是内建全局函数, 不需要引用优化;
+	需要import 的第三方库,
+	不需要import 的内建库, 如time, sys 等, 
+	都需要最小引用优化;
+'''
+
+
+
 # locals()局部变量字典/globals()全局变量字典的简介:
 '''
 	* locals()只读, globals()可读可写;
@@ -78,4 +98,5 @@ def func():
 	print(locals()["tmp"])
 
 func()
+
 
