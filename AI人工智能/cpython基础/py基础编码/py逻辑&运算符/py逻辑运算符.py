@@ -30,7 +30,7 @@ None:
 
 
 #
-# 2.if 写法
+# 2.if 基础写法
 #
 '''
 	最好带() 小括号, 必须用':'分号+'换行/退格', 表示一个if 结构.
@@ -39,8 +39,8 @@ None:
 x=1
 if(x == 1):
 	pass
-elif(x == 0):
-	print("x == 0")
+elif(x != 0):
+	print("x != 0")
 else:
 	print("x != 0 && x != 1")
 
@@ -59,7 +59,40 @@ else:
 
 
 #
-# 3.python 逻辑运算符(字母式)
+# 3.if 类对象
+#
+x=["apple", "banana"]
+y=["apple", "banana"]
+# '='号赋值, 并不会自动拷贝类对象, 只是代表: 该指针, 指向了这个类对象.
+z=x
+
+
+# is: 如果两个变量是同一个类对象, 则返回True.
+if not (y is x):
+	print("y[] is not x[]")
+if(z is x):
+	print("z[] is x")
+
+# is not: 如果两个变量不是同一个类对象, 则返回True.
+#if not (y is x):
+if(y is not x):
+	print("y[] is not x[]")
+
+
+# in: 如果类对象中存在具有指定值的序列, 则返回True.
+if("banana" in x):
+	print("banana in x[]")
+
+# not in: 如果类对象中不存在具有指定值的序列, 则返回True.
+if("fuck" not in x):
+	print("fuck not in x[]")
+
+
+
+
+
+#
+# 4.python 逻辑运算符(字母式)
 #
 x=5
 
@@ -76,39 +109,11 @@ if not (x<3):
 	print("not")
 
 
-# is 判断对象(指针), 是否最终指向同一实体
-x=["apple", "banana"]
-y=["apple", "banana"]
-
-# '='号赋值, 并不会自动拷贝对象, 只是代表: 该指针, 指向了这个对象.
-z=x
-
-# is: 如果两个变量是同一个对象, 则返回True.
-if not (y is x):
-	print("y[] is not x[]")
-if(z is x):
-	print("z[] is x")
-
-# is not: 如果两个变量不是同一个对象, 则返回True.
-#if not (y is x):
-if(y is not x):
-	print("y[] is not x[]")
-
-
-# in: 如果对象中存在具有指定值的序列, 则返回True.
-if("banana" in x):
-	print("banana in x[]")
-
-# not in: 如果对象中不存在具有指定值的序列, 则返回True.
-if("fuck" not in x):
-	print("fuck not in x[]")
-
-
 
 
 
 #
-# 4.python 逻辑运算符(简写式)
+# 5.python 逻辑运算符(简写式)
 #
 # &: 如果两个位均为1, 则将每个位设为1. 
 tmp=(1&1);print(tmp)
