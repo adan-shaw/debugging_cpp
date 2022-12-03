@@ -1,0 +1,27 @@
+1.标准python2, 默认编码是ascii, 不能读取'*中文*.py' 路径的源文件, 
+	就算python2 可以打印中文, 但python2源文件的路径中, 仍然不能有中文路径(锤实);
+
+	python3 默认支持打印中文字符串, 支持读取'*中文*.py' 的源文件路径;
+	python3 默认使用utf-8
+
+
+
+
+
+2.function 函数内, 不能有中文备注?
+	那是你没有指明py 源文件的编码格式, 不制定为:
+		# -*- coding: utf-8
+	不允许出现中文
+	指定了编码格式, 可以出现中文
+
+
+
+
+
+3.强制python2/python3 使用utf-8
+import sys
+import imp
+imp.reload(sys)
+
+if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+	sys.setdefaultencoding("utf-8")
