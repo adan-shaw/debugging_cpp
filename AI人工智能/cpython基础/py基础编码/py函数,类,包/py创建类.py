@@ -77,8 +77,9 @@ class father():
 
 
 
-	# 公有(可继承)
+	# 公开(可继承)
 	x1 = 111
+	#self.x1 = 111 (类变量定义, 可以省略self)
 
 	def func_x1(self):
 		print("father: self.func_x1():", self.x1)
@@ -118,7 +119,7 @@ class son(father):
 	def __init__(self):
 		print('son构造: __init__()')
 
-	# 公有(可继承)
+	# 公开(可继承)
 	x1 = 111000
 
 	def func_x1(self):
@@ -144,7 +145,6 @@ b.func_x1()
 
 c = son()
 c.func_x12()
-
 
 
 
