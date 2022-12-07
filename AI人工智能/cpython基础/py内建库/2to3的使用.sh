@@ -6,7 +6,7 @@
 py2to3="/home/tarball/cpython2/bin/2to3"
 
 # 2to3 之后, py3 导出时, 保存的路径
-py3_code_output="./py3_code_output"
+py3_output="./py3_output"
 
 
 
@@ -45,10 +45,10 @@ $py2to3 test.py
 
 
 # 导出2to3 之后, 不覆盖原文件, 导出到新文件中(输出文件夹, 不存在会自动创建)
-if [ ! -d $py3_code_output ]; then
-	mkdir $py3_code_output
+if [ ! -d $py3_output ]; then
+	mkdir $py3_output
 fi
-$py2to3 -w test.py -n -o $py3_code_output
+$py2to3 -w test.py -n -o $py3_output
 
 
 
