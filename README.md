@@ -12,5 +12,6 @@
 # have some fun, young students, good luck.
 # 2022/07/25
 #
-# affix china's gitee:
+# affix:
 #   https://gitee.com/adan_shaw/debugging_cpp
+#   https://github.com/adan-shaw/debugging_cpp
