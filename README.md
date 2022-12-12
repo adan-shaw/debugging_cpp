@@ -11,3 +11,7 @@
 #   posix_linux   = posix/sysv 多进程/多线程编码库
 # have some fun, young students, good luck.
 # 2022/07/25
+#
+# affix china's gitee:
+#   https://gitee.com/adan_shaw/debugging_cpp
+#   https://gitee.com/adan_shaw/debugging_lua
