@@ -14,4 +14,3 @@
 #
 # affix china's gitee:
 #   https://gitee.com/adan_shaw/debugging_cpp
-#   https://gitee.com/adan_shaw/debugging_lua
