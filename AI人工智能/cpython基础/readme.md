@@ -1,4 +1,4 @@
-# python 教程尽量兼容python2/3, 用比较简单的方法, 实现快速python 上手;
+# 本教程尽量兼容python2/3, 用比较简单的方法, 实现快速python 上手;
 #
 # python 基本上与lua 无异, 脚本都差不多, 唯一区别是: 
 #   python 有大量的现成库, 而且标准库, 已集成到python project 中;
