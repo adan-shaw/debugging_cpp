@@ -1,0 +1,58 @@
+python中内置的sequence 序列类型, 可分为:
+	Container Sequences容器序列:
+		list
+		collections.deque
+		tuple
+		(偏向操作: '数组+指针'组成的队列容器)
+
+	Flat Sequences平面序列:
+		str
+		bytes
+		bytearray
+		array.array
+		memoryview
+		(偏向操作: 数组/二进制块)
+
+	区别:
+		Container Sequences 中存放的元素, 元素可拥有不同类型;
+		Flat Sequences 中存放的元素, 元素类型必须一致, 且只能是primitive type, 比如character、bytes、numbers;
+
+
+
+(一般不按这种方法进行划分!!)
+依据sequence是否可变, 可将sequence类型分为:
+	Mutable Sequences易变序列:
+		list
+		collections.deque
+		bytearray
+		array.array
+		memoryview
+	Immutable Sequences不可变序列:
+		str
+		tuple
+		bytes
+
+
+
+
+
+所有Sequences序列, 都可以进行某些通用的操作, 比如:
+	索引(indexing)
+	分片(sliceing)
+	迭代(iteration)
+	加(adding)
+	乘(multiplying)
+
+	除了上面这些, 我们还可以:
+		检查某个元素是否属于序列的成员, 
+		计算序列的长度
+		等等;
+
+
+
+
+
+ps:
+	都是线性容器, 有连续线性, 也有'array+指针'线性容器,
+	具体使用, 看场景, 看需求;
+	简单易用or 追求性能的场合不同, 使用的容器也不同;
