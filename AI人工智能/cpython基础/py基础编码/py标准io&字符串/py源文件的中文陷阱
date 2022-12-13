@@ -18,7 +18,7 @@
 
 
 
-3.强制python2/python3 使用utf-8
+3.设置python2/3 的默认解码方式: utf-8
 import sys
 import imp
 imp.reload(sys)
