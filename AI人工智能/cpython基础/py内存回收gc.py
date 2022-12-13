@@ -12,17 +12,41 @@ import gc
 #
 # 1.python gc 的基础操作手段
 #
-# 停用gc
+# 启用/停用gc
 gc.disable()
-
-# 启用gc
 gc.enable()
 
-# 手动命令gc 执行回收操作
+# 判断是否启用gc
+if not (gc.isenabled()):
+	gc.enable()
+else:
+	print(gc.isenabled())
+
+
+
+# 判断是否启用debug, 启用即封禁
+if(gc.get_debug() != 0):
+	gc.set_debug(0)
+else:
+	print(gc.get_debug())
+
+
+
+# 手动命令gc 执行完全回收操作, 也可以指定0,1,2 三代cache 中的其中一代;
 gc.collect()
 
 # 打印回收步进, 当前步进计数(没有必要, 不需要操作)
 print(gc.get_count())
+
+# 获取当前回收步进max 值(达到这个值就执行一次完全回收)
+print(gc.get_threshold())
+
+# 设置当前回收步进max 值
+gc.set_threshold(600, 10, 10)
+print(gc.get_threshold())
+
+
+
 
 
 
@@ -100,5 +124,6 @@ A
 B
 print(id(A))
 print(id(B))
+
 
 
