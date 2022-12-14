@@ -11,7 +11,7 @@ python中内置的sequence 序列类型, 可分为:
 		bytearray
 		array.array
 		memoryview
-		(偏向操作: 数组/二进制块)
+		(偏向操作: 数组/二进制块的容器)
 
 	区别:
 		Container Sequences 中存放的元素, 元素可拥有不同类型;
