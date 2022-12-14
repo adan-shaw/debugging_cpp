@@ -68,7 +68,7 @@ print(x.bit_length())
 # 去除int 转换为'二进制数据'字符串时, '-0b'前缀(-表示负数, 正整数无符号, 只有0b)
 z=x
 z=bin(z)
-z = z.lstrip('-0b')
+z=z.lstrip('-0b')
 print(z)
 
 
