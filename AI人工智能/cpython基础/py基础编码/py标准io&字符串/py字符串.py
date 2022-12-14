@@ -13,9 +13,13 @@ if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
 
 
 
-# python 的字符串本质: 
-# 	表示一串unicode字符的字节'array数组', 即字符串实际是用'array数组'存储的.
-
+# python 的字符串本质:
+'''
+	表示一串unicode字符的字节'array数组', 即字符串实际是用'array数组'存储的;
+	Python2默认使用编码ascii, 不支持中文;
+	Python3默认使用编码utf-8, 支持中文, 其英文编码部分和ascii相同;
+	ascii = 1bit, utf-8 = 2bit;
+'''
 
 
 #
@@ -75,7 +79,7 @@ print(tmp)
 #
 '''
 所有Sequences序列的通用的操作:
-	下标索引(indexing)
+	下标索引(indexing) -- 下标从0 开始!!
 	下标切片(sliceing)
 	迭代(iteration)
 	运算符'+'加号重载(adding)
@@ -111,10 +115,12 @@ for x in range(pstr):
 	print(x)
 '''
 
-# 迭代找子字符串(废弃, 没必要, 直接用str.find()/str.index() 更好) [array数字, 可以这样用]
+# 迭代找子字符串(废弃, 没必要, 直接用str.find()/str.index() 更好) [array数组也有array.index()]
 z="China is a great country中文"
 if "ina" in z:
 	print("\"ina\" in z: ", z)
+
+print(z.find("ina"))
 
 if z.find("ina"):
 	print("str.find(\"ina\") == True: ", z)
@@ -238,5 +244,4 @@ translate()		返回被转换的字符串
 upper()				把字符串转换为大写
 zfill()				在字符串的开头填充指定数量的 0 值
 '''
-
 
