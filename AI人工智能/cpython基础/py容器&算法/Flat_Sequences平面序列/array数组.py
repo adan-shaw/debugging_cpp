@@ -74,8 +74,8 @@ tmp=array.array('f')
 #
 '''
 所有Sequences序列的通用的操作:
-	下标索引(indexing) -- 下标从0 开始!!
-	下标切片(sliceing)
+	下标索引(indexing) [ 下标从0 开始!! ]
+	下标分片(sliceing) [ 切片也可以用作区间索引,区间访问,但性能一般; 先拷贝,再索引,性能还能好到哪里去? 但也比逻辑索引强; ]
 	迭代(iteration)
 	运算符'+'加号重载(adding)
 	运算符'*'乘号重载(multiplying)
@@ -128,10 +128,16 @@ print(tmp)
 '''
 
 
+
 # 运算符'*'乘号重载(multiplying)
 print(arr_int*3)
 # 不能是两个字符串相乘, 两个array 相乘, 没意义; 要向量相乘, 请用numpy
 #print(arr_int*arr_int)
+
+
+
+# 获取数组的长度
+print(len(arr_int))
 
 
 
@@ -207,6 +213,5 @@ tmp=array.array('u')
 tmp.fromunicode(u'idiot2')		# unicode string录入数据到array
 print(tmp)
 print(tmp.tounicode())				# array导出数据到unicode string
-
 
 
