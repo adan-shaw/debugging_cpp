@@ -65,6 +65,17 @@ print(sys.getrefcount(a))
 
 
 
+# python 的命令gc 强制回收变量
+tmp = [1,2,3,4,5]
+del tmp
+
+
+# 你也可以使用lua 的方式, 将变量重新置换为一个轻变量, 让gc 触发回收操作(每次赋值, 都是创建一个新的变量)
+tmp = [1,2,3,4,5]
+tmp = None
+
+
+
 # python gc 的原理:
 '''
 	Python的内存机制以金字塔行, 各层的工作任务如下:
@@ -222,7 +233,6 @@ A = { 'a':'hello', 'b':'world', 'c':1000.00 }
 B=copy.deepcopy(A)
 print(id(A))
 print(id(B))
-
 
 
 
