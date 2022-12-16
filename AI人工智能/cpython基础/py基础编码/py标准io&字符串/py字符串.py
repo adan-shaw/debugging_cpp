@@ -19,6 +19,10 @@ if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
 	Python2默认使用编码ascii, 不支持中文;
 	Python3默认使用编码utf-8, 支持中文, 其英文编码部分和ascii相同;
 	ascii = 1bit, utf-8 = 2bit;
+
+	python 中的字符串是一个不可变类型, 跟c/c++ 中的字符串很不一样;
+	python 中的字符串可根据下标访问字符串中的单个字符, 但不能修改(只准访问,不允许修改), 否则报错:
+		TypeError ‘str’ object does not support item assignment
 '''
 
 
