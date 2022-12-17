@@ -40,7 +40,7 @@ python中内置的sequence 序列类型, 可分为:
 	下标索引(indexing) [ 下标从0 开始!! ]
 	下标分片(sliceing) [ 切片也可以用作区间索引,区间访问,但性能一般; 先拷贝,再索引,性能还能好到哪里去? 但也比逻辑索引强; ]
 	迭代(iteration)
-	加(adding)
+	加(adding)        [ 运算符重载, list+list返回list, tuple+tuple返回tuple; *乘号同理, :冒号切片同理 ]
 	乘(multiplying)
 
 	除了上面这些, 我们还可以:
