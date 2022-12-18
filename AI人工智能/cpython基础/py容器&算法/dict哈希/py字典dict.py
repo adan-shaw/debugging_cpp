@@ -2,6 +2,36 @@
 
 
 
+# '原地可变类型/不可变类型'简介
+'''
+	原地不可变类型又叫: 可哈希(hashable)类型, 
+	原地可变类型又叫: 不可哈希类型;
+
+	原地不可变类型:
+		* 数字类型: int, float, decimal.Decimal, fractions.Fraction, complex
+		* 字符串类型: str, bytes
+		* tuple
+		* frozenset
+		* 布尔类型: True, False
+		* None
+
+	原地可变类型:
+		* list
+		* dict
+		* set
+
+	只有可以hash的类型才可以作为dict的键;
+	只有可以hash的类型才可以放入set中, 所以set本身不可以嵌套存放在set中;
+
+
+	如何实际检验是否原地可变?
+	答:
+		hash还是会返回原地不可变类型的hash值, 
+		如果对一个原地可变的类型调用次函数, 那么会返回TypeError;
+'''
+
+
+
 #
 # 1.创建字典
 #
@@ -106,6 +136,10 @@ pdict["A"]=555
 
 # 新增'键值对'
 pdict["E"]=222
+
+# 更新多个'键值对'(存在则修改, 不存在则自动创建) [相当于两个dict 合并, 遇到相同的'键值对'则合并, 保留update()传入的那一份]
+pdict.update({"E":191000, "Q":"love", "R":999})
+print(pdict)
 
 # 根据key 值, 获取value 值(读)
 print(pdict.get("A"))
