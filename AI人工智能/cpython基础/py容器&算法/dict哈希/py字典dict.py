@@ -2,32 +2,10 @@
 
 
 
-# '原地可变类型/不可变类型'简介
+# dict 简介
 '''
-	原地不可变类型又叫: 可哈希(hashable)类型, 
-	原地可变类型又叫: 不可哈希类型;
-
-	原地不可变类型:
-		* 数字类型: int, float, decimal.Decimal, fractions.Fraction, complex
-		* 字符串类型: str, bytes
-		* tuple
-		* frozenset
-		* 布尔类型: True, False
-		* None
-
-	原地可变类型:
-		* list
-		* dict
-		* set
-
-	只有可以hash的类型才可以作为dict的键;
-	只有可以hash的类型才可以放入set中, 所以set本身不可以嵌套存放在set中;
-
-
-	如何实际检验是否原地可变?
-	答:
-		hash还是会返回原地不可变类型的hash值, 
-		如果对一个原地可变的类型调用次函数, 那么会返回TypeError;
+	dict 是一个'键值对'容器, 类似lua 的table;
+	只有可以hash的类型才可以作为dict的key键;
 '''
 
 
