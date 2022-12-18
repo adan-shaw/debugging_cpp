@@ -206,7 +206,7 @@ if(not B.isdisjoint(A)):
 '''
 pset={9,1,2,5,7,3,2,6,23,"love you"}
 
-# 检查某个值, 是否存在于set 'set集合'中
+# 检查某个值, 是否存在于'set集合'中
 if(1 in pset):
 	print("1 in pset yes")
 
