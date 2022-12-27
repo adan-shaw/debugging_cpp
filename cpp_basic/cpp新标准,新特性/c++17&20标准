@@ -1,0 +1,83 @@
+#
+# 1.工具库
+#
+1.杂项
+	<version>							(C++20起)提供依赖于实现的库信息
+	<source_location>			(C++20起)提供获得源码位置的手段
+
+2.动态内存管理
+	<memory_resource>			(C++17起)多态分配器及内存资源
+
+3.概念库
+	<concepts>						(C++20起)基础库概念
+
+
+
+
+
+#
+# 2.字符串库
+#
+<string_view>						(C++17起)std::basic_string_view类模板
+<charconv>							(C++17起)std::to_chars 与 std::from_chars
+
+
+
+
+
+#
+# 3.容器库
+#
+1.容器
+	<span>								(C++20起)std::span视图
+
+	<any>									(C++17起)std::any类
+	<optional>						(C++17起)std::optional类模板
+	<variant>							(C++17起)std::variant类模板
+
+2.算法
+	<compare>							(C++20起)三路比较运算符支持
+	<execution>						(C++17起)针对算法的并行版本的预定义执行策略
+	<bit>									(C++20起)位操纵函数
+
+3.范围库
+	<ranges>							(C++20起)范围访问、原语、要求、工具及适配器
+
+
+
+
+
+#
+# 4.输入/输出库
+#
+<syncstream>						(C++20起)std::basic_osyncstream、std::basic_syncbuf及typedef
+
+
+
+
+
+#
+# 5.线程支持库
+#
+1.线程支持库
+	<stop_token>					(C++20起)std::jthread的停止记号
+	<shared_mutex>				(C++14起)共享的互斥原语
+	<semaphore>						(C++20起)信号量
+	<latch>								(C++20起)闩
+	<barrier>							(C++20起)屏障
+
+2.协程库
+	<coroutine>						(C++20起)协程支持库
+
+
+
+
+
+#
+# 6.文件系统库
+#
+<filesystem>						(C++17起)std::path类及支持函数
+
+
+
+
