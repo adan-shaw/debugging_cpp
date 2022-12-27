@@ -1,0 +1,94 @@
+声明:
+	部分c++99 中有的功能, 新版本c++11/c++17/c++20 中基本不改变的, 就是'c语言标准库'部分, 这部分基本不改动的;
+	部分c++99 中有的功能, 新版本c++11/c++17/c++20 中也有改动的, 如:
+		<algorithm> 容器算法库
+		<iterator>  迭代器
+		<string>    字符串库
+		...
+	这些变动比较大的库, 主要看需求而定, 如果旧版本已经满足需求了, 尽量不用新版本功能;
+	除非新版本的功能, 语法糖十分诱惑, 十分简单好用, 那也可以学学;
+
+	其它新增的炫酷语法, 暂时搁浅, 以实际新增的功能为主, 
+	单纯执着新写法, 只会是换一种写法, 还是实现同样的功能, 没什么卵用;
+	(过分减少代码量, 也会提高阅读成本, 降低兼容性, 增加编译器翻译成本, 单纯换语法, 不是一个好主意)
+
+
+
+
+
+#
+# 1.将部分c 语言标准库头文件改写, 不再带后续.h;
+#
+cassert						C Diagnostics Library (header)												将其实参与零比较的条件性编译宏
+cctype						Character handling functions (header)									确定字符数据中所含类型的函数
+cerrno						C Errors (header)																			含有最近一次错误号的宏
+cfloat						Characteristics of floating-point types (header)			浮点类型的界限
+climits						Sizes of integral types (header)											整型类型的界限
+clocale						C localization library (header)												C本地化工具
+cmath							C numerics library (header)														常用数学函数
+csetjmp						Non local jumps (header)															保存执行语境的宏，及跳转到某个执行语境的函数
+csignal						C library to handle signals (header)									信号管理的函数与宏常量
+cstdarg						Variable arguments handling (header)									变长实参列表的处理
+cstddef						C Standard definitions (header)												标准宏和 typedef
+cstdio						C library to perform Input/Output operations (header)	C风格输入输出函数
+cstdlib						C Standard General Utilities Library (header)					通用工具:程序控制、动态内存分配、随机数、排序与搜索
+cstring						C Strings (header)																		多种窄字符串处理函数
+ctime							C Time Library (header)																C风格的时间/日期工具
+
+使用c语言头文件时, 需要先声明:
+	extern "C" { 
+		#include <cstdio>
+	}
+
+(这部分可以省略, 不看, 纯粹就是重复的内容)
+
+
+
+
+
+#
+# 2.string 字符串库
+#
+string						String class (class)
+
+
+
+
+
+#
+# 3.Standard Template Library (STL) 标准模板库
+#
+容器:
+	vector					Vector (class template)								向量
+	deque						Double ended queue (class template)		双向队列
+	list						List (class template)									列表
+	stack						LIFO stack (class template)						栈
+	queue						FIFO queue (class template)						队列
+	priority_queue	Priority queue (class template)				优先级队列
+	set							Set (class template)									集合
+	multiset				Multiple-key set (class template)			多重键集合
+	map							Map (class template)									映射
+	multimap				Multiple-key map (class template)			多重键映射
+	bitset					Bitset (class template)								位域
+
+算法:
+	algorithm				Standard Template Library: Algorithms (library)
+
+迭代器:
+	<iterator>			范围迭代器
+
+
+
+
+
+#
+# 4.Standard Input / Output Streams Library 标准io 流库
+#
+<ios>							std::ios_base 类、std::basic_ios 类模板及数个 typedef
+<istream>					std::basic_istream 类模板及数个 typedef
+<ostream>					std::basic_ostream、std::basic_iostream 类模板及数个 typedef
+<fstream>					std::basic_fstream、std::basic_ifstream、std::basic_ofstream 类模板及数个typedef
+<sstream>					std::basic_stringstream、std::basic_istringstream、std::basic_ostringstream 类模板及数个typedef
+
+
+
