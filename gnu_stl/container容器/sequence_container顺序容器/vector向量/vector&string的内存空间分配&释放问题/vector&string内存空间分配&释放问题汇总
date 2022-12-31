@@ -1,0 +1,156 @@
+#
+# 1.c++ 中'vector&string'的数据结构:
+#
+string 容器的'数据结构描述':
+	string 容器, 实际上是基于vector 的容器!! 只是对索引, 匹配, 替换字符串上面, 做了很多增强功能, 
+	在数据结构上解释string, string 就是一个装载str 字符的vector
+
+c++中, 'vector&string'都是vector 向量结构的, 
+但实际上, string 只是一个剪裁版的vector, 有部分功能是没有的, 例如:
+		# 'shrink收缩 to到 fit适合'的容量(自动释放多余的内存空间, 会触发'缩容', 触发内存重新分配, 触发数据拷贝)
+		vector::shrink_to_fit()
+
+		string 容器并没有shrink_to_fit()这个功能, vector 容器有这个功能, 可以把string 看成是一个剪裁版的vector;
+
+
+
+
+
+
+
+
+#
+# 2.c++ 中'vector&string'的内存空间分配&释放:
+#
+'vector&string'默认的初始化内存的位置(由编译器决定的):
+入栈限制值:
+	msvc:  小于15 bytes字节, 变量压栈
+	g++:   小于15 bytes字节, 变量压栈
+	clang: 小于23 bytes字节, 变量压栈
+	(小于'入栈限制值', 初始化容量capacity统一都是15 bytes, 实现内存对齐)
+
+入堆限制值:
+	msvc:  大于15 bytes字节, 变量入堆申请内存
+	g++:   大于15 bytes字节, 变量入堆申请内存
+	clang: 大于23 bytes字节, 变量入堆申请内存
+
+
+
+'vector&string'扩容增长系数(由编译器决定的):
+	msvc:  首次2 倍扩容(31 byte), 后续1.5 倍扩容, 原来的容量*1.5, 能容纳就容纳, 不能容纳就继续翻倍, 知道能容纳为止(这个计算过程,也是在编译过程中执行的)
+	g++:   2 倍扩容;
+	clang: n 倍扩容(未知);
+	(增长速度为: 2^n)
+
+	ps:
+		如果'vector&string'初始化入栈了, 一旦扩容, 就会触发堆内存分配, 这时候栈上面的内存又不能及时出栈, 会造成一定错乱消耗;
+		所以'vector&string'的使用原则是:
+			尽量初始化容量, 尽量不触发扩容;
+			扩容必然触发内存空间重新分配, 还会必然触发内存copy, 将旧数据拷贝新内存空间中, 维持内存空间的连续性, 保护随机下标访问的功能;
+			频繁扩容, 不仅效率低, 还会产生内存碎片;
+			迫不得已需要扩容, 请使用:
+				resize() / reserve(), 一步到位, 按照最大需求进行扩容, 力求一次扩容, 后续都够用;(用空间换效率!!)
+
+	申请新的buf 缓冲区之后, 会触发copy;
+	先把旧数据拷贝进来, 
+	然后再写入新数据, 
+	最后将旧buf缓冲区删除, string类指针替换上新的缓冲区指针;
+
+
+
+# 入栈(初始化""空字符串, 1bytes)
+string s;
+
+# 入栈
+string s="Hello,World!!";
+
+# 入堆
+string s2="Hello,World!! Hello,World!! Hello,World!! ";
+
+# 触发扩容
+s="Hello,World!! Hello,World!! Hello,World!! yes yes";
+
+总结:
+	'vector&string' 初始化时, 由编译器自动决定初始化容量, 由编译器根据大小决定存放在栈/堆;
+	'vector&string' 变量二次赋值时, 必然会触发容量是否能容纳新元素的问题, 不能容纳, 就触发扩容;
+	扩容增长系数, 也是由编译器决定的;
+
+提取string 的缓冲区:
+	string paper = "hello world";
+	const char* pbuf = paper.c_str();
+
+
+
+
+
+
+
+
+#
+# 3.'vector&string'如何释放buf 缓冲区内存?
+#
+string:
+	* 删除string容器, 触发'强制释放string缓冲区+string类容器'
+
+vector:
+	* 删除vector容器, 触发'强制释放vector缓冲区+vector类容器'
+	* vector::shrink_to_fit(), 自动释放多余的内存空间, 会触发'缩容', 触发内存重新分配, 触发数据拷贝;
+
+ps:
+	string::clear(), 并不会触发'释放string缓冲区', 只是相当于格式化为""空字符串而已;
+
+	resize() / reserve() 也不会触发'缩容', 但会触发'扩容', 只'扩容', 不'缩容'; 
+	resize() / reserve() '扩容'时会触发更换内存空间的操作;
+
+
+
+
+
+
+
+#
+# 4.resize() / reserve() 的区别:
+#
+共同点:
+	resize() / reserve() 也不会触发'缩容', 但会触发'扩容', 只'扩容', 不'缩容'; 
+	resize() / reserve() '扩容'时会触发更换内存空间的操作;
+
+
+
+区别:
+	resize():
+		1.resize()所指定的n小于vector当前的容量, 则会删除vector中多于n的元素;
+			(但不'缩容', 只是将多出的元素直接删除, 与vector::shrink_to_fit()'缩容'操作, 有区别)
+
+		2.resize()所指定的n大于vector当前的容量, 但小于capacity容量值时, 则看第二参数:
+				如果resize()指定了第二个参数, 则会把元素区间[vector当前的容量, resize()重新指定的容量], 全部格式化为该指定值;
+				如果resize()没有指定了第二个参数, 则会把元素区间[vector当前的容量, resize()重新指定的容量], 全部格式化为默认的初始值;
+
+		3.resize()所指定的n等于vector当前的容量;(傻逼操作, 应该避免)
+
+		4.resize()所指定的n大于vector当前的capacity容量值时, 则会做一次简单的扩容操作;
+
+
+	reserve():
+		1.reserve()所指定的n大于vector当前的capacity容量值时, 则会做一次简单的扩容操作;
+
+		2.reserve()所指定的n小于vector当前的capacity容量值时, 不做任何操作;
+
+		3.reserve()所指定的n等于vector当前的容量;(傻逼操作, 应该避免)
+
+
+
+
+
+ps:
+	vector中数据的随机存取效率很高, O(1)的时间的复杂度,
+	但在vector 中随机插入元素, 需要在断点位置, 断点后续的元素整体向后移动, 插入n 个元素, 整体后移动n 位, 效率比较低;
+
+
+
+
+
+
+
+
+
