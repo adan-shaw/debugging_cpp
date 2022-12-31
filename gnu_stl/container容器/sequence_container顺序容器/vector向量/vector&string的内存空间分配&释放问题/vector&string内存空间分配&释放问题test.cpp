@@ -1,5 +1,5 @@
 //编译:
-//		g++ ./vector\&string内存空间分配\&释放问题test.cpp -o x
+//		g++ -std=c++11 ./vector\&string内存空间分配\&释放问题test.cpp -o x
 
 
 #include<iostream>
@@ -55,7 +55,7 @@ int main(void){
 	cout << "reserve capacity 80\n";
 	cout << "capacity:" << ivec.capacity() << "  size:" << ivec.size() << endl;
 
-	//尝试shrink_to_fit() 缩容(只有这个缩容成功)
+	//尝试shrink_to_fit() 缩容(只有这个缩容成功, c++11)
 	ivec.shrink_to_fit();
 	cout << "shrink_to_fit()\n";
 	cout << "capacity:" << ivec.capacity() << "  size:" << ivec.size() << endl;
