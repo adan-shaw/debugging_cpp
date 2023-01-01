@@ -1,0 +1,254 @@
+#!/bin/sh
+
+# 声明: find 需要支持'正则表达式'才能使用!! 不过find 命令本身, 就会支持'正则表达式'
+
+
+
+#
+# -3.查看所有已损坏的link链接
+#
+find . -xtype l
+
+
+
+#
+# -2.find 批量修改文档编码格式:
+#
+# 一般windows 文档, 搬到linux 下乱码, 都是gbk -> utf-8, 也有可能是gb2312
+# (慎用, 使用前请备份, 否则文件容易损坏, 一旦覆盖, 没办法恢复)
+find . -type f -exec iconv -f gbk -t utf8 {} -o {} \;
+
+
+
+#
+# -1.find 命令连用{} demo:
+#
+# find 组合(自动产生副本)
+find . -name "*.png" -exec pngcrush -e ext {} \;
+
+# text后缀改回.png后缀(find 命令连用)
+find . -name "*text" -exec mv {} `basename {}`.png \;
+
+
+
+
+
+#
+# 0.find 批量改名
+#
+# 这个是最简单的了,但是有一点不好的是只能在后面加个后缀
+find . -name "*" -exec mv {} {}.bin \;
+
+# 修改pgsql-db home权限, 文件&文件夹执行权限
+find $PGDATA -type f|xargs chmod 600
+find $PGDATA -type d|xargs chmod 500
+
+
+
+
+
+#
+# 1.按照关键字匹配
+#
+# 查找包括 "*.js" 关键字的'文件/文件夹'
+find . -name "*.js"
+
+# 查找包括 "*.js" 关键字的'文件'(不包括文件夹)
+find . -type f -name "*.js"
+
+# 查找包括 "*.js" 关键字的'文件夹'(不包括文件)
+find . -type d -name "*.js"
+
+
+# 统计: 查找包括 "*.js" 关键字的'文件'(不包括文件夹)
+find . -type f -name "*.js" | wc
+
+
+# 联合grep命令, 在所有的普通文件中搜索hostname这个词：
+find . -type f -name "*.c" -print | xargs grep "hostname"
+
+
+
+
+
+#
+# 2.按照文件大小查找
+#
+# 查找大于10MB 的文件
+find . -type f -size +10M
+
+# 查找小于10MB 的文件
+find . -type f -size -10M
+
+# 查找小于10MB 的'文件夹'(没有意义,文件夹基本都是几KB大小,按照大小来查找文件夹,无意义!!)
+#find . -type d -size -10M
+
+
+# 查找'空文件'
+find . -type f -empty
+# 统计'空文件'的个数
+find . -type d -empty | wc
+
+
+
+
+
+#
+# 3.按照时间日期来查找
+#
+# 查找"超过30天"没有被'读取'过的文件
+find . -type f -atime +30
+
+# 查找"3天内"有被'读取'过的文件
+find . -type f -atime -3
+
+# 查找"超过30分钟"没有被'读取'过的文件
+find . -type f -amin +30
+
+# 查找"3分钟内"有被'读取'过的文件
+find . -type f -amin -3
+
+
+# 查找"超过30天"没有被'修改'过的文件
+find . -type f -ctime +30
+
+# 查找"3天内"有被'修改'过的文件
+find . -type f -ctime -3
+
+# 查找"超过30分钟"没有被'修改'过的文件
+find . -type f -cmin +30
+
+# 查找"3分钟内"有被'修改'过的文件
+find . -type f -cmin -3
+
+
+
+
+
+#
+# 4.按照文件权限来查找
+#
+# (不包括文件夹, 文件夹必然统一具备 5rx 读,执行权限, 没有写权限, 查看文件夹没意思)
+
+# 查看具备755权限的文件
+find . -perm 755 -type f -ls
+
+# 统计具备755权限的文件(文件数量,文件数量,文件大小)
+find . -perm 755 -type f -ls | wc
+
+
+
+
+
+#
+# 5.查找之后, 执行-exec 二级命令
+#
+# 查找包括 "*.js" 关键字的'文件'(不包括文件夹), 找到一个删除一个!!
+find . -type f -name "*.js" -exec rm {} \;
+
+# 查找包括 "*.js" 关键字的'文件', 并打印他们的'inode 码'
+find . -type f -name "*.html" -exec ls -i '{}' \;
+
+# 查找包括 "*.c" 关键字的'文件', 拷贝到另一个文件夹里面存放
+find . -type f -name "*.c" -exec cp {} ./bak_path \;
+
+# 查找包括 "*.c" 关键字的'文件', 移动到另一个文件夹里面存放
+find . -type f -name "*.c" -exec mv {} ./bak_path \;
+
+
+
+#
+# 解析: 为什么find 命令比 xargs 优秀!!
+#
+# -exec 执行是: 
+# 	找到就'马上执行操作', 并不是存储'回显路径'之后, 查找完毕之后, 再删除.
+
+# ls | grep "js" | rm {} \; 
+# 这种才是: <存储'回显路径'之后, 查找完毕之后, 再删除>
+# 这种方式, 遇到'特殊字符'作为路径, 文件名 or 文件夹名, 肯定会出错的.
+# 所以find 命令操作文件比较可靠!!
+
+
+# 查找<target path> 中的匹配文件, 然后打印'所有匹配文件'的路径, 传递给管道, 再进行删除.
+# (不能解决'转义字符'的问题)
+# 因为单靠‘echo回显-路径字符串’进行删除, 
+# 如果路径中有特殊字符串, 不能自动添加'\'进行转义字符的转变, 
+# 所以会导致删除路径不正确, 删除操作失效.(而且并没有任何报错结果)
+#
+find . -type f -name "*.jpeg" | xargs rm -rf
+
+# 解决办法:
+# 	你可以用第1种方法, 直接在find 找到之后, 马上-exec 执行删除.
+# 	这样会找到一个, 删除一个.
+# 	不会说: 回显到屏幕中, 再根据记录, 逐条删除, 这样很容易出错.
+
+# 也可以使用:
+ls -i
+# 这个命令, 可以查看文件的inode 码, 这个inode码在文件系统中, 是唯一的!!
+# 你可以用:
+#rm <inode号>
+# 直接删除这个文件/文件夹.
+# ps: 
+# 	这种方法不能做到批量删除.
+
+
+
+
+
+
+
+
+
+#
+# 6.其它例子
+#
+将find出来的东西拷到另一个地方?
+find *.c -exec cp ‘{}’ /tmp ‘;’
+
+
+比如要查找磁盘中大于3M的文件
+find . -type f -size +3000k
+
+
+统计当前文件夹下, 有多少个文件
+find . * -type f | wc 
+
+
+
+
+
+# 查找<target path> 中的匹配文件, 然后逐个改名(找到一个, 改名一个)
+function batch_change_name() {
+		# 日期(年月日) -- $(date "+%Y%m%d%H%M%S") '年月日时分秒'版本
+	num_date=$(date "+%Y%m%d")
+	# 累计
+	num_count="0"
+	# 随机数
+	num_rand=$RANDOM
+	# 统计所有文件数量
+	num_sum=$(find $1 -type f -name "*" | wc | awk '{print $1}')
+	# 获取所有文件的inode码
+	num_inode=$(find $1 -type f -name "*" -exec ls -i '{}' \; | awk '{print $1}')
+	# 装载被改名的后的文件, 的文件夹路径
+	path_output="output$num_date$RANDOM"
+	# 创建$path_output 文件夹, 装载所有被改名的文件
+	if [ -d "$path_output" ]; then echo "$path_output文件夹已经存在"; exit 0; fi
+
+	# 根据inode 码, 对单个文件进行改名('{}' = 单个文件.)
+	find $1 -inum $tmp -exec mv '{}' "$path_output/$num_date-$num_count-$RANDOM" \;
+
+	# 通过echo回显的方式, 显示文件名or 文件的路径名
+	#find . -inum $tmp -exec pwd '{}' \; # 显示路径
+	#find . -inum $tmp -exec basename '{}' \; # 显示自身的文件名
+}
+
+# 详情, 请参考: batch_change_name批量改名.sh
+
+
+
+
+
+
+
+
+
