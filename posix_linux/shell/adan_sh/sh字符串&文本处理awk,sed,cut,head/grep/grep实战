@@ -1,0 +1,57 @@
+egrep 是grep 的拓展版本, 感觉改良了grep的一些不可以直接操作的东西,
+但是总体来说还是没太大区别的, 都是一个过滤工具.
+
+grep -E 可以开启egrep 的所有属性, 可以互相通用.
+
+
+grep 工具, 和cat 工具一样, 都可以直接打开文件的
+
+
+
+0、grep 筛选赋值给shell变量
+tmp="`cat /etc/passwd | grep adan`"
+echo $tmp
+
+
+1、显示/proc/meminfo文件中以大小写s开头的行;
+grep [Ss]  /proc/meminfo
+
+
+2、取出默认shell为非bash的用户;
+grep -v 'bash' /etc/passwd
+
+
+3、取出默认shell为bash的且其ID号最大的用户;
+grep 'bash' /etc/passwd | cut -d:-f3 |sort |tail -1
+
+
+4、显示/etc/rc.d/rc.sysinit文件中,以#开头,后面跟至少一个空白字符,而后又有至少一个非空白字符的行;
+grep '^#[[:space:]]\{1,\}[[:space:]]\{1,\}'  /etc/rc.d/rc.sysinit
+
+
+5、显示/boot/grub/grub.conf中以至少一个空白字符开头的行;
+grep '^[[:space:]]\{1,}' /boot/grub/grub.conf
+
+
+6、找出/etc/passwd文件中一位数或两位数;
+grep '\<[0-9]\{1,2\}\>' /etc/passwd
+
+
+7、找出ifconfig命令结果中的1到255之间的整数;
+ifconfig eth0 | egrep '2[0-5][0-5]|1[0-9][0-9]|[1-9][0-9]|[0-9]'
+
+
+8、查看当前系统上root用户的所有信息;
+grep '\<root\>' /etc/passwd
+
+
+9、添加用户bash和testbash、basher,而后找出当前系统上其用户名和默认shell相同的用户;
+grep '^\([[:alpha:]]\{1\}\.*\1$' /etc/passwd
+
+
+10、找出netstat -tan命令执行的结果中以"LISTEN"或"ESTABLISHED"结尾的行;
+netstat -tan | egrep 'LISTEN|ESTABLISHED[[:space:]]\{1,\}$'
+
+
+11、取出当前系统上所有用户的shell,要求:每种shell只显示一次,且按升序显示;
+cat /etc/passwd | cut -d:-f7 | sort -u
