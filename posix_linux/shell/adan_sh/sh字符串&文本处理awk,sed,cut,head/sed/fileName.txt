@@ -1,0 +1,56 @@
+我是测试数据x
+
+
+
+
+
+x
+x
+x
+x
+x
+x
+
+xx
+
+x
+x
+x
+x
+xx
+
+xxxxxxxxxxx
+
+
+
+
+
+
+
+x
+x
+x
+x
+x
+x
+x
+
+
+# s=替换命令, / 是分隔符号, 将fileName.txt文件中, 所有patternA 关键字匹配, 替换为String.
+sed 's/patternA/String/' fileName.txt
+sed 's/patternA/String/' fileName.txt
+sed 's/patternA/String/' fileName.txt
+sed 's/patternA/String/' fileName.txt
+
+
+
+# 删除匹配到的内容
+sed 'd/fuck_you/' fileName.txt
+
+
+#打印匹配error的行的行号
+sed  -n '/error/='  1.txt
+
+
+#打印匹配error的行的行号和内容（可用于查看日志中有error的行及其内容
+sed  -n '/error/{=;p}'   1.txt
