@@ -1,0 +1,2 @@
+# 只取第一行
+cat /etc/shadow | grep "*" | awk 'BEGIN { FS=":" }{print $1}' | head -n 1
