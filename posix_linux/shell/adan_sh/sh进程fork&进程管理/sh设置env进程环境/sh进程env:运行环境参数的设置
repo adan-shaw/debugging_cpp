@@ -1,0 +1,122 @@
+#
+# export 进程环境保底手段
+#
+export 的好处是: 当前用户, 当次登录, 用户下所有进程, 有效.
+但使用export 的话, 不太安全, 容易暴露权限, 给黑客便捷的入侵方案.
+
+如果不使用export, 只怕python 多进程程序, 会越界跳出当前tty.
+因为你在shell 中修改的:
+	PATH
+	LD_LIBRARY_PATH
+	C_INCLUDE_PATH
+	CPLUS_INCLUDE_PATH
+只对'当前shell 所在的tty' 有效,
+一旦跳出'当前shell 所在的tty', 就会出现'找不到进程环境的问题'
+
+不过应该问题不大, 在一个tty 内, tty 可以创建多个会话, 进程组, 子进程,
+完全可以满足多进程需求, 经过实验验证, 貌似可行!!
+实在不行, 可以使用export
+
+
+
+
+
+#
+# 0.daemon shell 程序的进程环境
+#
+daemon shell 程序的进程环境, 可以很轻松地在daenon shell 中指定的,
+根本不需要搞太多东西, daemon shell 本身就是启动前置shell.
+daemon shell 本身就是一个进程环境前置shell, 
+你不添加语句, 重置整套进程环境, 就是你的错.
+
+而python tarball, lua tarball, 等等.
+这些脚本机, 你如果不为这些脚本程序设置启动前置shell, 
+那么这些脚本exe程序, 将没办法保证进程的运行环境, 绝对正确.
+
+
+
+
+
+#
+# 1.如何在tarball 结尾, 为tarball home 中的.exe 指导必要的'进程运行环境参数'?
+#
+
+你必须要像:
+	xfce4 程序启动中文汉化功能一样, 在/bin/sh 运行前, 给它指定'进程运行环境参数'.
+	这也是GreenOdoo8.0 的执行方式.
+	这种方法, 必须应用到每一个tarball 包中,
+	以确保, 每一个tarball 程序, 都不会碰到运行环境出问题的情况.
+
+	而且系统也不会很杂乱, 
+	你只需要将你所有可执行程序, 按照这种模式, 设置好, 
+	然后拷贝start_shell 到/usr/local/bin中即可
+
+
+	注意:
+		一般情况下, 只有.exe 需要指定'进程运行环境参数',
+		如果是编译程序时, 需要指定library链接库和.h 头文件,
+		那简单, 直接在编写makefile 的时候指定.
+		这里只讲述:
+			shell 运行.exe 可执行程序时, 需要指定的'进程运行环境参数'
+
+
+
+
+
+#
+# 2.可供修改的'进程环境宏'有:
+#
+# .exe 可执行程序查找(进程环境宏)
+PATH
+
+# 链接库查找(进程环境宏)
+LD_LIBRARY_PATH
+
+# 头文件查找(进程环境宏)
+C_INCLUDE_PATH
+CPLUS_INCLUDE_PATH
+
+
+
+
+
+#
+# 3.修改例子(原来的+新增的)
+#
+
+*
+# 直接拷贝版, 创建文件, 拷贝, 粘帖, 保存, chmod给运行权限(至少给5, 否则不能运行)
+*
+vim ./ffmpeg.exe.sh
+cp ./ffmpeg.exe.sh /usr/local/bin/ffmpeg
+chmod 555 /usr/local/bin/ffmpeg
+
+
+#!/bin/sh
+
+home="/home/tarball/ffmpeg"
+bin="$home/bin"
+lib="$home/lib"
+c_headfile="$home/include"
+cpp_headfile="$home/include"
+
+exe="$bin/ffmpeg"
+
+/bin/sh -c " \
+LANGUAGE=zh_CN \
+PATH="$PATH:$bin" \
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$lib" \
+C_INCLUDE_PATH="$C_INCLUDE_PATH:$c_headfile" \
+CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:$cpp_headfile" \
+$exe $* \
+"
+
+
+
+*
+# echo 回显写入版(不做了, 太复杂, 不如直接改名, 拷贝过去之后改名.)
+*
+
+
+
+
