@@ -1,0 +1,17 @@
+#
+# BEGIN 关键字: 从哪里开始检索字符串
+#
+
+# (以":"空格作为分隔符)centos 带有'!!'的用户, 没有密码.
+cat /etc/shadow | grep "!!" | awk 'BEGIN { FS=":" }{print $1}'
+
+# (以":"空格作为分隔符)debian 中是带有'*'号的用户, 没有密码
+cat /etc/shadow | grep "*" | awk 'BEGIN { FS=":" }{print $1}'
+
+
+
+# (以":"空格作为分隔符)查看passwd 文件中, 所有用户的名
+cat /etc/passwd | awk 'BEGIN { FS=":" }{print $1}'
+
+# 以" "空格作为分隔符, 切割出$1 $2 $3 ... $n
+cat /etc/passwd | awk 'BEGIN { FS=" " }{print $1}'
