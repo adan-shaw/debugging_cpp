@@ -1,0 +1,9 @@
+windows环境中中文压缩一般为gbk, 
+而在linux环境中为utf8, 
+这就导致了在windows下, 能正常显示的txt文件, 
+在linux环境下打开呈现了乱码状态.
+
+
+
+转换命令如下:
+	iconv -f gbk -t utf8 iconv_test_data.txt > output_utf8.txt
