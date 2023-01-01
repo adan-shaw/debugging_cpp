@@ -1,0 +1,92 @@
+adb reboot bootloader重启并进入Fastboot模式
+
+Fastboot reboot 表示Fastboot模式下重启
+
+Fastboot devices 表示查看Fastboot模式下已连接的设备号
+
+
+
+
+
+3、adb的使用
+
+接下来介绍adb的一些常用命令：
+
+查看当前连接的设备，连接到PC的Android设备将被会打印到终端：
+
+# adb devices
+
+将指定的apk文件安装到设备上：
+
+# adb install 应用包.apk
+
+将指定的软件进行卸载：
+
+# adb uninstall  <应用包>
+or
+# adb uninstall –k <应用包>
+
+加上-k参数表示卸载软件，但是保留配置和缓存文件。
+
+登录到Android设备的shell：
+
+# adb shell
+
+从电脑上发送文件到设备：
+
+# adb push <本地路径> <远程路径>
+
+从设备上下载文件到电脑：
+
+# adb pull <远程路径> <本地路径>
+
+显示adb的帮助信息：
+
+# adb help
+
+ 
+
+4、fastboot的使用
+
+先进入到烧写模式，使用Mico USB数据线将Android设备与电脑进行连接，在PC端进入到cmd命令行进行操作：
+
+先测试adb是否能正常使用，使用下面命令进入到Android设备shell中：
+
+# adb shell
+
+进入到BootLoader烧写模式：
+
+# adb reboot bootloader
+
+然后查看连接的设备：
+
+# fastboot devices
+
+fastboot烧写的常用命令：
+
+把当前目录下的system.img烧写到system分区，也就是系统分区：
+
+# fastboot flash system system.img
+
+烧写缓存分区：
+
+# fastboot flash cache cache.img
+
+烧写用户数据分区：
+
+# fastboot flash userdata userdata.img
+
+把当前的boot.img烧写到boot分区，boot分区存放内核和ramdisk：
+
+# fastboot flash boot boot.img
+
+把当前目录下的recovery.img烧写到recovery分区：
+
+# fastboot flash recovery recovery.img
+
+烧写完成后，设备重启：
+
+# fastboot reboot
+
+
+
