@@ -1,0 +1,21 @@
+awk 'BEGIN { cmd=" cp -ri ./a/* ./b/ "; print "n" |cmd; }'
+
+
+awk 'BEGIN { cmd=" ./test.sh "; print "Y" |cmd; }'
+
+
+awk 'BEGIN { cmd=" cp -ri /var/cache/apt/archives/* ./ "; print "n" |cmd; }'
+
+
+awk 'BEGIN { cmd=" cp -ri ./* /var/cache/apt/archives/ "; print "n" |cmd; }'
+
+
+awk 'BEGIN { cmd=" cp -ri /var/cache/apt/archives/ /root/rw/debian10_amd64_pkg "; print "n" |cmd; }'
+
+
+
+
+
+
+# cp覆盖不提示
+cp -r -f ./Makefile ./vsftpd-3.0.3/Makefile
