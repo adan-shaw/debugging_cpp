@@ -1,0 +1,56 @@
+#
+# 1.原版内容
+#
+cat test.txt
+
+No Name Mark Percent
+01 tom 69 91
+02 jack 71 87
+03 alex 68 98
+
+
+
+
+
+#
+# 2.提取纵列(-f 选项)
+#
+# 提取第一纵列
+cut -f 1 test.txt
+
+No
+01
+02
+03
+
+
+# 提取第2,3纵列
+cut -f2,3 test.txt
+Name Mark
+tom 69
+jack 71
+alex 68
+
+
+
+
+
+#
+# 3.在提取纵列的基础上, 再指定分割符号进行提取(防止越界)
+#
+# 原版
+cat test2.txt
+
+No;Name;Mark;Percent
+01;tom;69;91
+02;jack;71;87
+03;alex;68;98
+
+
+# 以';'为分割符号, 提取第二纵列
+cut -f2 -d";" test2.txt
+
+Name
+tom
+jack
+alex
