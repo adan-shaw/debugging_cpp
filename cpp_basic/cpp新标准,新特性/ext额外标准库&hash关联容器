@@ -1,0 +1,50 @@
+#
+# 1.'ext 额外标准库'简介
+#
+ext 额外标准库, 每个c++ 编译器都有不同的实现;
+有什么内容, 请自己看:
+	# 以g++8.x.x 为例
+	/usr/include/c++/8/ext/
+
+
+
+
+
+
+
+
+#
+# 2.'ext 额外标准库'对hash 关联容器的支持
+#
+g++ 对'ext 额外标准库'的实现, 主要有:
+	容器:
+		<ext/hash_set>
+		<ext/hash_map>
+
+g++ 对'ext 额外标准库'的实现, 不包含:
+	<ext/hash_multiset>
+	<ext/hash_multimap>
+
+
+
+因此, 建议直接使用'c++11 标准的hash 关联容器', 取代'ext 额外标准库'的hash 关联容器:
+	std::unordered_set(C++11起)
+	std::unordered_multiset(C++11起)
+	std::unordered_map(C++11起)
+	std::unordered_multimap(C++11起)
+
+使用c++11 标准实现, 各大编译器都有实现支持, 这样可靠性比较高;
+而且实际上, c++11 标准的hash 关联容器, 与'ext 额外标准库'的hash 关联容器, 并没有多大差异, 
+如果有需要使用hash 关联容器的场合, 
+'c++11 标准的hash 关联容器'最可靠;
+
+
+
+声明:
+	'ext 额外标准库'对hash 关联容器, 与'c++11 标准的hash 关联容器', 是两个不同的实现, 彼此互不依赖对方;
+	[否则, 如果这两者有关联, 
+	 那么所有c++编译器为了支撑c++11 标准, 也必然会先实现所有的'ext 额外标准库'对hash 关联容器, 以实现对c++11 标准的支持;
+	 而现实是: 大部分c++编译器, 都热衷于支持c++11 标准, 而不太想理会对'ext 额外标准库'的支持, 这就很现实了, 耿直]
+
+	但这两者都是基于hashtable 实现的, 都会引用#include <backward/hashtable.h>
+	(这倒是共同点)
