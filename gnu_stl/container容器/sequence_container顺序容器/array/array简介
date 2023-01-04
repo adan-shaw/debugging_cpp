@@ -47,12 +47,20 @@
 
 	这种繁琐的操作, c++ 直接帮你省掉了,
 	c++ 允许'泛型类型模板T', 允许你直接进行内嵌, 如:
-		std::array<std::string, 2> a3 = { std::string("a"), "b" };
+		std::array<std::string, 2> b1 = { std::string("i'm b1[0]"), "i'm b1[1]" };
 	这样一来, 将std::string 替换为void 指针的工作, 就全部交给c++ 编译器去完成, 你可以专心focus 在你的业务设计上面, 十分方便;
 
 	这样才是c++11 改革的真正意义所在, 简化设计过程, 让机器语言更简单地完成面向对象变成, 面向人工智能, 做更敏捷的开发;
 
 	这样一来, 以后c++ 编码, 数组也一般使用array 容器比较好;
 	当然如果你不打算进行内嵌的话, 用c 语言的'array传统数组'也可以;
+	注意:
+		array 容器的'聚合初始化', 元素类型必须一致, 不能内嵌两种不同的类型!! 否则报错;
+		例如:
+			std::array<std::string, 2> b1 = { std::string("i'm b1[0]"), "i'm b1[1]" };
+		由于std::array<std::string, 2>, 已经将b1 初始化为std::string类型的std::array,
+		因此, b1[0] = std::string("i'm b1[0]"), b1[0]元素是一个string 容器;
 
+		b1[1]元素是"i'm b1[1]", 看上去没有声明b1[1]的元素类型为std::string, 
+		但实际上编译器会自动用std::string, 将"i'm b1[1]"装入std::string;
 
