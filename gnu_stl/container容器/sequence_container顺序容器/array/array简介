@@ -59,8 +59,13 @@
 		例如:
 			std::array<std::string, 2> b1 = { std::string("i'm b1[0]"), "i'm b1[1]" };
 		由于std::array<std::string, 2>, 已经将b1 初始化为std::string类型的std::array,
-		因此, b1[0] = std::string("i'm b1[0]"), b1[0]元素是一个string 容器;
+		因此, b1[0] = std::string("i'm b1[0]"), b1[0]元素是一个std::string 容器;
 
 		b1[1]元素是"i'm b1[1]", 看上去没有声明b1[1]的元素类型为std::string, 
 		但实际上编译器会自动用std::string, 将"i'm b1[1]"装入std::string;
 
+
+
+
+
+4.补漏:迭代器访问array 容器, 更安全, 内存访问越界的问题, 更不容易出现;
