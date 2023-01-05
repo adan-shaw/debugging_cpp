@@ -1,0 +1,34 @@
+for_each()是function template, 其源码如下:
+
+	template <class _InIt, class _Fn>
+	_CONSTEXPR20 _Fn for_each(_InIt _First, _InIt _Last, _Fn _Func) {
+			_Adl_verify_range(_First, _Last);
+			auto _UFirst      = _Get_unwrapped(_First);
+			const auto _ULast = _Get_unwrapped(_Last);
+			for (; _UFirst != _ULast; ++_UFirst) {
+				_Func(*_UFirst);
+			}
+			return _Func;
+	}
+
+
+
+因此, 实际上for_each()函数的效率, 并不高;
+还会触发对每一个子元素, 都调用钩子函数'_Fn _Func'(函数指针), 对遍历过程中, 对每个元素进行操作;
+如果不是比较复杂的遍历操作, 建议使用迭代器进行遍历, 这才是c++ 的做法;
+for_each() 貌似是为了对接互联网语言而设计出来的;
+
+
+
+c++ 迭代器遍历方式(通用的):
+	std::array<std::string, 2> b1{{ std::string("i'm b1[0]"), "i'm b1[1]" }};	//定义容器
+	std::array<std::string, 2>::iterator iter;																//定义遍历迭代器
+
+	//迭代器遍历
+	for(iter = b1.begin(); iter != b1.end(); ++iter)
+		printf("%s\n",iter->c_str());
+
+ps:
+	这种方法, 编译器解析效率还很高, 减少多重递归函数调用(性能地狱),
+	也兼顾了安全性, 使用迭代器遍历容器, 也很安全;
+	也很面向对象, 这是c++ 程序员的惯用做法;
