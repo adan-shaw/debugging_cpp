@@ -18,6 +18,9 @@
 	ps:
 		array 数组不支持inserter插入迭代器, 因为array 根本连insert(), push_front(), push_back()操作都没有;
 		对array 数组使用inserter插入迭代器, 编译器会报错!!
+
+		vector 向量不支持std::front_inserter 插入迭代器, 因为vector 向量没有push_front() 方法;
+		vector 向量只支持std::inserter, std::back_inserter;
 */
 
 
