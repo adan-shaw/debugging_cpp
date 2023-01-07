@@ -1,0 +1,102 @@
+1.vector向量简介:
+	vector向量是一个支持随机访问的'原始线性容器', vector向量5 种迭代器访问:
+		LegacyInputIterator旧式输入迭代器
+		LegacyOutputIterator旧式输出迭代器
+		LegacyForwardIterator旧式向前迭代器
+		LegacyBidirectionalIterator旧式双向迭代器
+		LegacyRandomAccessIterator旧式随机访问迭代器
+	(详情请看: 6种迭代器list)
+
+
+
+	vector向量的内存空间分配&释放问题:
+		'vector&string'默认的初始化内存的位置(由编译器决定的):
+		入栈限制值:
+			msvc:  小于15 bytes字节, 变量压栈
+			g++:   小于15 bytes字节, 变量压栈
+			clang: 小于23 bytes字节, 变量压栈
+			(小于'入栈限制值', 初始化容量capacity统一都是15 bytes, 实现内存对齐)
+
+		入堆限制值:
+			msvc:  大于15 bytes字节, 变量入堆申请内存
+			g++:   大于15 bytes字节, 变量入堆申请内存
+			clang: 大于23 bytes字节, 变量入堆申请内存
+
+		'vector&string'扩容增长系数(由编译器决定的):
+			msvc:  首次2 倍扩容(31 byte), 后续1.5 倍扩容, 原来的容量*1.5, 能容纳就容纳, 不能容纳就继续翻倍, 知道能容纳为止(这个计算过程,也是在编译过程中执行的)
+			g++:   2 倍扩容;
+			clang: n 倍扩容(未知);
+			(增长速度为: 2^n)
+
+			ps:
+				如果'vector&string'初始化入栈了, 一旦扩容, 就会触发堆内存分配, 这时候栈上面的内存又不能及时出栈, 会造成一定错乱消耗;
+				所以'vector&string'的使用原则是:
+					尽量初始化容量, 尽量不触发扩容;
+					扩容必然触发内存空间重新分配, 还会必然触发内存copy, 将旧数据拷贝新内存空间中, 维持内存空间的连续性, 保护随机下标访问的功能;
+					频繁扩容, 不仅效率低, 还会产生内存碎片;
+					迫不得已需要扩容, 请使用:
+						resize() / reserve(), 一步到位, 按照最大需求进行扩容, 力求一次扩容, 后续都够用;(用空间换效率!!)
+
+				申请新的buf 缓冲区之后, 会触发copy;
+				先把旧数据拷贝进来, 
+				然后再写入新数据, 
+				最后将旧buf缓冲区删除, string类指针替换上新的缓冲区指针;
+
+
+
+
+
+2.使用经验:
+	* vector向量支持拷贝其他容器, 但必须使用std::copy() 逻辑遍历拷贝;
+		vector向量拷贝vector向量, 可以在使用构造函数时, 进行赋值to 构造函数, 进行高性能拷贝;(这种拷贝优于std::copy() 逻辑遍历拷贝)
+
+
+
+	* vector向量可以pop_back()空, 但此时vector向量已损坏, 任何形式的push 操作, 都会崩溃, 包括随机访问push;
+		不过可以持续多次pop_back()空, 只要不调用任何形式的push 操作, 都okay;
+		实验代码:
+			vec.clear();
+			vec.pop_back();
+			vec.pop_back();
+			vec.push_back(111);	//崩溃
+			vec[0] = 111;				//崩溃
+			vec.at(0) = 111;		//崩溃
+		因此, pop_back()操作, 必须做非空检测:
+			assert(!vec.empty());
+		ps:
+			clear(), resize() 都可以修复已损坏的vector向量
+
+
+
+	*'it迭代器'快速取值函数front(), back() 不安全, 慎用:
+		if(vec.begin() == vec.end()) 的确可以判断stl 容器为空, 但即便stl 容器为空, 但一般默认都会预分配存储空间的, 如: vector;
+		因此, front(), back() 这两个快速访问函数, 并不安全;
+		因此, *vec.begin(), *vec.end()  这两个'it迭代器'访问, 也不安全;
+		因为此时stl 容器可能已经为空;
+
+		你必须保证stl 容器不为空:
+			assert(!vec.empty());
+		否则迭代器快速访问, 得到的数值不一定准确;
+
+		另外:
+			front() 不一定等于*vec.begin();
+			back() 不一定等于*vec.end();
+
+		front() = stl容器'已申请的内存空间地址'中第一个元素;
+		back() = stl容器'已申请的内存空间地址'中最后一个元素;
+
+		*vec.begin() = stl容器'现存的元素'的第一个;
+		*vec.end() = stl容器'现存的元素'的最后一个;
+
+		因此, front(), back()操作, 必须做非空检测:
+			assert(!vec.empty());
+
+
+
+	* erase() 删除多个连续元素(不安全, 两个迭代器的有效性, 必须自己保证)
+	if((x2.begin()+3) <= x2.end())//最好的保障手段: 保障最后一个连续元素, 不超出x2.end()
+		x2.erase(x2.begin()+1,x2.begin()+3);
+
+
+
+
