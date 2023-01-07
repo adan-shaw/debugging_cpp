@@ -20,3 +20,9 @@
 			stack,          可基于'原始线性容器': deque(默认), list, vector
 			priority_queue, 可基于'原始线性容器': deque(默认), vector
 			queue,          可基于'原始线性容器': deque(默认), list
+
+
+
+	ps:
+		能用vector 的场合, 绝对不用deque, 因为vector 是连续内存容器;
+		详细各种容器怎么用, 自己根据数据结构的常识来判断, 这里不再重复;
