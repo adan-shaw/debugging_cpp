@@ -1,0 +1,22 @@
+'adapter适配器'简介:
+	'adapter适配器'基本上也是线性容器, 但为什么要单独把'adapter适配器'区分出来?
+
+	主要的原因是:
+		'adapter适配器'并不是原生容器, 'adapter适配器'是基于'原始线性容器', 进行二次封装得到的容器;
+		'adapter适配器'实际上也是裁减'原始线性容器'的功能得到的, 功能上难以超越'原始线性容器'的限制, 
+		基本上'原始线性容器'没有实现的功能, 'adapter适配器'也没有;
+
+
+
+	因此, 作为区分, 下面列出常见的'adapter适配器', 还有常见的'原始线性容器':
+		常见的'原始线性容器'有:
+			array
+			vector
+			deque
+			list
+			forward_list
+
+		常见的'adapter适配器'有:
+			stack,          可基于'原始线性容器': deque(默认), list, vector
+			priority_queue, 可基于'原始线性容器': deque(默认), vector
+			queue,          可基于'原始线性容器': deque(默认), list
