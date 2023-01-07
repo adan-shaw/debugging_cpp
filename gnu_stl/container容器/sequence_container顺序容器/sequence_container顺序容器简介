@@ -1,0 +1,73 @@
+gnu stl 实现的sequence_container顺序容器简介
+	常见的'原始线性容器'有:
+		array
+		vector
+		deque
+		list
+		forward_list
+
+	常见的'adapter适配器'有:
+		stack,          可基于'原始线性容器': deque(默认), list, vector
+		priority_queue, 可基于'原始线性容器': deque(默认), vector
+		queue,          可基于'原始线性容器': deque(默认), list
+
+
+
+
+
+	支持LegacyRandomAccessIterator旧式随机访问迭代器的'原始线性容器':
+		array
+		vector
+		deque
+
+	支持LegacyBidirectionalIterator旧式双向迭代器的'原始线性容器':
+		array
+		vector
+		deque
+		list
+
+	支持LegacyForwardIterator旧式向前迭代器的'原始线性容器':
+		array
+		vector
+		deque
+		list
+		forward_list
+
+	支持LegacyInputIterator旧式输入迭代器的'原始线性容器': all (全体都sequence_container顺序容器都支持旧式输入迭代器)
+
+	支持LegacyOutputIterator旧式输出迭代器的'原始线性容器':
+		vector
+		deque
+		list
+		forward_list
+		ps:
+			array 数组不支持inserter插入迭代器, 因为array 根本连insert(), push_front(), push_back()操作都没有;
+			对array 数组使用inserter插入迭代器, 编译器会报错!!
+
+			vector 向量不支持std::front_inserter 插入迭代器, 因为vector 向量没有push_front() 方法;
+			vector 向量只支持std::inserter, std::back_inserter;
+
+
+
+
+
+	内存空间连续的'原始线性容器'[支持memset()]:
+		array
+		vector
+
+
+
+
+
+	支持任意位置频繁删除元素的'原始线性容器':
+		list
+		forward_list
+
+	支持双端(push_back, pop_back, push_front, pop_front)快速新增/删除元素的'原始线性容器':
+		deque
+
+	支持在队尾(push_back, pop_back)快速新增/删除元素的'原始线性容器':
+		array
+		vector
+
+
