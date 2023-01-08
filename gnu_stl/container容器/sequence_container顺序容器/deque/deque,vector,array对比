@@ -1,0 +1,47 @@
+array/vector/deque 的共同点:
+	* 线性容器
+	* 支持随机访问(下标访问)
+	...
+
+
+
+
+
+array/vector/deque 的不同点:
+	* iterator插入迭代器支持:
+		array: 不支持
+		vector: 支持insert_iterator/back_insert_iterator
+		deque: 支持insert_iterator/back_insert_iterator/front_insert_iterator
+
+	* '插入/删除'元素
+		array: 尾部'插入/删除'元素, 不推荐其他位置'插入/删除'元素(因为会触发元素整体向后移动)
+		vector: 尾部'插入/删除'元素, 不推荐其他位置'插入/删除'元素(因为会触发元素整体向后移动)
+		deque: 尾部/头部'插入/删除'元素, 不推荐其他位置'插入/删除'元素(因为会触发元素整体向后移动)
+
+	* '连续or 非连续'内存空间
+		array: 连续内存空间
+		vector: 连续内存空间
+		deque: 非连续内存空间
+
+	* 扩容/缩容
+		array: 不会扩容, 不会缩容
+		vector: 会自动扩容, 支持手动缩容
+		deque: 会自动扩容, 支持手动缩容
+
+	* 支持的适配器
+		array: 不支持
+		vector: stack, priority_queue
+		deque: stack, priority_queue, queue
+
+	...
+
+
+
+
+
+杂谈:
+	array/vector 是连续内存的容器, 随机访问性能很强;
+	deque 虽然也支持随机访问, 但实际上内存空间并不是连续的, 而是多块数组凭接而成的, 这样会导致:
+			非连续内存, 操作起来, 性能其实不如连续内存好, 还会有内存碎片, 维护内存空间的成本较高等问题, 弊端比较多;
+
+
