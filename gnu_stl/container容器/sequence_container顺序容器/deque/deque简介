@@ -1,0 +1,91 @@
+1.cpp 官网简介
+	std::deque(double-ended queue ,双端队列)是有下标顺序容器, 它允许在其首尾两段快速插入及删除;
+	另外,在 deque 任一端插入或删除不会非法化指向其余元素的指针或引用;
+
+	与std::vector 相反, deque 的元素不是相接存储的:
+		典型实现用单独分配的固定大小数组的序列, 外加额外的登记,
+		这表示下标访问必须进行二次指针解引用, 与之相比vector 的下标访问只进行一次;
+
+	deque 的存储按需自动扩展及收缩;
+	扩张deque 比扩展std::vector 便宜, 因为它不涉及到复制既存元素到新内存位置;
+	另一方面, deque 典型地拥有较大的最小内存开销;
+	只保有一个元素的deque 必须分配其整个内部数组;
+	(例如: 64位libstdc++ 上为对象大小8倍; 64位libc++ 上为对象大小16倍或4096字节的较大者)
+
+
+	deque 上常见操作的复杂度(效率)如下:
+		随机访问——常数 O(1)
+		在结尾或起始插入或移除元素——常数 O(1)
+		插入或移除元素——线性 O(n)
+
+
+
+
+
+2.deque向量简介:
+	deque向量是一个支持随机访问的'原始线性容器', deque向量5 种迭代器访问:
+		LegacyInputIterator旧式输入迭代器
+		LegacyOutputIterator旧式输出迭代器
+		LegacyForwardIterator旧式向前迭代器
+		LegacyBidirectionalIterator旧式双向迭代器
+		LegacyRandomAccessIterator旧式随机访问迭代器
+	(详情请看: 6种迭代器list)
+
+
+
+
+
+3.使用经验:
+	* deque向量支持拷贝其他容器, 但必须使用std::copy() 逻辑遍历拷贝;
+		deque向量拷贝deque向量, 可以在使用构造函数时, 进行赋值to 构造函数, 进行高性能拷贝;(这种拷贝优于std::copy() 逻辑遍历拷贝)
+
+
+
+	* deque向量可以pop_back()空, 但此时deque向量已损坏, 任何形式的push 操作, 都会崩溃, 包括随机访问push;
+		不过可以持续多次pop_back()空, 只要不调用任何形式的push 操作, 都okay;
+		实验代码:
+			deq.clear();
+			deq.pop_back();
+			deq.pop_back();
+			deq.push_back(111);	//崩溃
+			deq[0] = 111;				//崩溃
+			deq.at(0) = 111;		//崩溃
+		因此, pop_back()操作, 必须做非空检测:
+			assert(!deq.empty());
+		ps:
+			clear(), resize() 都可以修复已损坏的deque向量
+
+
+
+	*'it迭代器'快速取值函数front(), back() 不安全, 慎用:
+		if(deq.begin() == deq.end()) 的确可以判断stl 容器为空, 但即便stl 容器为空, 但一般默认都会预分配存储空间的, 如: deque;
+		因此, front(), back() 这两个快速访问函数, 并不安全;
+		因此, *deq.begin(), *deq.end()  这两个'it迭代器'访问, 也不安全;
+		因为此时stl 容器可能已经为空;
+
+		你必须保证stl 容器不为空:
+			assert(!deq.empty());
+		否则迭代器快速访问, 得到的数值不一定准确;
+
+		另外:
+			front() 不一定等于*deq.begin();
+			back() 不一定等于*deq.end();
+
+		front() = stl容器'已申请的内存空间地址'中第一个元素;
+		back() = stl容器'已申请的内存空间地址'中最后一个元素;
+
+		*deq.begin() = stl容器'现存的元素'的第一个;
+		*deq.end() = stl容器'现存的元素'的最后一个;
+
+		因此, front(), back()操作, 必须做非空检测:
+			assert(!deq.empty());
+
+
+
+	* erase() 删除多个连续元素(不安全, 两个迭代器的有效性, 必须自己保证)
+	if((x2.begin()+3) <= x2.end())//最好的保障手段: 保障最后一个连续元素, 不超出x2.end()
+		x2.erase(x2.begin()+1,x2.begin()+3);
+
+
+
+
