@@ -58,7 +58,7 @@
 
 
 	*'it迭代器'快速取值函数front(), back() 不安全, 慎用:
-		if(deq.begin() == deq.end()) 的确可以判断stl 容器为空, 但即便stl 容器为空, 但一般默认都会预分配存储空间的, 如: deque;
+		if(deq.begin() == deq.end()) 的确可以判断stl 容器为空, 如果stl 容器为空, 但一般默认都会预分配存储空间的, 如: vector;
 		因此, front(), back() 这两个快速访问函数, 并不安全;
 		因此, *deq.begin(), *deq.end()  这两个'it迭代器'访问, 也不安全;
 		因为此时stl 容器可能已经为空;
@@ -80,6 +80,11 @@
 		因此, front(), back()操作, 必须做非空检测:
 			assert(!deq.empty());
 
+		deque 不同于vector 的地方是:
+			当deque 为空时, 访问front()/back()/deq.begin()/deq.end(), 会触发内存越界, 程序崩溃;
+			当vector 为空时, 访问front()/back()/deq.begin()/deq.end(), 不会触发内存越界, 只是会弹出已分配的内存地址上的值;
+			(大概率是上一次操作的值, 但此时此值, 已经失效了, 因为vector 已经为空)
+
 
 
 	* erase() 删除多个连续元素(不安全, 两个迭代器的有效性, 必须自己保证)
@@ -88,4 +93,30 @@
 
 
 
+	* deque 中, 尽量不要使用max_size(), 这个函数通常性等于-1(默认假设deque 可以无限增长, 这点与vector 不同)
+		size() 比较适合, 可以轻松替代max_size();
+		因此, 不建议使用max_size(), 弃用这个函数;
 
+
+
+	* deque 中, 使用resize()进行扩容, 必须先保证deque 不为空, 否则会触发内存越界, 程序崩溃;
+		一般情况下, deque 也没有扩容的必要;
+
+
+
+	* ～deque 析构函数报错:
+		free(): double free detected in tcache 2
+		Aborted
+		gdb 调试信息:
+			std::deque<int, std::allocator<int> >::~deque (this=0x7fffffffd970, __in_chrg=<optimized out>) at /usr/include/c++/8/bits/stl_deque.h:1055
+			1055	      { _M_destroy_data(begin(), end(), _M_get_Tp_allocator()); }
+		未知原因:
+			不是扩容resize()/缩容shrink_to_fit()问题, 把这些语句全部屏蔽了, 还是报错, 不知道为何??
+			deque_old.cpp 没有报错, 你需要自己找找~deque() 析构函数报错的原因;
+
+
+
+
+
+总结:
+	deque 容器的稳定性, 不如vector, 性能也不如vector, 能用vector, 不用deque!!
