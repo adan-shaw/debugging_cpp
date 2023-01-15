@@ -64,6 +64,14 @@
 		std::swap(std::list)	特化 std::swap 算法
 		erase(std::list)			擦除所有满足特定判别标准的元素(C++20)
 		erase_if(std::list)
+
+	forward_list&list的erase()/insert()操作的区别:
+		list:
+			erase(): 删除迭代器指向的元素, 删除后, 迭代器指向下一个元素, 再执行list 收缩, 最后返回迭代器;
+			insert(): 在迭代器指向的元素前面插入, 插入后, 迭代器指向当前插入元素, 再执行list 扩张, 最后返回迭代器;
+		forward_list:
+			erase_after() 删除迭代器所在的元素后面的元素, 删除后, 再后移一位(相当于后移了两位), 最后返回迭代器;
+			insert_after() 在迭代器指向的元素后面插入, 插入后, 迭代器指向当前插入元素, 再执行list 扩张, 最后返回迭代器;
 */
 
 
@@ -89,7 +97,7 @@ int main(void){
 	list<int> x4 (x3);									//a copy of x3
 	//the iterator constructor can also be used to construct from arrays:
 	list<int> x5 (arr_tmp, arr_tmp + sizeof(arr_tmp)/sizeof(int));
-	list<int>::iterator it;							//顺向迭代器(比较安全一点的方法)
+	list<int>::iterator it,it1,it2;			//顺向迭代器(比较安全一点的方法)
 	list<int>::reverse_iterator rit;		//逆向迭代器
 
 
@@ -130,12 +138,16 @@ int main(void){
 	it = x2.begin();
 	x2.insert(it,555);//从头部插入
 	//rit = x2.rend();
-	//x2.insert(rit,5555);//不能用反向迭代器操作!!
+	//x2.insert(rit,5555);//不能用反向迭代器进行insert()操作!!
 
 	it = x2.end();
 	x2.insert(it,666);//从尾部插入
 	//rit = x2.rbegin();
-	//x2.insert(rit,6666);//不能用反向迭代器操作!!
+	//x2.insert(rit,6666);//不能用反向迭代器进行insert()操作!!
+	printf("6 -- x2:");
+	for(it = x2.begin(); it != x2.end(); *it++)
+		printf("%d  ", *it);
+	printf("\n");
 
 
 
@@ -168,7 +180,7 @@ int main(void){
 
 
 	//8.list 元素访问典范demo:
-	//iterator erase(iterator position);//通过迭代器删除元素
+	//iterator erase(iterator position);//通过迭代器删除元素, 并自动指向下一个元素, 返回迭代器
 	/*
 		由于list 不随机访问元素, 所以必须是'迭代器指针'访问和操作.
 		因此:
@@ -186,15 +198,15 @@ int main(void){
 	++it1;                  //    ^              ^
 
 	it1 = x1.erase(it1);    // 10 30 40 50 60 70 80 90
-													//    ^           ^
+                          //    ^           ^
 
 	it2 = x1.erase(it2);    // 10 30 40 50 60 80 90
-													//    ^           ^
+                          //    ^           ^
 	++it1;                  //       ^        ^
 	--it2;                  //       ^     ^
 
 	x1.erase(it1,it2);      // 10 30 60 80 90
-													//       ^^
+                          //       ^^
 
 	for(it = x1.begin(); it != x1.end(); *it++)
 		printf("%d  ", *it);
@@ -213,9 +225,9 @@ int main(void){
 	assert(!x2.empty());
 	x2.pop_front();
 
-	//空队列的x2.front() == NULL == 0 !!(c/c++ 中, NULL == 0)
+	//空队列的x2.begin() == x2.end()
 	assert(!x2.empty());
-	printf("9 -- x2 front=%d,back=%d,空list 头,尾 == NULL!!\n", x2.front(), x2.back());
+	printf("9 -- x2 front=%d,back=%d,空list x2.begin() == x2.end()!!\n", x2.front(), x2.back());
 
 	x2.clear();
 	if(x2.empty())
