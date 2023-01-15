@@ -91,7 +91,6 @@ int main(void){
 	list<int> x5 (arr_tmp, arr_tmp + sizeof(arr_tmp)/sizeof(int));
 	list<int>::iterator it;							//顺向迭代器(比较安全一点的方法)
 	list<int>::reverse_iterator rit;		//逆向迭代器
-	list<int>::iterator it1,it2;				//unsigned int != int
 
 
 
