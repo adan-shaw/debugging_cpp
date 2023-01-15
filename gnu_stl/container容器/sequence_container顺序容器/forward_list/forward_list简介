@@ -12,5 +12,27 @@ forward_list实现简介:
 
 	forward_list 不能pop() 空, 否则forward_list 一旦损坏, 一访问就会遇到空指针, 导致程序崩溃;
 
-	forward_list 操作大量依赖迭代器, 但forward_list 对迭代器失效条件并不敏感, 非常友好, 
-	erase() 删除元素操作, 会自动返回指向下一个元素的迭代器, 这点关联容器的erase() 是void 无返回值的;
+	forward_list 没有成员函数size(), 但可以使用std::distance() 来代替;
+
+	forward_list 操作大量依赖迭代器, 但forward_list 对迭代器失效条件并不敏感, 非常友好;
+
+	push_front() 会造成forward_list 出现倒序的情况:
+		for(tmp=1; tmp<10; tmp++)
+			x1.push_front(tmp*10);
+		得到正向迭代遍历:  90 80 70 60 50 40 30 20 10
+		并不是: 10 20 30 40 50 60 70 80 90
+
+
+
+	forward_list&list的erase()/insert()操作的区别:
+		list:
+			erase(): 删除迭代器指向的元素, 删除后, 迭代器指向下一个元素, 再执行list 收缩, 最后返回迭代器;
+			insert(): 在迭代器指向的元素前面插入, 插入后, 迭代器指向当前插入元素, 再执行list 扩张, 最后返回迭代器;
+		forward_list:
+			erase_after() 删除迭代器所在的元素后面的元素, 删除后, 再后移一位(相当于后移了两位), 最后返回迭代器;
+			insert_after() 在迭代器指向的元素后面插入, 插入后, 迭代器指向当前插入元素, 再执行list 扩张, 最后返回迭代器;
+		ps:
+			list 收缩/扩张, 并没有任何消耗, 不会影响其他元素;
+
+	任何删除/新增操作, 并不会影响list 的其他迭代器的有效性;
+	(但删除最后一个元素, 可能返回一个失效的迭代器)
