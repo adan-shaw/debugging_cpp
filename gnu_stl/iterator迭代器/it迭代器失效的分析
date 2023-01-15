@@ -1,0 +1,56 @@
+stl迭代器的失效原因:
+	对容器的操作影响了元素的存放位置,称为迭代器失效;
+
+
+
+stl迭代器的失效常见情况: 
+	* 当容器调用erase()方法后, 当前位置到容器末尾元素的所有迭代器全部失效;
+	* 当容器调用insert()方法后, 当前位置到容器末尾元素的所有迭代器全部失效;
+	* 如果容器扩容, 在其他地方重新又开辟了一块内存, 则原来容器底层的内存上所保存的迭代器全都失效了;
+
+
+
+
+
+不同类型的容器, stl迭代器失效的情况也不相同:
+	* 序列式容器(支持随机访问迭代器)
+		因为array/vector/deque, 支持随机访问, 默认情况下, 内存存储空间是连续的, 因此:
+			在不触发'扩容/缩容'的情况下, 触发迭代器失效的操作是: erase()/insert();
+			线性容器, 一旦在中间删除元素, 必然性触发元素整体向前倾, 因此, 迭代器容易失效;
+			(遍历erase()/insert()操作, 建议用rit 迭代器, 从最后一位元素开始操作, 最安全)
+
+			在触发'扩容/缩容'的情况下, 所有迭代器马上失效(必然性失效, 无法避免);
+
+
+	* 序列式容器(链表式, 不支持随机访问迭代器)
+		因为list/forward_list, 是链表结构的, erase()/insert()增删操作, 仅仅会使当前的iterator 失效,
+		因此, 这种容器, 遍历erase()/insert()操作, 可以使用it/rit, 双向迭代器, 随意遍历;
+		并且 erase 方法可以返回下一个有效的 iterator!! 所以可以轻松使用:
+		iter = erase(iter);
+		iter = insert(iter);
+
+
+	* 关联式容器(红黑树结构)
+		因为map,set,multimap,multiset, 是红黑树结构的, erase()/insert()增删操作, 仅仅会使当前的iterator 失效,
+		因此, 这种容器, 遍历erase()/insert()操作, 可以使用it/rit, 双向迭代器, 随意遍历;
+		erase 方法可以返回void!! 所以要采用erase(iter++)/insert(iter++)的方式遍历执行增删操作;
+		(插入insert()/删除erase()操作后, 趁函数还未返回, 迭代器还没失效, 马上移动, 迭代器移动后, erase()/insert()操作函数才返回)
+
+
+	* 关联式容器(hash结构)
+		unordered_map,unordered_set,unordered_multimap,unordered_multiset, 是hash结构的, 
+		erase()/insert()增删操作, 主要看是否引起以rehash:
+			若erase()/insert()增删操作引起rehash, 则所有迭代器失效;
+			若erase()/insert()增删操作不引起rehash, 则所有迭代器依然有效;
+			(rehash的触发条件: 插入后元素数量超过 max_load_factor() * bucket_count(), 则引起rehash)
+		erase()操作将使迭代器无效, 但它还会向下一个元素返回一个有效的迭代器;
+
+
+
+
+
+注意事项:
+	由于stl 迭代器, 大部分在erase()/insert()增删操作后, 都有可能处罚迭代器失效, 
+	因此在使用迭代器进行erase()/insert()增删操作的时候, 要特别小心一点(自己注意一点才是!!);
+
+	这样看的话, push/pop 操作真的很爽, 不用考虑这么多;
