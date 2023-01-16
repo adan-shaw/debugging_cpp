@@ -4,7 +4,10 @@
 
 	'queue队列'可基于'原始线性容器': deque(默认), list
 
-	'queue队列'是一种先进先出(FIFO)的数据结构, 默认情况下, 'queue队列'只操作两端, 跟deque 只操作两端的特性, 非常吻合;
+	'queue队列'是一种先进先出(FIFO)的数据结构, 
+	queue 在底层容器尾端推入元素, 从首端弹出元素;
+
+	默认情况下, 'queue队列'只操作两端, 跟deque 只操作两端的特性, 非常吻合;
 	(push_back()/push_front()/pop_back()/pop_front() 两端操作)
 	因此, 'queue队列'最理想的'原始线性容器'是: deque(默认)
 
@@ -15,6 +18,7 @@
 
 		由于'queue队列'没有优先级需求, 因此, deque 是最常用, 最理想的deque'原始线性容器', list一般不用;
 		由于deque 不能pop_back()/pop_front() 空, 因此基于deque 的'queue队列' 也不能pop() 空!!
+		(不会崩溃, 但根据deque 特性, 向已损坏的deque push_back(), 会丢失值, 造成数值错误!!)
 		'queue队列'的很多特性, 随'原始线性容器'的不同, 而不同;
 
 
@@ -32,4 +36,5 @@
 		deque 会自动增长, 那么'queue队列'也会自动增长, 你不用担心'queue队列'会栈爆, 
 		但需要担心'queue队列'pop()空, 变成坏容器, 这是不允许发生的;
 */
+
 
