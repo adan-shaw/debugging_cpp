@@ -13,7 +13,7 @@
 		'stack栈'使用哪种'原始线性容器', 操作特性就会基于那种'原始线性容器', 有不同的变异特性;
 
 		由于'stack栈'没有优先级需求, 因此, vector 是最常用, 最理想的stack'原始线性容器', 其他两种, deque, list, 一般不用;
-		由于vector 不能pop_back() 空, 因为基于vector 的'stack栈' 也不能pop() 空!!
+		由于vector 不能pop_back() 空, 因此基于vector 的'stack栈' 也不能pop() 空!!
 		'stack栈'的很多特性, 随'原始线性容器'的不同, 而不同;
 
 
@@ -24,4 +24,10 @@
 		因此, 'stack栈'不能被遍历!!
 		有遍历需求的, 何必用'stack栈'? 何必用'adapter适配器'?
 		有遍历需求的, 请直接用'原始线性容器': deque, list, vector等
+
+
+
+	ps:
+		vector 会自动增长, 那么'stack栈'也会自动增长, 你不用担心'stack栈'会栈爆, 
+		但需要担心'stack栈'pop()空, 变成坏容器, 这是不允许发生的;
 */
