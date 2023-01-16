@@ -1,0 +1,63 @@
+//priority_queue优先队列实现简介:
+/*
+	'priority_queue优先队列'并不是原生容器, 'priority_queue优先队列'是基于'原始线性容器', 进行二次封装得到的容器;
+
+	'priority_queue优先队列'可基于'原始线性容器': deque(默认), vector
+
+	'priority_queue优先队列'是一种先进先出(FIFO)的数据结构, 
+	priority_queue 在底层容器尾端推入元素, 从首端弹出元素(逻辑上的尾端推入,首端弹出);
+	实际上, priority_queue 是优先级大的优先弹出, priority_queue 的必要条件是:
+		front()
+		push_back()
+		pop_back()
+	经过优化之后, 是可以实现只在一端实现push,pop, 因此, 如果是你stl 设计者, 你也会让priority_queue 设计成只在一端push/pop,
+	彻底抛弃逻辑上的尾端推入,首端弹出,
+	这样一来, priority_queue 使用vector 是最优的;
+	只是每次push_back() 之后, 元素都会重新排序, 这不影响, vector 仍然是最优;
+
+		***废弃,不正确的想法***
+			只有在严格遵守: FIFO尾端推入,首端弹出,
+			在这种情况下, deque 会优于vector;
+			因为此时priority_queue 只在push 时排序, pop 的时候是从[0] 开始弹出, 会触发vector 整体向前倾(移动),
+			因此, 用deque 实际可以减少消耗, 支持高速双端push/pop;
+		***废弃,不正确的想法***
+
+	因此, 'priority_queue优先队列'最理想的'原始线性容器'是: vector(默认)
+	(push_back()/pop_back() 单端操作)
+
+
+
+	ps:
+		'priority_queue优先队列'使用哪种'原始线性容器', 操作特性就会基于那种'原始线性容器', 有不同的变异特性;
+
+		由于'priority_queue优先队列'没有优先级需求, 因此vector 是最常用, 最理想的'原始线性容器', deque一般不用;
+		由于vector 不能pop_back() 空, 因此基于vector 的'priority_queue优先队列' 也不能pop() 空!!
+		'priority_queue优先队列'的很多特性, 随'原始线性容器'的不同, 而不同;
+
+
+
+	ps:
+		'priority_queue优先队列'没有迭代器, 'priority_queue优先队列'又不能通过'成员对象Container c', 进行逆向访问底层容器,
+		('成员对象Container c'是一个protected 保护对象, 外部不能访问, 仅vector 定义时, 内部可访问, vector 实体对象不能引用)
+		因此, 'priority_queue优先队列'不能被遍历!!
+		有遍历需求的, 何必用'priority_queue优先队列'? 何必用'adapter适配器'?
+		有遍历需求的, 请直接用'原始线性容器': deque, list, vector等
+
+
+
+	ps:
+		vector 会自动增长, 那么'priority_queue优先队列'也会自动增长, 你不用担心'priority_queue优先队列'会栈爆, 
+		但需要担心'priority_queue优先队列'pop()空, 变成坏容器, 这是不允许发生的;
+
+
+
+	ps:
+		'priority_queue优先队列'可以指定自定义比较函数, 来决定使用那种比较方式进行排序, 这个方法很好用, 非常适合struct 结构体指针元素排序;
+		一般情况下, 使用'priority_queue优先队列', 必须自己定义好比较函数, 这样才有使用'priority_queue优先队列'的意义
+
+
+
+	ps:
+		巨坑: 'priority_queue优先队列'无论是vector, 还是deque 作为'原始线性容器'时, 都不能使用std::greater<int>(), 只能使用std::less<int>(), 否则会神秘报错!!
+		原因: g++ 的实现, 只支持在栈顶一端push/pop, 这样极大地迎合了'兼容vector/deque'作为'原始线性容器'的原则, 好手段!!
+*/
