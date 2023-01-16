@@ -62,6 +62,7 @@ int main(void){
 	queue<int,deque<int>> q2(x2);
 	//queue<int> s2(x2);			//queue默认使用deque容器, 等价于上一条语句
 	queue<int,list<int>> q3(x3);
+	
 
 	//queue<int>::iterator it;//'queue队列'没有迭代器
 	deque<int>::iterator it;
@@ -91,8 +92,8 @@ int main(void){
 
 
 
-	//5.value_type& back();		//查看队列尾部元素(只返回,不移除)
-	//	value_type& front();	//查看队列头部元素(只返回,不移除)
+	//5.value_type& back();		//查看队列尾部元素(只返回,不移除; 为了保证查看back值的有效性, 最好加断言)
+	//	value_type& front();	//查看队列头部元素(只返回,不移除; 为了保证查看front值的有效性, 最好加断言)
 	assert(!q2.empty());
 	printf("5 -- 'q2 deque' size()=%d\n", q2.size());
 	printf("5 -- 'q2 queue' back()=%d\n", q2.back());
