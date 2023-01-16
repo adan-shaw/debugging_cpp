@@ -49,7 +49,6 @@
 #include <cstdio>
 #include <cassert>
 #include <stack>
-#include <string>
 #include <vector>
 #include <deque>
 #include <list>
