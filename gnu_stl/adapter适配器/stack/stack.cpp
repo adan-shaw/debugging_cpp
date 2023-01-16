@@ -75,7 +75,7 @@ int main(void){
 
 
 
-	//2.bool empty();					//堆栈为空则返回真
+	//2.bool empty();					//栈为空则返回真
 	if(s1.empty())
 		printf("2 -- 's1 stack' is now empty!!\n");
 
@@ -155,3 +155,4 @@ int main(void){
 
 	return 0;
 }
+
