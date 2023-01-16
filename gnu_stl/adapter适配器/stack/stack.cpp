@@ -97,7 +97,7 @@ int main(void){
 
 
 
-	//5.value_type& top();		//返回栈顶元素(只返回,不移除)
+	//5.value_type& top();		//返回栈顶元素(只返回,不移除; 为了保证查看top值的有效性, 最好加断言)
 	assert(!s1.empty());
 	printf("5 -- 's1 stack' size()=%d\n", s1.size());
 	printf("5 -- 's1 stack' top=%d\n", s1.top());
