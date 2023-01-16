@@ -1,0 +1,27 @@
+//栈简介:
+/*
+	'stack栈'并不是原生容器, 'stack栈'是基于'原始线性容器', 进行二次封装得到的容器;
+
+	'stack栈'可基于'原始线性容器': deque(默认), list, vector
+
+	栈是一种先进后出(FILO)的数据结构, 默认情况下, 'stack栈'只操作栈顶, 符合频繁push_back()/pop_back(), 
+	因此, vector 是最理想的stack'原始线性容器', 无特殊情况, 请使用vector 构建'stack栈', 性能最好;
+
+
+
+	ps:
+		'stack栈'使用哪种'原始线性容器', 操作特性就会基于那种'原始线性容器', 有不同的变异特性;
+
+		由于'stack栈'没有优先级需求, 因此, vector 是最常用, 最理想的stack'原始线性容器', 其他两种, deque, list, 一般不用;
+		由于vector 不能pop_back() 空, 因为基于vector 的'stack栈' 也不能pop() 空!!
+		'stack栈'的很多特性, 随'原始线性容器'的不同, 而不同;
+
+
+
+	ps:
+		'stack栈'没有迭代器, 'stack栈'又不能通过'成员对象Container c', 进行逆向访问底层容器,
+		('成员对象Container c'是一个protected 保护对象, 外部不能访问, 仅stack 定义时, 内部可访问, stack 实体对象不能引用)
+		因此, 'stack栈'不能被遍历!!
+		有遍历需求的, 何必用'stack栈'? 何必用'adapter适配器'?
+		有遍历需求的, 请直接用'原始线性容器': deque, list, vector等
+*/
