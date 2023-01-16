@@ -1,0 +1,35 @@
+//queue队列实现简介:
+/*
+	'queue队列'并不是原生容器, 'queue队列'是基于'原始线性容器', 进行二次封装得到的容器;
+
+	'queue队列'可基于'原始线性容器': deque(默认), list
+
+	'queue队列'是一种先进先出(FIFO)的数据结构, 默认情况下, 'queue队列'只操作两端, 跟deque 只操作两端的特性, 非常吻合;
+	(push_back()/push_front()/pop_back()/pop_front() 两端操作)
+	因此, 'queue队列'最理想的'原始线性容器'是: deque(默认)
+
+
+
+	ps:
+		'queue队列'使用哪种'原始线性容器', 操作特性就会基于那种'原始线性容器', 有不同的变异特性;
+
+		由于'queue队列'没有优先级需求, 因此, deque 是最常用, 最理想的deque'原始线性容器', list一般不用;
+		由于deque 不能pop_back()/pop_front() 空, 因此基于deque 的'queue队列' 也不能pop() 空!!
+		'queue队列'的很多特性, 随'原始线性容器'的不同, 而不同;
+
+
+
+	ps:
+		'queue队列'没有迭代器, 'queue队列'又不能通过'成员对象Container c', 进行逆向访问底层容器,
+		('成员对象Container c'是一个protected 保护对象, 外部不能访问, 仅deque 定义时, 内部可访问, deque 实体对象不能引用)
+		因此, 'queue队列'不能被遍历!!
+		有遍历需求的, 何必用'queue队列'? 何必用'adapter适配器'?
+		有遍历需求的, 请直接用'原始线性容器': deque, list, deque等
+
+
+
+	ps:
+		deque 会自动增长, 那么'queue队列'也会自动增长, 你不用担心'queue队列'会栈爆, 
+		但需要担心'queue队列'pop()空, 变成坏容器, 这是不允许发生的;
+*/
+
