@@ -1,0 +1,24 @@
+//map实现简介:
+/*
+	* 基于'RBTree红黑树'实现的map 集合功能, 是一种key-value键值对的有序关联容器, key 唯一, 对key 进行排序;
+
+	* map 可以在构造函数中, 重写Compare 排序比较函数, 默认排序顺序是: 从小到大, less<int>升序;
+
+	* 排序比较函数为less<int>升序, 从小到大; greater<int>降序不能用, 不知道为什么!! 可能是编译器的兼容问题, gcc 不支持在map 中使用greater<int>降序;
+
+	* map 的搜索、移除和插入操作, 拥有对数复杂度O(log n); 
+
+	* map 有key-value键值对, 不允许出现重复key;
+
+	* map 常见的集合操作, 很多: 去重、并集、交集等;
+
+	* 使用emplace 替代insert 插入, 更安全, 更快捷一点(需要c++11);
+
+	* map c++17 提供更多安全插入的功能(不用也没关系的, 看业务需求);
+
+	* end()是指向最后一个元素的下一个(通常是NULL), rbegin()指向最后一个元素;
+
+	* map 支持'旧式双向迭代器'(LegacyBidirectionalIterator);
+
+	* map 满足容器(Container)、具分配器容器(AllocatorAwareContainer)、关联容器(AssociativeContainer)和可逆容器(ReversibleContainer)的要求;
+*/
