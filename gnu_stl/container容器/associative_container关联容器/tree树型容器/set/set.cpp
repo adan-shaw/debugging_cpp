@@ -61,10 +61,10 @@
 
 
 
-#include <iostream>
 #include <cstdio>
 #include <cassert>
 #include <set>
+//#include<functional>
 
 using namespace std;
 
@@ -76,8 +76,8 @@ int main(void){
 	//1.创建set
 	set<int> x1;												//empty set of ints
 	set<int> x2(arr,arr+5);							//指针拷贝[起始地址, (起始地址+5)=结束地址]
-	set<int> x3(x2);										//a copy of x2
-	set<int> x4(x2.begin(), x2.end());	//iterator ctor.
+	set<int,less<int>> x3(x2);					//a copy of x2, 重写排序比较函数为less<int>升序, 从小到大; greater<int>降序不能用, 不知道为什么!!
+	set<int> x4(x2.begin(), x2.end());	//iterator 构造copy
 	set<int>::iterator it,itlow,ithigh;	//顺向迭代器
 	set<int>::reverse_iterator rit;			//逆向迭代器
 	set<int>::key_compare kcomp;				//key 比较对象的副本
@@ -85,6 +85,16 @@ int main(void){
 																			//pair一对变量
 	pair<set<int>::iterator, bool> set_pair_val;
 	pair<set<int>::iterator, set<int>::iterator> set_pair_equal_range;
+
+	printf("1 -- x2:");
+	for(it = x2.begin(); it != x2.end(); *it++)
+		printf("%d  ", *it);
+	printf("\n");
+
+	printf("1 -- x3:");
+	for(it = x3.begin(); it != x3.end(); *it++)
+		printf("%d  ", *it);
+	printf("\n");
 
 
 
@@ -135,10 +145,10 @@ int main(void){
 	x2.erase(x2.begin());								//迭代器单个删除
 
 	assert(!x2.empty());
-	x2.erase(30);												//输入'常量值'删除
+	x2.erase(30);												//输入'常量值'删除(存在则删除, 不存在则忽略)
 
 	assert(!x2.empty());
-	it=x2.find(40);											//迭代器区域删除
+	it=x2.find(40);											//迭代器区域删除(区域内, 圈中则删除, 没有圈中则忽略)
 	if(it != x2.end())
 		x2.erase(it, x2.end());
 
@@ -150,18 +160,20 @@ int main(void){
 
 
 	//8.插入新元素(有2种方式)
-	//std::pair<iterator,bool> insert(const value_type& x);					//直接插入常量, 自动排序, 插入位置不确定, 返回pair 对
-	//iterator insert(iterator position, const value_type& x);			//根据迭代器插入, 自动排序, 插入位置确定, 返回迭代器
+	//std::pair<iterator,bool> insert(const value_type& x);					//直接插入常量, 自动排序, 插入位置不确定, 返回pair 对;
+	//iterator insert(iterator position, const value_type& x);			//根据迭代器插入, 自动排序, 插入位置确定, 返回迭代器;
 	//std::pair<iterator,bool> emplace( Args&&... args );						//尝试性插入, 返回pair<iterator,bool>; 
 																																	//有插入, bool=true, 并返回迭代器; 无插入, bool=false, 表明元素已经存在, 返回迭代器;
-	set_pair_val = x2.insert(123);
+	//set_pair_val = x2.insert(pair<set<int>::iterator,bool>(123));	//失败, 不能像map 那样用, 不能直接插入pair 对;
+	//set_pair_val = x2.insert(int,bool>(123));
+	set_pair_val = x2.insert(123);																	//插入方式1: 直接插入常量
 	set_pair_val = x2.insert(123);
 	printf("%d, %d\n", *set_pair_val.first, set_pair_val.second);
 
-	x2.insert(x2.begin(), 223);
+	x2.insert(x2.begin(), 223);																			//插入方式2: 根据迭代器插入
 
-	set_pair_val = x2.emplace(123);
-	printf("%d, %d\n", *set_pair_val.first, set_pair_val.second);		//无插入, 直接返回迭代器, bool=false(emplace 比insert 稍微安全一点)
+	set_pair_val = x2.emplace(123);																	//插入方式3: 尝试性插入
+	printf("%d, %d\n", *set_pair_val.first, set_pair_val.second);
 
 	printf("8 -- x2:");
 	for(it = x2.begin(); it != x2.end(); *it++)
@@ -203,23 +215,22 @@ int main(void){
 	//12.iterator lower_bound(const key_type& x);										//返回首个不小于'给定key值x'的元素的迭代器('给定key值x'不一定需要存在于set中, 等于也算是不小于)
 	it = x1.lower_bound(25);
 	if(it != x1.end())
-		printf("12 -- lower_bound(25)=存在'不小于25 的值'\n", *it);
+		printf("12 -- lower_bound(25)=存在'不小于25 的key值', 这个key值是: %d\n", *it);
 	else
-		printf("12 -- lower_bound(25)=不存在'不小于25 的值'\n", *it);
+		printf("12 -- lower_bound(25)=不存在'不小于25 的key值'\n");
 
 	//	 iterator upper_bound(const key_type& x);										//返回首个大于'给定key值x'的元素的迭代器
 	it = x1.upper_bound(25);
 	if(it != x1.end())
-		printf("12 -- upper_bound(25)=存在'大于25 的值'\n", *it);
+		printf("12 -- upper_bound(25)=存在'大于25 的key值', 这个key值是: %d\n", *it);
 	else
-		printf("12 -- upper_bound(25)=不存在'大于25 的值'\n", *it);
+		printf("12 -- upper_bound(25)=不存在'大于25 的key值'\n");
 
 
 
 	//13.pair<iterator,iterator> equal_range(const key_type& x)const;//返回'范围区域'组成的迭代器pair对, 等价于pair(lower_bound(), upper_bound()); ps: set 集合是有序的
 	set_pair_equal_range = x1.equal_range(25);
 	printf("13 -- set->equal_range(25): [%d, %d]\n", *set_pair_equal_range.first, *set_pair_equal_range.second);
-	//删除区域内的元素
 
 
 
@@ -243,18 +254,18 @@ int main(void){
 	//15.key_compare key_comp();				//取出set 中所有的key, 作为副本, 用于比较(返回值可以当成是比较函数用, 但这个比较函数, 只比较值, 不比较迭代器)
 	kcomp = x1.key_comp();
 	it=x1.begin();
+	tmp=*x1.rbegin();
 	printf("15 -- x1-kcomp: ");
-	while(kcomp(*it++, *x1.rbegin()))		//大于比较对象才打印, 小于&等于都不打印!!
+	while(kcomp(*it++, tmp))						//大于比较对象才打印, 小于&等于都不打印!!
 		printf("%d  ", *it);
 	printf("\n");
-
-
 
 	//16.value_compare value_comp();		//取出set 中所有的value, 作为副本, 用于比较; 与key_compare key_comp(); 相同, (一样的功能)
 	vcomp = x1.value_comp();
 	it=x1.begin();
+	tmp=*x1.rbegin();
 	printf("16 -- x1-vcomp: ");
-	while(vcomp(*it++, *x1.rbegin()))		//大于比较对象才打印, 小于&等于都不打印!!
+	while(vcomp(*it++, tmp))						//大于比较对象才打印, 小于&等于都不打印!!
 		printf("%d  ", *it);
 	printf("\n");
 
