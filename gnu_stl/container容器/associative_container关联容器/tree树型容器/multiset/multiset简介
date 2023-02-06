@@ -1,0 +1,36 @@
+//多元集合实现简介:
+/*
+	* 基于'RBTree红黑树'实现的multiset 集合功能, 是一种有序关联容器, key 不是唯一的, 对key 进行排序, value 值一般是bool, 有特殊用途, 但无实用意义;
+
+	* multiset 可以在构造函数中, 重写Compare 排序比较函数, 默认排序顺序是: 从小到大, less<int>升序;
+
+	* 排序比较函数为less<int>升序, 从小到大; greater<int>降序不能用, 不知道为什么!! 可能是编译器的兼容问题, gcc 不支持在multiset 中使用greater<int>降序;
+
+	* multiset 的搜索、移除和插入操作, 拥有对数复杂度O(log n); 
+
+	* multiset 只有key, 没有value, 不允许出现重复key;
+
+	* multiset 常见的集合操作, 很多: 去重、并集、交集等;
+
+	* 使用emplace 替代insert 插入, 更安全, 更快捷一点(需要c++11);
+
+	* end()是指向最后一个元素的下一个(通常是NULL), rbegin()指向最后一个元素;
+
+	* multiset 支持'旧式双向迭代器'(LegacyBidirectionalIterator);
+
+	* multiset 满足容器(Container)、具分配器容器(AllocatorAwareContainer)、关联容器(AssociativeContainer)和可逆容器(ReversibleContainer)的要求;
+
+
+
+	* multiset 跟set 其实并无太大差别, 只是multiset 兼容多个相同键值而已;
+
+
+
+	* 与set不同的是:
+			set 'insert/emplace'插入常量, 返回pair 对;
+			set 借助迭代器执行'insert/emplace'插入, 则返回迭代器;
+			//std::pair<iterator,bool> insert(const value_type& x);					//直接插入常量, 自动排序, 插入位置不确定, 返回pair 对;
+			//iterator insert(iterator position, const value_type& x);			//根据迭代器插入, 自动排序, 插入位置确定, 返回迭代器;
+
+			multiset 则统一返回multiset<int>::iterator 迭代器;
+*/
