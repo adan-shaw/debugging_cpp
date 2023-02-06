@@ -96,4 +96,4 @@
 
 总结:
 	内存中的tree, 应该是红黑树;(c++ tree 型容器)
-	disk 中的tree, 应是b+树;(mysql innodb 存储引擎)
+	disk 中的tree, 应该是b+树;(mysql innodb 存储引擎)
