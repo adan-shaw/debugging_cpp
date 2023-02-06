@@ -26,7 +26,7 @@
 
 
 
-	* 与set不同的是:
+	* 与set不同的是: 'insert/emplace'插入操作的返回值不同;
 			set 'insert/emplace'插入常量, 返回pair 对;
 			set 借助迭代器执行'insert/emplace'插入, 则返回迭代器;
 			//std::pair<iterator,bool> insert(const value_type& x);					//直接插入常量, 自动排序, 插入位置不确定, 返回pair 对;
