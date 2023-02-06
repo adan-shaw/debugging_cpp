@@ -1,8 +1,12 @@
 //集合实现简介:
 /*
-	* 基于'RBTree红黑树'实现的set 集合功能, 是一种有序关联容器, 提供快速查找, 较快的增删速度[查找复杂度: O(log n)];
+	* 基于'RBTree红黑树'实现的set 集合功能, 是一种有序关联容器, key 唯一, 对key 进行排序, value 值一般是bool, 有特殊用途, 但无实用意义;
 
-	* set 默认是从大到小, 自动排序的;
+	* set 可以在构造函数中, 重写Compare 排序比较函数, 默认排序顺序是: 从小到大, less<int>升序;
+
+	* 排序比较函数为less<int>升序, 从小到大; greater<int>降序不能用, 不知道为什么!! 可能是编译器的兼容问题, gcc 不支持在set 中使用greater<int>降序;
+
+	* set 的搜索、移除和插入操作, 拥有对数复杂度O(log n); 
 
 	* set 只有key, 没有value, 不允许出现重复key;
 
@@ -11,4 +15,9 @@
 	* 使用emplace 替代insert 插入, 更安全, 更快捷一点(需要c++11);
 
 	* end()是指向最后一个元素的下一个(通常是NULL), rbegin()指向最后一个元素;
+
+	* set 支持'旧式双向迭代器'(LegacyBidirectionalIterator);
+
+	* set 满足容器(Container)、具分配器容器(AllocatorAwareContainer)、关联容器(AssociativeContainer)和可逆容器(ReversibleContainer)的要求;
 */
+
