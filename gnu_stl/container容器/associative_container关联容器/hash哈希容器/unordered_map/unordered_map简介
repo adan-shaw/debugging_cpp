@@ -1,6 +1,6 @@
 //集合实现简介:
 /*
-	* 基于hash实现的unordered_map 集合功能, 是一种无序的键值对关联容器, key 唯一;
+	* 基于hash实现的unordered_map 集合功能, 是一种无序的'key-value键值对'关联容器, key 唯一;
 
 	* unordered_map 是无序关联容器, 不可排序, 不可在构造函数中指定'less<int>升序/greater<int>降序';
 
