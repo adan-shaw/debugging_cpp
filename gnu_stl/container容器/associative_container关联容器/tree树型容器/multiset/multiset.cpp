@@ -208,7 +208,7 @@ int main(void){
 	if(it != x1.end())
 		printf("11 -- x1.find(123)=%d\n", *it);
 	else
-		printf("11 -- x1.find(123) failed !!\n", *it);
+		printf("11 -- x1.find(123) failed !!\n");
 
 
 
