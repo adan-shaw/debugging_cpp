@@ -217,7 +217,7 @@ int main(void){
 	if(it != x1.end())
 		printf("11 -- x1.find(4) = %d\n", *it);
 	else
-		printf("11 -- x1.find(4) failed!!\n", *it);
+		printf("11 -- x1.find(4) failed!!\n");
 
 
 
