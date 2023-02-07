@@ -215,7 +215,7 @@ int main(void){
 	//11.iterator find(const key_type& x);																		//查找指定元素
 	it=x1.find(4);
 	if(it != x1.end())
-		printf("11 -- x1.find(4) = %d\n", *it);
+		printf("11 -- x1.find(4) = [%d,%d]\n", (*it).first,(*it).second);
 	else
 		printf("11 -- x1.find(4) failed!!\n");
 
