@@ -83,6 +83,8 @@ int main(void){
 	multimap<int,int>::reverse_iterator rit;			//逆向迭代器
 	multimap<int,int>::key_compare kcomp;					//key 比较对象的副本
 	//multimap<int,int>::value_compare vcomp;			//value 比较对象的副本(gcc 没有这个对象, 十分诡异)
+																								//pair一对变量
+	pair<multimap<int,int>::iterator, multimap<int,int>::iterator> multimap_pair_range;
 
 
 
@@ -225,7 +227,24 @@ int main(void){
 
 
 
-	//13.删除范围区域中的元素
+	//13.pair<iterator,iterator> equal_range(const key_type& x)const;				//'范围区域'搜索值, 找到则返回首个指向该值的迭代器;(多值容器常用, 可以知道有多少个相同的值, 唯一键容器少用)
+	/*
+	multimap_pair_range = x1.equal_range(500);															//超出范围的值搜索, 会直接等于end(), 表示被搜索的值不存在
+	assert(multimap_pair_range.first == x1.end());
+
+	multimap_pair_range = x1.equal_range(223);															//刚好搜索到最后一个值, multimap_pair_range.second == x1.end()
+	assert(multimap_pair_range.second == x1.end());
+
+	assert(multimap_pair_range.first != multimap_pair_range.second);				//multimap_pair_range.first 永远不等于 multimap_pair_range.second 
+	*/
+	multimap_pair_range = x1.equal_range(9);
+	if(multimap_pair_range.first != x1.end())
+		for(; multimap_pair_range.first != multimap_pair_range.second; multimap_pair_range.first++)
+			printf("13 -- x1.equal_range(9)=%d [pair.second=%d]\n", *multimap_pair_range.first, *multimap_pair_range.second);
+
+
+
+	//14.删除范围区域中的元素
 	x4.clear();
 	for(tmp=0; tmp<10; tmp++)											// 1  2  3  4  5  6  7  8  9    key
 		x4.insert(pair<int,int>(tmp,tmp*10));				// 10 20 30 40 50 60 70 80 90   value
@@ -233,7 +252,7 @@ int main(void){
 	ithigh=x4.upper_bound(6);											//									 ^
 	x4.erase(itlow,ithigh);												// 10 20 70 80 90
 
-	printf("13 -- x4:");
+	printf("14 -- x4:");
 	for(it = x4.begin(); it != x4.end(); *it++)
 		printf("[%d,%d]  ", (*it).first,(*it).second);
 	printf("\n");
@@ -243,13 +262,13 @@ int main(void){
 	//
 	// multimap 观察器: 功能很鸡肋, 不知道有何作用, 还不如普通的迭代器遍历, 慎用(诡异的用法, 无聊得很!!)
 	//
-	//14.key_compare key_comp();																						//取出multimap 中所有的key, 作为副本, 用于比较(返回值可以当成是比较函数用, 但这个比较函数, 只比较值, 不比较迭代器)
+	//15.key_compare key_comp();																						//取出multimap 中所有的key, 作为副本, 用于比较(返回值可以当成是比较函数用, 但这个比较函数, 只比较值, 不比较迭代器)
 	kcomp = x1.key_comp();																									//(其实key_compare 取出后, 也包含multimap 中所有的value)
 
 	//打印
 	it=x1.begin();
 	tmp=x1.rbegin()->first;
-	printf("14 -- x1:");
+	printf("15 -- x1:");
 	while(kcomp((*it++).first, tmp))							//大于比较对象才打印, 小于&等于都不打印!!
 		printf("[%d,%d]  ", (*it).first,(*it).second);
 	printf("\n");
