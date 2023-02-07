@@ -1,0 +1,88 @@
+//集合实现简介:
+/*
+	* 基于hash实现的unordered_multiset 集合功能, 是一种无序关联容器, key 唯一, value 值一般是bool, 有特殊用途, 但无实用意义;
+
+	* unordered_multiset 是无序关联容器, 不可排序, 不可在构造函数中指定'less<int>升序/greater<int>降序';
+
+	* unordered_multiset 的搜索、移除和插入操作, 拥有对数复杂度是常数级的; 
+
+	* unordered_multiset 只有key, 没有value, 不允许出现重复key;
+
+	* unordered_multiset 常见的集合操作, 很多: 去重、并集、交集等;
+
+	* 使用emplace 替代insert 插入, 更安全, 更快捷一点(需要c++11);
+
+	* end()是指向最后一个元素的下一个(通常是NULL), rbegin()指向最后一个元素;
+
+	* unordered_multiset 支持'旧式向前迭代器'(LegacyForwardIterator);
+
+	* unordered_multiset 不支持逆向迭代器, 只支持顺向迭代器;
+
+	* unordered_multiset 不支持'key_compare/value_compare'比较对象副本(不能排序, 何来比较, 忽略!!)
+
+	* unordered_multiset 满足容器(Container)、具分配器容器(AllocatorAwareContainer)、无序关联容器(UnorderedAssociativeContainer)的要求;
+
+
+
+	unordered_multiset 的元素并不以任何顺序排序, 而是根据元素值, 经过hash函数之后, 被指定放进哪个hash桶中;
+	元素被放进哪个hash桶, 完全依赖元素值的哈希;
+	这允许对单独元素的快速访问, 因为哈希一旦, 就准确指代元素被放入的桶;
+
+	不可修改容器元素(即使通过非 const 迭代器), 因为修改可能更改元素的哈希, 并破坏容器;
+	但可以增删, 可以查询访问(读访问);
+
+
+
+	//	 size_type bucket_size(size_type n) const;		//返回在特定的桶中的元素数量
+	b_count = x1.bucket_count();											//固定用法: 先求出桶的count数量, 然后遍历所有桶, 桶的下标从0 开始;
+	for(tmp=0; tmp<b_count; tmp++)
+		printf("15 -- x1.bucket_size(%d)首个桶的元素个数=%d\n", tmp, x1.bucket_size(tmp));
+
+	//	 size_type bucket(const Key& key) const;			//输入指定key 值, 返回key 值所在的桶号(根据值, 索引桶号)
+	printf("15 -- x1.bucket(20): 指定的key值=20, 指定key所在的桶号=%d\n", x1.bucket(20));
+
+
+
+	template < class Key,                              // unordered_multiset::key_type/value_type 哈希变量类型
+		         class Hash = hash<Key>,                 // unordered_multiset::hasher              哈希函数(形参实际是一个类, 不是函数指针!!)
+		         class Pred = equal_to<Key>,             // unordered_multiset::key_equal           哈系比较(形参实际是一个类, 不是函数指针!!)
+		         class Alloc = allocator<Key>            // unordered_multiset::allocator_type      哈系内存分配者(实体所在)
+		         > class unordered_multiset;
+
+
+
+	//	 hasher hash_function() const;								 //获取哈希的函数(自定义hash函数略, 在另外一个文件上); ps: 获取hash 函数没什么用, 自定义hash函数较为复杂, 高级用法;
+	fn = x1.hash_function();													 //一般在定义hash 容器的时候, 就修改hash function
+
+
+
+	//	 key_equal key_eq() const;										 //获取比较函数(如果值类型比较复杂, 需要自定义key 值比较函数, 用做find 查找时, 匹配具体的key 值, 高级用法)
+	eq = x1.key_eq();
+
+	获取key equal函数, key_equal函数为判断key值是否匹配, 
+	在一般情况下, hash函数并不能保证每一个输入对应一个独一无二的输出, 可能多个输入会对应同一个输出, 这就是hash冲突;
+	可能一个槽内同时由多个元素, 这时候就需要使用key_equal来进行进一步判断;
+
+
+
+	* 一般情况下, 构造了hash 函数, 也要重写比较函数, 否则遇到复杂的元素, 单单重写hash函数/比较函数, 是没用的, 必须两个都重写;
+
+	* hash函数/比较函数, 传入构造函数时, 实际形参, 是一个类, 不是函数指针!!
+
+
+
+	* unordered_multiset 跟unordered_set 其实并无太大差别, 只是unordered_multiset 兼容多个相同键值而已;
+
+
+
+	* 与unordered_set不同的是: 'insert/emplace'插入操作的返回值不同;
+			unordered_set 'insert/emplace'插入常量, 返回pair 对;
+			unordered_set 借助迭代器执行'insert/emplace'插入, 则返回迭代器;
+			//std::pair<iterator,bool> insert(const value_type& x);					//直接插入常量, 自动排序, 插入位置不确定, 返回pair 对;
+			//iterator insert(iterator position, const value_type& x);			//根据迭代器插入, 自动排序, 插入位置确定, 返回迭代器;
+
+			unordered_multiset 则统一返回unordered_multiset<int>::iterator 迭代器;
+*/
+
+
+
