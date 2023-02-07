@@ -17,7 +17,7 @@ class Customer{
 		~Customer() = default;
 
 		friend ostream& operator<<(ostream& os,const Customer& a){
-			os<<a.id<<" "<<a.name<<endl;
+			os<<a.id<<" "<<a.name<<endl;									//重写了'<<'流输出运算符
 			return os;
 		}
 
