@@ -84,7 +84,7 @@ int main(void){
 	set<int>::value_compare vcomp;			//value 比较对象的副本
 																			//pair一对变量
 	pair<set<int>::iterator, bool> set_pair_val;
-	pair<set<int>::iterator, set<int>::iterator> set_pair_equal_range;
+	pair<set<int>::iterator, set<int>::iterator> set_pair_range;
 
 	printf("1 -- x2:");
 	for(it = x2.begin(); it != x2.end(); *it++)
@@ -228,9 +228,20 @@ int main(void){
 
 
 
-	//13.pair<iterator,iterator> equal_range(const key_type& x)const;//返回'范围区域'组成的迭代器pair对, 等价于pair(lower_bound(), upper_bound()); ps: set 集合是有序的
-	set_pair_equal_range = x1.equal_range(25);
-	printf("13 -- set->equal_range(25): [%d, %d]\n", *set_pair_equal_range.first, *set_pair_equal_range.second);
+	//13.pair<iterator,iterator> equal_range(const key_type& x)const;//'范围区域'搜索值, 找到则返回首个指向该值的迭代器;(多值容器常用, 可以知道有多少个相同的值, 唯一键容器少用)
+	/*
+	set_pair_range = x1.equal_range(500);														//超出范围的值搜索, 会直接等于end(), 表示被搜索的值不存在
+	assert(set_pair_range.first == x1.end());
+
+	set_pair_range = x1.equal_range(223);														//刚好搜索到最后一个值, set_pair_range.second == x1.end()
+	assert(set_pair_range.second == x1.end());
+
+	assert(set_pair_range.first != set_pair_range.second);					//set_pair_range.first 永远不等于 set_pair_range.second 
+	*/
+	set_pair_range = x1.equal_range(20);
+	if(set_pair_range.first != x1.end())
+		for(; set_pair_range.first != set_pair_range.second; set_pair_range.first++)
+			printf("13 -- x1.equal_range(20)=%d [pair.second=%d]\n", *set_pair_range.first, *set_pair_range.second);
 
 
 
