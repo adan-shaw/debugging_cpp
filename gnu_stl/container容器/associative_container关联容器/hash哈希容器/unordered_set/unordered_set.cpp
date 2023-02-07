@@ -81,7 +81,7 @@ int main(void){
 	int arr[]= {5,10,20,30,40,50,60};
 	//1.创建unordered_set
 	unordered_set<int> x1;												//empty unordered_set of ints
-	unordered_set<int> x2(arr,arr+7);							//指针拷贝[起始地址, (起始地址+5)=结束地址]
+	unordered_set<int> x2(arr,arr+7);							//指针拷贝[起始地址, (起始地址+7)=结束地址]
 	unordered_set<int> x3(x2.begin(), x2.end());	//iterator 构造copy
 	unordered_set<int>::iterator it,itlow,ithigh;	//顺向迭代器
 	unordered_set<int>::hasher fn;								//hash 函数
