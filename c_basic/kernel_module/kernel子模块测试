@@ -1,0 +1,30 @@
+大部分操作, 需要root 权限!!
+
+
+
+# 1.查看当前已经加载的驱动程序:
+lsmod
+lsmod | grep hello
+
+
+# 2.加载驱动:
+sudo insmod ./hello.ko
+
+
+# 3.查看内核打印信息(不用重启, 直接查看kernel 模块装载时, KERN_ALERT() syscall 的输出, 相当于prinft()):
+# 	安装: apt-get install util-linux
+dmesg
+# 只能追逐你要打印的字符串, 不能根据kernel 模块名进行详细追逐;
+dmesg | grep Hello
+
+
+# 4.卸载驱动:
+sudo rmmod hello
+
+
+# 5.查看模块的详细信息:
+modinfo ./hello.ko
+
+
+# 6.查看/var/log/kern.log, 能看到更多详细信息:
+tail /var/log/kern.log
