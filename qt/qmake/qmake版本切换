@@ -1,0 +1,115 @@
+#
+# 1.查看qmake 当前版本
+#
+qmake -v
+
+
+
+#
+# 2.切换qmake 版本
+#
+cd /usr/lib/x86_64-linux-gnu/qtchooser
+
+# 执行手动拷贝
+#cat ./qt5.conf
+#cd /usr/lib/x86_64-linux-gnu/qt-default/qtchooser
+#sudo gedit default.conf
+
+# 自动拷贝(默认的default.conf, 是一个软链接, 不能修改, 但可以删除)
+rm /usr/lib/x86_64-linux-gnu/qt-default/qtchooser/default.conf
+cp -i ./qt5.conf /usr/lib/x86_64-linux-gnu/qt-default/qtchooser/default.conf
+
+注意:
+	qtchooser 只能有一个当前qmake版本可激活, 你用了qt4-make, 就不能用qt5-make;
+	你可以在qtcreator 中, 选择两个qt库(qt4/qt5), 但你只能使用其中一个qmake;
+
+
+
+# for qt4:
+# 查询qt4 的安装路径
+whereis qt4 
+# 查询结果:
+# 	centos:
+# 		/usr/share/qt4/bin
+# 		/usr/share/qt4/
+# 	debian(在/usr/lib/x86_64-linux-gnu中):
+# 		/usr/lib/x86_64-linux-gnu/qt4/bin
+# 		/usr/lib/x86_64-linux-gnu
+
+# for qt5:
+# 查询qt5 的安装路径
+whereis qt5
+# 查询结果:
+# 	centos:
+# 		/usr/lib/qt5/bin
+# 		/usr/lib/qt5/
+# 	debian(在/usr/lib/x86_64-linux-gnu中):
+# 		/usr/lib/x86_64-linux-gnu/qt5/bin
+# 		/usr/lib/x86_64-linux-gnu
+
+
+
+# 最简单的安装qt4,qt5 两个版本的兼容方法:
+apt-get install qt4-default
+apt-get install qt5-default
+apt-get purge qt5-default # 卸载qt5-qmake(放心, 只会删除qt5-default, 而不会删除qt5 编程库的)
+
+# 安装qt5
+apt-get install libqt5concurrent5 libqt5core5a libqt5dbus5 libqt5gui5 libqt5network5 libqt5opengl5 libqt5opengl5-dev libqt5printsupport5 libqt5sql5 libqt5test5 libqt5widgets5 libqt5xml5 libvulkan-dev qt5-gtk-platformtheme qt5-qmake qt5-qmake-bin qtbase5-dev 
+# 修复qt5, 自动回复: n y y
+aptitude install qt5-default
+
+
+
+
+#
+# 3.qt4 工具链依赖包分析:
+#
+The following additional packages will be installed:(将安装以下附加软件包)
+  libqt4-dbus libqt4-declarative libqt4-designer libqt4-dev libqt4-dev-bin
+  libqt4-help libqt4-network libqt4-opengl libqt4-opengl-dev libqt4-qt3support
+  libqt4-script libqt4-scripttools libqt4-sql libqt4-sql-mysql libqt4-svg
+  libqt4-test libqt4-xml libqt4-xmlpatterns libqtcore4 libqtdbus4 libqtgui4
+  qdbus qt4-linguist-tools qt4-qmake
+Suggested packages:(建议的程序包)
+  libqt4-declarative-folderlistmodel libqt4-declarative-gestures
+  libqt4-declarative-particles libqt4-declarative-shaders qt4-qmlviewer
+  default-libmysqlclient-dev firebird-dev libpq-dev libsqlite0-dev
+  libsqlite3-dev qt4-dev-tools qt4-doc unixodbc-dev libicu57 qt4-qtconfig
+The following packages will be REMOVED:
+  qt5-default
+The following NEW packages will be installed:(将安装以下新软件包)
+  libqt4-declarative libqt4-designer libqt4-dev libqt4-dev-bin libqt4-help
+  libqt4-network libqt4-opengl libqt4-opengl-dev libqt4-qt3support
+  libqt4-script libqt4-scripttools libqt4-sql libqt4-sql-mysql libqt4-svg
+  libqt4-test libqt4-xmlpatterns qt4-default qt4-linguist-tools qt4-qmake
+The following packages will be upgraded:(将升级以下包)
+  libqt4-dbus libqt4-xml libqtcore4 libqtdbus4 libqtgui4 qdbus
+
+
+# 最终安装qt4 支持: (除了qt4-default 之外, 安装qt4-default 必须删除qt5-default)
+apt-get install libqt4-dbus libqt4-declarative libqt4-designer libqt4-dev libqt4-dev-bin libqt4-help libqt4-network libqt4-opengl libqt4-opengl-dev libqt4-qt3support libqt4-script libqt4-scripttools libqt4-sql libqt4-sql-mysql libqt4-svg libqt4-test libqt4-xml libqt4-xmlpatterns libqtcore4 libqtdbus4 libqtgui4
+
+
+
+
+
+#
+# 4.qt5 工具链依赖包分析:
+#
+The following additional packages will be installed:(将安装以下附加软件包)
+  libqt5concurrent5 libqt5core5a libqt5dbus5 libqt5gui5 libqt5network5
+  libqt5opengl5 libqt5opengl5-dev libqt5printsupport5 libqt5sql5 libqt5test5
+  libqt5widgets5 libqt5xml5 libvulkan-dev qt5-gtk-platformtheme qt5-qmake
+  qt5-qmake-bin qtbase5-dev
+Suggested packages:(建议的程序包)
+  default-libmysqlclient-dev firebird-dev libegl1-mesa-dev libpq-dev
+  libsqlite3-dev unixodbc-dev
+The following NEW packages will be installed:(将安装以下新软件包)
+  libqt5opengl5-dev libvulkan-dev qt5-default qt5-qmake qt5-qmake-bin
+  qtbase5-dev
+The following packages will be upgraded:(将升级以下包)
+  libqt5concurrent5 libqt5core5a libqt5dbus5 libqt5gui5 libqt5network5
+  libqt5opengl5 libqt5printsupport5 libqt5sql5 libqt5test5 libqt5widgets5
+  libqt5xml5 qt5-gtk-platformtheme
+
