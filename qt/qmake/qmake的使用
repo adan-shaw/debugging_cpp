@@ -1,0 +1,87 @@
+#
+# 1.qmake 使用声明:
+#
+# 	qmake 是一种类似cmake, 但实际比cmake 更高级别的语言, qmake 自动化做得比cmake 强很多;
+# 	cmake 只会根据CMakefile.txt 自动生成makefile,
+# 	qmake 会自动扫描project, 自动生成*.pro, *.pro 才是等价于CMakefile.txt, 是一个可以自动生成makefile 的文件;
+# 	最终的目标是: 
+# 		根据'qmake 专用的宏'自动生成*.pro, 由*.pro自动生产makefile, 然后用makefile 去编译项目;
+
+# 	实际上, qt 还是比较麻烦的, 如果没有IDE 自动生成, qmake 也要自己写, 也比较复杂;
+
+
+
+
+
+#
+# 2.qmake 命令(这个命令生成*.pro, 只能自动生成, 如果生成不成功, 则只能自己修改*.pro)
+#
+# 输出大量debug 信息
+qmake -d
+
+# qmake 自动生成*.pro 文件的命令(自动生成*.pro 文件的命令, 有点鸡肋, 还是自己补全比较好):
+qmake -project -t app -Wnone
+#qmake -project -t lib -Wnone
+
+# 命令*.pro 自动生成makefile
+qmake -makefile
+
+
+
+
+
+#
+# 3.自定义*.pro 文件
+#
+qmake 会识别下列的编译宏:
+	CONFIG:    通用工程配置选项
+	DESTDIR:   可执行文件或库文件的输出目录
+	FORMS:     由uic处理的UI文件列表
+	HEADERS:   构建工程使用的头文件列表
+	QT:        Qt相关配置选项
+	RESOURCES: 包含到最终工程的资源文件列表
+	SOURCES:   用于构建工程的源文件列表
+	TEMPLATE:  构建工程的模板, 决定构建过程输出一个应用, 一个库或是一个插件
+
+
+# 常用的*.pro 编译宏
+	# 二进制输出程序的名: *.exe/*.so
+	TARGET = qmake_demo
+
+	# 二进制输出程序的类型: app/lib(等价于qmake -t app/qmake -t lib)
+	TEMPLATE = app
+	#TEMPLATE = lib
+
+	# 添加调试选项
+	CONFIG+=debug
+
+
+	# 依赖库的头文件路径
+	DEPENDPATH += ./widget
+
+	# 指定链接器搜索路径
+	LIBPATH += ./widget
+
+
+	# 自定义头文件路径
+	INCLUDEPATH += ./widget
+
+	# 添加.so 链接库, 指定链接器选项(-l widgets # qt4 专用)
+	LIBS += -L ./widget -l Qt5Widgets
+	# 不指定链接器选项(用得较少)
+	#LIBS+= ./widget/*.so
+
+
+	# 源码路径下的所有文件
+	SOURCES += ./src/*.cpp
+
+
+	# 指定编译选项
+	QMAKE_LFLAGS += "-Wl -O2 -no-pie"
+
+
+
+
+
+# 未知作用: Qt相关配置选项??
+Qt += widgets
