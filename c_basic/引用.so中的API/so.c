@@ -46,67 +46,67 @@ int init_so_API(void* pso, API_list* pmysql_api){
 	dlerror();						//每次操作.so 共享链接库前, 都要清除一下错误记录器;
 	pmysql_api->mysql_error = (const char* (*)(MYSQL *mysql))dlsym(pso, "mysql_error");//装载一个API
 	perr_so = dlerror();	//查看错误字符串
-	if(perr_so != NULL) {printf("dlsym() mysql_error fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_error fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_init = (MYSQL* (*)(MYSQL *mysql))dlsym(pso, "mysql_init");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_init fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_init fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_real_connect = (MYSQL* (*)(MYSQL *mysql, const char *host,const char *user,const char *passwd,const char *db,unsigned int port,const char *unix_socket,unsigned long clientflag))dlsym(pso, "mysql_real_connect");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_real_connect fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_real_connect fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_real_query = (int (*)(MYSQL *mysql, const char *q,unsigned long length))dlsym(pso, "mysql_real_query");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_real_query fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_real_query fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_close = (void (*)(MYSQL *sock))dlsym(pso, "mysql_close");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_close fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_close fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_store_result = (MYSQL_RES* (*)(MYSQL *mysql))dlsym(pso, "mysql_store_result");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_store_result fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_store_result fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_use_result = (MYSQL_RES* (*)(MYSQL *mysql))dlsym(pso, "mysql_use_result");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_use_result fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_use_result fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_free_result = (void (*)(MYSQL_RES *result))dlsym(pso, "mysql_free_result");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_free_result fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_free_result fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_num_rows = (my_ulonglong (*)(MYSQL_RES *res))dlsym(pso, "mysql_num_rows");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_num_rows fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_num_rows fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_num_fields = (unsigned int (*)(MYSQL_RES *res))dlsym(pso, "mysql_num_fields");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_num_fields fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_num_fields fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_fetch_row = (MYSQL_ROW (*)(MYSQL_RES *result))dlsym(pso, "mysql_fetch_row");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_fetch_row fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_fetch_row fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_row_seek = (MYSQL_ROW_OFFSET (*)(MYSQL_RES *result,MYSQL_ROW_OFFSET offset))dlsym(pso, "mysql_row_seek");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_row_seek fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_row_seek fail: %s\n", perr_so);return -1;}
 
 	dlerror();
 	pmysql_api->mysql_next_result = (int (*)(MYSQL *mysql))dlsym(pso, "mysql_next_result");
 	perr_so = dlerror();
-	if(perr_so != NULL) {printf("dlsym() mysql_next_result fail: %s", perr_so);return -1;}
+	if(perr_so != NULL) {printf("dlsym() mysql_next_result fail: %s\n", perr_so);return -1;}
 
 	return 0;
 }
