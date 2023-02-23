@@ -14,7 +14,7 @@
 
 
 //创建一个unix socket listener
-int unix_sock_tcp_listener(void){
+int unix_sock_udp_listener(void){
 	int usfd_li,tmp;
 	struct sockaddr_un addr_srv;
 
@@ -53,7 +53,7 @@ int main(void){
 	uudp_frame_t frame;
 
 	//创建一个unix socket listener
-	usfd_li = unix_sock_tcp_listener();
+	usfd_li = unix_sock_udp_listener();
 
 	//阻塞读取一帧数据
 	tmp = recvfrom(usfd_li,&frame,sizeof(uudp_frame_t),0,NULL,NULL);
@@ -77,7 +77,7 @@ int main(void){
 	//结束回收资源
 	shutdown(usfd_li,2);
 	close(usfd_li);
-	unlink(UNIX_TCP_DOMAIN);
+	unlink(UNIX_UDP_DOMAIN);
 	return 0;
 }
 
