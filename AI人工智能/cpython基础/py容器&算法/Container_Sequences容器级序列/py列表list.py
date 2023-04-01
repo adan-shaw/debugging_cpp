@@ -116,6 +116,17 @@ print(len(plist))
 
 
 
+# 判断list 是否为空(在Python中, False,0,'',"",[],{},()都可以视为假)
+#print("check empty")
+plist = []
+if not plist:
+	print("plist is empty")
+
+if not len(plist):
+	print("plist is empty [cheap, dont use this way to make a logic-IF]")
+
+
+
 
 
 #
@@ -226,6 +237,10 @@ print(plist)
 plist=['2','4','5']
 x=(',').join(plist)
 print(x)
+
+
+
+
 
 
 
