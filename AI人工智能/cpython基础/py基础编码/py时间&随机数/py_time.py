@@ -24,7 +24,7 @@ print(time.ctime())
 # 进程休眠(单位秒), 必然返回None
 time.sleep(1)
 # 错误写法(打印"None"无意义)
-print(time.sleep(1))
+#print(time.sleep(1))
 
 
 
