@@ -57,15 +57,15 @@ stdout(tmp)
 # 3.print格式化打印输出
 #
 # 格式化打印输出
-str_tmp='fuck you bitch'
-print("'字符串: %s 的长度是: %d' %(str_tmp, len(str_tmp))")
+str_tmp='love you bitch'
+print("字符串: %s 的长度是: %d" %(str_tmp, len(str_tmp)))
 
 # 不允许多个 %() 格式化参数列表(一般只有一个)
-#print("'字符串: %s 的长度是: %d' %(str_tmp) %(len(str_tmp))")
+#print("字符串: %s 的长度是: %d" %(str_tmp) %(len(str_tmp)))
 
 
 # 打印不换行, 只附加一个空格(结尾加逗号)
-print("'fuck',")
+print("'love',")
 print("'you!!'")
 
 
