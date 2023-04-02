@@ -3,10 +3,24 @@
 
 
 import sys
-import imp
-imp.reload(sys)
-if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-	sys.setdefaultencoding("utf-8")
+
+if(sys.version_info.major == 3):
+	if(sys.version_info.minor <= 3):
+		import imp
+		imp.reload(sys)
+		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+			sys.setdefaultencoding("utf-8")
+	else:
+		import importlib
+		importlib.reload(sys)
+		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+			sys.setdefaultencoding("utf-8")
+
+if(sys.version_info.major == 2):
+	import imp
+	imp.reload(sys)
+	if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+		sys.setdefaultencoding("utf-8")
 
 
 
@@ -81,5 +95,6 @@ print("\"网站名:{name}, 地址 {url}\".format(**site)")
 # 格式化: 根据列表索引设置参数
 myList = ['菜鸟教程', 'www.runoob.com']
 print("\"网站名:{0[0]}, 地址 {0[1]}\".format(myList)")
+
 
 
