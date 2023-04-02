@@ -4,10 +4,24 @@
 
 # 设置python2/3 的统一utf-8 编码格式的方式:
 import sys
-import imp
-imp.reload(sys)
-if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-	sys.setdefaultencoding("utf-8")
+
+if(sys.version_info.major == 3):
+	if(sys.version_info.minor <= 3):
+		import imp
+		imp.reload(sys)
+		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+			sys.setdefaultencoding("utf-8")
+	else:
+		import importlib
+		importlib.reload(sys)
+		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+			sys.setdefaultencoding("utf-8")
+
+if(sys.version_info.major == 2):
+	import imp
+	imp.reload(sys)
+	if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
+		sys.setdefaultencoding("utf-8")
 
 
 
@@ -248,5 +262,4 @@ translate()		返回被转换的字符串
 upper()				把字符串转换为大写
 zfill()				在字符串的开头填充指定数量的0 值
 '''
-
 
