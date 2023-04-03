@@ -1,0 +1,6 @@
+{# 在jinja2 中执行一些简单的计算公式, 如果有这方面的需求, 最好使用这种方式, python 语法糖就是最好!! #}
+
+
+
+{# 计算汽车的总价, 计算逻辑写在txt 文本上面 #}
+The sum of car prices is {{ cars | sum(attribute='price') }}
