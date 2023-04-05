@@ -1,6 +1,19 @@
-{# 在jinja2 中执行一些简单的计算公式, 如果有这方面的需求, 最好使用这种方式, python 语法糖就是最好!! #}
+{#
+	jinja2 过滤器的用法(即'|' 管道符号):
+		在jinja2 中执行一些简单的计算公式, 如果有这方面的需求, 最好使用这种方式, python 语法糖就是最好!! 
+		但jinja2 中不能执行print(), 你不能在jinja2 里面, 又期望打印某个变量, 没有这么智能的(也可以用自定义过滤器来实现, 只是太麻烦);
+
+	jinja2 过滤器的常用功能:
+		* 字符串的大小写转换
+		* 简单数学公式计算结果
+
+	jinja2 自定义过滤器的实现:
+		* 比较复杂, 略;
+#}
 
 
 
-{# 计算汽车的总价, 计算逻辑写在txt 文本上面 #}
-The sum of car prices is {{ cars | sum(attribute='price') }}
+{# 简单数学公式: 计算汽车的总价, 计算逻辑写在txt 文本上面 #}
+The sum of cars prices is {{ cars | sum(attribute='price') }}
+
+
