@@ -25,3 +25,12 @@
 		{{- tmp.name }}
 	{% endif %}
 {%- endfor %}
+
+
+
+{#
+	循环控制(可以使用break以及continue):
+		jinja2.ext.loopcontrols
+	默认情况下,jinja2 的for循环中不支持break和continue,
+	但添加完此插件后, 就可以使用了, 很方便;
+#}
