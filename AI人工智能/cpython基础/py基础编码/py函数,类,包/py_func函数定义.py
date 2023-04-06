@@ -39,7 +39,7 @@ print(S(2))
 
 
 # 引用赋值
-def appoint( m_list ):
+def appoint(m_list):
 	m_list.append([1,2,3,4])
 	return
 
@@ -49,10 +49,24 @@ print(m_list)
 
 
 
-# 装饰器函数(不知道有什么用)
-def my_callback(*args, **kwargs):
-	print("unknow")
-	return
+# 装饰器: 多值参数传入
+'''
+	Python中有两种多值参数:
+		参数名前增加一个*可以接收元组, 一般用*args存放元组参数, args是arguments缩写;
+		参数名前增加两个*可以接收字典, 一般用**kwargs存放字典参数, kw是keyword缩写;
+'''
+# 如果入参是变量，那么多值参数传递遵循拆包语法
+def test(*args, **kwargs):
+    print(args)
+    print(kwargs)
+ 
+ 
+tup = (1, 2, 3)
+d = {"name":"horizon","11":1}
+ 
+test(*tup, **d)  # 拆包语法
+
+
 
 
 
