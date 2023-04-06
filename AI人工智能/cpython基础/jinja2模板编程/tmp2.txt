@@ -1,10 +1,5 @@
-{# jinja 注释语句, 是可以换行的; 
-	 如果不进行注释, 则这些字符串也会被读入到jinja2 输出文件中(一般不允许这种情况出现)
-#}
-
-
-
-{# jinja2 循环逻辑的先要条件:
+{# 
+	jinja2 循环逻辑的先要条件:
 	 * 对应的python 数据结构是plist[pdict{}];
 
 	 * 普通变量是一键替换全部, 不可深入内嵌模块, 循环体可以深入内嵌模块, 但需要遵循格式: 'plist[pdict{}] * n层'
@@ -15,11 +10,32 @@
 	 * 调用tm.render(p=A, p2=B) 时, 需要传入模板需要的所有参数!!
 		 左值p = jinja2 模板中可以引用的值;
 		 右值A = python 逻辑中的数据输入源;
+
+
+
+	使用jinja2 模板的过程中, 在循环{% %} 里面加'-' 号的话, 会导致渲染后的代码, 首行缩进;
+	就是去除所有的前置空格, 缩进退格, 全部消除, 但不会影响换行;
+	例如:
+		{%- %}
+		{% -%}
+		这两种写法是等价的(还是在前面就去除前面的空格和缩进退格, 在后面就去除后面的缩进退格? 待敲定)
 #}
 
 
 
-{# 筛选少于18 岁的学生( ) #}
+{# jinja2 遍历打印ptuple #}
+(  {% for v in ptuple %} {{v}}, {%- endfor %}  )
+
+
+{# jinja2 遍历打印plist #}
+[  {% for v in plist %} {{v}}, {%- endfor %}  ]
+
+
+{# jinja2 遍历打印pdict #}
+{  {% for k,v in pdict.items() %} {{k}}-{{v}}, {%- endfor %}  }
+
+
+{# jinja2 打印复杂结构体list[dict{}]: 筛选少于18 岁的学生( ) #}
 {% for tmp in school2 %}
 	{% if tmp.age < 18 %}
 		{{- tmp.name }}
@@ -28,9 +44,18 @@
 
 
 
+{# jinja2 打印复杂结构体list[dict{}]: 遍历打印(打印内嵌结构体) #}
+{% for pdict_tmp in school2 %}
+	{  {% for k,v in pdict_tmp.items() %} {{k}}-{{v}}, {%- endfor %}  }
+{%- endfor %}
+
+
+
 {#
 	循环控制(可以使用break以及continue):
 		jinja2.ext.loopcontrols
-	默认情况下,jinja2 的for循环中不支持break和continue,
+	默认情况下, jinja2 的for循环中不支持break和continue,
 	但添加完此插件后, 就可以使用了, 很方便;
 #}
+
+
