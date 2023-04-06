@@ -29,7 +29,7 @@ from jinja2 import Template, Environment, FileSystemLoader
 
 
 
-# 1.jinja 模板替换: python 变量 + 注释
+# 1.jinja2: python 变量+注释(简单的string替换)
 name = "adan shaw"
 age = 22
 tm = Template("Hello {{ name }}, you are already {{ age }} years old {# 注释, 不会打印出模板 #}")
@@ -40,7 +40,8 @@ print(msg)
 
 
 
-# 2.jinja 模板替换: 类成员'变量/函数结果返回'
+# 2.jinja2: 类成员'变量/函数结果返回'(简单的string替换)
+# 	[必须是返回string 的函数, 如果是print 那种无返回/打印数据到stdout 标准流的API 操作, 可以自定义jinja2 过滤器实现, 但比较复杂]
 class person:
 	IQ = 180
 	def __init__(self, name, age):
@@ -61,7 +62,7 @@ print(msg)
 
 
 
-# 3.jinja 模板替换: dict词典元素
+# 3.jinja2: 单点访问dict词典元素(简单的string替换)
 person = { 'name': 'adan shaw', 'age': 22 }
 
 tm = Template("My name is {{ p.name }} and I am {{ p.age }}")
@@ -74,7 +75,7 @@ print(tm.render(p=person))
 
 
 
-# 4.jinja 模板替换: 
+# 4.jinja2: 从string 中读取template 模板string
 data = '''
 {% raw %}
 His name is {{ name }}
@@ -89,8 +90,8 @@ print(msg)
 
 
 
-# 5.jinja 模板替换: 从file 中读取应用数据, 替换应用中变量的值(改变量必须存在, 且与file中的数据对齐)
-# 	应用中变量的值变更后, 将变更结果保存到file 中
+# 5.jinja2: 从file 中读取template 模板string应用中变量的值变更后, 将变更结果保存到file 中
+file_path="tmp.txt"
 school = [
 	{'name': "", 'age': 0},
 	{'name': "", 'age': 0},
@@ -100,13 +101,13 @@ school = [
 	{'name': "", 'age': 0}
 ]
 
-# 扫描指定文件路径下的所有文件(最好别太多, 否则会触发遍历)
+# 扫描'指定文件路径下的所有文件'(最好别扫描太多, 否则会触发循环遍历深入扫描)
 file_loader = FileSystemLoader('.', 'utf-8', False)
-# 把这些文件都装进env (jinja 的固定用法)
+# 把扫描到的文件路径都装进env (jinja2 的固定用法)
 env = Environment(loader=file_loader)
-# 使用jinja 解析指定的file
-template = env.get_template('tmp.txt')
-# 执行jinja 解析
+# 使用jinja2 解析指定的file
+template = env.get_template(file_path)
+# 执行jinja2 渲染
 output = template.render(school=school)
 print(output)
 
@@ -114,7 +115,10 @@ print(output)
 
 
 
-# 6.jinja 模板替换: 从file 中读取应用逻辑, 计算应用中变量的值(复杂版本:file中带有python 逻辑语句)
+# 6.jinja2: template 文件中的循环逻辑
+ptuple=("aa","bb","c")
+plist=["aa","bb","c"]
+pdict={"aa":1,"bb":2,"c":3}
 school2 = [
 	{'name': 'Andrej', 'age': 34},
 	{'name': 'Mark', 'age': 17},
@@ -132,14 +136,14 @@ env.rstrip_blocks = True
 
 template = env.get_template('tmp2.txt')
 
-output = template.render(school2=school2)
+output = template.render(ptuple=ptuple,plist=plist,pdict=pdict,school2=school2)
 print(output)
 
 
 
 
 
-# 7.jinja 模板替换: 从file 中读取应用逻辑, 计算应用中变量的值
+# 7.jinja2: template 文件中的调用默认过滤器函数
 cars = [
 	{'name': 'Audi', 'price': 23000}, 
 	{'name': 'Skoda', 'price': 17300}, 
@@ -169,3 +173,4 @@ template = env.get_template('about.html')
 
 output = template.render(content=content)
 print(output)
+
