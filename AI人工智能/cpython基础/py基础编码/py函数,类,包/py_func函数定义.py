@@ -57,17 +57,13 @@ print(m_list)
 '''
 # 如果入参是变量，那么多值参数传递遵循拆包语法
 def test(*args, **kwargs):
-    print(args)
-    print(kwargs)
- 
- 
+	print(args)
+	print(kwargs)
+
 tup = (1, 2, 3)
 d = {"name":"horizon","11":1}
- 
-test(*tup, **d)  # 拆包语法
 
-
-
-
+# 拆包语法
+test(*tup, **d)
 
 
