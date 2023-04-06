@@ -16,4 +16,3 @@
 {# 简单数学公式: 计算汽车的总价, 计算逻辑写在txt 文本上面 #}
 The sum of cars prices is {{ cars | sum(attribute='price') }}
 
-
