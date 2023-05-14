@@ -16,6 +16,11 @@
 pdict={ "A":191, "B":"love", "C":999, "D":"you" }
 print(pdict)
 
+# 将容器的内容[全部元素], 转换为可打印, 可传递的字符串
+ptmp=str(pdict)
+print(ptmp)
+
+
 
 # 一体化内嵌dict
 myfamily={
