@@ -46,6 +46,10 @@ symmetric_difference_update()	插入此'set集合'和另一个'set集合'的对�
 pset={9,1,2,5,7,3,2,6,23,(1,2),"idiot"}
 print(pset)
 
+# 将容器的内容[全部元素], 转换为可打印, 可传递的字符串
+ptmp=str(pset)
+print(ptmp)
+
 # set()构造函数拷贝
 pset0=set(pset)
 print(pset)
