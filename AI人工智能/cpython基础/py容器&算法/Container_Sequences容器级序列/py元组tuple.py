@@ -22,6 +22,10 @@ py_version=sys.version_info.major
 # tuple元组的创建
 ptuple=((1,2,3,4),"love","you","bitch",1,1,1,1,2,"","love",0)
 
+# 将容器的内容[全部元素], 转换为可打印, 可传递的字符串
+ptmp=str(ptuple)
+print(ptmp)
+
 # list拷贝tuple元组
 print(list(ptuple))
 
