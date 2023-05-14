@@ -48,6 +48,11 @@ array 常用的数据类型:
 arr_str=array.array('u', u"hello world")
 print(arr_str)
 
+# 将容器的内容[全部元素], 转换为可打印, 可传递的字符串
+ptmp=str(arr_str)
+print(ptmp)
+
+
 
 # 初始化数字array(必须从list/tuple 中强转导入, 最低消耗了)
 arr_int=array.array('l', [9,8,7,6,5,4,3,2,1,0])
