@@ -71,7 +71,7 @@ stdout(tmp)
 # 3.print格式化打印输出
 #
 # 格式化打印输出
-str_tmp='love you bitch'
+str_tmp='love you idiot'
 print("字符串: %s 的长度是: %d" %(str_tmp, len(str_tmp)))
 
 # 不允许多个 %() 格式化参数列表(一般只有一个)

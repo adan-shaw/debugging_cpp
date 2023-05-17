@@ -116,7 +116,7 @@ bool redis_test_str(redisContext *pCon){
 
 
 	//纯字符串测试
-	pReply = redisCommand(pCon, "set test_str fuckyou");
+	pReply = redisCommand(pCon, "set test_str loveyou");
 	if(pReply->type == REDIS_REPLY_ERROR)
 		goto redis_test_str_failed;
 
@@ -169,7 +169,7 @@ bool redis_test_list(redisContext *pCon){
 
 
 
-	pReply = redisCommand(pCon, "lpush test_list fuckyou 999 333 dead");
+	pReply = redisCommand(pCon, "lpush test_list loveyou 999 333 dead");
 	//(元素统一为字符串数据, 就算全为number 也是字符串)
 	//pReply = redisCommand(pCon, "lpush test_list 111 999 333 22 22");
 	if(pReply->type == REDIS_REPLY_ERROR)
@@ -204,7 +204,7 @@ bool redis_test_set(redisContext *pCon){
 
 	//sadd 成功后, 返回0; 如果出现重复元素, 则覆盖(无原子操作)
 	pReply = redisCommand(pCon, "sadd test_set 999 888 1");
-	pReply = redisCommand(pCon, "sadd test_set 999 fuck 888 you aaa bbb 1");
+	pReply = redisCommand(pCon, "sadd test_set 999 love 888 you aaa bbb 1");
 	if(pReply->type == REDIS_REPLY_ERROR)
 		goto redis_test_set_failed;
 	else

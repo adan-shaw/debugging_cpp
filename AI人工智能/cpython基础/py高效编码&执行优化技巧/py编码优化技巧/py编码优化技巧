@@ -45,7 +45,7 @@
 python 字符串的更换, 会触发缓冲区free() and malloc(),
 如果是python 字符串的值修改, 那字符串的内容都更改了, 你就没有优化的必要了;
 例如:
-	s1 = "fuck"
+	s1 = "love"
 	s2 = "you"
 	ss = s1 + s2
 
@@ -58,7 +58,7 @@ python 字符串的更换, 会触发缓冲区free() and malloc(),
 
 如果是字符串自加拼接, 在末尾添加, 应该使用join() 函数.
 例如:
-	s1 = "fuck"
+	s1 = "love"
 	s2 = "you"
 	ss = "007"
 	# 这样python 会先释放ss 原来的str_buf缓冲区, 再新建一个str_buf缓冲区, 来装在数据,

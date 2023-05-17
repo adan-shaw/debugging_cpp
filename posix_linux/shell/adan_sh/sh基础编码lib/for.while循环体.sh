@@ -29,7 +29,7 @@ done
 count=16
 for((i=0; i<$count; i++));
 do
-	echo "fuck you"
+	echo "love you"
 done
 
 
@@ -37,7 +37,7 @@ done
 write_count=4
 for((i=0; i<$write_count; i++));
 do
-	echo "fuck"
+	echo "love"
 done >&1;
 
 # debug point
@@ -93,7 +93,7 @@ fi
 recursion() {
 	tmp=$(($1+1))
 	if [ "$tmp" -lt 100 ];then
-		echo "fuck you $tmp"
+		echo "love you $tmp"
 		recursion $tmp
 	fi
 	return $tmp
@@ -118,7 +118,7 @@ recursion2() {
 	global_count=$(($global_count+1))
 	if [ "$global_count" -lt 100 ]
 	then
-		echo "fuck you2 $global_count"
+		echo "love you2 $global_count"
 		recursion2
 	fi
 	return $global_count

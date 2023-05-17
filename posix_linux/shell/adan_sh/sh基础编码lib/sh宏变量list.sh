@@ -93,7 +93,7 @@ tmp=$(env | grep PATH)
 echo -e "\n含有PATH关键字的环境变量有:\n$tmp"
 
 # 3, export 导入新的环境变量(重启会自动失效)
-export ADAN="fuck you"
+export ADAN="love you"
 echo "查看新设置的环境变量ADAN: $ADAN"
 
 # 4, 查看几个常用的环境变量:

@@ -35,7 +35,7 @@ sh_name="./__sh_test.sh"
 # 脚本exit 0: 表示脚本'正常结束'.
 # 脚本exit [非0]: 表示脚本'异常结束'(是一个8 bit的值, 由你任意定制)
 # 							 [1,255] or [-128,0)&&(0,+128]
-echo "echo fuck;exit 0" > ./$sh_name
+echo "echo love;exit 0" > ./$sh_name
 # 赋予执行权限
 chmod 755 ./$sh_name
 

@@ -155,7 +155,7 @@ class Test6{
 
 //测试2
 void test_56(void){
-	char test_text[] = "dont fucking kidding me !!";
+	char test_text[] = "dont loveing kidding me !!";
 	fprintf(stderr,"\n\n\n'拷贝构造函数'[测试2]:\n");
 
 	//浅拷贝(没有指针实体拷贝)
@@ -169,7 +169,7 @@ void test_56(void){
 	//深拷贝(指针实体拷贝)
 	Test6 t61;
 	t61.write_num_cp(6666);
-	t61.write_text("fuck you");
+	t61.write_text("love you");
 	t61.write_text(test_text);
 	Test6 t62(t61);
 	Test6 t63 = t61;

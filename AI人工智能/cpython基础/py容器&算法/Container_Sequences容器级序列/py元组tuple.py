@@ -20,7 +20,7 @@ py_version=sys.version_info.major
 # tuple元组的创建与删除, 基本api 操作
 #
 # tuple元组的创建
-ptuple=((1,2,3,4),"love","you","bitch",1,1,1,1,2,"","love",0)
+ptuple=((1,2,3,4),"love","you","idiot",1,1,1,1,2,"","love",0)
 
 # 将容器的内容[全部元素], 转换为可打印, 可传递的字符串
 ptmp=str(ptuple)
@@ -66,7 +66,7 @@ print(ptuple.count("love"))
 '''
 
 # 下标索引(indexing)
-ptuple=((1,2,3,4),"love","you","bitch",1,1,1,1,2,"","love",0,9,9,9)
+ptuple=((1,2,3,4),"love","you","idiot",1,1,1,1,2,"","love",0,9,9,9)
 print(ptuple[0][1])
 print(ptuple[1])
 print(ptuple[2])

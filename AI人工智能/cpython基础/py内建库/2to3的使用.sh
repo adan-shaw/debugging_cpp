@@ -13,14 +13,14 @@ py3_output="./py3_output"
 # 生成测试数据样板:
 :<<!
 	py2:
-		print "fuck you"
+		print "love you"
 
 	py3(实际上python2.6/2.7 也支持这种print("") 方式, 因此, 此乃python 通用打印标准):
-		print("fuck you")
+		print("love you")
 !
 
 # 创建测试数据:
-echo "print \"fuck you\"" > test.py
+echo "print \"love you\"" > test.py
 
 
 

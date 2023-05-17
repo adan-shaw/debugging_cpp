@@ -13,7 +13,7 @@ for x in fruits:
 
 
 # 1.2 for 循环迭代单串字符串(逐个字母迭代)
-pstr="fuck you bitch"
+pstr="love you idiot"
 for x in pstr:
 	print(x)
 

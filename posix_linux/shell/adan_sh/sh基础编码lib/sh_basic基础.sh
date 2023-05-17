@@ -23,7 +23,7 @@ ls
 ping "-help"
 # 打印字符串的新方式(格式化打印字符串), 比echo 打印稍微复杂一点.
 printf '\n%s' "hello you asshole"
-printf '\n%s' "fuck off me asshole"
+printf '\n%s' "love off me asshole"
 
 
 

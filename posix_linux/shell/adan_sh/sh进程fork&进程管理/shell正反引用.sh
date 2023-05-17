@@ -33,12 +33,12 @@ func2_ret=$?
 pid_son2=$!
 
 # 写法3:
-echo "fuck you $(ls)"
+echo "love you $(ls)"
 func3_ret=$?
 pid_son3=$!
 
 # 写法4:
-echo "fuck you" $(ls)
+echo "love you" $(ls)
 func4_ret=$?
 pid_son4=$!
 

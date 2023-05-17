@@ -36,7 +36,7 @@ print(None)
 
 
 # 测试打印容器
-ptuple=(1,2,3,4,"fuck","you","bitch",1,1,1,1,2,"","fuck",0)
+ptuple=(1,2,3,4,"love","you","idiot",1,1,1,1,2,"","love",0)
 print(ptuple)
 
 plist=[[1,2],11,12,13,14,15,16,17,18,19]
@@ -45,7 +45,7 @@ print(plist)
 pset={9,1,2,5,7,3,2,6,23}
 print(pset)
 
-pdict={ "A":191, "B":"fuck", "C":999, "D":"you" }
+pdict={ "A":191, "B":"love", "C":999, "D":"you" }
 print(pdict)
 
 

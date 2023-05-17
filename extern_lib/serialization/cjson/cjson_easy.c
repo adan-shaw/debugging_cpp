@@ -65,7 +65,7 @@ void basic_test(void){
 	basic.iNum = 111;
 	basic.is_working = 0;
 	basic.dSum = 888.22;
-	strncpy(basic.cStr,"fucked",cStr_MAX);
+	strncpy(basic.cStr,"loveed",cStr_MAX);
 	memset(basic.iArr, 11, iArr_MAX);
 
 

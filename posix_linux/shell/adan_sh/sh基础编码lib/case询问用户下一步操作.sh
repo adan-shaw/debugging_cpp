@@ -74,7 +74,7 @@ case "$stdin" in
 		echo "posix 也不可以使用if [ =~ ] 进行字符串匹配操作."
 		echo "if [ =~ ] 也是正则表达式."
 		;;
-	"fuck you")
+	"love you")
 		echo "空格也是字符, 不会视为'字符串分割符'"
 		;;
 	*)

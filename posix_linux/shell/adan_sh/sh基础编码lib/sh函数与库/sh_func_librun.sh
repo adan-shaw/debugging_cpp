@@ -64,7 +64,7 @@ echo -e "shell_func1() 'echo回显'返回:\n$echo_ret\n"
 #
 # 测试2:通过'echo回显'返回字符串
 #
-echo_ret=$(echo2STDOUT "fuck you" &)
+echo_ret=$(echo2STDOUT "love you" &)
 func_ret=$?
 echo -e "echo2STDOUT() 'echo回显'返回:\n$func_ret\n"
 echo -e "echo2STDOUT() 'echo回显'返回:\n$echo_ret\n"

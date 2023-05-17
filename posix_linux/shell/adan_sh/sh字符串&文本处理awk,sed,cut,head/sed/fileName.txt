@@ -45,7 +45,7 @@ sed 's/patternA/String/' fileName.txt
 
 
 # 删除匹配到的内容
-sed 'd/fuck_you/' fileName.txt
+sed 'd/love_you/' fileName.txt
 
 
 #打印匹配error的行的行号

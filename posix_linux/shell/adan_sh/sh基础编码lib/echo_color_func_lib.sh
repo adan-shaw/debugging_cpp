@@ -70,19 +70,19 @@ color_test() {
 	echo -e "\033[47;30m 白底黑字 \033[0m"
 
 	# my function test
-	fonts_red "fuck you "
-	fonts_green "fuck you "
-	fonts_yellow "fuck you "
-	fonts_blue "fuck you "
-	fonts_purple "fuck you "
-	fonts_cyan "fuck you "
-	fonts_white "fuck you "
+	fonts_red "love you "
+	fonts_green "love you "
+	fonts_yellow "love you "
+	fonts_blue "love you "
+	fonts_purple "love you "
+	fonts_cyan "love you "
+	fonts_white "love you "
 
-	background_red "fuck you "
-	background_yellow "fuck you "
-	background_blue "fuck you "
-	background_cyan "fuck you "
-	background_white "fuck you "
+	background_red "love you "
+	background_yellow "love you "
+	background_blue "love you "
+	background_cyan "love you "
+	background_white "love you "
 
 	return
 }

@@ -15,8 +15,8 @@ val="<变量字符串>"
 echo $val "显示变量字符串"
 echo "显示变量字符串2 $val"
 
-echo -e "开启转义字符模式 \nfuck you bitch \n\nbye"
-printf "fuck you bitch\nshell 'printf' 自带类似c语言的换行模式,也能打印多串字符"
+echo -e "开启转义字符模式 \nlove you idiot \n\nbye"
+printf "love you idiot\nshell 'printf' 自带类似c语言的换行模式,也能打印多串字符"
 
 
 

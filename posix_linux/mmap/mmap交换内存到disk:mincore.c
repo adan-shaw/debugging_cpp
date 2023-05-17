@@ -43,8 +43,8 @@ void mmap_mincore(void){
 
 	mlock(pmap, PAGE_COUNT/16);											//把第一页锁在物理内存中(禁止交换到disk 中)
 
-	strncpy(pmap, "hello fuckers", sizeof("hello fuckers"));
-	strncpy((pmap+(PAGE_COUNT/16/2)), "hello fuckers", sizeof("hello fuckers"));
+	strncpy(pmap, "hello loveers", sizeof("hello loveers"));
+	strncpy((pmap+(PAGE_COUNT/16/2)), "hello loveers", sizeof("hello loveers"));
 
 	mincore(pmap, PAGE_COUNT, pmap+(PAGE_COUNT/16));//除了第一页, 后面的15 页全部被交换到disk 中了
 

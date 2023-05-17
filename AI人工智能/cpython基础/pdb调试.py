@@ -65,7 +65,7 @@
 
 import pdb;
 
-val="fuck you"
+val="love you"
 
 # 设置断点(执行暂停, 可以在断点处打印其它的变量值, 观测此时的各个变量的值, 变量值的变化规律)
 pdb.set_trace()

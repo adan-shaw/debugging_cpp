@@ -73,7 +73,7 @@ print(complex("1+2j"))
 
 
 # 强转为二进制数据块, 返回一个新的缓冲区(只有一个形参)
-print(bytes('fuck you'))
+print(bytes('love you'))
 print(bytes(123))
 print(bytes([1,2,3,0]))
 
@@ -88,7 +88,7 @@ print(bytes([1,2,3,0]))
 print(bytearray(123))
 
 # 当输入str 时, str中, 每个char 都是一个元素, 可指定char 类型为'utf-8'
-print(bytearray('fuck you', 'utf-8'))
+print(bytearray('love you', 'utf-8'))
 
 # 当输入number list 时, list 中每个元素, 都应该属于[0,255]区间内, 否则, 有一个元素不属于这个区间都报错(无效?)
 print(bytearray([1,2,3,0]))

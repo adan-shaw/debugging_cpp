@@ -30,7 +30,7 @@ fi
 
 
 # 方法2: 用变量接住单寸字符串, 再进行判断
-tmp=`echo "fuck you" | grep "you"`
+tmp=`echo "love you" | grep "you"`
 if [ "$tmp" != "" ];then
 	echo "方法一: 包含(echo使能)"
 else
@@ -99,8 +99,8 @@ fi
 #
 # (基础版)字符串比较:
 #
-str1="oh fuck"
-str2="oh fuck"
+str1="oh love"
+str2="oh love"
 str3="are you kidding ?"
 str4=""
 

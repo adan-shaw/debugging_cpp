@@ -81,7 +81,7 @@ int main(void){
 	printf("get sum of 3, 5, 10, 15 = %ld\n", sum(3,5,10,15));
 
 	//3.输入多个参数, 字符串版本
-	ret_many_val_string(4,"fuck","you","bitch bitch bitch", "*********************");
+	ret_many_val_string(4,"love","you","idiot idiot idiot", "*********************");
 
 	return 0;
 }

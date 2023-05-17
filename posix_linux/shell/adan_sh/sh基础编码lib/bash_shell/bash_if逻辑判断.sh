@@ -120,15 +120,15 @@ fi
 # [[ ]]:# bash 高级正则表达式
 
 read -p "筛选A-Z, 检索前2 个字符, 后续字符随意: " tmp
-#if (( "$tmp" == "fuck" )); then
-if [ "$tmp" = "fuck" ]; then
+#if (( "$tmp" == "love" )); then
+if [ "$tmp" = "love" ]; then
 	echo "ok: $tmp"
 else	
 	echo "1 Invalid entry"
 fi
 
 
-if [[ "$tmp" = "fuck" && "$tmp" != "" ]]; then
+if [[ "$tmp" = "love" && "$tmp" != "" ]]; then
 	echo "ok: $tmp"
 else	
 	echo "1 Invalid entry"
@@ -139,7 +139,7 @@ fi
 if (( -z "$tmp" ));then
 	echo "(()) cant use -z -n -gt 等对比参数, [] 特殊使用, 但(()) 可以使用== > &&"
 fi
-if (( $tmp == "fuck" && $tmp != "!fuck" ));then
+if (( $tmp == "love" && $tmp != "!love" ));then
 	echo $tmp
 fi
 

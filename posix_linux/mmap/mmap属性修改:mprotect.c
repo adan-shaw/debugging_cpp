@@ -35,7 +35,7 @@ void mmap_noname_private(void){
 	//改变mmap 映射属性, 允许读写
 	mprotect(pmap, PAGE_COUNT, PROT_READ | PROT_WRITE);
 
-	strncpy(pmap, "hello fuckers", sizeof("hello fuckers"));
+	strncpy(pmap, "hello loveers", sizeof("hello loveers"));
 	printf("%s\n", pmap);
 
 	//释放mmap

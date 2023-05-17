@@ -38,7 +38,7 @@ recursion() {
 	# 溢出判断
 	if [ $tmp -lt 100 ];then
 		# 不溢出, 打印回显
-		echo "fuck you $tmp"
+		echo "love you $tmp"
 		# 执行递归, 递归recursion()函数
 		recursion $tmp
 	fi
@@ -56,7 +56,7 @@ recursion2() {
 	gCount=$(($gCount+1))
 	if [ $gCount -lt 100 ]
 	then
-		echo "fuck you2 $gCount"
+		echo "love you2 $gCount"
 		recursion2
 	fi
 	return $gCount
