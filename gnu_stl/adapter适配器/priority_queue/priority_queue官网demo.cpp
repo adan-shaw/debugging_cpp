@@ -55,7 +55,7 @@ void test2() {
 
 	print_queue(q2);
 
-	// 用 lambda 比较元素。
+	// 用 lambda 比较元素
 	auto cmp = [](int left, int right) { return (left ^ 1) < (right ^ 1);};
 	priority_queue<int, vector<int>, decltype(cmp)> q3(cmp);
 

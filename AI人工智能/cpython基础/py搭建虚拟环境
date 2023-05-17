@@ -47,7 +47,7 @@
 
 
 # venv 虚拟python环境, 怎么用pip?
-	Python3.3中使用"venv"命令创建的环境不包含"pip"，你需要进行手动安装;
+	Python3.3中使用"venv"命令创建的环境不包含"pip", 你需要进行手动安装;
 	Python3.4中改进了这一个缺陷, 进入了venv 目录之后, $venv/bin 里面就有pip 工具, 正常使用即可:
 		$venv/bin/pip install --upgrade pip
 		或者:

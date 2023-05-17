@@ -5,7 +5,7 @@ use db4adan_srv;
 drop table if exists db4adan_srv.uinfo;
 drop table if exists db4adan_srv.upicture;
 
--- 删除存储过程 -- 不要直接洗表，mysql.proc 或许有其它 procedure
+-- 删除存储过程 -- 不要直接洗表, mysql.proc 或许有其它 procedure
 drop procedure if exists `uinfo_clean`;
 drop procedure if exists `uinfo_add`;
 drop procedure if exists `uinfo_select_by_uid`;

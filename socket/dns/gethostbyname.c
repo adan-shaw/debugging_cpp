@@ -121,7 +121,7 @@ void gethostbyhost_test(void){
 	//(只能解析出/etc/services 中的ip 地址??)
 	printf("* 根据ip 反向解析出'所有地址信息'\n");
 	inAddr.s_addr = inet_addr("127.0.0.1");
-	//inAddr.s_addr = inet_addr("192.168.1.102");	//失败？
+	//inAddr.s_addr = inet_addr("192.168.1.102");	//失败?
 
 	//inAddr.s_addr = inet_addr("www.baidu.com");	//非ip地址字符串,肯定失败
 	//inAddr.s_addr = inet_addr("localhost");			//失败

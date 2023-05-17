@@ -26,7 +26,7 @@ cfloat						Characteristics of floating-point types (header)			浮点类型的�
 climits						Sizes of integral types (header)											整型类型的界限
 clocale						C localization library (header)												C本地化工具
 cmath							C numerics library (header)														常用数学函数
-csetjmp						Non local jumps (header)															保存执行语境的宏，及跳转到某个执行语境的函数
+csetjmp						Non local jumps (header)															保存执行语境的宏, 及跳转到某个执行语境的函数
 csignal						C library to handle signals (header)									信号管理的函数与宏常量
 cstdarg						Variable arguments handling (header)									变长实参列表的处理
 cstddef						C Standard definitions (header)												标准宏和 typedef

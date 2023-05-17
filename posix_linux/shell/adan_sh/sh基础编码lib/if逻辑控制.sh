@@ -68,7 +68,7 @@ fi
 ["filename1" -ot "filename2"]  如果filename1比filename2旧, 则为真.
                                例: [ ./file - ot /home/adan/file ]
 !
-# 一定要加双引号!! 否则出错！！
+# 一定要加双引号!! 否则出错!!
 if [ -e "/home/adan/filepath" ]; then echo "文件路径存在"; fi
 if [ -d "/home/adan/folder" ]; then echo "文件夹存在"; fi
 if [ -f "/home/adan/file" ]; then echo "常规文件存在"; fi

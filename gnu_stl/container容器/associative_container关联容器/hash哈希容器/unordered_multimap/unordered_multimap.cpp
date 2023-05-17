@@ -39,9 +39,9 @@
 		equal_range				返回匹配特定键的元素范围
 
 	桶接口
-		begin(size_type)	返回一个迭代器，指向指定的桶的开始
+		begin(size_type)	返回一个迭代器, 指向指定的桶的开始
 		cbegin(size_type)
-		end(size_type)		返回一个迭代器，指向指定的桶的末尾
+		end(size_type)		返回一个迭代器, 指向指定的桶的末尾
 		cend(size_type)
 		bucket_count			返回桶数
 		max_bucket_count	返回桶的最大数量

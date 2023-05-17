@@ -76,7 +76,7 @@ void test_def_trace_err(void) {
 	这类函数基本不会有任何出错的可能性, 也就不需要检查API返回值.
 
 	不检查返回值, 少敲儿个字, 听起来的确诱人, 但实际却得不偿失.
-	大部分资源申请型API, 都需要检查API返回值！！如:
+	大部分资源申请型API, 都需要检查API返回值!!如:
 		内存资源申请malloc(),new()
 		文件资源申请open() fopen()
 		socket资源申请socket()

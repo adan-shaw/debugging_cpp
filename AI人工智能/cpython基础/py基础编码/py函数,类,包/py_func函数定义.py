@@ -55,7 +55,7 @@ print(m_list)
 		参数名前增加一个*可以接收元组, 一般用*args存放元组参数, args是arguments缩写;
 		参数名前增加两个*可以接收字典, 一般用**kwargs存放字典参数, kw是keyword缩写;
 '''
-# 如果入参是变量，那么多值参数传递遵循拆包语法
+# 如果入参是变量, 那么多值参数传递遵循拆包语法
 def test(*args, **kwargs):
 	print(args)
 	print(kwargs)

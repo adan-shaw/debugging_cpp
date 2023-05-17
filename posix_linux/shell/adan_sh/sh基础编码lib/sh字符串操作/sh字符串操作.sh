@@ -6,7 +6,7 @@
 # 0.查找一个字符串是否存在'目标子字符串'(一定要多打双引号!!)
 #
 
-# 方法一:利用grep查找, posix 可用！！
+# 方法一:利用grep查找, posix 可用!!
 str="long stringx cc vv bb"
 str_son="string"
 if [ -n "$(echo "$str" | grep "${str_son}")" ];then

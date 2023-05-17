@@ -54,7 +54,7 @@ void printproto(struct protoent* proto){
 void getprotoent_test(void){
 	struct protoent* proto;
 
-	printf("遍历本地<记录文件>， 并打印所有的协议信息\n");
+	printf("遍历本地<记录文件>,  并打印所有的协议信息\n");
 	setprotoent(1);					//打开并挟持<记录文件>
 													//注意: 你不挟持文件,可能只会一直读取到第一个,读不到后面的协议
 
