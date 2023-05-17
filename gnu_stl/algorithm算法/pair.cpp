@@ -32,7 +32,7 @@
 	成员函数
 		(构造函数)			构造新的pair
 		operator=			赋值
-		swap					交换内容(C++11)
+		swap					交换内容(c++11)
 
 	非成员函数
 		make_pair			创建一个pair 对象, 其类型根据各实参类型定义
@@ -42,12 +42,12 @@
 		operator<=
 		operator>
 		operator>=
-		std::swap(std::pair)					特化std::swap 算法(C++11)
-		std::get(std::pair)						访问pair 的一个元素(C++11)
+		std::swap(std::pair)					特化std::swap 算法(c++11)
+		std::get(std::pair)						访问pair 的一个元素(c++11)
 
 	辅助类
-		std::tuple_size<std::pair>		获得pair的大小(C++11)
-		std::tuple_element<std::pair>	获得pair中元素的类型(C++11)
+		std::tuple_size<std::pair>		获得pair的大小(c++11)
+		std::tuple_element<std::pair>	获得pair中元素的类型(c++11)
 */
 
 

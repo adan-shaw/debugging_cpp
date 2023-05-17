@@ -32,18 +32,18 @@
 		empty							检查容器是否为空
 		size							返回容纳的元素数
 		max_size					返回可容纳的最大元素数
-		shrink_to_fit			通过释放未使用的内存减少内存的使用(C++11)
+		shrink_to_fit			通过释放未使用的内存减少内存的使用(c++11)
 
 	修改器
 		clear							清除内容
 		insert						插入元素
-		emplace						原位构造元素(C++11)
+		emplace						原位构造元素(c++11)
 		erase							擦除元素
 		push_back					将元素添加到容器末尾
-		emplace_back			在容器末尾就地构造元素(C++11)
+		emplace_back			在容器末尾就地构造元素(c++11)
 		pop_back					移除末元素
 		push_front				插入元素到容器起始
-		emplace_front			在容器头部就地构造元素(C++11)
+		emplace_front			在容器头部就地构造元素(c++11)
 		pop_front					移除首元素
 		resize						改变容器中可存储元素的个数
 		swap							交换内容
@@ -56,7 +56,7 @@
 		operator>
 		operator>=
 		std::swap(std::deque)		特化 std::swap 算法
-		erase(std::deque)				擦除所有满足特定判别标准的元素(C++20)
+		erase(std::deque)				擦除所有满足特定判别标准的元素(c++20)
 		erase_if(std::deque)
 */
 

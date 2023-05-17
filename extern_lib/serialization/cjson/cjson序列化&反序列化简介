@@ -6,8 +6,8 @@ json 即JavaScript Object Notation, 是一种互联网常用的轻量级'应用�
 	cjson 是应用数据data to 'json文本'的c/c++ 编码库;
 	json-c 同样也是应用数据data to 'json文本'的c/c++ 编码库[弃用];
 	nlohmann json 是一个全新的, 支持反序列化的c++ 库, 比较好用;
-	ConfigLoader 是一个全新的C++静态反射框架[C++17];
-	dsmarshal 网友实现的c++ 反序列化方案[C++98], 支持比较老的c++;
+	ConfigLoader 是一个全新的c++静态反射框架[c++17];
+	dsmarshal 网友实现的c++ 反序列化方案[c++98], 支持比较老的c++;
 
 ps:
 	关于json反序列, 目前c语言貌似没有具体的实现方案;

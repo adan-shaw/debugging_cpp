@@ -34,13 +34,13 @@
 	修改器
 		clear							清除内容
 		insert						插入元素
-		emplace						原位构造元素(C++11)
+		emplace						原位构造元素(c++11)
 		erase							擦除元素
 		push_back					将元素添加到容器末尾
-		emplace_back			在容器末尾就地构造元素(C++11)
+		emplace_back			在容器末尾就地构造元素(c++11)
 		pop_back					移除末元素
 		push_front				插入元素到容器起始
-		emplace_front			在容器头部就地构造元素(C++11)
+		emplace_front			在容器头部就地构造元素(c++11)
 		pop_front					移除首元素
 		resize						改变容器中可存储元素的个数
 		swap							交换内容
@@ -62,7 +62,7 @@
 		operator>
 		operator>=
 		std::swap(std::list)	特化 std::swap 算法
-		erase(std::list)			擦除所有满足特定判别标准的元素(C++20)
+		erase(std::list)			擦除所有满足特定判别标准的元素(c++20)
 		erase_if(std::list)
 
 	forward_list&list的erase()/insert()操作的区别:

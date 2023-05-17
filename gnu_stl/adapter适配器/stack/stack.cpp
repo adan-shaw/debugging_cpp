@@ -19,7 +19,7 @@
 
 	修改器
 		push					向栈顶插入元素
-		emplace				于顶原位构造元素(C++11)
+		emplace				于顶原位构造元素(c++11)
 		pop						删除栈顶元素
 		swap					交换内容
 
@@ -36,7 +36,7 @@
 		std::swap(std::stack)							特化 std::swap 算法
 
 	辅助类
-		std::uses_allocator<std::stack>		特化 std::uses_allocator 类型特性(C++11)
+		std::uses_allocator<std::stack>		特化 std::uses_allocator 类型特性(c++11)
 
 
 

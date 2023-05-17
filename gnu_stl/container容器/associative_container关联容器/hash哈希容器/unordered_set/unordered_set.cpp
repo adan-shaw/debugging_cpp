@@ -24,18 +24,18 @@
 
 	修改器
 		clear							清除内容
-		insert						插入元素或结点 (C++17 起)
+		insert						插入元素或结点 (c++17 起)
 		emplace						原位构造元素
 		emplace_hint			使用提示原位构造元素
 		erase							擦除元素
 		swap							交换内容
-		extract						从另一容器释出结点(C++17)
-		merge							从另一容器接合结点(C++17)
+		extract						从另一容器释出结点(c++17)
+		merge							从另一容器接合结点(c++17)
 
 	查找
 		count							返回匹配特定键的元素数量
 		find							寻找带有特定键的元素
-		contains					检查容器是否含有带特定关键的元素(C++20)
+		contains					检查容器是否含有带特定关键的元素(c++20)
 		equal_range				返回匹配特定键的元素范围
 
 	桶接口
@@ -61,8 +61,8 @@
 	非成员函数
 		operator==				比较 unordered_set 中的值
 		operator!=
-		std::swap(std::unordered_set)		特化 std::swap 算法(C++11)
-		erase_if(std::unordered_set)		擦除所有满足特定判别标准的元素(C++20)
+		std::swap(std::unordered_set)		特化 std::swap 算法(c++11)
+		erase_if(std::unordered_set)		擦除所有满足特定判别标准的元素(c++20)
 */
 
 

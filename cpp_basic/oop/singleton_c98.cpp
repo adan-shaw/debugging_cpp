@@ -16,7 +16,7 @@ namespace adan_cpplib{
 	//c98 标准下的单例模式
 	//
 
-	//中间tmp 临时类, 用来禁止编译器生成'C++默认成员函数'
+	//中间tmp 临时类, 用来禁止编译器生成'c++默认成员函数'
 	class uncopyable{
 		protected:
 			//允许derived对象的构造和解析

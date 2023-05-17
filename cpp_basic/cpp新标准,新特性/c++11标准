@@ -3,26 +3,26 @@
 #
 1.杂项
 	<typeinfo>						运行时类型信息工具
-	<typeindex>						std::type_index(C++11起)
-	<type_traits>					编译时类型信息(C++11起)
+	<typeindex>						std::type_index(c++11起)
+	<type_traits>					编译时类型信息(c++11起)
 	<functional>					函数对象、函数调用、绑定操作、引用包装
 	<utility>							多种工具组件
-	<chrono>							C++时间工具(C++11起)
+	<chrono>							c++时间工具(c++11起)
 
 2.动态内存管理
 	<new>									低层内存管理工具
 	<memory>							高层内存管理工具
-	<scoped_allocator>		嵌套分配器类(C++11起)
+	<scoped_allocator>		嵌套分配器类(c++11起)
 
 3.数值界限
-	<cstdint>							定长整数及其他类型的界限(C++11起)
-	<cinttypes>						格式化宏、intmax_t及uintmax_t,数学工具及转换(C++11起)
+	<cstdint>							定长整数及其他类型的界限(c++11起)
+	<cinttypes>						格式化宏、intmax_t及uintmax_t,数学工具及转换(c++11起)
 	<limits>							查询算术类型属性的标准化方式
 
 4.错误处理
 	<exception>						异常处理工具
 	<stdexcept>						标准异常对象
-	<system_error>				定义std::error_code,依赖于平台的错误码(C++11起)
+	<system_error>				定义std::error_code,依赖于平台的错误码(c++11起)
 
 
 
@@ -33,7 +33,7 @@
 #
 <cwctype>								确定宽字符数据中所含类型的函数
 <cwchar>								多种宽及多字节字符串处理函数
-<cuchar>								C风格Unicode字符转换函数(C++11起)
+<cuchar>								C风格Unicode字符转换函数(c++11起)
 
 
 
@@ -43,24 +43,24 @@
 # 3.容器库
 #
 1.容器
-	<array>								std::array容器(C++11起)
-	<forward_list>				std::forward_list容器(C++11起)
-	<unordered_set>				std::unordered_set及std::unordered_multiset无序关联容器(C++11起)
-	<unordered_map>				std::unordered_map及std::unordered_multimap无序关联容器(C++11起)
+	<array>								std::array容器(c++11起)
+	<forward_list>				std::forward_list容器(c++11起)
+	<unordered_set>				std::unordered_set及std::unordered_multiset无序关联容器(c++11起)
+	<unordered_map>				std::unordered_map及std::unordered_multimap无序关联容器(c++11起)
 
-	<initializer_list>		std::initializer_list类模板(C++11起)
-	<tuple>								std::tuple类模板(C++11起)
+	<initializer_list>		std::initializer_list类模板(c++11起)
+	<tuple>								std::tuple类模板(c++11起)
 
 2.数值库
 	<complex>							复数类型
 	<valarray>						表示和操作值的数组的类
-	<random>							随机数生成器及分布(C++11起)
+	<random>							随机数生成器及分布(c++11起)
 	<numeric>							容器中值的数值运算
-	<ratio>								编译时有理数算术(C++11起)
-	<cfenv>								浮点环境访问函数(C++11起)
+	<ratio>								编译时有理数算术(c++11起)
+	<cfenv>								浮点环境访问函数(c++11起)
 
 3.正则表达式库
-	<regex>								支持正则表达式处理的类、算法及迭代器(C++11起)
+	<regex>								支持正则表达式处理的类、算法及迭代器(c++11起)
 
 
 
@@ -82,7 +82,7 @@
 # 5.本地化库
 #
 <locale>								本地化工具
-<codecvt>								Unicode转换设施(C++11起)(C++17中弃用)
+<codecvt>								Unicode转换设施(c++11起)(c++17中弃用)
 
 
 
@@ -91,13 +91,13 @@
 # 6.线程支持库
 #
 1.原子操作库
-	<atomic>							原子操作库(C++11起)
+	<atomic>							原子操作库(c++11起)
 
 2.线程支持库
-	<thread>							std::thread类及支持函数(C++11起)
-	<mutex>								互斥原语(C++11起)
-	<future>							异步计算的原语(C++11起)
-	<condition_variable>	线程等待条件(C++11起)
+	<thread>							std::thread类及支持函数(c++11起)
+	<mutex>								互斥原语(c++11起)
+	<future>							异步计算的原语(c++11起)
+	<condition_variable>	线程等待条件(c++11起)
 
 
 

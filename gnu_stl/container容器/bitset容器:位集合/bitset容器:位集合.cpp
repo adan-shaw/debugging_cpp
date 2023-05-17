@@ -26,7 +26,7 @@
 		test(pos)                  : 它和vector中的at()的作用是一样的, 和[]运算符的区别是: 越界检查, 一旦越界, 弹出更准确的报错信息;
 		any()                      : 若存在某一位是true, 则返回true, 否则返回false
 		none()                     : 若所有位都是false, 则返回true, 否则返回false
-		all()                      : C++11, 若所有位都是true, 则返回true, 否则返回false
+		all()                      : c++11, 若所有位都是true, 则返回true, 否则返回false
 		set()                      : 将整个bitset设置成true
 		set(pos, val = true)       : 将某一位设置成true / false
 		reset()                    : 将整个bitset设置成false
@@ -35,7 +35,7 @@
 		flip(pos)                  : 翻转某一位
 		to_string()                : 返回转换成的字符串(返回string 类)
 		to_ulong()                 : 返回转换成的unsigned long
-		to_ullong()                : C++11, 返回转换成的unsigned long long;
+		to_ullong()                : c++11, 返回转换成的unsigned long long;
 */
 
 

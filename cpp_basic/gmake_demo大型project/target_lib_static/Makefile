@@ -82,7 +82,7 @@ CPPFLAGS += -DNDEBUG
 
 # c version: { [ANSI C]=-std=c90=-ansi / -std=c99 / -std=c11 }
 CFLAGS += -std=c99
-# c version: { [ANSI C++]=-std=c++98 / -std=c++03 / -std=c++0x }
+# c version: { [ANSI c++]=-std=c++98 / -std=c++03 / -std=c++0x }
 CPPFLAGS += -std=c++03
 
 # open/close gcc-Warning(打开/关闭 gcc警告功能): { -w关闭 / -W开启 / empty=-W }

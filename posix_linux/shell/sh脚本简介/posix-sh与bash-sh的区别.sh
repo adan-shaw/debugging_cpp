@@ -14,7 +14,7 @@ if false; then
 		但posix shell 的好处是:
 			跨unix平台流通性.
 			主要是各大平台的默认shell 都不一样, 虽然各大平台都支持安装bash shell,
-			但是debian 默认是dash, 一种bash shell 阉割版, 接近posix shell.
+			但debian默认的是dash, 一种bash shell 阉割版, 接近posix shell.
 			所以, shell 的种类太多了, posix shell 好处很大.
 
 		bash shell 的好处是:

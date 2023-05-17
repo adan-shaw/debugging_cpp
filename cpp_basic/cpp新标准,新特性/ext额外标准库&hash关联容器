@@ -28,10 +28,10 @@ g++ 对'ext 额外标准库'的实现, 不包含:
 
 
 因此, 建议直接使用'c++11 标准的hash 关联容器', 取代'ext 额外标准库'的hash 关联容器:
-	std::unordered_set(C++11起)
-	std::unordered_multiset(C++11起)
-	std::unordered_map(C++11起)
-	std::unordered_multimap(C++11起)
+	std::unordered_set(c++11起)
+	std::unordered_multiset(c++11起)
+	std::unordered_map(c++11起)
+	std::unordered_multimap(c++11起)
 
 使用c++11 标准实现, 各大编译器都有实现支持, 这样可靠性比较高;
 而且实际上, c++11 标准的hash 关联容器, 与'ext 额外标准库'的hash 关联容器, 并没有多大差异, 

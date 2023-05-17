@@ -54,8 +54,8 @@
 		operator<=
 		operator>
 		operator>=
-		std::swap(std::forward_list)	特化 std::swap 算法(C++11)
-		erase(std::forward_list)			擦除所有满足特定判别标准的元素(C++20)
+		std::swap(std::forward_list)	特化 std::swap 算法(c++11)
+		erase(std::forward_list)			擦除所有满足特定判别标准的元素(c++20)
 		erase_if(std::forward_list)
 
 	ps:

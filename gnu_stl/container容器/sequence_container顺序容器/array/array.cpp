@@ -45,8 +45,8 @@
 		operator>
 		operator>=
 		std::get(std::array)						访问array 的一个元素
-		std::swap(std::array)						特化std::swap 算法(C++11)
-		to_array												从内建数组创建std::array 对象(C++20)
+		std::swap(std::array)						特化std::swap 算法(c++11)
+		to_array												从内建数组创建std::array 对象(c++20)
 
 	辅助类
 		std::tuple_size<std::array>			获得array 的大小

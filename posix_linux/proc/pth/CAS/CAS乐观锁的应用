@@ -4,8 +4,8 @@
 
 	CAS乐观锁, 无论是:
 		posix API, 实现的API层面上的原子操作;
-		C11 C++11 实现的原子变量: std::atomic_long tmp;
-		C11 C++11 实现的CAS乐观锁: std::atomic_flag lock;
+		C11 c++11 实现的原子变量: std::atomic_long tmp;
+		C11 c++11 实现的CAS乐观锁: std::atomic_flag lock;
 		老式编译器实现的CAS乐观锁(gcc4.1.2原子操作);
 
 	他们的本质上, 都是CAS乐观锁, 都与自旋锁类似, 都是死等锁;

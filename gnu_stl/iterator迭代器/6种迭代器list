@@ -1,10 +1,10 @@
-迭代器共有五(C++17前)/六(C++17起)种:
+迭代器共有五(c++17前)/六(c++17起)种:
 	LegacyInputIterator											旧式输入迭代器					只读/自增(非多趟)
 	LegacyOutputIterator										旧式输出迭代器					只写/自增(非多趟)
 	LegacyForwardIterator										旧式向前迭代器					读(引用写)/自增(多趟)
 	LegacyBidirectionalIterator							旧式双向迭代器					读(引用写)/自增&自减(多趟)
 	LegacyRandomAccessIterator							旧式随机访问迭代器			读(引用写)/自增&自减(多趟)/随机访问
-	LegacyContiguousIterator(C++17起)				旧式连续迭代器					相接存储
+	LegacyContiguousIterator(c++17起)				旧式连续迭代器					相接存储
 
 	ps:
 		一般迭代器的类型, 不需要你记住, 由编译器根据容器类型, 自动选择;
@@ -123,7 +123,7 @@
 
 
 
-6.(C++17起)LegacyContiguousIterator旧式连续迭代器, 支持:
+6.(c++17起)LegacyContiguousIterator旧式连续迭代器, 支持:
 		- 逻辑判断
 			(it == it2) -- 两个迭代器比较
 			(*it == 18) -- 迭代器与'常量/变量'的值比较

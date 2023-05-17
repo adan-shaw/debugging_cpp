@@ -19,7 +19,7 @@
 
 	修改器
 		push					插入元素,并对底层容器排序
-		emplace				原位构造元素并排序底层容器(C++11)
+		emplace				原位构造元素并排序底层容器(c++11)
 		pop						删除栈顶元素
 		swap					交换内容
 
@@ -31,7 +31,7 @@
 		std::swap(std::priority_queue)						特化 std::swap 算法
 
 	辅助类
-		std::uses_allocator<std::priority_queue>	特化 std::uses_allocator 类型特性(C++11)
+		std::uses_allocator<std::priority_queue>	特化 std::uses_allocator 类型特性(c++11)
 */
 
 

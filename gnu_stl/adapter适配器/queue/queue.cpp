@@ -20,7 +20,7 @@
 
 	修改器
 		push					向队列尾部插入元素
-		emplace				于尾部原位构造元素(C++11)
+		emplace				于尾部原位构造元素(c++11)
 		pop						删除队列头部元素
 		swap					交换内容
 
@@ -37,7 +37,7 @@
 		std::swap(std::queue)							特化 std::swap 算法
 
 	辅助类
-		std::uses_allocator<std::queue>		特化 std::uses_allocator 类型特性(C++11)
+		std::uses_allocator<std::queue>		特化 std::uses_allocator 类型特性(c++11)
 */
 
 
