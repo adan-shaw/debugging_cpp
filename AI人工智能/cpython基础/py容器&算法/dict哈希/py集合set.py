@@ -217,8 +217,10 @@ if(1 in pset):
 	print("1 in pset yes")
 
 pint=2
-if(pint in pset):
-	print("pint in pset yes")
+if(pint not in pset):
+	print("2 not in pset no")
+else:
+	print("2 in pset yes")
 
 
 
@@ -228,12 +230,12 @@ print("pset len()=%d" %(len(pset)))
 
 
 # add()添加单个元素
-if("love" in pset):
+if("love" not in pset):
 	pset.add("love")
 
-# update([])添加多个元素(相当于插入了一个list)
-if("you","bitch",666 in pset):
-	pset.update(["you","bitch",666])
+# update([])更新多个元素(相当于插入了一个list)
+if("you","idiot",666 in pset):
+	pset.update(["you","idiot",666])
 print(pset)
 
 
@@ -252,6 +254,16 @@ print(pset.discard("you"))
 if(len(pset)):
 	pset.pop()
 print(pset)
+
+
+
+# 遍历set(最优)
+for v in pset:
+	print(v)
+
+# 使用迭代器遍历set, 浪费性能
+for v in iter(pset):
+	print(v)
 
 
 
