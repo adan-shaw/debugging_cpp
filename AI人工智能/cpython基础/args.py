@@ -10,7 +10,6 @@ if __name__=='__main__':
 	parser.add_argument('--url', type=str, default="127.0.0.1")		# 添加str 字符串参数
 	parser.add_argument('--port', type=int, default=80)						# 添加int 整形参数
 
-
 	# 获取命令行参数
 	args = parser.parse_args()
 
