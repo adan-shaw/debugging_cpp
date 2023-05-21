@@ -1,0 +1,39 @@
+# 安装旧版execl 解析库
+sudo apt-get install python3-xlrd python3-xlwt
+
+# 安装解析execl 的pandas 库
+sudo apt-get install python3-pandas
+
+# 安装解析execl 的openpyxl 库(高性能, 但功能简单)
+sudo apt-get install python3-openpyxl
+
+# python2
+sudo apt-get install python-xlrd python-xlwt
+sudo apt-get install python-pandas
+sudo apt-get install python-openpyxl
+
+
+
+
+
+# openpyxl vs pandas
+1.读取效率:
+	读取方面, openpyxl效率会更快一些(快一倍);
+	但进一步对数据进行探索分析, openpyxl并无法做到, 需要pandas对数据进行探索分析;
+
+
+
+2.数据整理(写):
+	使用openpyxl先对数据简单整理, 再用pandas 进行深层整理, 性能会比较好;
+
+	pandas读取数据是从头开始, 从单元格A1开始连续读取表格, 若首行存在缺失值则该位置的标题表头就会变成Unnamed:i (i=1,2...n);
+	pandas可以轻松地读取和转换Excel数据, 
+	但面对杂乱的表格结构, 分散在不同工作表的数据或是范围性数值的数据(如数值为'5-7'), 
+	以及表格中分布很乱时, 
+	直接使用pandas进行数据清洗相对比较吃力;
+
+
+
+3.execl 与numpy 二维表对接, 100%还原二维表, 目前就panas 做得比较好;
+	openpyxl 是性能不错, 但处理数据是一维的, 实际操作过程十分麻烦, 还是panas 方便;
+	execl 数据导出处理, 不需要性能, 只是一个一次性处理的工具, 所以优选panas;

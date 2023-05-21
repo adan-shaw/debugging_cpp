@@ -1,0 +1,213 @@
+# 导入openpyxl库
+import openpyxl
+
+
+
+
+
+#
+# 1.openpyxl 读操作
+#
+# 打开xlsx, 返回Book(class)工作簿read类实体
+'''
+	filename: 文件路径
+	data_only: 默认为False, 以Excel公式的形式读取; 当为True的时候以值的形式读取
+'''
+book = load_workbook(filename='文件路径', data_only=False)
+
+
+# 打开active活动sheet工作表
+sheet = book.active
+
+
+# 打开指定的sheet工作表
+sheet = book['Sheet1']
+
+
+# 获取sheet 的最大行/列(无, 无效定义)
+#max_row = sheet.max_row
+#max_col = sheet.max_col
+
+
+# 查看sheets(所有工作表的名称), 返回list列表
+book.sheetnames
+
+
+# 访问单个单元格: 直接使用'openpyxl特有的索引方法'(row=A,B,C,D(大写); col=1,2,3,4)
+cell=sheet['A1']
+cell2=sheet['B1']
+cell3=sheet['A2']
+
+
+# 访问单个单元格: 使用sheet.cell()方法
+cell=sheet.cell(1,1)       # 等价于A1
+cell2=sheet.cell(1,2)      # 等价于B1
+cell3=sheet.cell(2,1)      # 等价于A2
+
+# 访问单元格里面的值
+val=cell.value
+val=sheet['A1'].value
+val=sheet.cell(1,1).value
+
+# 访问单元格里面的值类型(永远返回一个int, 不过int 数值不同, 表示不同的'单元格数据存放类型')
+val_t=cell.ctype
+val_t=sheet['A1'].ctype
+val_t=sheet.cell(1,1).ctype
+
+# 访问多个单元格: 直接使用'openpyxl特有的索引方法'(特殊的方法)
+cell_range=sheet['A1:A5']  # 一列5 个单元格
+cell_range=sheet['A1:G1']  # 一行7 个单元格
+
+
+# 按行遍历获取单元格, 返回: 以row为每行单元格组成的元组(元组不可修改, 返回单元格对象没啥实用意义)
+'''
+	min_row: 最小行
+	max_row: 最大行
+	min_col: 最小列
+	max_col: 最大列
+	values_only: 默认为False, 以单元格对象返回; 当为True时, 以单元格值返回
+'''
+for row in ws.iter_rows(min_row=1, max_row=1, min_col=1, max_col=1, values_only=False): print(row)
+
+# 按列遍历获取单元格, 返回: 以col为每列单元格组成的元组(元组不可修改, 返回单元格对象没啥实用意义)
+'''
+	min_row: 最小行
+	max_row: 最大行
+	min_col: 最小列
+	max_col: 最大列
+	values_only: 默认为False, 以单元格对象返回; 当为True时, 以单元格值返回
+'''
+for col in ws.iter_cols(min_row=1, max_row=1, min_col=1, max_col=1, values_only=False): print(col)
+
+
+# 按行获取单元格(返回元组, 元组元素=单元格, 默认按行读取全部) [不可以使用字母]
+ptuple=sheet.iter_rows()       # 按行读取全部
+ptuple=sheet.iter_rows(1,1)    # 仅读取第一行
+ptuple=sheet.iter_rows(2,2)    # 仅读取第二行
+ptuple=sheet.iter_rows(3,3)    # 仅读取第三行
+
+# 按列获取单元格(返回元组, 元组元素=单元格, 默认按列读取全部) [不可以使用字母]
+ptuple=sheet.iter_cols()       # 按列读取全部
+ptuple=sheet.iter_cols(1,1)    # 列读取第一列
+ptuple=sheet.iter_cols(2,2)    # 列读取第二列
+ptuple=sheet.iter_cols(3,3)    # 列读取第三列
+#ptuple=sheet.iter_cols('A')
+
+
+
+
+
+
+
+
+#
+# 2.openpyxl 写操作
+#
+# 创建workbook工作簿, 返回Workbook(class)工作簿write类实体
+workbook = Workbook()
+
+# 保存workbook工作簿
+workbook.save()
+
+# 创建新的worksheet工作表(不传递名字的话, 默认自动赋值Sheet1、Sheet2...)
+worksheet = workbook.create_sheet('Sheet2')
+
+# 修改worksheet工作表名称
+workbook.title = 'Sheet_New_Name'
+
+# 删除worksheet工作表
+workbook.remove(worksheet)
+
+# 复制sheet工作表(创建worksheet副本)
+sheet2 = book.active
+worksheet2 = workbook.copy_worksheet(sheet2)
+
+# 修改worksheet工作表标签颜色
+worksheet.sheet_properties.tabColor = "1072BA"
+worksheet.sheet_properties.tabColor = '颜色十六进制码'
+
+
+# 在最后添加一行数据(传入参数必须为: list列表/tuple元组, 一维容器)
+worksheet.append(plist)
+worksheet.append(ptuple)
+
+# 插入行(row_pos=插入起始位, row_count=插入的数量)
+worksheet.insert_rows(row_pos, row_count)
+
+# 插入列(col_pos=插入起始位, col_count=插入的数量)
+worksheet.insert_cols(col_pos, col_count)
+
+# 删除行(row_pos=插入起始位, row_count=插入的数量)
+worksheet.delete_rows(row_pos, row_count)
+
+# 删除列(col_pos=插入起始位, col_count=插入的数量)
+worksheet.delete_cols(col_pos, col_count)
+
+
+# 修改单个单元格: 直接使用'openpyxl特有的索引方法'(row=A,B,C,D(大写); col=1,2,3,4)
+cell=worksheet['A1']
+cell.value = 999
+cell.ctype = 1
+worksheet['A1'].value = 999
+worksheet['A1'].ctype = 1
+
+# 修改单个单元格: 使用worksheet.cell()方法
+cell=worksheet.cell(1,1)
+cell.value = 999
+cell.ctype = 1
+worksheet.cell(1,1).value = 999
+worksheet.cell(1,1).ctype = 1
+
+
+# 合并单元格, 例: 合并A1到C2的单元格
+worksheet.merge_cells('首格:末格')
+worksheet.merge_cells('A1:C2')
+
+# 合并单元格(另一种方法), 例: 合并A1到C2的单元格
+'''
+	start_row:    开始行
+	srart_column: 开始列
+	end_row:      结束行
+	end_column:   结束列
+'''
+worksheet.merge_cells(start_row=1, start_column=1, end_row=3, end_column=2)
+
+
+# 拆分'已合并的单元格'(单个单元格不可擦分, 擦分成粒度为1 的单元格), 例: 拆分A1到C2
+worksheet.unmerge_cells('首格:末格')
+worksheet.unmerge_cells('A1:C2')
+
+# 拆分'已合并的单元格'(另一种方法), 例: 拆分A1到C2
+'''
+	start_row:    开始行
+	srart_column: 开始列
+	end_row:      结束行
+	end_column:   结束列
+'''
+worksheet.unmerge_cells(start_row=1, start_column=1, end_row=3, end_column=2)
+
+
+# 移动&覆盖数据区域(被移动的数据清空, 被覆盖的区域覆盖), 例: 将D4到F10向上移动1行, 向右移动2列
+worksheet.move_range("D4:F10", rows=-1, cols=2)
+
+# 冻结行/列, 例: 冻结B列和第2行
+worksheet.freeze_panes = '作为基准的单元格'
+worksheet.freeze_panes = 'B2'
+
+# 隐藏行/列
+worksheet.column_dimensions.group('A', 'D', hidden=True) # 隐藏A到D列
+worksheet.row_dimensions.group(1, 10, hidden=True)       # 隐藏1到10行
+
+# 插入图片(需要openpyxl.drawing.image)
+from openpyxl.drawing.image import Image
+img = Image('图片文件')
+worksheet.add_image(img, '单元格位置')
+
+
+
+
+
+# 使用Excel公式(公式读写属性要区分好, book 使用公式读可以, workbook 使用公式写可以)
+ws['单元格位置'] = '=Excel公式'
+sheet["A1"] = "=SUM(1, 1)"                               # 例-读公式: 求和
+

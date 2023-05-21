@@ -1,42 +1,104 @@
-1.安装uWSGI
-	cd ~/venv_py311/bin
-	./python3 -m pip install uwsgi -i https://mirrors.aliyun.com/pypi/simple/
+#
+# 1.快捷安装uwsgi 关键包
+#
+# uwsgi 核心组件
+uwsgi - fast, self-healing application container server
+uwsgi-core - fast, self-healing application container server (core)
+uwsgi-dbg - debugging symbols for uWSGI server and it's plugins
+uwsgi-dev - fast, self-healing application container server (headers)
+uwsgi-emperor - fast, self-healing application container server (emperor scripts)
+uwsgi-extra - fast, self-healing application container server (extra files)
 
-	安装之后, 生成路径在:
-		/home/tarball/cpython311/lib/python3.11/wsgiref/
-
-	执行路径bin:
-		/home/tarball/cpython311/bin/uwsgi
-
-	直接创建link to venv(这是一个exe二进制封装包, 不是.py, 所以可以直接创建软链接):
-		ln -s /home/tarball/cpython311/bin/uwsgi /home/adan/venv_py311/bin/uwsgi
-
-
+apt-get install uwsgi uwsgi-core uwsgi-dbg uwsgi-dev uwsgi-emperor uwsgi-extra 
 
 
 
-2.first test:
-	cd /home/adan/venv_py311/bin/
-	./uwsgi --http :8001 --wsgi-file ../lib_py/uwsgi/test_uwsgi.py
+# uwsgi 插件的关键拓展
+uwsgi-infrastructure-plugins - infrastructure plugins for uWSGI
+uwsgi-app-integration-plugins - plugins for integration of uWSGI and application
 
-	# 测试
-	curl http://127.0.0.1:8001/
-
+apt-get install uwsgi-infrastructure-plugins uwsgi-app-integration-plugins
 
 
 
+# apache 内建的uwsgi 模块
+libapache2-mod-proxy-uwsgi - transitional package
+libapache2-mod-ruwsgi - uwsgi module for Apache2 (mod_Ruwsgi)
+libapache2-mod-ruwsgi-dbg - debugging symbols for Apache2 mod_Ruwsgi
+libapache2-mod-uwsgi - uwsgi module for Apache2 (mod_uwsgi)
+libapache2-mod-uwsgi-dbg - debugging symbols for Apache2 mod_uwsgi
 
-3.uwsgi 指定config 文件启动:
-	# uWSGI 支持多种配置文件格式, 比如 xml/ini/json 等等都可以;
-	cd /home/adan/venv_py311/bin/
-	#./uwsgi --xml ../lib_py/uwsgi/config.xml --wsgi-file ../lib_py/uwsgi/test_uwsgi.py
-	./uwsgi --ini ../lib_py/uwsgi/config.ini --wsgi-file ../lib_py/uwsgi/test_uwsgi.py
 
-	# 查看uwsgi 有没有启动
-	netstat -lpnt
 
-	# 杀死uwsgi
-	killall uwsgi
 
-	# 测试
-	curl http://127.0.0.1:8001/
+
+#
+# 2.debian 10 自带的uwsgi 安装包
+#
+libapache2-mod-proxy-uwsgi - transitional package
+python-django-uwsgi - uWSGI related tools for Django
+python-django-uwsgi-doc - uWSGI related tools for Django (Documentation)
+python3-django-uwsgi - uWSGI related tools for Django (Python3 version)
+python-django-websocket-redis - Websockets for Django applications using Redis (Python2 version)
+python3-django-websocket-redis - Websockets for Django applications using Redis (Python3 version)
+lemonldap-ng-uwsgi-app - Lemonldap::NG uWSGI server
+mailman3-web - Django project integrating Mailman3 Postorius and HyperKitty
+neutron-server - OpenStack virtual network service - metapackage for the server
+libnginx-mod-http-cache-purge - Purge content from Nginx caches
+nginx-extras - nginx web/proxy server (extended version)
+nginx-full - nginx web/proxy server (standard version)
+nginx-light - nginx web/proxy server (basic version)
+radicale - simple calendar and addressbook server - daemon
+libapache2-mod-ruwsgi - uwsgi module for Apache2 (mod_Ruwsgi)
+libapache2-mod-ruwsgi-dbg - debugging symbols for Apache2 mod_Ruwsgi
+libapache2-mod-uwsgi - uwsgi module for Apache2 (mod_uwsgi)
+libapache2-mod-uwsgi-dbg - debugging symbols for Apache2 mod_uwsgi
+python-uwsgidecorators - module of decorators for elegant access to uWSGI API (Python 2)
+python3-uwsgidecorators - module of decorators for elegant access to uWSGI API (Python 3)
+uwsgi - fast, self-healing application container server
+uwsgi-app-integration-plugins - plugins for integration of uWSGI and application
+uwsgi-core - fast, self-healing application container server (core)
+uwsgi-dbg - debugging symbols for uWSGI server and it's plugins
+uwsgi-dev - fast, self-healing application container server (headers)
+uwsgi-emperor - fast, self-healing application container server (emperor scripts)
+uwsgi-extra - fast, self-healing application container server (extra files)
+uwsgi-infrastructure-plugins - infrastructure plugins for uWSGI
+uwsgi-plugin-alarm-curl - cURL alarm plugin for uWSGI
+uwsgi-plugin-alarm-xmpp - XMPP alarm plugin for uWSGI
+uwsgi-plugin-asyncio-python - asyncio plugin for uWSGI (Python 2)
+uwsgi-plugin-asyncio-python3 - asyncio plugin for uWSGI (Python 3)
+uwsgi-plugin-curl-cron - cron cURL plugin for uWSGI
+uwsgi-plugin-emperor-pg - Emperor PostgreSQL plugin for uWSGI
+uwsgi-plugin-fiber - Fiber plugin for uWSGI
+uwsgi-plugin-gccgo - GNU Go plugin for uWSGI
+uwsgi-plugin-geoip - GeoIP plugin for uWSGI
+uwsgi-plugin-gevent-python - gevent plugin for uWSGI (Python 2)
+uwsgi-plugin-gevent-python3 - gevent plugin for uWSGI (Python 3)
+uwsgi-plugin-glusterfs - GlusterFS storage plugin for uWSGI
+uwsgi-plugin-graylog2 - graylog2 plugin for uWSGI
+uwsgi-plugin-greenlet-python - greenlet plugin for uWSGI (Python 2)
+uwsgi-plugin-greenlet-python3 - greenlet plugin for uWSGI (Python 3)
+uwsgi-plugin-jvm-openjdk-11 - Java plugin for uWSGI (OpenJDK 11)
+uwsgi-plugin-jwsgi-openjdk-11 - JWSGI plugin for uWSGI (OpenJDK 11)
+uwsgi-plugin-ldap - LDAP plugin for uWSGI
+uwsgi-plugin-lua5.1 - Lua WSAPI plugin for uWSGI (Lua 5.1)
+uwsgi-plugin-lua5.2 - Lua WSAPI plugin for uWSGI (Lua 5.2)
+uwsgi-plugin-mono - Mono/ASP.NET plugin for uWSGI
+uwsgi-plugin-psgi - Perl PSGI plugin for uWSGI
+uwsgi-plugin-python - WSGI plugin for uWSGI (Python 2)
+uwsgi-plugin-python3 - WSGI plugin for uWSGI (Python 3)
+uwsgi-plugin-rack-ruby2.5 - Rack plugin for uWSGI (ruby2.5)
+uwsgi-plugin-rados - Ceph/RADOS storage plugin for uWSGI
+uwsgi-plugin-rbthreads - Ruby native threads plugin for uWSGI (ruby2.5)
+uwsgi-plugin-ring-openjdk-11 - Closure/Ring plugin for uWSGI (OpenJDK 11)
+uwsgi-plugin-router-access - Access router plugin for uWSGI
+uwsgi-plugin-servlet-openjdk-11 - JWSGI plugin for uWSGI (OpenJDK 11)
+uwsgi-plugin-sqlite3 - SQLite 3 configurations plugin for uWSGI
+uwsgi-plugin-tornado-python - tornado plugin for uWSGI (Python 2)
+uwsgi-plugin-tornado-python3 - tornado plugin for uWSGI (Python 3)
+uwsgi-plugin-xslt - XSLT request plugin for uWSGI
+uwsgi-plugins-all - all available plugins for uWSGI
+uwsgi-src - sources for uWSGI plugins
+uwsgi-plugin-luajit - Lua WSAPI plugin for uWSGI (LuaJIT)
+uwsgi-plugin-mongo - MongoDB/GridFS plugins for uWSGI
+uwsgi-plugin-php - PHP plugin for uWSGI

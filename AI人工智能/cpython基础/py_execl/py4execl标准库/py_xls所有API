@@ -1,0 +1,127 @@
+#
+# 1.xlrd读取库:
+#
+# 根据./example.xls 文件路径, 读入Book(class)工作簿read类实体
+book_r=xlrd.open_workbook("./example.xls")
+
+Book(class)工作簿read类成员:
+	nsheets:                      sheets数
+	sheet_names:                  sheet工作表名list
+	sheets:                       sheet工作表类实体list(每个元素都是一个sheet工作表类实体)
+	sheet_by_index(sheetx):       按序号提取Sheet(class)类实体(弃用, 超级难用)
+	sheet_by_name(sheet_name):    按名称提取Sheet(class)类实体
+
+Sheet(class)类成员:
+	name:                                           sheet工作表名
+	nrows:                                          行数
+	ncols:                                          列数
+	cell(rowx,colx):                                第rows行colx列的单元格, 返回Cell(class)类实体
+	cell_type(rowx,colx):                           数据类型
+	cell_value(rows,colx):                          数值
+	col(colx):                                      第colx列所有单元格组成的列表
+	col_slice(colx,start_rowx=0,end_rowx=None):     第colx列指定单元格组成的列表
+	col_types(colx,start_rowx=0,end_rowx=None):     第colx列指定单元格数值类型组成的列表
+	col_values(colx,start_rowx=0,end_rowx=None):    第colx列指定单元格数值组成的列表
+	row(rows):                                      第rows行所有单元格组成的列表
+	row_slice(rows,start_rowx=0,end_rowx=None):     第rows行指定单元格组成的列表
+	row_types(rows,start_rowx=0,end_rowx=None):     第rows行指定单元格数值类型组成的列表
+	row_values(rows,start_rowx=0,end_rowx=None):    第rows行指定单元格数值组成的列表
+
+Cell(class)类成员:
+	ctype:                        一个int型变量, 对应不同的数值类型
+	value:                        单元格的值
+
+
+
+
+
+#
+# 2.xlwt写入库:
+#
+# 创建一个新的Workbook(class)工作簿write类实体
+workbook_w=xlwt.Workbook()
+
+Workbook(class)工作簿write类成员:
+	encoding:                     编码方案
+	add_sheet(sheet_name):        添加sheet工作表
+	get_sheet(Sheet_name):        选择sheet工作表
+	save(file_name):              保存
+
+Worksheet(class)类成员:
+	write(rows,colx,cell_value,style):              编辑单元格
+	row(rowx).write(colx,cell_value,style):         编辑行
+	col(colx),write(rows,cell_value,style):         编辑列
+	flush_row_data():                               减少内存压力, flush之前行不可再修改(不存在这个API?? 暂时弃用)
+
+	easyxf(function)                                创建XFStyle instance, 格式控制
+	expression syntax: (<element>:(<attribute> <value>,)+;)+
+	<element> - <attribute> - <value>:
+	(加粗为默认格式, 以下所列并非全部)
+  font      - bold          - True or False
+            - colour        - {colour}
+            - italic        - True or False
+            - name          - name of the font, Arial
+            - underline     - True or False
+  alignment - direction     - general, lr, rl
+            - horizontal    - general, left, center, right, filled 
+            - vertical      - bottom, top, center, justified, distributed
+            - shrink_to_fit - True or False
+  bolders   - left          - an integer width between 0 and 13
+            - right         - an integer width between 0 and 13
+            - top           - an integer width between 0 and 13
+            - bottom        - an integer width between 0 and 13
+            - diag          - an integer width between 0 and 13
+            - left_colour   - {colour}*, automatic colour
+            - right_colour  - {colour}*, automatic colour
+            - ...
+  pattern   - back_color    - {colour}*, automatic colour
+            - fore_colour   - {colour}*, automatic colour
+            - pattern       - none, solid, fine_dots, sparse_dots
+  {colous}*: black, (dark_)(light_)blue, gold, (dark_)(light_)green, ivory, lavender,
+             (light_)orange, pink, (dark_)red, rose, violet, white, (dark_)(light_)yellow, ...
+
+
+
+
+
+#
+# 3.xlutils追加写入库(需要手动安装: pip install xlutils):
+#
+# 导入python xlutils库
+import xlutils
+
+xlutils 的成员API:
+	copy:                          将xlrd.Book转为xlwt.Workbook
+	styles:                        读取xlrd.Workbook的每一个单元格的style
+	display:                       简单而安全地呈现xlrd读取的数据
+	filter:                        拆分与整合多个xls文件
+	margins:                       查看表格稀疏程度
+	save:                          序列化xlrd.Book, 转存为binary xls或stream
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
