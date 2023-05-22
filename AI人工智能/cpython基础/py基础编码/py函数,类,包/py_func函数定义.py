@@ -49,6 +49,23 @@ print(m_list)
 
 
 
+# 固定形参类型
+def val_type_confirm_normal(try_int: int, try_str: str = "default value") -> str:
+	print(try_int)
+	print(try_str)
+	return "return a string"
+print(val_type_confirm_normal(999))
+
+# 固定参数为容器: dict/list/tuple
+def val_type_confirm_stl(try_dict: dict, try_list: list, try_tuple: tuple) -> str:
+	print(try_dict)
+	print(try_list)
+	print(try_tuple)
+	return "return a string"
+print(val_type_confirm_stl({11,22},[11,22],(11,22)))
+
+
+
 # 装饰器: 多值参数传入
 '''
 	Python中有两种多值参数:
@@ -65,5 +82,7 @@ d = {"name":"horizon","11":1}
 
 # 拆包语法
 test(*tup, **d)
+
+
 
 
