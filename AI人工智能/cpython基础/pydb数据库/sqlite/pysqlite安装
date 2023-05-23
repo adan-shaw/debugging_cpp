@@ -1,0 +1,15 @@
+python-pysqlite2 - Python interface to SQLite 3
+python-pysqlite2-dbg - Python interface to SQLite 3 (debug extension)
+
+python-sqlite - Python interface to SQLite 2
+python-sqlite-dbg - Python interface to SQLite 2 (debug extension)
+
+python3-aiosqlite - sqlite library for Python 3 using asyncio
+
+
+
+# 安装sqlite3 for python
+apt-get install python-pysqlite2 python-pysqlite2-dbg
+
+# 安装sqlite2 for python
+apt-get install python-sqlite python-sqlite-dbg
