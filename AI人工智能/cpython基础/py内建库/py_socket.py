@@ -1,4 +1,14 @@
+#coding=utf-8
+
+
+
 import socket
+
+
+
+# 现在的python 编程, 基本上都会用到框架, 所以根本不需要自己搭建socket 软件, 所以, 尽量不学, 省略, 知道就好;
+
+
 
 # unix socket
 sfd = socket.socket(AF_UNIX, SOCK_STREAM, 0); # tcp
@@ -36,4 +46,3 @@ sfd.connect_ex();
 
 
 
-# 现在的python 编程, 基本上都会用到框架, 所以根本不需要自己搭建socket 软件, 所以, 尽量不学, 省略, 知道就好;
