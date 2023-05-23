@@ -71,3 +71,5 @@ mod_timestamp = time.mktime(time.strptime('2020-10-10 10:00:00', '%Y-%m-%d %H:%M
 # 篡改文件的访问和修改时间(篡改后, gedit 编辑器会显示文件已经修改, 要求你reload)
 os.utime('./py_os.py', (mod_timestamp, mod_timestamp))
 print(os.path.getmtime('./py_os.py'))
+
+
