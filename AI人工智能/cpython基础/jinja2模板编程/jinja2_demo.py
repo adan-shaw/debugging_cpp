@@ -163,7 +163,7 @@ print(output)
 
 
 
-# 7.jinja2 模板代码之间的内嵌(about.html 中内嵌base.html, 内嵌是通过extends指令完成的)
+# 8.jinja2 模板代码之间的内嵌(about.html 中内嵌base.html, 内嵌是通过extends指令完成的)
 content = 'This is about page'
 
 file_loader = FileSystemLoader('.', 'utf-8', False)
