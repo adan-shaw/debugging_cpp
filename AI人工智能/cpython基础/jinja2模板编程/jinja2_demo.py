@@ -173,4 +173,3 @@ template = env.get_template('about.html')
 
 output = template.render(content=content)
 print(output)
-
