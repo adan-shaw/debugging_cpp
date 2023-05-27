@@ -1,10 +1,47 @@
+{# 引入base.html 页 #}
 {% extends 'base.html' %}
 
+
+{# 设置base.html 中的title 块的内容 #}
 {% block title%}About page{% endblock %}
 
+
+{# 设置base.html 中的content 块的内容 #}
 {% block content %}
+
 <h1>About page</h1>
 <p>
-    This is about page
+  This is about page[content from jinja2 template]
 </p>
+
+
+
+print good student name[show you how to use if in jinja2]:
+* 展示怎么在jinja2 中使用if *
+  {% for tmp in students %}
+    {% if tmp == "donkey" %}
+    ** {{ tmp }} **
+    {% elif tmp == "idiot" %}
+    ** {{ tmp }} **
+    {% else %}
+    ++ {{ tmp }} ++
+    {% endif %}
+  {%- endfor %}
+
+
+
+* jinja2 打印复杂结构体list[dict{}]: 筛选少于18 岁的学生():
+{% for tmp in students_info %}
+	{% if tmp.age < 18 %}
+		{{- tmp.name }}
+	{% endif %}
+{%- endfor %}
+
+
+
+* jinja2 打印复杂结构体list[dict{}]: 遍历打印(打印内嵌结构体):
+{% for pdict_tmp in students_info %}
+	{  {% for k,v in pdict_tmp.items() %} {{k}}-{{v}}, {%- endfor %}  }
+{%- endfor %}
+
 {% endblock %}
