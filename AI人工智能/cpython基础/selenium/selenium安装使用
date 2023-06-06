@@ -1,0 +1,50 @@
+#
+# 1.selenium 简介
+#
+selenium 是一个测试框架, 支持多种语言, python, java等(但没有c++ 版本, 不支持c++)
+
+selenium 是通过web 浏览器控件, 主动调用web 浏览器启动, 去访问url, 做到100% 终端仿真, 并不是单纯curl 检测数据而已;
+
+也可测试一下web 页面在web 浏览器上面的执行是否正确;
+(相当于启动web浏览器去访问url, 然后返回web text超文本, 再做text 检索)
+
+selenium 支持python, 同一个selenium 包, 支持python2, python3 下运行;
+
+
+
+
+
+#
+# 2.selenium 安装使用
+#
+chromium-driver - web browser - WebDriver support
+python-selenium - Python bindings for Selenium
+python3-selenium - Python3 bindings for Selenium
+
+# debian 默认只有chromium 的webdriver, firefox 的webdriver 需要自己去github 下载安装包
+apt-get install chromium-driver python-selenium python3-selenium
+
+
+
+
+
+#
+# 3.selenium 的简单使用(相当于启动web浏览器去访问url)
+#
+ps:
+	不同版本的web 浏览器, 需要安装不同版本的webdriver 才能正常使用;
+
+启动Chrome浏览器:
+	from selenium import webdriver
+	browser = webdriver.Chrome()
+	browser.get('http://www.baidu.com/')
+
+启动Firefox浏览器(从github 中获取):
+	from selenium import webdriver
+	browser = webdriver.Firefox()
+	browser.get('http://www.baidu.com/')
+
+启动IE浏览器(弃用):
+	from selenium import webdriver
+	browser = webdriver.Ie()
+	browser.get('http://www.baidu.com/')
