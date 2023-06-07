@@ -21,6 +21,9 @@ browser.implicitly_wait(2)
 # 访问url
 browser.get('http://127.0.0.1:8072/')
 
+# 打印该页的标题
+print(browser.title)
+
 # 利用js 代码, 创建新Tab标签页
 browser.execute_script('window.open("http://127.0.0.1:8072/");')
 
@@ -45,6 +48,8 @@ browser.switch_to.window(handles[0])
 # 暴力创建128 个
 for x in range(128):
 	browser.execute_script('window.open("http://127.0.0.1:8072/");')
+	# 创建空白页
+	#browser.execute_script('window.open("about:blank");')
 
 # 快速关闭128 个(从最后一个开始关闭)
 for x in range(128):
