@@ -1,0 +1,59 @@
+dpkg 命令, 是deb 包的安装管理工具;
+dpkg-deb 命令, 是deb 包的封装, 查看, 拆包等操作工具;
+
+
+
+# 打印deb 包的描述信息
+dpkg-deb -I ./python2_2.7.16-1_amd64.deb
+
+# 打印deb 包中所有的文件路径
+dpkg-deb -c ./python2_2.7.16-1_amd64.deb
+
+
+
+# 封包前的预处理(对control.tar.xz & data.tar.xz的数据, 进行极限压缩) [压缩等级max=9(已是最高)]
+# 7z压缩比例和des 加密差不多, 没有优势, 还消耗很多时间和cpu;(一般不能对control.tar.xz & data.tar.xz包进行加密)
+7z a ./control.tar.xz ./control.tar -r -mx=9
+7z a ./data.tar.xz ./data.tar -r -mx=9
+
+
+
+
+
+# debian 重新封包, 其实就是一条命令:
+dpkg-deb -b ./python2_2.7.16-1_amd64 ./python2_2.7.16-1_amd64.deb
+
+
+
+# 所以, 其实deb 封包很简单, 关键是部署信息和md5sum 校验码要算对!!
+# 为了演示, 这里就不自己封包了, 拿一个现成的包, 拆了再封, 演示一遍;
+
+
+
+# 下载pypy2.7(略), 得到./python2_2.7.16-1_amd64.deb
+
+# 计算md5sum(为了验证封包结果的正确性)
+md5sum ./python2_2.7.16-1_amd64.deb
+
+# 拆包(重点: control.tar.xz 包必须新建一个DEBIAN 文件, 用作存放)
+dpkg-deb -X ./python2_2.7.16-1_amd64.deb ./python2_2.7.16-1_amd64
+dpkg-deb -e ./python2_2.7.16-1_amd64.deb ./python2_2.7.16-1_amd64/DEBIAN
+
+
+# 封包
+dpkg-deb -b ./python2_2.7.16-1_amd64 ./my_python2_2.7.16-1_amd64.deb
+
+# 计算md5sum(直接重新封包, 应该md5sum 是一样的) [failed!! 竟然不一样]
+md5sum ./my_python2_2.7.16-1_amd64.deb
+md5sum ./python2_2.7.16-1_amd64.deb
+
+# 查看pypy2.7 的简要信息
+dpkg-deb -c ./my_python2_2.7.16-1_amd64.deb
+dpkg-deb -I ./my_python2_2.7.16-1_amd64.deb
+
+
+# 安装测试
+sudo dpkg -i ./my_python2_2.7.16-1_amd64.deb
+sudo dpkg -r ./my_python2_2.7.16-1_amd64.deb
+
+
