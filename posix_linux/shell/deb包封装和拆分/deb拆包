@@ -1,0 +1,45 @@
+dpkg 命令, 是deb 包的安装管理工具;
+dpkg-deb 命令, 是deb 包的封装, 查看, 拆包等操作工具;
+
+
+
+# 打印deb 包的描述信息
+dpkg-deb -I ./python2_2.7.16-1_amd64.deb
+
+# 打印deb 包中所有的文件路径
+dpkg-deb -c ./python2_2.7.16-1_amd64.deb
+
+
+
+
+
+# 全部解压, 需要分两步!!
+
+# 解压data.tar.xz 部署文件
+dpkg-deb -X ./python2_2.7.16-1_amd64.deb ./python2_2.7.16-1_amd64
+
+# 解压control.tar.xz 软件的详细描述信息 & md5sum 校验码数据
+dpkg-deb -e ./python2_2.7.16-1_amd64.deb ./python2_2.7.16-1_amd64/DEBIAN
+
+
+
+
+
+# 手动暴力解包
+使用xarchiver 可视化工具, 直接解压./python2_2.7.16-1_amd64.deb
+一般会得到3 个文件:
+	debian-binary:   描述软件版本
+	control.tar.xz:  软件的详细描述信息
+	data.tar.xz:     软件/usr/* 的部署文件
+
+
+然后再进一步手动手动解压:
+	control.tar.xz:
+		control:       软件的详细描述信息
+		md5sums:       所有部署文件的md5sum 校验码(一般来说, 每部署一个文件, 都要使用一个md5sum 校验码)
+
+	data.tar.xz:
+		/usr/bin/*     大量部署文件
+		/usr/lib/*
+		/usr/etc/*
+		/usr/share/*
