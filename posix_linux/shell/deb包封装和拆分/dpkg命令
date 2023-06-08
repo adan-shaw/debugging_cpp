@@ -1,0 +1,40 @@
+***
+dpkg的用法
+***
+	<package.deb> = 未安装的.deb包
+	<software> = 已经安装的软件(必须使用准确关键字)
+	<keywork> = 查询关键词
+
+	注意:
+		apt 包管理器, 下载之后的.deb包, 默认存放在: /var/cache/apt/archives
+
+
+
+!_1.dpkg 的安装与卸载:
+		dpkg -i <package.deb>            安装包
+		dpkg -r <software>               删除包
+		dpkg -P <software>               删除包(包括配置文件)
+		dpkg --purge <software>          彻底卸载
+
+
+
+!_2.dpkg 的查询:
+		dpkg -l                          列出'当前-所有已安装的包'
+		dpkg -l <software>               查询单个包的信息
+		dpkg -l | grep <keywork>         查询单个包的信息, 再筛选出关键字;
+
+		dpkg -L <keywork>                查看'已安装的软件'所占用的安装路径
+		dpkg -S <keywork>                查看'已安装的软件'所占用的安装路径(包括config文件)
+		dpkg -s <keywork>                查看单个软件的'安装简介/软件简介'信息(简单)
+		dpkg -I vim7.0.deb               查看单个软件的'安装简介/软件简介'信息(详细)
+
+
+
+!_3.dpkg 包操作
+		dpkg -c ./<package.deb>          列出 deb 包的内容
+		dpkg -unpack ./<package.deb>     解开 deb 包
+
+
+
+!_4.dpkg 重新配置local 本地系统信息(有点类似bsdconfig命令)
+		dpkg-reconfigure locales
