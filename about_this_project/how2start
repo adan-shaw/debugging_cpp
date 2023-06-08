@@ -4,7 +4,7 @@ how to start c/c++ programming in linux system?
 		start by install linux system, start by linux basic command,
 		keep using linux system as usually as windows/MacOS system;
 
-	* second, read books, i shared to you my favorite books:
+	* second, read books, i shared to you guys my favorite books:
 		* No.0: 单片机原理与应用(第二版) - 北京航空航天大学出版社(次要, 没决心可以忽略不学)
 						主修:8051 汇编, 梦起始的地方
 		* No.1: 标准c++实用教程 - 电子工业出版社(康晓林,汪涛) [十分重要,书本很少,请买正版]
@@ -13,55 +13,86 @@ how to start c/c++ programming in linux system?
 		* No.4: Linux/Unix系统编程手册[德]Michael Kerrisk - 人民邮电出版社
 		* No.5: TCP/IP详解卷1: 协议(必须要会), 卷2: syscall(内核编码,需要可以买), 卷3: TCP进阶(需要买,互联网常用)
 
-	* three, start programming, try how to use it;
+	* three, start programming, try to use it, write some demo;
 
 	* four, record important data;
-		ps: 鉴于刚开始编码的时候, 一般初学者水平不高, 初级的时候, 注重收集数据, 完善数据, 知识点,
-				让知识树, 理论上支撑稳定之后, 再进行精炼(一般可以一边练手,一边收集资料,一阶段很漫长);
-				等资料, 练手经验, 准备得差不多的时候, 就提炼, 尝试深入了解细节, 尝试步入二阶;
-				注意:
-					不要一开始就做算法, 除非你是应用数学系出身的高材生, 
-					否则容易托慢进度, 打思想空转, 
-					c++数据结构基础扎实即可, 后续具体业务, 具体分析, 老板给钱, 你就学具体行业的算法;
-					学习过程中接触过的算法, 大部分到了后期都惨不忍睹, 不堪直视, 不敢相信自己写的烂代码, 别浪费时间;
+		建议1:
+			鉴于刚开始编码的时候, 一般初学者水平不高, 初级的时候, 注重收集数据, 完善数据, 知识点;
+			让知识树, 理论树, 足够支撑下一阶段的拓展的需求的时候, 再进行精炼(一般可以一边收集资料,一边练手,一阶段很漫长);
+			等资料, 练手经验, 准备得差不多的时候, 就提炼, 尝试深入了解细节, 尝试步入二阶;
+			(这个过程可能是比较反复, 多次重复的, 所以渐渐你也会养成非常良好的: 数据梳理, 分类习惯, 咬文嚼字)
+		建议2:
+			不要一开始就做算法, 除非你是应用数学系出身的高材生, 
+			否则容易托慢进度, 打思想空转, 
+			c++数据结构基础扎实即可, 后续具体业务, 具体分析, 老板给钱, 你就学具体行业的算法;
+			学习过程中接触过的算法, 大部分到了后期都惨不忍睹, 不堪直视, 不敢相信自己写的烂代码, 别浪费时间;
+			学习的主要目标是:
+				学习计算机原理(由于c/c++ 必然会涉及计算机底层的知识, 所以必须学)
+				网络协议基础(偏软件, 非数模转换, 这里谈论的是纯软件程序员的养成日记)
+				c++数据结构基础(主要是顺序容器, 树形容器, hash容器 这三类常见的数据结构的使用和配套算法, 还有各种类型的DB数据库的使用)
 
 	* five, cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, gdb[初级]
 
 
 
 	* 二阶:
+			linux 日常使用[熟练]
 			cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, gdb[高级]
 			(至少熟练编写makefile/CMakeList.txt, 会搭建交叉编译链, 会使用gdb调试)
-			openssl 最基础的两类算法: 校验数/对称加密
+			openssl 最基础的两类算法: hash校验数/对称加密
+			c++标准库STL的使用: 顺序容器, 树形容器, hash容器的基础使用和配套算法(初级)
 			常用数据库的基础使用: mysql(pgsql)/redis/sqlite
-			常见的序列化: cjson/xml
-			SMP 同构CPU 并行计算[二阶++的基础,多线程调度会用到]
-			常见的芯片架构[intel/arm/mips], 常见的指令集的具体用途(不需要知道细节,但大概知道有什么用), 了解芯片基本的差异性;
-			操作系统拓展: freebsd/openwrt/RT-Thread [拓展了操作系统,视野更广]
-			常用的图片压缩算法+ffmpeg视频压缩,转码,滤镜: 走向多媒体, 进入复合数据流时代;
+			常见的数据序列化: cjson/xml
+			SMP同构CPU并行计算, 即: linux 多线程/多进程编程[二阶++的基础,多线程调度会用到]
+			操作系统拓展: freebsd/LFS/android/openwrt/QNX/RT-Thread [拓展了操作系统,视野更广]
+			了解常见的芯片指令集的具体用途(硬件加速), 了解现代SMP多核芯片架构与线程调度机制的关联点(多线程调度能力),了解常见的芯片特性差异[主要是: intel/arm/mips];
+			了解常用的图片压缩算法+ffmpeg视频压缩,转码,滤镜特效,推流拉流: 走向多媒体, 进入复合数据流时代;
+			shell 编码(初级)
 
-		++:
+
+	* 二阶++(第一次提炼后, 全局整顿一次后, 第二提炼):
 			linux 日常使用[十分熟练]
-			shell 编码
+			c++标准库STL的使用: 顺序容器, 树形容器, hash容器的基础使用和配套算法(熟练)
+			shell 编码(熟练)
+			python 编码(初级)
 			systemd家族命令/service命令
 			daemon shell编写
 			使用gdb调试daemon 程序
 			linux kernel 子模块管理
-			syscall入门(可选,可以不搞)
-			最终实现基础的LFS(Linux From Scratch)
+			linux syscall入门(可选,驱动编程,linux内核编码必须)
+			操作系统拓展: 了解BSP是干什么的, 会tarball[初级]
 
-		++:
-			NUMA (一般是CUDA, opencl, openMP)异构芯片并行计算
+	* 二阶++(第二次提炼后, 全局整顿一次后, 第三提炼):
+			boost 库[初级]
+			qt 库[初级: 直接参考别人的成果即可, 理解信号槽, UI界面控件之间的通信即可, 不需要深入太多]
+			python 编码(熟练, 拓展多款python 工具)
+			操作系统拓展: 理解BSP是干什么的, 会tarball[熟练]
+			python jinja2 模板编程(有时候可以实现半自动化编程)
+
+	* 三阶:
+		互联网行业:
+			MQ 消息队列中间件的使用[c++ app server 常用]
+			http proxy 代理网关的使用[http server 常用, 安全行业常见, 最好是: nginx/openresty]
+			linux内核+kvm+xen+docker+k8s(云计算,虚拟化方向)
+			openwrt(交叉编译+网络安全方向)
+			ffmpeg 精炼(多媒体方向: 需要会使用ffmpeg API进行编码,视频压缩,转码,滤镜特效,推流拉流)
 			MPP (局域网小型分布式系统)
+			python 机器学习框架(人工智能方向)
+			NUMA (一般是CUDA, opencl, openMP)异构芯片并行计算(人工智能方向)
 			理解:
 				同构cpu/异构芯片
 				并行计算/分布式计算/云计算(虚拟化技术,计算资源拆分)=网格计算(新型符合计算网络)
-			nginx/openresty(http方向必学)
-			linux内核+kvm+xen+docker+k8s(云计算,虚拟化方向)
-			openwrt(交叉编译+网络安全方向)
-			ffmpeg 精炼(需要会使用ffmpeg API进行编码,多媒体方向)
+		工业相关的行业:
+			qt 客户端程序(毕业1-2年内可以考虑, 后期不建议)
 			opencv 视觉计算(需要会算法,人工智能方向)
-			LFS+linux内核子模块编码[syscall API](BSP系统移植方向,操作系统方向)
+			BSP系统移植, 驱动编写, 操作系统重建(BSP 方向: linux syscall API, LFS/android/openwrt/QNX/RT-Thread)
+			autosar 自动驾驶开发(需要会算法, DDS/SomeIP/CAN 工业总线协议)
+			无线电方向: 微波雷达/蓝牙/WIFI/5G (需要懂数模转换, MCU/FPGA)
+			编译器开发: 词法语义分析, 编译原理(骨灰级), 芯片指令集(熟练), 汇编 (芯片行业+少量人工智能&算法优化)
+			语音识别, 语音翻译(人工智能方向, 偏互联网)
+			web搜索引擎&新型知识网络系统chatgpt(人工智能方向, 偏互联网)
+			多媒体数据处理算法的提升级重写(压缩, 推流拉流, 转码, 滤镜特效的底层支撑算法, 多媒体方向的top)
+			hash校验数/对称加密算法的的提升级重写(银行业, 移动支付行业的top)
 
-		++: ...(待续)
+	++: ...(待续)
 
