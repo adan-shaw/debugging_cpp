@@ -1,7 +1,6 @@
 how to start c/c++ programming in linux system?
 
-	* first, install linux system into your laptop/PC computer, get it 
-started;
+	* first, install linux system into your laptop/PC computer, get it started;
 		start by install linux system, start by linux basic command,
 		keep using linux system as usually as windows/MacOS system;
 
@@ -9,23 +8,19 @@ started;
 		* No.0: 单片机原理与应用(第二版) - 北京航空航天大学出版社(次要, 没决心可以忽略不学)
 						主修:8051 汇编, 梦起始的地方
 		* No.1: 标准c++实用教程 - 电子工业出版社(康晓林,汪涛) [十分重要,书本很少,请买正版]
-		* No.2: 数据结构c++语言描述--应用标准模板库(STL)(第二版)[美]William Ford, William 
-Topp - 清华大学出版社
+		* No.2: 数据结构c++语言描述--应用标准模板库(STL)(第二版)[美]William Ford, William Topp - 清华大学出版社
 		* No.3: 程序员的自我修养--链接,装载与库 - 电子工业出版社(俞甲子,石凡,潘爱民) [一阶重点]
 		* No.4: Linux/Unix系统编程手册[德]Michael Kerrisk - 人民邮电出版社
-		* No.5: TCP/IP详解卷1: 协议(必须要会), 卷2: syscall(内核编码,需要可以买), 卷3: 
-TCP进阶(需要买,互联网常用)
+		* No.5: TCP/IP详解卷1: 协议(必须要会), 卷2: syscall(内核编码,需要可以买), 卷3: TCP进阶(需要买,互联网常用)
 
 	* three, start programming, try to use it, write some demo;
 
 	* four, record important data;
 		建议1:
 			鉴于刚开始编码的时候, 一般初学者水平不高, 初级的时候, 注重收集数据, 完善数据, 知识点;
-			让知识树, 理论树, 足够支撑下一阶段的拓展的需求的时候, 
-再进行精炼(一般可以一边收集资料,一边练手,一阶段很漫长);
+			让知识树, 理论树, 足够支撑下一阶段的拓展的需求的时候, 再进行精炼(一般可以一边收集资料,一边练手,一阶段很漫长);
 			等资料, 练手经验, 准备得差不多的时候, 就提炼, 尝试深入了解细节, 尝试步入二阶;
-			(这个过程可能是比较反复, 多次重复的, 所以渐渐你也会养成非常良好的: 数据梳理, 资料分类, 
-咬文嚼字等习惯)
+			(这个过程可能是比较反复, 多次重复的, 所以渐渐你也会养成非常良好的: 数据梳理, 资料分类, 咬文嚼字等习惯)
 		建议2:
 			不要一开始就做算法, 除非你是应用数学系出身的高材生, 
 			否则容易托慢进度, 打思想空转, 
@@ -36,28 +31,23 @@ TCP进阶(需要买,互联网常用)
 				学习基础的c++面向对象编程(追求精度, 也需要学c语言面向过程编程)
 				学习基础的unix posix API的编程使用(linux 内核学syscall)
 				网络协议基础(偏软件, 非数模转换, 这里谈论的是纯软件程序员的养成日记)
-				c++数据结构基础(主要是顺序容器, 树形容器, hash容器 
-这三类常见的数据结构的使用和配套算法, 还有各种类型的DB数据库的使用)
+				c++数据结构基础(主要是顺序容器, 树形容器, hash容器 这三类常见的数据结构的使用和配套算法, 还有各种类型的DB数据库的使用)
 
-	* five, cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, 
-gdb[初级]
+	* five, cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, gdb[初级]
 
 
 
 	* 二阶:
 			linux 日常使用[熟练]
-			cross compile, gmake/cmake/autoconf[makefile], gcc, 
-glibc, gdb[高级]
+			cross compile, gmake/cmake/autoconf[makefile], gcc, glibc, gdb[高级]
 			(至少熟练编写makefile/CMakeList.txt, 会搭建交叉编译链, 会使用gdb调试)
 			openssl 最基础的两类算法: hash校验数/对称加密
 			c++标准库STL的使用: 顺序容器, 树形容器, hash容器的基础使用和配套算法(初级)
 			常用数据库的基础使用: mysql(pgsql)/redis/sqlite
 			常见的数据序列化: cjson/xml
 			SMP同构CPU并行计算, 即: linux 多线程/多进程编程[二阶++的基础,多线程调度会用到]
-			操作系统拓展: freebsd/LFS/android/openwrt/QNX/RT-Thread 
-[拓展了操作系统,视野更广]
-			了解常见的芯片指令集的具体用途(硬件加速), 
-了解现代SMP多核芯片架构与线程调度机制的关联点(多线程调度能力),了解常见的芯片特性差异[主要是: intel/arm/mips];
+			操作系统拓展: freebsd/LFS/android/openwrt/QNX/RT-Thread [拓展了操作系统,视野更广]
+			了解常见的芯片指令集的具体用途(硬件加速), 了解现代SMP多核芯片架构与线程调度机制的关联点(多线程调度能力),了解常见的芯片特性差异[主要是: intel/arm/mips];
 			了解常用的图片压缩算法+ffmpeg视频压缩,转码,滤镜特效,推流拉流: 走向多媒体, 进入复合数据流时代;
 			shell 编码(初级)
 
@@ -84,8 +74,7 @@ glibc, gdb[高级]
 	* 三阶:
 		互联网行业:
 			MQ 消息队列中间件的使用[c++ app server 常用]
-			http proxy 代理网关的使用[http server 常用, 安全行业常见, 最好是: 
-nginx/openresty]
+			http proxy 代理网关的使用[http server 常用, 安全行业常见, 最好是: nginx/openresty]
 			linux内核+kvm+xen+docker+k8s(云计算,虚拟化方向)
 			openwrt(交叉编译+网络安全方向)
 			ffmpeg 精炼(多媒体方向: 需要会使用ffmpeg API进行编码,视频压缩,转码,滤镜特效,推流拉流)
@@ -98,12 +87,10 @@ nginx/openresty]
 		工业相关的行业:
 			qt 客户端程序(毕业1-2年内可以考虑, 后期不建议)
 			opencv 视觉计算(需要会算法,人工智能方向)
-			BSP系统移植, 驱动编写, 操作系统重建(BSP 方向: linux syscall API, 
-LFS/android/openwrt/QNX/RT-Thread)
+			BSP系统移植, 驱动编写, 操作系统重建(BSP 方向: linux syscall API, LFS/android/openwrt/QNX/RT-Thread)
 			autosar 自动驾驶开发(需要会算法, DDS/SomeIP/CAN 工业总线协议)
 			无线电方向: 微波雷达/蓝牙/WIFI/5G (需要懂数模转换, MCU/FPGA)
-			编译器开发: 词法语义分析, 编译原理(骨灰级), 芯片指令集(熟练), 汇编 
-(芯片行业+少量人工智能&算法优化)
+			编译器开发: 词法语义分析, 编译原理(骨灰级), 芯片指令集(熟练), 汇编(芯片行业+少量人工智能&算法优化)
 			语音识别, 语音翻译(人工智能方向, 偏互联网)
 			web搜索引擎&新型知识网络系统chatgpt(人工智能方向, 偏互联网)
 			多媒体数据处理算法的提升级重写(压缩, 推流拉流, 转码, 滤镜特效的底层支撑算法, 多媒体方向的top)
