@@ -64,7 +64,7 @@ find . -type d -name "*.js"
 find . -type f -name "*.js" | wc
 
 
-# 联合grep命令, 在所有的普通文件中搜索hostname这个词：
+# 联合grep命令, 在所有的普通文件中搜索hostname这个词:
 find . -type f -name "*.c" -print | xargs grep "hostname"
 
 

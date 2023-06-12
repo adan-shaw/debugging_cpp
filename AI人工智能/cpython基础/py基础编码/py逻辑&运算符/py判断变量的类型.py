@@ -13,7 +13,7 @@ tmp = 2
 a=A()
 b=B()
 '''
-isinstance() 与 type() 区别：
+isinstance() 与 type() 区别:
 	isinstance() 适合'类变量'的实体(子类是一种父类类型, 考虑继承关系
 	type() 性能好
 	isinstance() 功能多, 可判断'类变量'实体的类型

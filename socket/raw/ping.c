@@ -121,7 +121,7 @@ static unsigned short icmp_cksum(unsigned char*data, int len){
 		data += 2;
 		len -= 2;
 	}
-	//判断是否为奇数个数据, 若ICMP报头为奇数个字节, 会剩下最后一字节。
+	//判断是否为奇数个数据, 若ICMP报头为奇数个字节, 会剩下最后一字节.
 	if(odd){
 		tmp = ((*data)<<8)&0xff00;
 		sum += tmp;

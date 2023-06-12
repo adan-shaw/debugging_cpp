@@ -3,8 +3,8 @@
 
 
 //编译选项: -ldl
-//	这样初始化, 不需要额外添加编译选项, 而是直接抓住.so 共享库, 装载进本进程, 留做自己使用;
-//	所以, 这种情况下, 不需要添加编译选项(可能性能开销比较大, 但相对安全很多)
+//	这样初始化, 不需要额外添加编译选项, 而是直接找到.so 共享库, 装载进本进程, 留做自己使用;
+//	所以, 这种情况下, 不需要添加编译选项(但操作较为复杂)
 
 
 
@@ -18,10 +18,9 @@
 	RTLD_NOLOAD (since glibc 2.2)
 	RTLD_DEEPBIND (since glibc 2.3.4)
 */
+
 //打开共享链接库(装载so 库)(成功返回一根内存指针, 出错返回NULL)
 #define open_soEx(path_so) ( dlopen(path_so, RTLD_LAZY) )
-
-
 
 //关闭共享链接库(释放so 库)
 #define close_soEx(pso) { if(dlclose(pso) != 0){ perror("dlclose()"); } }

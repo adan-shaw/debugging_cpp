@@ -150,7 +150,7 @@ int main(void){
 	getaddrinfo()根据'host主机名字符串/URL'(ip),[如: www.baidu.com];
 		和'service高层协议服务名'(port),[如: http = 80];
 		引用返回一个addrinfo{}结构体链表.
-		[可以是:(ip地址 + 端口的模式),也可以是：(URL + 端口/高层协议名)]
+		[可以是:(ip地址 + 端口的模式),也可以是:(URL + 端口/高层协议名)]
 
 	getaddrinfo()直向返回值, 成功则返回0, 出错返回一个'非0的错误码'.
 	int getaddrinfo(\

@@ -45,7 +45,7 @@ def scan_all_port(ip):
 			#lock.acquire()
 			pth.start_new_thread(scan_tcp_port,(ip, int(i)))
 			#lock.release()
-		print('scan finished, time-consuming：%.2f' %(time.time()-t_start))
+		print('scan finished, time-consuming:%.2f' %(time.time()-t_start))
 	except:
 		print('scan execption!!', ip)
 

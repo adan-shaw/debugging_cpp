@@ -3,7 +3,7 @@
 
 
 
-//安装mariadb/mysql client
+//安装mariadb/mysql client 引擎:
 //		apt-get install mariadb-client
 
 
@@ -130,4 +130,5 @@ int main(void){
 	close_soEx(pso);
 	return 0;
 }
+
 

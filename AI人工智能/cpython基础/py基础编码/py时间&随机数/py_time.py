@@ -46,7 +46,7 @@ time.ctime([secs])
 	作用相当于asctime(localtime(secs)), 未给参数相当于asctime()
 
 time.gmtime([secs])
-	接收时间戳(1970纪元后经过的浮点秒数)并返回格林威治天文时间下的时间元组t.注：t.tm_isdst始终为0
+	接收时间戳(1970纪元后经过的浮点秒数)并返回格林威治天文时间下的时间元组t.注:t.tm_isdst始终为0
 
 time.localtime([secs])
 	接收时间戳(1970纪元后经过的浮点秒数)并返回当地时间下的时间元组t(t.tm_isdst可取0或1, 取决于当地当时是不是夏令时).
