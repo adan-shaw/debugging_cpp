@@ -1,0 +1,31 @@
+1.做一个监控模块, 可以随时打印进程资源统计, 方便查看daemon server 的状态;
+	包括打印:
+			limit 进程限制
+			sysconf 环境变量list
+			server app 应用关键数据(自定义)
+			server app 运行状态
+			server app 统计信息
+			...
+
+
+
+2.做一个监控模块, 可以随时修改daemon server 进程的关键app 配置信息, 
+	实现daemon server 功能动态调整;
+
+	用mmap 映射 + 结构体来做, 还能将daemon server 的配置信息缓存到文件中;
+	且不影响daemon server 的运行性能;
+
+
+
+3.实现主线程和worker 线程之间的自动汇报和存活管理, 包括对假死的线程进行自动重启;
+
+
+
+虚拟tty
+echo "给pts0 发消息" > /dev/pts/0
+
+真实tty
+echo "给tty1 发消息" > /dev/tty1
+
+
+
