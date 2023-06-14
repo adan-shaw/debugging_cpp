@@ -23,7 +23,7 @@ SMP(Symmetric Multi-Processor)对称多处理器:
 
 NUMA(Non-Uniform Memory Access)非一致性内存访问:
 	NUMA服务器的基本特征是具有多个CPU模块, 
-	每个CPU模块由多个CPU(如8个CPU)组成, 并且具有'独立的本地内存、 I/O槽口'等; 
+	每个CPU模块由多个CPU(如8个CPU)组成, 并且具有'独立的本地内存、I/O槽口'等; 
 
 	由于其节点之间可以通过互联模块(称为Crossbar Switch)进行连接和信息交互, 
 	因此, 每个CPU可以访问整个系统的内存(这是NUMA系统与MPP系统的重要差别);
@@ -53,4 +53,6 @@ MPP(Massive Parallel Processing)[局域网分布式系统]:
 
 	MPP 实际上就是局域网分布式系统, 利用高速局域网+SMP 系统, 共享资源;
 	(离广域分布式系统, 只差一步)
+
+
 

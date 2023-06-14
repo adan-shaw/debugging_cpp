@@ -18,8 +18,8 @@
 
 	实时调度策略api:
 		* 根据调度策略type, 获取'调度权值'
-		int sched_get_priority_min(int policy);//获取'调度权值'起点min
-		int sched_get_priority_max(int policy);//获取'调度权值'终点max
+		int sched_get_priority_min(int policy);	//获取'调度权值'起点min
+		int sched_get_priority_max(int policy);	//获取'调度权值'终点max
 				policy参数(指定调度策略type):
 					#define SCHED_OTHER			0
 					#define SCHED_FIFO			1
@@ -31,7 +31,7 @@
 
 		* 根据调度策略type, 修改'实时调度策略结构体'(修改操作需要root权限)
 		int sched_setscheduler(pid_t pid,int policy,const struct *sched_param);
-		int sched_getscheduler(pid_t pid);		 //获取当前的权重值
+		int sched_getscheduler(pid_t pid);			//获取当前的权重值
 
 		* 直接修改'实时调度策略结构体'(废弃, 少用)
 		int sched_setparam(pid_t pid, const struct *sched_param);

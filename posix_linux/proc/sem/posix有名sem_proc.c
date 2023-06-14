@@ -87,7 +87,7 @@
 
 //#define TEST_COUNT (9)
 #define TEST_COUNT (99999)
-#define SEM_NAME "/chroot_sem_name"	//chroot()默认在'/'根目录,不能修改,修改需要root权限,还会报错;
+#define SEM_NAME "/chroot_sem_name" //chroot()默认在'/'根目录,不能修改,修改需要root权限,还会报错;
 
 int G_test_val = 0;
 sem_t* sem;
@@ -178,6 +178,9 @@ int main(void){
 	posix_sem_pth_test();
 	return 0;
 }
+
+
+
 
 
 

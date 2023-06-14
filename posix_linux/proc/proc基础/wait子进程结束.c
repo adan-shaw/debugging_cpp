@@ -70,6 +70,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 
 //打印子进程的退出状态(显示子进程为什么退出)
 void print_wait_stat(int status, const char *attach_msg);
@@ -153,29 +154,29 @@ int main(void){
 
 //打印子进程的退出状态(显示子进程为什么退出)
 void print_wait_stat(int status, const char *attach_msg){
-	if(attach_msg != NULL)						//打印附带msg
+	if(attach_msg != NULL)							//打印附带msg
 		printf("%s\n", attach_msg);
 
-	if(WIFEXITED(status)){						//子进程正常退出, 退出statue码=WEXITSTATUS(status)
+	if(WIFEXITED(status)){							//子进程正常退出, 退出statue码=WEXITSTATUS(status)
 		printf("child exited, status=%d\n", WEXITSTATUS(status));
 		return;
 	}
 
-	if(WIFSIGNALED(status)){					//子进程被信号终止, 终止信号=WTERMSIG(status)
+	if(WIFSIGNALED(status)){						//子进程被信号终止, 终止信号=WTERMSIG(status)
 		printf("child killed by signal %d (%s)",WTERMSIG(status), strsignal(WTERMSIG(status)));
 		#ifdef WCOREDUMP
-		if(WCOREDUMP(status))						//产生了核心转存
+		if(WCOREDUMP(status))							//产生了核心转存
 			printf(" (core dumped)\n");
 		#endif
 		return;
 	}
 
-	if(WIFSTOPPED(status)){						//子进程被信号暂停, 暂停信号=WSTOPSIG(status)
+	if(WIFSTOPPED(status)){							//子进程被信号暂停, 暂停信号=WSTOPSIG(status)
 		printf("child stopped by signal %d (%s)\n",WSTOPSIG(status), strsignal(WSTOPSIG(status)));
 		return;
 	}
 
-	#ifdef WIFCONTINUED								//子进程已从暂停状态转为继续执行continue
+	#ifdef WIFCONTINUED									//子进程已从暂停状态转为继续执行continue
 	if(WIFCONTINUED(status)){
 		printf("child continued\n");
 		return;
@@ -186,3 +187,4 @@ void print_wait_stat(int status, const char *attach_msg){
 	printf("print_wait_stat() failed, child statue=%d\n",status);
 	return;
 }
+

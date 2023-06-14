@@ -98,9 +98,10 @@ type __sync_val_compare_and_swap (type* ptr, type oldval type newval, ...);		//�
 
 
 //先取出更新前的值, 执行更新, 返回更新前的值
-type __sync_lock_test_and_set (type* ptr, type value, ...);	//将*ptr设为value, 返回*ptr操作之前的值
+type __sync_lock_test_and_set (type* ptr, type value, ...);										//将*ptr设为value, 返回*ptr操作之前的值
 //不返回, 直接清0
-void __sync_lock_release (type* ptr, ...);									//将*ptr置0
+void __sync_lock_release (type* ptr, ...);																		//将*ptr置0
+
 
 
 

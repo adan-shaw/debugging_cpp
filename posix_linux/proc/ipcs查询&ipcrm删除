@@ -36,6 +36,8 @@
 	 -b, --bytes       show sizes in bytes
 !
 
+
+
 # 查看系统有多少个ftok()-key
 ipcs -a
 
@@ -61,6 +63,9 @@ ipcs -i <ftok()-key值>
 	 -h, --help                 display this help
 	 -V, --version              display version
 !
+
+
+
 # 删除当前系统所有ipc 资源
 ipcrm -a
 
@@ -69,4 +74,5 @@ ipcrm -m <id>
 
 # 根据key 来删除共享内存
 ipcrm -M <key>
+
 

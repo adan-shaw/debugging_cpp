@@ -68,16 +68,16 @@
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);//保留
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);//不保留
 
-	2.int pthread_detach(pthread_t thread);//手动将线程属性设置为unjoinable状态
+	2.int pthread_detach(pthread_t thread);							//手动将线程属性设置为unjoinable状态
 		常见组合用法:
-			pthread_detach(pthread_self());//线程自己脱离, 放弃保留pthread退出状态记录的权利
+			pthread_detach(pthread_self());									//线程自己脱离, 放弃保留pthread退出状态记录的权利
 */
 
 
 
 //获取pthread退出状态记录
 /*
-	int pthread_join(pthread_t thread, void **retval);//获取pthread退出状态记录
+	int pthread_join(pthread_t thread, void **retval);	//获取pthread退出状态记录
 
 	如果使用了pthread_cancel()强制退出其它线程, 则void **retval返回值永远为-1;
 */
@@ -133,4 +133,5 @@ int main(void){
 	printf("pthread_join(): exit return = %d\n", (int*)pson_ret);
 	return 0;
 }
+
 

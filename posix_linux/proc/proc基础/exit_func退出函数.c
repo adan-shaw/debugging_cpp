@@ -1,6 +1,8 @@
 //编译:
 //		gcc ./exit_func退出函数.c -g3 -o x 
 
+
+
 //进程退出函数:
 /*
 	int on_exit(void (*function)(int , void *), void *arg);	//传递参数版
@@ -10,6 +12,8 @@
 
 	void exit(int status);																	//常见用法: exit(EXIT_SUCCESS); exit(EXIT_FAILURE);
 */
+
+
 
 //进程终止行为概述:
 /*
@@ -76,6 +80,8 @@
 		atexit()与on_exit() 函数会被架空;
 */
 
+
+
 #define _BSD_SOURCE// Get on_exit() declaration from <stdlib.h>
 
 #include <stdio.h>
@@ -130,4 +136,7 @@ int main(void){
 	exit_func_test();
 	return 0;
 }
+
+
+
 

@@ -1333,12 +1333,12 @@ int main(int argc, char **argv){
 		perror("signal()");
 	*/
 
-	//printf("love you\n");//for test only
+	//printf("fuck you\n");//for test only
 	//开始执行程序(fork() + execv() 替换, 在这之前可以设置信号函数)
 	execv(startas, argv);
 	fatal("Unable to start %s: %s", startas, strerror(errno));
 
-	//return -1;//设置了main() NONRETURNING;无返回, 这里不用return -1;
+	return -1;//设置了main() NONRETURNING;无返回, 这里不用return -1;(仅欺骗编译器, 不报错用的)
 }
 
 
@@ -1384,4 +1384,6 @@ static void do_help_cn(void){
 "\n"
 "Exit status:  0 = done      1 = nothing done (=> 0 if --oknodo)\n"
 "              3 = trouble   2 = with --retry, processes wouldn't die\n");
+	return;
 }
+

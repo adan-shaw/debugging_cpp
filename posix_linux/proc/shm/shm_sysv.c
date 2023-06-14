@@ -128,3 +128,4 @@ int main(void){
 	# shell 查看SHMMAX 的命令
 	cat /proc/sys/kernel/shmmax
 */
+

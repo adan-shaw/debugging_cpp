@@ -26,8 +26,8 @@
 //16个线程, 一共操作G_count+1, 32000000 次
 #define pth_count (16)
 
-int G_count = 0;				//全局变量
-int G_count_mlock = 0;	//全局变量mutex锁
+int G_count = 0;											//全局变量
+int G_count_mlock = 0;								//全局变量mutex锁
 
 //简化宏
 #define CASEx_mutex_entry(G_lock_mutex) { while(!__sync_bool_compare_and_swap(&G_lock_mutex,0,1)){;} }
@@ -36,9 +36,9 @@ int G_count_mlock = 0;	//全局变量mutex锁
 void *test_func(void *arg){
 	int i=0;
 	for(i=0;i<2000000;++i){
-		CASEx_mutex_entry(G_count_mlock);//死等抢占CAS互斥锁, 进入临界区
+		CASEx_mutex_entry(G_count_mlock);	//死等抢占CAS互斥锁, 进入临界区
 		G_count+=1;
-		CASEx_mutex_leave(G_count_mlock);//离开临界区
+		CASEx_mutex_leave(G_count_mlock);	//离开临界区
 	}
 	return NULL;
 }
@@ -72,10 +72,10 @@ void *test_func_old(void *arg){
 	int i=0;
 	for(i=0;i<2000000;++i){
 		while(!__sync_bool_compare_and_swap(&G_count_mlock,0,1))
-			;								//死等抢占CAS互斥锁, 进入临界区
-		//__sync_fetch_and_add(&G_count,1);//理论上不再需要__sync 函数进行操作了
+			;																	//死等抢占CAS互斥锁, 进入临界区
+		//__sync_fetch_and_add(&G_count,1);	//理论上不再需要__sync 函数进行操作了
 		G_count+=1;
-		G_count_mlock = 0;//离开临界区
+		G_count_mlock = 0;									//离开临界区
 	}
 	return NULL;
 }

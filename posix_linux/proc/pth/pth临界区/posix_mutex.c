@@ -15,12 +15,12 @@
 	int pthread_mutex_trylock(pthread_mutex_t *);
 	int pthread_mutex_unlock(pthread_mutex_t *);
 
-	pthread_mutex_init()				//初始化互斥锁(一定会成功的, 永远不会失败, 总是返回0)
-	pthread_mutex_destroy()			//销毁互斥锁
-	pthread_mutex_timedlock()		//阻塞+超时, 若阻塞触发线程切换, 超时后cpu会自动唤醒线程继续运行
-	pthread_mutex_lock()				//阻塞+死等, 若阻塞触发线程切换[mutex空闲返回0, mutex被占用则返回16]
-	pthread_mutex_trylock()			//非阻塞加锁
-	pthread_mutex_unlock()			//解锁
+	pthread_mutex_init()							//初始化互斥锁(一定会成功的, 永远不会失败, 总是返回0)
+	pthread_mutex_destroy()						//销毁互斥锁
+	pthread_mutex_timedlock()					//阻塞+超时, 若阻塞触发线程切换, 超时后cpu会自动唤醒线程继续运行
+	pthread_mutex_lock()							//阻塞+死等, 若阻塞触发线程切换[mutex空闲返回0, mutex被占用则返回16]
+	pthread_mutex_trylock()						//非阻塞加锁
+	pthread_mutex_unlock()						//解锁
 */
 
 
@@ -172,5 +172,8 @@ int main(void){
 	mutex_all_api();
 	return 0;
 }
+
+
+
 
 

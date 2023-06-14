@@ -26,7 +26,7 @@
 
 //fifo 中间文件存放路径
 #define FIFO_FILE_PATH "./tmp.fifo"
-//fifo 中间文件使用权限(必须为0644, 不能写成644)
+//fifo 中间文件使用权限(建议使用660, 兼容进程组之间通信; 666 兼容不同进程组之间通信)
 #define FIFO_MODE (O_CREAT|O_EXCL|0600)
 
 //结构体app_body{}

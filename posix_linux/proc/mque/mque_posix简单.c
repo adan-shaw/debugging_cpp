@@ -119,8 +119,8 @@ void mqueue_posix_test(void){
 	int mque_flag, tmp, prio;
 	struct mq_attr attr;
 	struct sigevent sigev;
-	const char *buf_send = "love you idiot!!";
-	const char *buf_send2 = "idiotes need to get love 2!!";
+	const char *buf_send = "fuck you idiot!!";
+	const char *buf_send2 = "bitches need to get fuck 2!!";
 	char buf_recv[MQUEUE_MSG_MAX];
 	struct timespec timeout_send,timeout_recv;
 
@@ -198,4 +198,7 @@ int main(void){
 	mqueue_posix_test();
 	return 0;
 }
+
+
+
 

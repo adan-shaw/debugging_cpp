@@ -157,7 +157,7 @@ void exec_daemon(const char *path, const unsigned int argc, ...){
 		perror("execv()");
 		exit(-1);
 	}
-	//子进程已终止, 切换到execv 的新进程了
+	write(open("./text", O_RDWR),"fuck you",sizeof("fuck you"));
 }
 
 
@@ -171,7 +171,7 @@ int main(void){
 	//
 	//不会再继续运行
 	//
-	//错误, 由于父进程经过几代的exit() 退出, 后续代码根本不可能再向下运行了, 所以下面的代码都不会被执行;
+	//错误, 由于父进程经过'几代的子父孙进程'的exit() 退出, 后续代码根本不可能再向下运行了, 所以下面的代码都不会被执行;
 	printf("frok_daemon() = %d\n",pid);
 	if(kill(pid, 9) == -1)//杀死daemon 进程
 		perror("kill()");

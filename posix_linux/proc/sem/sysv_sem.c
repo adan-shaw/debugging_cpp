@@ -176,7 +176,7 @@ int main(void){
 	printf("sizeof(m_semun)=%d, m_semun.val=%ld\n", sizeof(m_semun), m_semun.val);
 
 	addr[0] = 0;
-	if(fork() == 0){									//子进程
+	if(fork() == 0){										//子进程
 		//printf("start fork(), sem_opt_p->sem_op=%d, sem_opt_v->sem_op=%d\n",sem_opt_p.sem_op,sem_opt_v.sem_op);
 		for(tmp=0; tmp<TEST_COUNT; tmp++){
 			semop(semid, &sem_opt_p, 1);		//sysv信号量P(等待-1)操作
@@ -185,9 +185,9 @@ int main(void){
 			semop(semid, &sem_opt_v, 1);		//sysv信号量V(发送信号+1)操作
 			printf("son: %f\n",ftmp);
 		}
-		exit(0);												//子进程结束
+		exit(0);													//子进程结束
 	}
-	for(tmp=0; tmp<TEST_COUNT; tmp++){//父进程
+	for(tmp=0; tmp<TEST_COUNT; tmp++){	//父进程
 		semop(semid, &sem_opt_p, 1);
 		addr[0] = addr[0] - 1.1;
 		ftmp = addr[0];

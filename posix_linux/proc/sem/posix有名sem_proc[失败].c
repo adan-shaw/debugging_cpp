@@ -172,3 +172,4 @@ void print_wait_stat(int status, const char *attach_msg){
 	printf("print_wait_stat() failed, child statue=%d\n",status);
 	return;
 }
+

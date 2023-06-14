@@ -56,7 +56,7 @@ void shm_posix_test(void){
 	m_frame.b = 999;
 	m_frame.c = 1.1;
 	m_frame.d = 9.9;										//填充mmap_frame_t结构体
-	strncpy(m_frame.buf, "hello loveer, i am your 朋友\0", 32);
+	strncpy(m_frame.buf, "hello fucker, i am your 朋友\0", 32);
 
 	memcpy(pmap,&m_frame,sizeof(mmap_frame_t));
 
@@ -101,7 +101,9 @@ int main(void){
 
 	shm_posix, 受进程chroot() 约束!!
 	如果你使用root+chroot(), 尝试修改chroot(), 修改成功之后, debian 马上会拒绝报错:
-		shm_unlink(): Function not implemented (功能未实现)
-		shm_open(): Function not implemented
+		sem_unlink(): Function not implemented (功能未实现)
+		sem_open(): Function not implemented
 	因此, 暂时不要逃脱chroot(), 这可能是出于对系统安全的考虑, 故意不让你修改chroot()的;
 */
+
+

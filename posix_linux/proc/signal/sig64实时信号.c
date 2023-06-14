@@ -18,7 +18,7 @@ void ignore_all_signal(void){
 	sigdelset(&sig_set,9);
 	sigdelset(&sig_set,19);
 	//if(sigismember(&sig_set,0) == 0)//信号存在, 返回1; 信号不存在, 返回0
-		//printf("sigismember(): 0信号不在sigset_t 信号集中\n");
+	//	printf("sigismember(): 0信号不在sigset_t 信号集中\n");
 	if(sigprocmask(SIG_BLOCK,&sig_set,NULL) == -1)
 		perror("sigprocmask()");
 }
@@ -124,9 +124,9 @@ void setitimer_test(void){
 	struct itimerval tick;
 	int test_count;
 
-	tick.it_value.tv_sec = 1;								//启动延时(单位:秒)
-	tick.it_value.tv_usec = 0;							//(单位:微秒,6位数=1秒)
-	tick.it_interval.tv_sec = 1;						//触发间隔
+	tick.it_value.tv_sec = 1;									//启动延时(单位:秒)
+	tick.it_value.tv_usec = 0;								//(单位:微秒,6位数=1秒)
+	tick.it_interval.tv_sec = 1;							//触发间隔
 	tick.it_interval.tv_usec = 0;
 
 	sigfillset(&sig_set);
@@ -134,12 +134,12 @@ void setitimer_test(void){
 	sigdelset(&sig_set,19);
 	sigdelset(&sig_set,SIGALRM);
 
-	//act.sa_sigaction = handler_point;			//参数信号处理函数(指针)
-	act.sa_sigaction = handler_int;					//参数信号处理函数(整形)
-	act.sa_flags = ITIMER_REAL;							//实时定时器类型
+	//act.sa_sigaction = handler_point;				//参数信号处理函数(指针)
+	act.sa_sigaction = handler_int;						//参数信号处理函数(整形)
+	act.sa_flags = ITIMER_REAL;								//实时定时器类型
 	act.sa_mask = sig_set;
 
-	if(sigaction(SIGALRM,&act,NULL) == -1){	//激活信号
+	if(sigaction(SIGALRM,&act,NULL) == -1){		//激活信号
 		perror("sigaction()");
 		return;
 	}
@@ -151,10 +151,12 @@ void setitimer_test(void){
 	}
 
 	//等待定时信号到来for test
-	test_count = 6;													//等待6 个信号即退出
+	test_count = 6;														//等待6 个信号即退出
 	while(test_count > 0){
 		sigsuspend(&sig_set);
 		test_count--;
 	}
 	return ;
 }
+
+

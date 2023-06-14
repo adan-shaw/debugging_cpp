@@ -115,7 +115,7 @@ void mqueue_posix_test(void){
 
 	buf_send.i1 = 999;
 	buf_send.d2 = 888.888;
-	strncpy(buf_send.c3, "you idiot, loveer!!", sizeof("you idiot, loveer!!"));
+	strncpy(buf_send.c3, "you idiot, fucker!!", sizeof("you idiot, fucker!!"));
 
 	tmp = mq_send(G_mque_fd, &buf_send, sizeof(buf_send), 0);
 	if(tmp == -1){												//阻塞发送mque消息, 优先级=0
@@ -162,5 +162,7 @@ int main(void){
 	mqueue_posix_test();
 	return 0;
 }
+
+
 
 

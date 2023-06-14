@@ -1,0 +1,35 @@
+//常见的控制线程启动等待的有:
+/*
+	barrier围栏(不需要加mutex互斥锁)
+	cond条件变量(需要加mutex互斥锁才能工作)
+
+	barrier围栏/cond条件变量, 一旦陷入线程阻塞, 必然造成线程切换, 基本上无法避免, 
+	但也是业务需要, 没办法, 除非你不用;
+*/
+
+
+
+//barrier围栏(不需要加互斥锁)
+/*
+	好处:
+		简单的线程同步方式, 连mutex互斥锁都省了, 十分好用;
+		可重复利用, 也适合一次性使用并销毁;
+	缺点:
+		只能做简单等待(等人齐了自动唤醒),
+		不能主动(手动)唤醒;
+*/
+
+
+//cond条件变量
+/*
+	cond条件变量要用到mutex互斥锁, 
+	不用mutex互斥锁, 条件变量的pthread_cond_wait()会直接pass 成为空语句, 执行了等于没执行;
+
+	条件变量可以实现线程的等待&唤醒;
+
+	等待有阻塞死等版本: pthread_cond_wait()
+	也有timeout版本: pthread_cond_timedwait()[慎用, cond条件变量的timeout很容易出问题,难用]
+
+	在调用pthread_cond_wait()前必须由本线程加锁 pthread_mutex_lock()
+*/
+

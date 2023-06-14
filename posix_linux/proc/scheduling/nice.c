@@ -1,5 +1,5 @@
 //编译:
-//		gcc -g3 ./nice.c -o x
+//		gcc -g3 ./nice.c -o x 
 
 //进程'nice值'优先级修改:
 /*
@@ -54,7 +54,7 @@ int main(void){
 
 	pid = getpid();
 
-	//被弃用? gcc报错:error: called object ‘nice’ is not a function or function pointer
+	//被弃用? gcc报错:error: called object 'nice' is not a function or function pointer
 	//if(nice(9) == -1){ perror("nice()"); return -1;}
 
 	nice = getpriority(PRIO_PROCESS, pid);

@@ -1,7 +1,10 @@
 //编译:
 //		gcc ./clone最底层的进程创建方式.c -g3 -lpthread -o x 
 
+
+
 #define _GNU_SOURCE
+
 #include <sched.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,8 +30,7 @@
 															 |CLONE_SETTLS|CLONE_PARENT_SETTID
 															 |CLONE_CHILD_CLEARTID|0);
 			TLS_DEFINE_INIT_TP (tp, pd);
-			if(__glibc_unlikely (ARCH_CLONE (&start_thread, STACK_VARIABLES_ARGS,
-				 clone_flags, pd, &pd->tid, tp, &pd->tid) == -1))
+			if(__glibc_unlikely(ARCH_CLONE(&start_thread, STACK_VARIABLES_ARGS, clone_flags, pd, &pd->tid, tp, &pd->tid) == -1))
 			...
 */
 
@@ -42,11 +44,10 @@
 
 	clone()函数原型:
 		int clone(int (*fn)(void *), void *stack, int flags, void *arg, ...);
-							... 多参数一般填充数据为:
-									pid_t *parent_tid, void *tls, pid_t *child_tid
+			...多参数一般填充数据为: pid_t *parent_tid, void *tls, pid_t *child_tid
 
 		long clone3(struct clone_args *cl_args, size_t size);
-			size参数: 为cl_args结构体的大小(size参数可允许未来对clone_args进行扩展)
+			size参数为:            cl_args结构体的大小(size参数可允许未来对clone_args进行扩展)
 
 	clone3()用到的结构体(其实就是将旧式的clone()多参数的部分,弄成一个结构体,比较直观好处理):
 		struct clone_args {
@@ -102,13 +103,14 @@
 	 但这样做也不能让多进程共享互斥锁? 没准多进程互斥锁, 只能在CLONE_THREAD 多线程属性中使用;
 	 但也有可能可以用, 试试)
 
-												 |CLONE_SIGHAND|CLONE_THREAD //直接在线程的基础上, 去除CLONE_THREAD & CLONE_SIGHAND信号共享;
-												 |CLONE_CHILD_CLEARTID       //去掉子线程pid变成: CLONE_CHILD_SETTID创建子进程pid, 这样clone() 会返回新子进程的pid;
-												 |CLONE_SETTLS               //去掉TLS(Thread Local Storage) tls字段;
-												 |CLONE_VM                   //附带CLONE_VM选项,中断会导致主线程被牵连(必然牵连),
-																										 //也就是不能共享内存,否则指针崩溃会受牵连,子进程回收空间时,会把父进程的内存空间也给回收了;
-												 |SIGCHLD                    //新增SIGCHLD选项,那么父进程就可以使用wait()/waitpid()操作子进程了,且崩溃不互相影响;
+				|CLONE_SIGHAND|CLONE_THREAD //直接在线程的基础上, 去除CLONE_THREAD & CLONE_SIGHAND信号共享;
+				|CLONE_CHILD_CLEARTID       //去掉子线程pid变成: CLONE_CHILD_SETTID创建子进程pid, 这样clone() 会返回新子进程的pid;
+				|CLONE_SETTLS               //去掉TLS(Thread Local Storage) tls字段;
+				|CLONE_VM                   //附带CLONE_VM选项,中断会导致主线程被牵连(必然牵连),
+																		//也就是不能共享内存,否则指针崩溃会受牵连,子进程回收空间时,会把父进程的内存空间也给回收了;
+				|SIGCHLD                    //新增SIGCHLD选项,那么父进程就可以使用wait()/waitpid()操作子进程了,且崩溃不互相影响;
 */
+
 //常见的clone()组合用法1: (子进程崩溃互不影响, 但不能共享CLONE_VM, 还是得用shm/mmap + 信号量做进程同步)
 const int clone_flags1 = (CLONE_FS|CLONE_FILES|CLONE_SYSVSEM|SIGCHLD
 												 |CLONE_PARENT_SETTID|CLONE_CHILD_SETTID|0);
@@ -116,8 +118,9 @@ const int clone_flags1 = (CLONE_FS|CLONE_FILES|CLONE_SYSVSEM|SIGCHLD
 //常见的clone()组合用法2: (子进程崩溃互相影响, 但能共享CLONE_VM, 可以用pthread_mutex 互斥锁)
 const int clone_flags2 = (CLONE_FS|CLONE_FILES|CLONE_SYSVSEM|SIGCHLD|CLONE_VM
 												 |CLONE_PARENT_SETTID|CLONE_CHILD_SETTID|0);
-static pthread_mutex_t mutex;		//互斥锁
-static pthread_cond_t cond;			//条件变量
+
+static pthread_mutex_t mutex;				//互斥锁
+static pthread_cond_t cond;					//条件变量
 static int val = 0;
 
 
@@ -218,3 +221,7 @@ int main(void){
 	test_child_func2();
 	return 0;
 }
+
+
+
+

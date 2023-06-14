@@ -4,8 +4,8 @@
 
 	CAS乐观锁, 无论是:
 		posix API, 实现的API层面上的原子操作;
-		C11 c++11 实现的原子变量: std::atomic_long tmp;
-		C11 c++11 实现的CAS乐观锁: std::atomic_flag lock;
+		C11 C++11 实现的原子变量: std::atomic_long tmp;
+		C11 C++11 实现的CAS乐观锁: std::atomic_flag lock;
 		老式编译器实现的CAS乐观锁(gcc4.1.2原子操作);
 
 	他们的本质上, 都是CAS乐观锁, 都与自旋锁类似, 都是死等锁;
@@ -23,10 +23,10 @@
 //CAS乐观锁-常见的使用案例1:
 /*
 	多线程抢夺资源的情况下, 使用:
-		__sync_fetch_and_add(&G_count,1);//多线程加法操作
+		__sync_fetch_and_add(&G_count,1);			//多线程加法操作
 		__sync_fetch_and_add(&G_count,n);
 
-		__sync_fetch_and_sub(&G_count,1);//多线程减法操作
+		__sync_fetch_and_sub(&G_count,1);			//多线程减法操作
 		__sync_fetch_and_sub(&G_count,n);
 
 	详情, 自己看: ./gcc4.1.2原子操作
@@ -71,4 +71,6 @@
 #else
 		#error "must be >= gcc4.1.2, please check your compiler"
 #endif
+
+
 

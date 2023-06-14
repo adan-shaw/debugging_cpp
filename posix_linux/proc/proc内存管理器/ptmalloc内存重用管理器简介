@@ -1,0 +1,244 @@
+//ptmalloc内存重用管理器( 不满意可以切换jemalloc )
+
+
+
+>>1.ptmalloc 时glibc 默认的内存分配管理器, 
+	也就是malloc and free 的内存分配管理器.
+	它与jemalloc, tcmalloc 都是全内存分配管理器, 是最底层的,
+
+	而nginx 内存池, 则是一种基于以上ptmalloc, jemalloc, tcmalloc 等
+	最底层的内存管理器上面, 再划分出来的半内存管理器,
+
+	由于ptmalloc 的普及性和便捷性, 了解ptmalloc 的成本和实用性会更高,
+	而且由了ptmalloc 的基础, 如果不够用, 你还可以加入jemalloc 的考虑.
+	而且, 将nginx 这种优秀的半内存管理器收归囊中, 是一个不错的方案.
+
+
+
+>>2.ptmalloc 分析:
+分析声明: 
+	ptmalloc 管理的对象主要是: heap 进程堆 和 mmap 虚拟内存映射区.
+	你可以不用管mmap 怎么管理, 你也很少用,
+	但是这些都是进程内多线程共享的资源.
+	对于不同进程之间的内存竞争, 是没有限制的.
+
+	但是你可以设定默认堆MAX, 让每个进程都只能合理申请系统内存,
+	否则就会触发内存--> 磁盘数据交换. (也就是内存映射mmap)
+
+
+
+2.1: 
+	加锁操作:
+	malloc 和free 在系统层实现的时候, 都是加锁操作的,
+	这样想也是正常的, 因为所有线程都共享一个heap 堆,
+	heap 堆是共有资源, 线程之间访问应该加锁的.
+	一次加锁操作需要消耗100ns 左右, 正是锁的缘故,
+	导致ptmalloc 在多线程竞争情况下性能远远落后于tcmalloc.
+
+
+
+2.2:
+	ptmalloc chunk 组织:
+	不管内存是在哪里被分配的, 用什么方法分配,
+	用户请求分配的空间在ptmalloc 中都使用一个chunk 来表示.
+	用户调用free() 函数释放掉的内存也<并不是立即就归还>给操作系统,
+	相反, 它们也会被表示为一个chunk,
+	ptmalloc <使用特定的数据结构>来管理这些<空闲的chunk>.
+	ptmalloc 在给用户<分配的空间的前后>加上了一些<控制信息>,
+	用这样的方法来<记录分配的信息>, 以便完成分配和释放工作.
+
+	>>空闲chunk 容器:
+	用户free 掉的内存并不是都会马上归还给系统,
+	ptmalloc 会统一管理heap 和mmap 映射区域中的空闲的chunk,
+	当用户进行下一次分配请求时,
+	ptmalloc 会首先试图在空闲的chunk 中挑选一块给用户,
+	这样就避免了频繁的系统调用, 降低了内存分配的开销.
+
+	>>chunk 容器链表:
+	ptmalloc 将相似大小的chunk 用双向链表链接起来,
+	这样的一个链表被称为一个bin. ptmalloc 一共维护了128 个bin,
+	并使用一个数组来存储这些bin 的实体指针, bin 中内存的大小限额等.
+	以便重用时, 可以直接根据现有的大小需求, 找到可重用的内存块.
+
+	>>Fast Bins
+	ptmalloc 中在分配过程中引入了fast bins 的概念,
+	即不大于max_fast(默认值为 64B)的chunk 被释放后,
+	首先会被放到fast bins 中.
+
+	>>Unsorted Bin
+	unsorted bin 的队列使用bins 数组的第一个,
+	如果被用户释放的chunk 大于max_fast, 或者fast bins 中的空闲chunk 合并后,
+	这些chunk 首先会被放到unsorted bin 队列中.
+
+	在进行malloc 操作的时候, 如果在fast bins 中没有找到合适的chunk,
+	则ptmalloc 会先在unsorted bin 中查找合适的空闲 chunk, 然后才查找bins.
+	如果unsorted bin 不能满足分配要求,
+	malloc 便会将unsorted bin 中的chunk 加入 bins 中.
+	然后再从bins 中继续进行查找和分配过程.
+
+	从这个过程可以看出来, unsorted bin可以看做是bins 的一个缓冲区,
+	增加它只是为了加快分配的速度.
+
+
+	>>Top chunk: top chunk对于主分配区和非主分配区是不一样的.
+	非主分配区:
+	对于<非主分配区>会预先从mmap 区域分配一块较大的空闲内存模拟sub-heap,
+	通过管理sub-heap 来响应用户的需求,
+	因为内存是按地址从低向高进行分配的, 在空闲内存的最高处,
+	必然存在着一块空闲chunk, 叫做top chunk.
+
+	当bins 和fast bin都满足不了用户的需求,
+	ptmalloc 会从top chunk 分出一块内存给用户,
+	如果top chunk空间不足, 会重新分配一个sub-heap,
+	将top chunk迁移到行的sub-heap上.
+	新的sub-heap和旧的sub, 在分配过程中, top chunk的大小随着切割动态变化.
+
+	主分配区:
+	主分配区是唯一能够映射进程heap 区域的分配区,
+	它可以通过sbrk()来增大或是收缩进程 heap 的大小.
+	top chunk 在heap 的最上面,
+	如果申请内存时, top chunk空间不足,
+	ptmalloc 会调用 sbrk()将的进程 heap 的边界 brk 上移,
+	然后修改 top chunk 的大小.
+
+
+	>>mmaped chunk
+	当分配的内存空间过大的时候, top chunk也不能满足需求,
+	ptmalloc会直接调用mmap给用户分配内存.
+	mmap分配阈值(mmap threshold, 默认值为 128KB, 分配阈值可以动态调整).
+	如果开启了mmap 分配阈值的动态调整机制,
+	并且当前回收的chunk 大小大于mmap 分配阈值,
+	将mmap 分配阈值设置为该chunk 的大小,
+	将mmap 收缩阈值设定为mmap 分配阈值的2 倍.
+
+	>>last remainder
+	last remainder 也不存在于bins 中,
+	当用户在small bins 中找不到合适的chunk,
+	如果last remainder 的大小大于small chunk 的大小,
+	last remainder 会分裂为两个chunk, 一个返回给用户,
+	另一个变成新的remainder chunk.
+
+
+
+2.3: 内存分配概述(以32位系统为例):
+	小于等于64 字节:		用 pool 算法分配.
+	64 到512 字节之间: 在最佳匹配算法分配和pool 算法分配中取一种合适的.
+	大于等于512 字节:	用最佳匹配算法分配.
+
+	大于等于mmap 分配阈值(默认值 128KB):根据设置的mmap 的分配策略进行分配,
+	如果没有开启mmap 分配阈值的动态调整机制,
+	大于等于128KB 就直接调用mmap() 分配.
+	否则, 大于等于mmap 分配阈值时直接调用mmap()分配.
+
+
+
+2.4: ptmalloc 的响应用户内存分配要求的具体步骤:
+>1.(获取一个未加锁/被使用的分配区):
+	获取一个未加锁的分配区, 如果所有分配区都加了锁,
+	ptmalloc会开辟一个新的分配区. 开辟新分配区时,
+	会调用mmap创建一个sub-heap, 并设置好top chunk.
+>2.(将用户需求大小转为chunk 标格大小):
+	将用户的请求大小转换为实际需要分配的 chunk 空间大小
+
+>3.(判断chunk 的大小是否满足max_fast 条件):
+	判断所需分配chunk 的大小是否满足chunk_size <= max_fast
+	(max_fast 默认为 64B),
+	如果是的话, 则转下一步, 否则跳到第 5 步.
+
+>4.(如果满足max_fast 条件):
+	首先尝试在fast bins 中取一个所需大小的chunk 分配给用户.
+	如果可以找到, 则分配结束. 否则转到下一步.
+
+>5.(不满足max_fast 条件, 判断是否满足small bins 条件):
+	判断所需大小是否处在small bins 中,
+	即判断chunk_size < 512B 是否成立.
+	如果chunk大小处在small bins中, 则转下一步, 否则转到第 7 步.
+
+>6.(如果满足max_fast 条件):
+	根据所需分配的chunk 的大小, 找到具体所在的某个small bin,
+	从该bin 的尾部摘取一个恰好满足大小的chunk.
+	若成功, 则分配结束, 否则, 转到下一步.
+
+>7.(不满足small bins 条件, 检查一次fast bins 合并,
+	合并后检查是否符合分配, 是就分配,
+	不是就将unsorted bin/未排序的chunk 排序放入small bins
+	或者large bins, 然后继续下一步):
+
+	首先尽可能将fast bins中的chunk合并,
+	并且放入unsorted bin中. //未排序的chunk !!
+	如果unsorted bin中只有一个chunk, 而且在上次分配的时候使用过,
+	并且说需要分配的属于small bins,
+	并且chunk 的大小大于等于需要分配的大小,
+	这种情况下就直接将该chunk 进行切割, 然后分配, 分配结束.
+	否则, 将unsorted bin 中的chunk 放入small bins
+	或者large bins. 进入下一步.
+
+>8.从large bins分配一块合适的chunk, 没有适合的就继续下一步.
+
+>9.根据申请空间的大小和mmap分配阈值判断,
+	从top chunk中分配内存还是直接调用mmap分配内存.
+
+
+小总结: 总结:
+
+小内存:
+	[获取分配区(arena)并加锁] -> fast bins -> small bins
+	-> 合并fast bins加入unsorted bins -> unsorted bins合并,
+	加入small bins或者large bins -> small bins -> large bins
+	-> top chunk(低于mmap阈值) -> mmap(高于mmap 阈值)
+
+大内存: 直接mmap
+
+分配区:
+	实际就是按照进程来划分的, 系统统一管理内存回收机制,
+	但是回根据进程来划分分配区.
+
+
+
+2.5: 内存回收概述:
+>1.根据地址对齐找到sub-heap, 从sub-heap头部信息找到属于哪个分配区,
+		获取分配区的锁, 保证线程安全.
+>2.判断所需释放的chunk 是否为 mmaped chunk, 如果是,
+		则调用munmap()释放mmaped chunk, 解除内存空间映射, 该该空间不再有效.
+>3.判断chunk 的大小和所处的位置, 若chunk_size <= max_fast,
+		并且chunk 并不位于heap 的顶部, 也就是说并不与top chunk 相邻,
+		则转到下一步. 否则跳到5.
+>4.将chunk 放到fast bins 中, chunk 放入到fast bins 中时,
+		并不会修改chunk 的使用状态位, 也并不尝试合并. 然后free 函数返回.
+>5.判断前一个 chunk 是否处在使用中,
+		如果前一个块也是空闲块, 则合并. 并转下一步.
+>6.判断当前释放 chunk 的下一个块是否为 top thunk,
+		如果是, 则转第8步, 否则转下一步.
+>7.判断下一个 chunk 是否处在使用中,	如果下一个 chunk 也是空闲的,
+		则合并, 并将合并后的 chunk 放到 unsorted bin 中.
+>8.将chunk与top chunk合并.
+>9.判断合并后的chunk的大小是否大于FASTBIN_CONSOLIDATION_THRESHOLD
+		(默认64KB),	如果是的话, 则会触发进行 fast bins 的合并操作,
+		fast bins 中的 chunk 将被遍历, 并与相邻的空闲 chunk 进行合并,
+		合并后的 chunk 会被放到 unsorted bin 中.
+		fast bins 将变为空, 操作完成之后转下一步.
+>10.判断top chunk是否大于mmap收缩值,
+		如果大于就将一部分top chunk归还给操作系统.
+
+
+
+2.6: 总结: 
+*1.大内存:									直接munmap
+*2.小内存(与top chunk相邻):	如果在top chunk上面,
+													尽可能合并chunk, 然后与top chunk合并.
+*3.小内存(chunk_size <= max_fast): 直接放入fast_bin
+*4.小内存(chunk_size > max_fast):	与周围的chunk合并后放到unsorted bin中
+*5.(all)如果合并后的chunk触发合并fast bin操作, 合并fast bin放到unsorted中. 
+
+
+
+2.7: ptmalloc缺点
+*1.因为 ptmalloc 收缩内存是从top chunk开始, 
+	如果与top chunk相邻的chunk不能释放, top chunk以下都不能释放.
+	对于长期持有的内存, 尽量直接越过mmap阈值调用mmap直接分配
+
+*2.多线程不友好, 频繁加锁. 
+
+
+
+

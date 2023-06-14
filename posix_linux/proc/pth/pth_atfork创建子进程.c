@@ -124,7 +124,7 @@ int main(void){
 		return -1;
 	}
 	if(pid == 0){
-		printf("child running\n");		//子进程
+		printf("child running\n");			//子进程
 		while(G_count < 4){
 			pthread_mutex_lock(&G_mutex);
 			G_count++;
@@ -132,10 +132,10 @@ int main(void){
 			printf("child: G_count:%d\n",G_count);
 			sleep(1);
 		}
-		exit(0);											//子进程结束
+		exit(0);												//子进程结束
 	}
 
-	printf("parent continue\n");		//父进程
+	printf("parent continue\n");			//父进程
 	sleep(5);
 
 	if(pthread_join(thid,NULL) != 0){

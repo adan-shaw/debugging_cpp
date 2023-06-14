@@ -112,23 +112,23 @@
 		void *sival_ptr;
 	} sigval_t;
 
-	sig_t signal(int signum,sig_t handler);	//绑定信号的sig_func()处理函数
-	int kill(pid_t pid, int sig);						//给指定进程发送信号
-	int raise(int sig);											//向自身进程发送信号[等价于kill(getpid(), sig)]
-	int pause(void);												//使得进程暂停运行,进入休眠状态;直到进程捕获到一个信号,并执行了信号处理函数后,才返回;
-	void abort(void);												//调用abort(),内核会向进程发送SIGABRT信号(SIGABRT信号会终止进程,并生成核心转储文件)
-	unsigned int alarm(unsigned int seconds);//设置一个定时器(闹钟),当定时器时间到,内核会向进程发送SIGALRM信号;(单位:秒)
-																					 //(每个进程只能设置一个alarm闹钟)
-																					 //alarm闹钟只能触发一次,若想循环触发,可在SIGALRM信号处理函数中,再次调用alarm()重置定时器
-																					 //alarm闹钟可以打断进程sleep()挂起,让进程继续运行;
+	sig_t signal(int signum,sig_t handler);					//绑定信号的sig_func()处理函数
+	int kill(pid_t pid, int sig);										//给指定进程发送信号
+	int raise(int sig);															//向自身进程发送信号[等价于kill(getpid(), sig)]
+	int pause(void);																//使得进程暂停运行,进入休眠状态;直到进程捕获到一个信号,并执行了信号处理函数后,才返回;
+	void abort(void);																//调用abort(),内核会向进程发送SIGABRT信号(SIGABRT信号会终止进程,并生成核心转储文件)
+	unsigned int alarm(unsigned int seconds);				//设置一个定时器(闹钟),当定时器时间到,内核会向进程发送SIGALRM信号;(单位:秒)
+																									//(每个进程只能设置一个alarm闹钟)
+																									//alarm闹钟只能触发一次,若想循环触发,可在SIGALRM信号处理函数中,再次调用alarm()重置定时器
+																									//alarm闹钟可以打断进程sleep()挂起,让进程继续运行;
 
 
-	int sigemptyset(sigset_t *set);										//清空信号集
-	int sigfillset(sigset_t *set);										//自动填充信号集,使其包含64个信号
-	int sigaddset(sigset_t *set,int signum);					//向信号集中添加一个信号
-	int sigdelset(sigset_t *set,int signum);					//向信号集中删除一个信号
-	int sigismember(const sigset_t *set,int signum);	//测试某个信号是否存在于一个信号集中
-	char *strsignal(int sig);													//获取信号的string描述信息
+	int sigemptyset(sigset_t *set);									//清空信号集
+	int sigfillset(sigset_t *set);									//自动填充信号集,使其包含64个信号
+	int sigaddset(sigset_t *set,int signum);				//向信号集中添加一个信号
+	int sigdelset(sigset_t *set,int signum);				//向信号集中删除一个信号
+	int sigismember(const sigset_t *set,int signum);//测试某个信号是否存在于一个信号集中
+	char *strsignal(int sig);												//获取信号的string描述信息
 
 	//绑定信号处理函数:
 		如果参数act不为NULL,则表示设置新的struct sigaction; 
@@ -250,7 +250,7 @@
 	17) SIGCHLD:
 		子进程结束时, 父进程会收到这个信号. 
 		如果父进程没有处理这个信号, 也没有等待(wait)子进程, 
-		子进程虽然终止, 但还是会在内核进程表中占有表项, 
+		子进程虽然终止, 但是还会在内核进程表中占有表项, 
 		这时的子进程称为僵尸进程. 
 		这种情况我们应该避免
 		(父进程或者忽略SIGCHILD信号, 或者捕捉它, 
@@ -308,4 +308,6 @@
 	31) SIGSYS:
 		非法的系统调用. 
 */
+
+
 

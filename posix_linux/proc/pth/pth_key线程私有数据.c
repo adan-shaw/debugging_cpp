@@ -49,7 +49,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-struct info{
+struct pth_info{
 	int i;
 	float k;
 };
@@ -59,20 +59,20 @@ struct info{
 pthread_key_t key;
 
 void* child1(void *arg){
-	struct info data, *pdata;
+	struct pth_info data, *pdata;
 	data.i = 10;
 	data.k = 3.1415;
-	pthread_setspecific(key, &data);	//把线程key初始化为结构体
+	pthread_setspecific(key, &data);	//把'线程key'初始化为结构体
 	printf("child1--&data=0x%p\n", &data);
-	printf("child1--pthread_getspecific(key)=0x%p\n", (struct info*)pthread_getspecific(key));
-	pdata = (struct info*)pthread_getspecific(key);
+	printf("child1--pthread_getspecific(key)=0x%p\n", (struct pth_info*)pthread_getspecific(key));
+	pdata = (struct pth_info*)pthread_getspecific(key);
 	printf("child1--pdata->i:%d, pdata->k: %f\n", pdata->i, pdata->k);
 	return NULL;
 }
 
 void* child2(void *arg){
 	int temp = 20, *ptemp;
-	pthread_setspecific(key, &temp);	//把线程key初始化为int
+	pthread_setspecific(key, &temp);	//把'线程key'初始化为int
 	printf("child2--&temp=0x%p\n", &temp);
 	printf("child2--pthread_getspecific(key)=0x%p\n", (int*)pthread_getspecific(key));
 	ptemp = (int*)pthread_getspecific(key);
@@ -84,7 +84,7 @@ void* child2(void *arg){
 int main(void){
 	pthread_t thid1, thid2;
 
-	pthread_key_create(&key, NULL);		//创建线程key(私有变量)
+	pthread_key_create(&key, NULL);		//创建'线程key'(私有变量)
 
 	if(pthread_create(&thid1, NULL, (void*)child1, NULL) != 0){
 		perror("pthread_create()");
@@ -106,7 +106,7 @@ int main(void){
 		return -1;
 	}
 
-	pthread_key_delete(key);					//销毁线程key(私有变量)
+	pthread_key_delete(key);					//销毁'线程key'(私有变量)
 
 	return 0;
 }

@@ -196,3 +196,4 @@
 		//获取系统cpu 的时间片长度(仅SCHED_OTHER/SCHED_RR有效, SCHED_FIFO为0)
 		int sched_rr_get_interval(pid_t pid, struct timespec *tp);
 */
+
