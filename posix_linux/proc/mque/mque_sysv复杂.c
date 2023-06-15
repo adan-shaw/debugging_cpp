@@ -21,7 +21,7 @@ typedef struct app_body{
 void mque_sysvw(void){
 	key_t kfd;
 	int mque_fd, tmp;
-	body_t buf = {1,2.2,"love  you asshole!!"};
+	body_t buf = {1,2.2,"love you asshole!!"};
 
 	kfd = ftok(mque_sysv_path, 0x57);
 	if(kfd == -1){

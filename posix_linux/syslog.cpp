@@ -182,9 +182,9 @@ int main(void){
 
 	//最终测试:
 	openlog(log_file_name,options,facility);	//打开日志文件
-	syslog(LOG_DEBUG,"%s","love  me harder");	//刷写一条日志
-	syslog(LOG_ERR,"%s","love  me harder2");		//刷写一条日志
-	syslog(LOG_INFO,"%s","love  me harder3");	//刷写一条日志
+	syslog(LOG_DEBUG,"%s","love me harder");	//刷写一条日志
+	syslog(LOG_ERR,"%s","love me harder2");		//刷写一条日志
+	syslog(LOG_INFO,"%s","love me harder3");	//刷写一条日志
 	closelog();																//关闭日志文件
 
 

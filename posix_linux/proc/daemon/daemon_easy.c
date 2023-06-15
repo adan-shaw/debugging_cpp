@@ -157,7 +157,7 @@ void exec_daemon(const char *path, const unsigned int argc, ...){
 		perror("execv()");
 		exit(-1);
 	}
-	write(open("./text", O_RDWR),"love  you",sizeof("love  you"));
+	write(open("./text", O_RDWR),"love you",sizeof("love you"));
 }
 
 

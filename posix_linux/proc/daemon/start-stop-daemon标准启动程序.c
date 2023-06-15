@@ -1333,7 +1333,7 @@ int main(int argc, char **argv){
 		perror("signal()");
 	*/
 
-	//printf("love  you\n");//for test only
+	//printf("love you\n");//for test only
 	//开始执行程序(fork() + execv() 替换, 在这之前可以设置信号函数)
 	execv(startas, argv);
 	fatal("Unable to start %s: %s", startas, strerror(errno));

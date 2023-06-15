@@ -27,8 +27,8 @@ void mmap_mlock(void){
 
 	mlock(pmap, PAGE_COUNT/2);			//把前半页锁在物理内存中(禁止交换到disk 中)
 
-	strncpy(pmap, "hello love ers", sizeof("hello love ers"));
-	strncpy((pmap+(PAGE_COUNT/2)), "hello love ers", sizeof("hello love ers"));
+	strncpy(pmap, "hello lovers", sizeof("hello lovers"));
+	strncpy((pmap+(PAGE_COUNT/2)), "hello lovers", sizeof("hello lovers"));
 
 	munlock(pmap, PAGE_COUNT/2);		//解锁
 
