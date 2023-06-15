@@ -49,7 +49,7 @@
 void mque_sysv_easyw(void){
 	key_t kfd;
 	int mque_fd, tmp;
-	const char* pbuf = "fuck you man";
+	const char* pbuf = "love  you man";
 
 	kfd = ftok(mque_sysv_path, 0x57);
 	if(kfd == -1){

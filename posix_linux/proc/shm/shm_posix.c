@@ -56,7 +56,7 @@ void shm_posix_test(void){
 	m_frame.b = 999;
 	m_frame.c = 1.1;
 	m_frame.d = 9.9;										//填充mmap_frame_t结构体
-	strncpy(m_frame.buf, "hello fucker, i am your 朋友\0", 32);
+	strncpy(m_frame.buf, "hello love er, i am your 朋友\0", 32);
 
 	memcpy(pmap,&m_frame,sizeof(mmap_frame_t));
 

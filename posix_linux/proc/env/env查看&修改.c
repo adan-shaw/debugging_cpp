@@ -69,7 +69,7 @@ int main(void){
 
 
 	printf("2.2 新增'进程环境变量'条目(进程内有效, 进程退出会销毁)\n");
-	strncpy(env_buf,"ADAN_TEST=\"come_fuck_me\"",sizeof(env_buf));
+	strncpy(env_buf,"ADAN_TEST=\"come_love _me\"",sizeof(env_buf));
 	tmp = putenv(env_buf);
 	if(tmp != 0){
 		printf("putenv()比较特殊, 失败不是返回-1, 而是返回随机值, 成功则返回0\n");
@@ -99,7 +99,7 @@ int main(void){
 	*/
 	strncpy(env_buf,"ADAN_TEST",sizeof(env_buf));
 	//覆盖式修改
-	tmp = setenv(env_buf, "\"setenv()_fuck_me\"", 1);
+	tmp = setenv(env_buf, "\"setenv()_love _me\"", 1);
 	if(tmp == -1){
 		perror("setenv()");
 		return -1;

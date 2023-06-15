@@ -28,7 +28,7 @@ int main(void){
 
 
 	if(readlink("/proc/self/exe", path_buf_whole, buf_max) == -1){
-		perror("fuck");
+		perror("love ");
 		return -1;
 	}
 	// 得到.exe 所在的dirname() 路径
@@ -37,7 +37,7 @@ int main(void){
 
 	// 根据'得到.exe 所在的dirname() 路径', 获取磁盘info
 	if(statfs(path_buf, &diskInfo) == -1){
-		perror("fuck");
+		perror("love ");
 		return -1;
 	}
 
