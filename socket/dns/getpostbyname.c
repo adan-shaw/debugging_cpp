@@ -20,10 +20,10 @@
 
 	//2.协议存放结构体
 	struct servent{
-		char *s_name;			// Official service name.
-		char **s_aliases;	// Alias list.
-		int s_port;				// Port number.
-		char *s_proto;		// Protocol to use.
+		char *s_name;										// Official service name.
+		char **s_aliases;								// Alias list.
+		int s_port;											// Port number.
+		char *s_proto;									// Protocol to use.
 	};
 */
 
@@ -55,17 +55,17 @@ void getservent_test(void){
 	struct servent* serv;
 
 	printf("遍历/etc/services 里面的信息\n");
-	setservent(1);					//打开/etc/services 并挟持
+	setservent(1);										//打开/etc/services 并挟持
 
 	while(1){
 		serv = getservent();
 		if(serv == NULL)
-			break;							//读取结束or 遇到意外终止.
+			break;												//读取结束or 遇到意外终止.
 		else
-			printservent(serv);	//打印单个struct servent 节点
+			printservent(serv);						//打印单个struct servent 节点
 	}
 
-	endservent();						//关闭/etc/services 并释放
+	endservent();											//关闭/etc/services 并释放
 	return;
 }
 

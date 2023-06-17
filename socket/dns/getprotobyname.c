@@ -11,19 +11,19 @@
 /*
 	//1.<proto>API函数, 用于操作协议名和协议编号:
 	struct protoent* getprotobyname(const char* name);//指定协议名, 测试能不能用.
-	struct protoent* getprotobynumber(int proto);			//少用
-	struct protoent* getprotoent(void);								//读取并后移, 通常遍历的时候用
+	struct protoent* getprotobynumber(int proto);	//少用
+	struct protoent* getprotoent(void);						//读取并后移, 通常遍历的时候用
 
 	//如果参数stayopen参数值为1,则接下来的getprotobyname()或getprotobynumber()将不会自动关闭此文件.
-	void setprotoent(int stayopen);										//打开/etc/protocols
-	void endprotoent(void);														//关闭/etc/protocols 文件
+	void setprotoent(int stayopen);								//打开/etc/protocols
+	void endprotoent(void);												//关闭/etc/protocols 文件
 
 
 	//2.协议存放结构体
 	struct protoent{
-		char *p_name;			//Official protocol name.
-		char **p_aliases;	//Alias list.
-		int p_proto;			//Protocol number.
+		char *p_name;																//Official protocol name.
+		char **p_aliases;														//Alias list.
+		int p_proto;																//Protocol number.
 	};
 
 */
@@ -55,18 +55,17 @@ void getprotoent_test(void){
 	struct protoent* proto;
 
 	printf("遍历本地<记录文件>,  并打印所有的协议信息\n");
-	setprotoent(1);					//打开并挟持<记录文件>
-													//注意: 你不挟持文件,可能只会一直读取到第一个,读不到后面的协议
+	setprotoent(1);								//打开并挟持<记录文件>; 注意: 你不挟持文件,可能只会一直读取到第一个,读不到后面的协议
 
 	while(1){
 		proto = getprotoent();
-		if(proto == NULL)			//如果读到/etc/protocols 文件结束
-			break;							//读取结束or 遇到意外终止
+		if(proto == NULL)						//如果读到/etc/protocols 文件结束
+			break;										//读取结束or 遇到意外终止
 		else
-			printproto(proto);	//打印单个struct protoent 节点
+			printproto(proto);				//打印单个struct protoent 节点
 	}
 
-	endprotoent();					//关闭并释放<记录文件>
+	endprotoent();								//关闭并释放<记录文件>
 	return;
 }
 

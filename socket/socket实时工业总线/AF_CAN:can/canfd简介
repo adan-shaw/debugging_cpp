@@ -17,7 +17,7 @@ CANfd,CANoe,CANalyzer,CANape的区别:
 	CANoe是Vector公司开发的一款总线开发测试工具,具备分析,仿真,测试,记录,诊断等多项功能,是一款软件;
 
 	CANalyzer是一款网络分析工具,CANalyzer是CANoe的功能子集,是缩减版的CANoe,
-	CANalyzer没有测试功能,不能作为测试工具去应用,只有记录,分析功能
+	CANalyzer没有测试功能,不能作为测试工具去应用,只有记录,分析功能。
 
 	CANape是一款ECU标定工具,可以对ECU的参数进行标定,测量分析,它与CANoe在功能上的差别还是比较大的;
 	当然,CANoe利用XCP插件也可以做标定,但不能完全替代CANape;

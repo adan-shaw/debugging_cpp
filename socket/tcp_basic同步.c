@@ -80,12 +80,12 @@ int tcp_ioEx(int sfd, void* pbuf, unsigned int len, int flags){
 	int tmp = recv(sfd, pbuf, len, flags);
 	int tmp = send(sfd, pbuf, len, flags);
 	if(tmp >= 0)
-		return tmp;		//阻塞同步操作: 大于0, 一定是发送/接受成功了
+		return tmp;					//阻塞同步操作: 大于0, 一定是发送/接受成功了
 	//if(tmp == 0)
-		//return tmp;	//阻塞同步操作: 等于0, 只有对端关闭这一种可能(errno==ENOTSOCK), 此时你也应该close(sfd);
-									//不要乱用shutdown(), 只有当对端还在线的时候, 你才可以shutdown(), 而且shutdown() 操作是不可逆的
+		//return tmp;				//阻塞同步操作: 等于0, 只有对端关闭这一种可能(errno==ENOTSOCK), 此时你也应该close(sfd);
+												//不要乱用shutdown(), 只有当对端还在线的时候, 你才可以shutdown(), 而且shutdown() 操作是不可逆的
 
-	//if(tmp == -1)	//上面两个if 排除之后, 此时的tmp返回值, 肯定是-1
+	//if(tmp == -1)				//上面两个if 排除之后, 此时的tmp返回值, 肯定是-1
 	assert(tmp == -1);
 	switch(errno){
 		case EAGAIN:				//套接字已标记为非阻塞, 网卡正忙, 稍后再试
@@ -115,8 +115,8 @@ int tcp_ioEx(int sfd, void* pbuf, unsigned int len, int flags){
 int tcp_recv(int sfd, void* rbuf, unsigned int buf_len){
 	int tmp = recv(sfd, *rbuf, buf_len, 0);
 	if(tmp > 0)
-		return tmp;	//接收成功(非接收成功, 就应该close(sfd))
-	if(tmp == 0)	//对端已经关闭
+		return tmp;					//接收成功(非接收成功, 就应该close(sfd))
+	if(tmp == 0)					//对端已经关闭
 		return -1;
 	//此时, tmp == -1
 	perror("recv()");
@@ -127,8 +127,8 @@ int tcp_recv(int sfd, void* rbuf, unsigned int buf_len){
 int tcp_send(int sfd, void* sbuf, unsigned int len){
 	int tmp = send(sfd, sbuf, len, 0);
 	if(tmp >= 0)
-		return tmp;	//发送成功(非发送成功, 就应该close(sfd))
-	if(tmp == 0)	//对端已经关闭
+		return tmp;					//发送成功(非发送成功, 就应该close(sfd))
+	if(tmp == 0)					//对端已经关闭
 		return -1;
 	//此时, tmp == -1
 	perror("send()");

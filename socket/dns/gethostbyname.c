@@ -20,12 +20,12 @@
 
 	//2.返回的<dns host>信息载体
 	struct hostent{
-		char *h_name;									//主机名
-		char **h_aliases;							//可选的别名列表
-		int h_addrtype;								//地址类型, 一般为AF_INET
-		int h_length;									//地址长度
-		char **h_addr_list;						//网络地址列表
-		#define h_addr h_addr_list[0]; //第一个网络地址
+		char *h_name;										//主机名
+		char **h_aliases;								//可选的别名列表
+		int h_addrtype;									//地址类型, 一般为AF_INET
+		int h_length;										//地址长度
+		char **h_addr_list;							//网络地址列表
+		#define h_addr h_addr_list[0];	//第一个网络地址
 	};
 	//说明:
 		之所以主机的地址是一个链表的形式, 其原因是:
@@ -74,15 +74,15 @@ void gethostent_test(void){
 	struct hostent* h;
 
 	printf("* 遍历'本地dns记录文件'所有的host 主机信息\n");
-	sethostent(1);		//打开并'挟持'本地dns记录文件
+	sethostent(1);										//打开并'挟持'本地dns记录文件
 	while(1){
 		h = gethostent();
 		if(h == NULL)
-			break;				//读取结束or 遇到意外终止
+			break;												//读取结束or 遇到意外终止
 		else
-			printhost(h);	//打印单个struct hostent 节点
+			printhost(h);									//打印单个struct hostent 节点
 	}
-	endnetent();			//关闭并'释放'本地dns记录文件
+	endnetent();											//关闭并'释放'本地dns记录文件
 	return;
 }
 
@@ -94,12 +94,12 @@ void gethostbyname_test(void){
 
 	printf("* 测试<URL dns 解析>出'所有地址信息'\n");
 	//只有第一个hostent 地址有效, 其它都是空的, 访问就会指针越界
-	//h = gethostbyname("127.0.0.1");			//环回地址ok
-	//h = gethostbyname("192.168.0.100");	//网卡地址ok
-	h = gethostbyname("www.baidu.com");		//百度地址测试->ok
-	//h = gethostbyname("localhost");			//localhost 测试->ok
-	//h = gethostbyname("eva");						//主机名 测试->ok
-	//h = gethostbyname("handsome");			//主机别名 测试->失败
+	//h = gethostbyname("127.0.0.1");							//环回地址ok
+	//h = gethostbyname("192.168.0.100");					//网卡地址ok
+	h = gethostbyname("www.baidu.com");						//百度地址测试->ok
+	//h = gethostbyname("localhost");							//localhost 测试->ok
+	//h = gethostbyname("eva");										//主机名 测试->ok
+	//h = gethostbyname("handsome");							//主机别名 测试->失败
 	if(h != NULL)
 		printhost(h);
 	else

@@ -58,8 +58,8 @@
 #define USOCK_BUF_MAX (64)
 
 struct usock_frame{
-	short int type;								//信息类型编号
-	short int buf_len;						//信息长读buf_len
+	short int type;				//信息类型编号
+	short int buf_len;		//信息长读buf_len
 	char buf[USOCK_BUF_MAX];
 };
 

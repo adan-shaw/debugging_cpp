@@ -181,5 +181,6 @@ inline int get_sockopt_opts_tcpinfo(int sfd, struct tcp_info* ptcp_info){
 		perror("getsockopt");
 		return 0;
 	}
-	return 1;//调用成功返回1, 失败返回0
+	//调用成功返回1, 失败返回0
+	return 1;
 }

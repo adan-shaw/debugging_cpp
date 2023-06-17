@@ -47,15 +47,15 @@ static void icmp_usage();
 
 static ping_packet m_ping_packet[128];
 static unsigned char send_buff[BUFFERSIZE];
-static unsigned char recv_buff[2*K];				//为防止接收溢出, 接收缓冲区设置大一些
-static struct sockaddr_in dest;							//目的地址
-static int rawsock = 0;											//发送和接收线程需要的socket描述符
-static pid_t pid=0;													//进程PID
-static int alive = 0;												//是否接收到退出信号
-static short packet_send = 0;								//已经发送的数据包多少
-static short packet_recv = 0;								//已经接收的数据包多少
-static char dest_str[80];										//目的主机字符串
-static struct timeval tv_begin, tv_end,tv_interval; //本程序开始发送、结束和时间间隔
+static unsigned char recv_buff[2*K];								//为防止接收溢出, 接收缓冲区设置大一些
+static struct sockaddr_in dest;											//目的地址
+static int rawsock = 0;															//发送和接收线程需要的socket描述符
+static pid_t pid=0;																	//进程PID
+static int alive = 0;																//是否接收到退出信号
+static short packet_send = 0;												//已经发送的数据包多少
+static short packet_recv = 0;												//已经接收的数据包多少
+static char dest_str[80];														//目的主机字符串
+static struct timeval tv_begin, tv_end,tv_interval;	//本程序开始发送、结束和时间间隔
 
 
 

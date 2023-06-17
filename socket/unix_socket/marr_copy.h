@@ -1,6 +1,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+
+
 //malloc分配的内存空间是连续的吗?
 /*
 	1.linux内核管理内存空间的分配,

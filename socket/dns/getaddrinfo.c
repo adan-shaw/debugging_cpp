@@ -72,10 +72,10 @@ void print_addrinfo(const struct addrinfo* addr){
 
 //2.getaddrinfo()测试函数
 void getaddrinfo_test(void){
-	const char* serv = "80";							//可以直接写端口号
-	//const char* serv = "http";					//也可以直接写'高层协议名'
-	const char* host = "www.baidu.com";		//可以直接写url链接(主机域名)
-	//const char* host = "180.101.49.14";	//可以直接写ip 地址
+	const char* serv = "80";															//可以直接写端口号
+	//const char* serv = "http";													//也可以直接写'高层协议名'
+	const char* host = "www.baidu.com";										//可以直接写url链接(主机域名)
+	//const char* host = "180.101.49.14";									//可以直接写ip 地址
 	struct addrinfo hint,*res,*res_save;
 	int tmp;
 
