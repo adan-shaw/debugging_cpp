@@ -1,0 +1,23 @@
+MQ时代,取代旧式socketAPI:
+	目前大部分的网络app, 都有MQ/proxy的, 旧式socket API, 基本上只会在: 
+		防火墙, 
+		网络设备, 
+		proxy 网关本身的实现,
+		MQ 本身的实现, 这几个环境下, 还会用;
+
+	基本没有应用程序, 会直接裸奔旧式socket API, 吃力不讨好, 功能还超级傻瓜简单;
+	不符合敏捷开发的要求, 重复造轮子;
+	(除非你是专门做防火墙, 网络设备, 或者MQ 供应商, 那需要旧时socket API 高手, 不是骨灰级高手, 基本很难玩的动)
+
+	因此, 现在的网络应用, 迎来了MQ/proxy 时代, 无论是互联网应用, 还是工业应用;
+
+
+
+常见的MQ/proxy:
+	http/ftp:      apache/nginx proxy
+	sip实时通话:    freeSwitch 网关
+	app server:    异步MQ(互联网MQ 大部分是异步的, 种类非常多)
+	工业总线server: fastDDS/openDDS
+	lua游戏后端:    skynet 代理proxy(实际上也是一个proxy, 互联网app 后端server)
+
+	IBM MQ:        可能质量较高, 应该也是异步的, 但也在工业/银行里面用, 估计性能和稳定性较好的话, 质量介于互联网MQ-工业MQ之间;
