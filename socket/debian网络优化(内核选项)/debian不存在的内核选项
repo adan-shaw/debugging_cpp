@@ -1,0 +1,50 @@
+sysctl: cannot stat /proc/sys/kern/ipc/shm_use_phys: No such file or directory
+#sysctl: cannot stat /proc/sys/kern/ipc/shmmax: No such file or directory
+#sysctl: cannot stat /proc/sys/kern/ipc/shmall: No such file or directory
+#sysctl: cannot stat /proc/sys/kern/ipc/somaxconn: No such file or directory
+sysctl: cannot stat /proc/sys/kern/coredump: No such file or directory
+sysctl: cannot stat /proc/sys/kern/securelevel: No such file or directory
+sysctl: cannot stat /proc/sys/security/bsd/see_other_uids: No such file or directory
+
+
+
+
+
+sysctl: cannot stat /proc/sys/net/inet/tcp/sendspace: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/udp/sendspace: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/udp/maxdgram: No such file or directory
+sysctl: cannot stat /proc/sys/net/local/stream/recvspace: No such file or directory
+sysctl: cannot stat /proc/sys/net/local/dgram/maxdgram: No such file or directory
+sysctl: cannot stat /proc/sys/net/local/dgram/recvspace: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/raw/maxdgram: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/raw/recvspace: No such file or directory
+sysctl: cannot stat /proc/sys/net/ipv4/idgen_retries: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/rfc1323: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/rfc1644: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/rfc3042: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/rfc3390: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/delayed_ack: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/icmp/drop_redirect: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/icmp/log_redirect: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/ip/redirect: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet6/ip6/redirect: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/icmp/bmcastecho: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/icmp/maskrepl: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/icmp/icmplim: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/icmp/icmplim_output: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/drop_synfin: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/always_keepalive: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/ip/intr_queue_maxlen: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/msl: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/blackhole: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/udp/blackhole: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/inflight/enable: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/ip/fastforwarding: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/log_in_vain: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/udp/log_in_vain: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/udp/checksum: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/mssdflt: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/inflight_enable: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/tcp/minmss: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/ip/fw/dyn_max: No such file or directory
+sysctl: cannot stat /proc/sys/net/inet/ipf/fr_tcpidletimeout: No such file or directory
