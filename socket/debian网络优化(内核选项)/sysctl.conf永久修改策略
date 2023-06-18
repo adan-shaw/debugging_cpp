@@ -1,0 +1,457 @@
+#
+# 0.杂项
+#
+# 仅为线程提供物理内存支持, 需要256兆以上内存
+###kern.ipc.shm_use_phys=1
+
+# 线程可使用的最大共享内存
+###kern.ipc.shmmax=67108864
+kernel.shmmax=67108864
+
+# 最大线程数量
+###kern.ipc.shmall=32768
+kernel.shmall=67108864
+
+# 并发连接数, 默认为128, 推荐在1024-4096之间, 数字越大占用内存也越大
+###kern.ipc.somaxconn=4096
+net.core.somaxconn=4096
+
+# kernel编译打开options POLLING功能, 高负载情况下使用低负载不推荐SMP不能和polling一起用
+# kern.polling.enable=1
+
+# 程序崩溃时不记录
+###kern.coredump=0
+
+# 设置kernel安全级别
+###kern.securelevel=0
+
+# 禁止用户查看其他用户的进程
+###security.bsd.see_other_uids=0
+
+
+
+
+
+#
+# 1.fs 文件系统策略
+#
+# open files max(系统级限制),不能小于ulimit 中设置的上限
+# 1024*1024=1048576, 1024*768=786432, 1024*512=524288, 1024*256=262144, 1024*128=131072, 1024*64=65536
+# 母主机取256*1024, 子主机取64*1024, 可开启256/64=4 个子主机?
+fs.file-max=524288
+
+# epoll,poll,select,listen()都属于io时间监听行为.这些fd总和,等于max_user_watches
+fs.epoll.max_user_watches=524288
+fs.inotify.max_user_watches=524288
+
+
+# mqueue 优化(android 没有这个选项)
+fs.mqueue.msg_default=10
+fs.mqueue.msg_max=10
+fs.mqueue.msgsize_default=8192
+fs.mqueue.msgsize_max=16384
+fs.mqueue.queues_max=256
+
+# pipe 优化(1048576=1024*1024=1MB, 2097152=2MB)
+fs.pipe-max-size=2097152
+fs.pipe-user-pages-hard=0
+fs.pipe-user-pages-soft=16384
+
+
+
+
+
+#
+# 2.net 网络策略-part1 (copy from openwrt)
+#
+
+# 路由转发功能
+# openwrt默认开启, linux server 手动关闭
+net.ipv4.ip_forward=0
+net.ipv4.ip_forward_update_priority=1
+net.ipv4.ip_forward_use_pmtu=0
+
+# 忽略arp 广播
+net.ipv4.conf.all.arp_ignore=1
+net.ipv4.conf.default.arp_ignore=1
+
+# 禁止ping
+net.ipv4.icmp_echo_ignore_all=1
+
+# 忽略所有的ICMP ECHO请求, 或忽略广播和多播请求
+net.ipv4.icmp_echo_ignore_broadcasts=1
+net.ipv4.icmp_ignore_bogus_error_responses=1
+net.ipv4.icmp_errors_use_inbound_ifaddr=0
+
+# 禁止ping风暴(限制icmp 报文)
+net.ipv4.icmp_msgs_burst=50
+net.ipv4.icmp_msgs_per_sec=1000
+net.ipv4.icmp_ratelimit=1000
+net.ipv4.icmp_ratemask=6168
+
+# 关闭IP转发
+net.ipv4.conf.all.forwarding=0
+net.ipv4.conf.default.forwarding=0
+
+# 关闭代理arp
+net.ipv4.conf.all.proxy_arp=0
+net.ipv4.conf.default.proxy_arp=0
+
+# 关闭路径MTU探测功能
+net.ipv4.ip_no_pmtu_disc=1
+
+# 开启后可以减少重复数据的上传(ack fin)
+net.ipv4.tcp_sack=1
+net.ipv4.tcp_dsack=1
+
+# 打开FACK(Forward ACK)拥塞避免和快速重传功能
+net.ipv4.tcp_fack=1
+
+# 对于本端断开的socket连接, 这个参数决定了它保持在FIN-WAIT-2状态的时间=15s, 默认30s
+net.ipv4.tcp_fin_timeout=15
+
+# 关闭网络日志分析
+net.ipv4.conf.all.log_martians=0
+net.ipv4.conf.default.log_martians=0
+
+# 是否开启对数据包源地址的校验, 启用欺骗保护(反向路径过滤器: 在所有接口中启用源地址验证以防止一些欺骗攻击)
+net.ipv4.conf.default.rp_filter=1
+net.ipv4.conf.all.rp_filter=1
+
+# 不接受ICMP重定向(防止MITM攻击)
+net.ipv4.conf.all.accept_redirects=0
+net.ipv4.conf.default.accept_redirects=0
+
+# 不接受发送重定向
+net.ipv4.conf.all.send_redirects=0
+net.ipv4.conf.default.send_redirects=0
+
+# 不接受含有源路由信息的ip包(在充当网关的linux主机上缺省值为1,在一般的linux主机上缺省值为0.从安全性角度出发,建议关闭该功能)
+net.ipv4.conf.all.accept_source_route=0 
+net.ipv4.conf.default.accept_source_route=0
+
+
+
+
+
+#
+# 3.net 网络策略-part2 (my own)
+#
+# 仅接受默认网关列表中列出的网关的ICMP重定向(默认启用)
+net.ipv4.conf.all.secure_redirects=1
+net.ipv4.conf.default.secure_redirects=1
+
+# ipv4 igmp协议策略(net.ipv4.igmp_xxx=xxx)
+net.ipv4.igmp_link_local_mcast_reports=1
+net.ipv4.igmp_max_memberships=20
+net.ipv4.igmp_max_msf=10
+net.ipv4.igmp_qrv=2
+
+# ipv4 inet_peer网络邻居策略
+net.ipv4.inet_peer_maxttl=600
+net.ipv4.inet_peer_minttl=120
+net.ipv4.inet_peer_threshold=65664
+
+# ipv4 ip协议策略(net.ipv4.ip_xxx=xxx)
+net.ipv4.ip_default_ttl=64
+net.ipv4.ip_dynaddr=0
+net.ipv4.ip_early_demux=1
+net.ipv4.ip_nonlocal_bind=0
+net.ipv4.ip_unprivileged_port_start=1024
+
+# ipv4 ipfrag策略(net.ipv4.ip_xxx=xxx)
+net.ipv4.ipfrag_high_thresh=4194304
+net.ipv4.ipfrag_low_thresh=3145728
+net.ipv4.ipfrag_max_dist=64
+net.ipv4.ipfrag_secret_interval=0
+net.ipv4.ipfrag_time=30
+
+# ipv6 部分(全部禁用)
+net.ipv6.conf.all.forwarding=0
+net.ipv6.conf.default.forwarding=0
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+
+# 关掉包过滤器对所有netns 网络空间的log(仅一个选项)
+net.netfilter.nf_log_all_netns=0
+
+# 关闭所有防火墙日志
+net.netfilter.nf_log.0=NONE
+net.netfilter.nf_log.1=NONE
+net.netfilter.nf_log.10=NONE
+net.netfilter.nf_log.11=NONE
+net.netfilter.nf_log.12=NONE
+net.netfilter.nf_log.2=NONE
+net.netfilter.nf_log.3=NONE
+net.netfilter.nf_log.4=NONE
+net.netfilter.nf_log.5=NONE
+net.netfilter.nf_log.6=NONE
+net.netfilter.nf_log.7=NONE
+net.netfilter.nf_log.8=NONE
+net.netfilter.nf_log.9=NONE
+
+
+
+
+
+#
+# 4.vm 内存池策略
+#
+# 禁用Block Debug模式(dirty_background_ratio, dirty_expire_centisecs, dirty_ratio, dirty_writeback_centisecs 都会被弃用)
+vm.block_dump=0
+
+# 内核回收用于directory和inode cache内存的倾向,缺省值100;
+# 降低该值低于100,将导致内核倾向于保留directory和inode cache;
+# 增加该值超过100,将导致内核倾向于回收directory和inode cache;
+vm.vfs_cache_pressure=100
+
+
+# 修改vm cache 策略为3
+vm.drop_caches=3
+
+# 强制Linux VM最低保留多少空闲内存(Kbytes), 参考: 默认512MB的dvm, 保留724kb;centos=66MB=65536
+vm.min_free_kbytes=32768
+
+
+# 内核针对内存分配的策略,其值可以是0、1、2(默认值:0)
+# 0,表示内核将检查是否有足够的可用内存供应用进程使用;如果有足够的可用内存,内存申请允许;否则,内存申请失败,并把错误返回给应用进程.
+# 1,表示内核允许分配所有的物理内存,而不管当前的内存状态如何.
+# 2,表示内核允许分配超过所有物理内存和交换空间总和的内存(参照overcommit_ratio).
+vm.overcommit_memory=0
+
+# 如果overcommit_memory=2,可以过载内存的百分比,通过以下公式来计算系统整体可用内存:
+# 	系统可分配内存=交换空间+物理内存*overcommit_ratio/100
+# 默认值: 50=50%, 只有overcommit_memory=2时才会生效
+vm.overcommit_ratio=50
+
+
+# 在写一次到swap区的时候写入的页面数量,0表示1页,1表示2页,2表示4页,3表示8页(2的3次方,8页)
+vm.page-cluster=3
+
+# 系统进行swap交换行为的程度,数值(0-100)越高,越可能发生磁盘交换.默认值:60
+vm.swappiness=0
+#vm.swappiness=10
+
+# 是否使用最新的32位共享内存mmap()系统调用,Linux支持的共享内存分配方式包括mmap(),Posix,System VIPC.
+# 0,使用最新32位mmap()系统调用
+# 1,使用2.4内核提供的系统调用
+# 默认值: 0
+vm.legacy_va_layout=0
+
+# 关闭内核打印OOM 信息
+# (OOM-killing时会打印系统内进程的信息,信息包括pid、uid、tgid、vm size、rss、nr_ptes,swapents,oom_score_adj和进程名称.
+#  这些信息可以帮助找出为什么OOM killer被执行,找到导致OOM的进程,以及了解为什么进程会被选中)
+vm.oom_dump_tasks=0
+
+
+
+
+
+#
+# 5.内核策略
+#
+# 关闭内核追踪
+debug.exception-trace=0
+# 关闭内核断点调试优化
+debug.kprobes-optimization=0
+# 关闭内核请求(Magic system request Key, 0=disable, 1=enable all, >1 bitmask of sysrq functions)
+kernel.sysrq=0
+
+# 如果内核崩溃, 1秒内重启(默认3秒)
+kernel.panic=1
+# 如果内核崩溃, 生成核心转存(禁用)
+#kernel.core_pattern=/tmp/%e.%t.%p.%s.core
+# 如果生成核心转存, 详细程度[0,3](禁用)
+fs.suid_dumpable=0
+
+kernel.ftrace_dump_on_oops=0
+kernel.ftrace_enabled=0
+kernel.hardlockup_all_cpu_backtrace=0
+kernel.softlockup_all_cpu_backtrace=0
+kernel.stack_tracer_enabled=0
+kernel.yama.ptrace_scope=0
+
+# 内核打印禁用
+kernel.print-fatal-signals=0
+kernel.printk=0 0 0 0
+
+# debian 10 没有printk_level选项, 弃用
+#kernel.printk_level=0
+kernel.printk_ratelimit=0
+kernel.printk_ratelimit_burst=0
+kernel.traceoff_on_warning=0
+kernel.tracepoint_printk=0
+
+# 内核线程数量max(应该大于limits.conf限制)
+kernel.threads-max=81920
+
+
+
+
+
+#
+# 6.用户限制
+#
+user.max_cgroup_namespaces=63858
+user.max_inotify_instances=128
+user.max_inotify_watches=262144
+user.max_ipc_namespaces=63858
+user.max_mnt_namespaces=63858
+user.max_net_namespaces=63858
+user.max_pid_namespaces=63858
+user.max_user_namespaces=63858
+user.max_uts_namespaces=63858
+
+
+
+
+
+#
+# 7.新增的网络优化内核策略
+#
+
+#
+# send发送buf增大的syscvtl内核策略
+#
+# 最大的待发送TCP数据缓冲区空间(默认值:4096, 最大值65536)
+###net.inet.tcp.sendspace=65536
+# 最大的接受TCP缓冲区空间(一般不修改)
+###net.inet.tcp.recvspace=65536
+
+# 最大的接受UDP缓冲区大小
+###net.inet.udp.sendspace=65535
+# 最大的发送UDP数据缓冲区大小
+###net.inet.udp.maxdgram=65535
+
+# unix socket接收和发送空间
+###net.local.stream.recvspace=65536
+###net.local.dgram.maxdgram=16384
+###net.local.dgram.recvspace=65536
+
+# raw socket接收和发送空间
+###net.inet.raw.maxdgram=65536
+###net.inet.raw.recvspace=65536
+
+# 最大的套接字缓冲区(没必要)
+#kern.ipc.maxsockbuf=2097152
+
+
+
+#
+# 限制tcp重发次数(改sysctl内核参数)
+#
+net.ipv4.tcp_orphan_retries = 0
+net.ipv4.tcp_retries1 = 3
+net.ipv4.tcp_retries2 = 15
+net.ipv4.tcp_syn_retries = 6
+# 对于远端SYN连接请求,内核会发送SYN+ACK数据包来确认收到了上一个SYN连接请求包,然后等待远端的确认(ack数据包)
+# 该值则指定了内核会向远端发送tcp_synack_retires次SYN+ACK数据包.默认设定值是5,可以调整为2.
+net.ipv4.tcp_synack_retries=2
+###net.ipv4.idgen_retries = 3
+
+
+
+#
+# TIME_WAIT过多的处理办法:改sysctl内核参数
+#
+# 开启socket重用和快速回收:
+# 防止 synflood 攻击
+net.ipv4.tcp_syncookies = 1
+# 表示开启重用(允许将TIME-WAIT sockets重新用于新的TCP连接, 默认为0)
+net.ipv4.tcp_tw_reuse = 1
+# 是否开启快带回收TIME_WAIT tcp连接的功能
+#net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_max_tw_buckets = 5000
+net.ipv4.tcp_max_syn_backlog = 8192
+
+# 削减keepalive 时间为120秒, 还有其它微调:
+net.ipv4.tcp_keepalive_time = 120
+net.ipv4.tcp_keepalive_intvl = 2
+net.ipv4.tcp_keepalive_probes = 1
+
+# 增大tcp 动态port范围(65536过大, 提示: write error: Invalid argument)64512=1024*63
+net.ipv4.ip_local_port_range = 1024 64512
+# 预留指定的端口, 不被占用(将自己的server端口, 全部预留下来即可)
+net.ipv4.ip_local_reserved_ports = 10080,10443,18072,18069
+
+
+
+#
+# socket其他内核优化选项(debian linux 没有这些选项)
+#
+# 加快网络性能的协议
+###net.inet.tcp.rfc1323=1
+###net.inet.tcp.rfc1644=1
+###net.inet.tcp.rfc3042=1
+###net.inet.tcp.rfc3390=1
+
+# 当一台计算机发起TCP连接请求时, 系统会回应ACK应答数据包;
+# 该选项设置是否延迟ACK应答数据包, 把它和包含数据的数据包一起发送, 在高速网络和低负载的情况下会略微提高性能, 
+# 但在网络连接较差的时候, 对方计算机得不到应答会持续发起连接请求, 反而会降低性能;
+###net.inet.tcp.delayed_ack=0
+
+# 屏蔽ICMP重定向功能
+###net.inet.icmp.drop_redirect=1
+###net.inet.icmp.log_redirect=1
+###net.inet.ip.redirect=0
+###net.inet6.ip6.redirect=0
+
+# 防止ICMP广播风暴
+###net.inet.icmp.bmcastecho=0
+###net.inet.icmp.maskrepl=0
+
+# 限制系统发送ICMP速率
+###net.inet.icmp.icmplim=100
+
+# 安全参数, 编译内核的时候加了options TCP_DROP_SYNFIN才可以用
+###net.inet.icmp.icmplim_output=0
+###net.inet.tcp.drop_synfin=1
+
+# 设置为1会帮助系统清除没有正常断开的TCP连接, 这增加了一些网络带宽的使用, 但一些死掉的连接最终能被识别并清除;
+# 死的TCP连接是被拨号用户存取的系统的一个特别的问题, 因为用户经常断开modem而不正确的关闭活动的连接
+###net.inet.tcp.always_keepalive=1
+
+# 若看到net.inet.ip.intr_queue_drops这个在增加, 就要调大net.inet.ip.intr_queue_maxlen, 为0最好
+###net.inet.ip.intr_queue_maxlen=1000
+
+# 防止DOS攻击, 默认为30000
+###net.inet.tcp.msl=7500
+
+# 接收到一个已经关闭的端口发来的所有包, 直接drop, 如果设置为1则是只针对TCP包
+###net.inet.tcp.blackhole=2
+
+# 接收到一个已经关闭的端口发来的所有UDP包直接drop
+###net.inet.udp.blackhole=1
+
+# 为网络数据连接时提供缓冲
+###net.inet.tcp.inflight.enable=1
+
+# 如果打开的话每个目标地址一次转发成功以后它的数据都将被记录进路由表和arp数据表, 节约路由的计算时间,
+# 但会需要大量的内核内存空间来保存路由表
+###net.inet.ip.fastforwarding=0
+
+# 记录下任何TCP连接
+###net.inet.tcp.log_in_vain=1
+
+# 记录下任何UDP连接
+###net.inet.udp.log_in_vain=1
+
+# 防止不正确的udp包的攻击
+###net.inet.udp.checksum=1
+
+# 数据包数据段大小, ADSL为1452;
+###net.inet.tcp.mssdflt=1460
+
+# 为网络数据连接时提供缓冲
+###net.inet.tcp.inflight_enable=1
+
+# 数据包数据段最小值, ADSL为1452
+###net.inet.tcp.minmss=1460
+
+# ipfw防火墙动态规则数量, 默认为4096, 增大该值可以防止某些病毒发送大量TCP连接, 导致不能建立正常连接
+###net.inet.ip.fw.dyn_max=65535
+
+# 设置ipf防火墙TCP连接空闲保留时间, 默认8640000(120小时)
+###net.inet.ipf.fr_tcpidletimeout=86400
+
+
