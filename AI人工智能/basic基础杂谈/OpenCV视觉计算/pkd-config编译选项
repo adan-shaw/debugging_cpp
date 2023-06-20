@@ -1,0 +1,121 @@
+1>: pkg-config 是bsd 系统里面的pkg 配置工具, 但如果你用linux 系统来运行bsd 软件, 
+		涉及的配置问题都可能需要pkg-config 来解决
+		安装pkg-config:
+			apt-get install pkg-config
+
+
+
+2>: 查看某个全局变量的pkg-config 配置: 
+		pkg-config --cflags --libs opencv
+		pkg-config --cflags opencv
+		pkg-config --libs opencv
+		以上3 条命令都会显示opencv 的--cflags 路径, or opencv --libs 路径, 
+		对gcc 编译的时候会用到
+
+
+
+3>: pkg-config 联合gcc 进行编译:
+			g++ $(pkg-config --cflags --libs opencv) ./hello.c -o hello
+		上面一条gcc 编译命令是错的, 
+		仅仅只是顺序出错, 就会导致 $(pkg-config --cflags --libs opencv)所有的东西都找不到, 
+		并不是$(pkg-config --cflags --libs opencv) 配置错误, 注意注意!!
+
+		写法1:
+			g++ ./hello.c -o hello `pkg-config --libs --cflags opencv`
+		写法2:
+			g++ ./hello.c -o hello $(pkg-config --cflags --libs opencv)
+
+
+
+4>: pkg-config 联合makefile 编写:
+		CFLAGS=`pkg-config --cflags opencv`
+		LDFLAGS=`pkg-config --libs opencv`
+
+
+
+5>: eclipse 里面, 修改项目配置, 添加: pkg-config --libs --cflags opencv
+//*****************************************************************
+-I /usr/local/include/opencv 
+-I /usr/local/include 
+-L /usr/local/lib 
+-l opencv_calib3d 
+-l opencv_contrib 
+-l opencv_core 
+-l opencv_features2d # 标定程序需要这个东西
+-l opencv_flann
+-l opencv_gpu
+-l opencv_highgui 
+-l opencv_imgproc
+-l opencv_legacy
+-l opencv_ml 
+-l opencv_nonfree
+-l opencv_objdetect
+-l opencv_ocl
+-l opencv_photo 
+-l opencv_stitching 
+-l opencv_superres
+-l opencv_ts 
+-l opencv_video 
+-l opencv_videostab 
+-l rt
+-l pthread
+-l m
+-l dl
+
+eclipse -I -include -l -L 的区别:
+	-I -include = 编译器里面的-I and -include
+	-l -L = 编译连接器里面的-L and -l, 是不一样的,
+添加的时候, 要对应地添加!! 才能正确编译:
+	-l rt
+	-l pthread
+	-l m
+	-l dl
+
+而且上面的添加顺序是不应该乱的, 有些非标准库不能乱序的, 标准库随意
+//*****************************************************************
+
+
+
+6>: 编译成功之后, 运行还是出错: 显示共享so 库找不到, 那么:
+	进入目录:
+		/etc/ld.so.conf.d
+	创建:
+		opencv.conf, 
+		或者编辑libc.conf, 添加opencv 库的目录
+	添加:
+		/opt/opencv-3.0.0/build/lib (这个目录是你的opencv 运行库目录)
+		/home/dqc/Public/opencv-2.4.11-cmake/lib/
+	重载系统的.so文件:
+		ldconfig
+
+
+
+7>: 如果没有安装gnome 的编程库, opencv 编译出来的东西会出错的, 
+		opencv 的下游库, windows有win-gui 联合, 
+		在linux 上面, opencv 联合了gnome, 
+		因此, 你需要安装了gnome 的东西, 重新编译, 才能执行opencv 的程序:
+			apt-get install libgnomeui-dev
+			apt-get install libgtk2.0-dev
+
+7.1、安装gcc/g++/gdb/make 等基本编程工具
+	apt-get install build-essential
+7.2、用于在编译GTK程序时自动找出头文件及库文件位置
+	apt-get install pkg-config
+7.3、安装基于GTK的界面GTK是开发Gnome窗口的c/c++语言图形库
+	apt-get install glade libglade2-dev
+7.4、安装gtk2.0 或者 将gtk+2.0所需的所有文件统通下载安装完毕
+	apt-get install libgtk2.0-dev
+7.5、安装 libgtk2.0-dev libglib2.0-dev 等开发相关的库文件
+	apt-get install gnome-core-devel
+7.6、安装 devhelp GTK文档查看程序
+	apt-get install devhelp
+7.7、安装 gtk/glib 的API参考手册及其它帮助文档
+	apt-get install libglib2.0-doc libgtk2.0-doc
+
+7.8、合体安装:
+	apt-get install libgnomeui-dev libgtk2.0-dev build-essential pkg-config glade libglade2-dev
+
+
+
+8>: 查看opencv 版本: pkg-config --modversion opencv
+
