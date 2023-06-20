@@ -40,8 +40,8 @@
 //
 void test_def_trace_err(void) {
 	char str[]="Hello World";
-	DEBUG("love you");
-	DEBUG_EX("love you again", 111);
+	DEBUG("fuck you");
+	DEBUG_EX("fuck you again", 111);
 	exit(0);
 }
 
@@ -62,7 +62,7 @@ void test_def_trace_err(void) {
 
 	通常, 返回值为-1表示出错, 返回值为0表示成功.
 
-	​少数API(比如, getpriority())在调用成功后, 也会返回-1 .
+	​少数API(比如, getpriority())在调用成功后, 也会返回-1;
 	要判断此类API是否发生错误应在调用前, 将errno先置为0,
 	并在调用后对其进行检查(只对errno 检查, 这类函数很少!!).
 
@@ -130,35 +130,35 @@ void test_def_trace_err(void) {
 	要<错误打印>的方法有很多, 但都是基于errno 做出来的.
 	正常来说, 错误信息都是打印到syslog 标准的log 系统中的.
 
-*1.errno
-		只是一个全局int(最底层,也会被冲掉的,新的errno覆盖旧的errno)
+	*1.errno
+			只是一个全局int(最底层,也会被冲掉的,新的errno覆盖旧的errno)
 
 
-*2.strerr()
-		stdin,stdout,stderr是每一个进程自带的,进程开始就会自动创建
+	*2.strerr()
+			stdin,stdout,stderr是每一个进程自带的,进程开始就会自动创建
 
 
-*3.perror()
-		是对errno 的封装翻译, 在自带字符串后面附上errno 翻译
-		一般只是用作打印字符串到屏幕上面,还是打印errno到file比较好
+	*3.perror()
+			是对errno 的封装翻译, 在自带字符串后面附上errno 翻译
+			一般只是用作打印字符串到屏幕上面,还是打印errno到file比较好
 
 
-*4.strerror()
-		执行errno 翻译, 返回错误字符串
+	*4.strerror()
+			执行errno 翻译, 返回错误字符串
 
 
 
 
 
 2.3 极限宏和变量(C11):[忽略!!]
-errno_t (C11) 对int 的 typedef, 定义于头文件 <errno.h>
-	用于自描述性函数返回errno 值(typedef)
+	errno_t (C11) 对int 的 typedef, 定义于头文件 <errno.h>
+		用于自描述性函数返回errno 值(typedef)
 
-rsize_t (C11) 对size_t 相同类型的typedef, 定义于头文件 <stddef.h>
-	用于自描述性函数在运行时检查它们的参数范围(typedef)
+	rsize_t (C11) 对size_t 相同类型的typedef, 定义于头文件 <stddef.h>
+		用于自描述性函数在运行时检查它们的参数范围(typedef)
 
-RSIZE_MAX (C11) 范围检查函数可接受的最大大小, 定义于头文件 <stdint.h>
-	展开成常量或可能在运行时改变的变量(例如, 当前分配的内存大小改变时)(宏变量)
+	RSIZE_MAX (C11) 范围检查函数可接受的最大大小, 定义于头文件 <stdint.h>
+		展开成常量或可能在运行时改变的变量(例如, 当前分配的内存大小改变时)(宏变量)
 
 
 */
@@ -182,25 +182,27 @@ RSIZE_MAX (C11) 范围检查函数可接受的最大大小, 定义于头文件 <
 			API报什么errno错误
 
 	这些都是由编译器去自动翻译的!!
-***__FUNCSIG__  编译器自动插入字符串: 函数名的详细信息
-                (ELF 标准信息, 打印入栈方式, 返回值类型,参数类型等)
+
+***__FUNCSIG__   编译器自动插入字符串: 函数名的详细信息
+                 (ELF 标准信息, 打印入栈方式, 返回值类型,参数类型等)
 	例如:
 		printf("FUNCINFO:%s\n",__FUNCSIG__);
 		输出: 
 			FUNCINFO:int __cdecl hello_world(char *)
 
-***__FUNCDNAME__  编译器自动插入字符串: 仅函数名
+***__FUNCDNAME__ 编译器自动插入字符串: 仅函数名
 
 
 gcc 真正有效的宏:
-__FUNCTION__   编译器自动插入字符串: 仅函数名
-__LINE__  编译器自动插入字符串: 当前代码行数
-__FILE__  编译器自动插入字符串: 源文件名
+	__FUNCTION__   编译器自动插入字符串: 仅函数名
+	__LINE__       编译器自动插入字符串: 当前代码行数
+	__FILE__       编译器自动插入字符串: 源文件名
 
 	因此, 你可以用这些'编译器自动插入字符串'宏, 组建一个自定义'通用的报错宏'.
 
 
 */
+
 
 
 

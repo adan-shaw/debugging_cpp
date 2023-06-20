@@ -26,9 +26,8 @@ char* substr(const char* str_src, int offset, unsigned int len){
 	char *str_tmp = NULL;
 	int len_total, real_len;
 
-	len_total = strlen(str_src);//必须保证str_src 为单串字符串, 且有'\0'结束符号!!
-															//(多串字符串, 截取结果有误;
-															// 没有'\0'结束符号, 则内存越界)
+	len_total = strlen(str_src);											//必须保证str_src 为单串字符串, 且有'\0'结束符号!!
+																										//(多串字符串, 截取结果有误; 没有'\0'结束符号, 则内存越界)
 	real_len = ((len_total - offset) >= len ? len : (len_total - offset)) + 1;
 
 	if(NULL == (str_tmp = (char*)malloc(real_len * sizeof(char)))){
@@ -67,9 +66,8 @@ void substr_test(void){
 void substr_r(const char* str_src, int offset, char* str_buf, unsigned int len_cut){
 	int len_total, real_len;
 
-	len_total = strlen(str_src);//必须保证str_src 为单串字符串, 且有'\0'结束符号!!
-															//(多串字符串, 截取结果有误;
-															// 没有'\0'结束符号, 则内存越界)
+	len_total = strlen(str_src);											//必须保证str_src 为单串字符串, 且有'\0'结束符号!!
+																										//(多串字符串, 截取结果有误; 没有'\0'结束符号, 则内存越界)
 	real_len = ((len_total - offset) >= len_cut ? len_cut : (len_total - offset)) + 1;
 
 	strncpy(str_buf, str_src+offset, real_len-1);
@@ -80,18 +78,18 @@ void substr_r_test(void){
 	const char str_src[] = "this is a test string!";
 	char str_buf[64];
 	memset(str_buf,'\0',64);
-	substr_r(str_src, 8, str_buf, MIN_NUM(8,64));								//普通截取测试
+	substr_r(str_src, 8, str_buf, MIN_NUM(8,64));			//普通截取测试
 	printf("TEST: result = %s\n", str_buf);
 
 	memset(str_buf,'\0',64);
-	substr_r(str_src, 8, str_buf, MIN_NUM(0,64));								//空截取测试
+	substr_r(str_src, 8, str_buf, MIN_NUM(0,64));			//空截取测试
 	printf("TEST: result = %s\n", str_buf);
 	if(str_buf[0] == '\0')
 		printf("TEST: substr() 空字符串截取test okay\n");
 
 	memset(str_buf,'\0',64);
-	substr_r(str_src, 0, str_buf, MIN_NUM(strlen(str_src),64));	//满员截取测试
-	printf("TEST: result = %s\n", str_buf);
+	substr_r(str_src, 0, str_buf, MIN_NUM(strlen(str_src),64));
+	printf("TEST: result = %s\n", str_buf);						//满员截取测试
 }
 
 int main(void){
@@ -99,4 +97,5 @@ int main(void){
 	substr_r_test();
 	return 0;
 }
+
 

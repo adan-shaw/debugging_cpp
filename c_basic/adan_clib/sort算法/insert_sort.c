@@ -108,7 +108,7 @@ void insert_sortEx_test(void){
 	int len = sizeof(a) / sizeof(a[0]);
 	arr_t* parr = malloc(arr_buf_max*sizeof(arr_t));
 
-	insert_sortEx(a, len);											//easy
+	insert_sortEx(a, len);										//easy
 	//parr_int(a, len);
 	parr_double(a, len);
 	printf("\n");

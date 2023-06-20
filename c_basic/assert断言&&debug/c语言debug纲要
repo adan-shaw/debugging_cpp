@@ -1,0 +1,40 @@
+//
+// linux c 程序的debug 纲要:
+//
+
+
+
+//0.添加-g3 or -ggdb3编译选项, 才能进行断点调试.
+//	-pg(性能调试选项)
+
+
+
+//1.打印追逐信息info:
+/*
+	追踪错误: 哪一个文件? 哪一行? 哪个api出错? api的出错原因(errno码)?
+	详情, 请查看:
+		./errno进程错误码/def_trace_err定位错误宏debug.cpp
+*/
+
+
+
+//2.善用断言assert()替代if, 提高程序效率.
+
+
+
+//3.关于边界检查函数(windows 才有的私货, 不要妄想!!):
+/*
+	边界检查<windows才有, linux一般用'buf截断函数'来实现: strncpy>
+	windows 标准库提供了一些既存函数的边界检查版本：
+		(gets_s, fopen_s, printf_s, strcpy_s,
+		 wcscpy_s, mbstowcs_s, qsort_s, getenv_s等).
+
+	这些功能是可选的, 并且仅若定义 __STDC_LIB_EXT1__ 才可用.
+
+	定义于头文件 <stdlib.h>
+	set_constraint_handler_s (C11) 设置<边界检查函数>的出错回调(函数)
+					 abort_handler_s (C11) <边界检查函数>的异常中止回调(函数)
+					ignore_handler_s (C11) <边界检查函数>的忽略回调(函数)
+
+*/
+

@@ -1,5 +1,5 @@
 //编译:
-//		gcc bsearch.c -g3 -o x 
+//		gcc ./bsearch.c -g3 -o x 
 
 
 
@@ -35,7 +35,7 @@
 
 
 //#define arr_t int		//兼容int整形
-#define arr_t double//兼容double浮点
+#define arr_t double	//兼容double浮点
 
 
 
