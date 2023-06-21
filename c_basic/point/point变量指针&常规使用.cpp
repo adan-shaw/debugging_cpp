@@ -37,7 +37,6 @@ const int (*pFunc2)(void) = &ret_const_int;
 //
 //常规变量指针的使用
 //
-
 //一维数组-指针
 void test1(void){
 	int tmp;
@@ -52,7 +51,6 @@ void test1(void){
 	for(tmp=0;tmp<64;tmp++)
 		std::cout << pi[tmp] << std::endl;
 
-
 	//遍历-指针赋值2
 	for(tmp=0;tmp<64;tmp++){
 		*(pi+tmp) = tmp;
@@ -65,9 +63,8 @@ void test1(void){
 		pi++;
 	}
 
-
 	//字符串批量处理
-	strncpy(pc, "love you idiot", 64);
+	strncpy(pc, "fuck you bitch", 64);
 	std::cout << pc << std::endl;
 
 	return;
@@ -90,7 +87,6 @@ void test2(void){
 	for(row=0;row<32;row++)
 		for(tmp=0;tmp<32;tmp++)
 			std::cout << pd[row][tmp] << std::endl;
-
 
 	//遍历-指针赋值2
 	for(row=0;row<32;row++)

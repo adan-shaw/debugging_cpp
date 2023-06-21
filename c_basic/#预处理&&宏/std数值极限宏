@@ -1,0 +1,111 @@
+//
+//字符, 整型, 浮点的变量数值极限宏:
+//
+/*
+1>:库类型极限
+定义于头文件 <stdint.h>
+	PTRDIFF_MIN (C99)         ptrdiff_t类型对象的最小值(宏常量)
+	PTRDIFF_MAX (C99)         ptrdiff_t类型对象的最大值(宏常量)
+	SIZE_MAX    (C99)         size_t类型对象的最大值(宏常量)
+	SIG_ATOMIC_MIN (C99)      sig_atomic_t 类型对象的最小值(宏常量)
+	SIG_ATOMIC_MAX (C99)      sig_atomic_t 类型对象的最大值(宏常量)
+
+定义于头文件 <wchar.h>
+	WCHAR_MIN (C99)           wchar_t类型对象的最小值(宏常量)
+	WCHAR_MAX (C99)           wchar_t类型对象的最大值(宏常量)
+	WINT_MIN (C99)            wint_t类型对象的最小值(宏常量)
+	WINT_MAX (C99)            wint_t类型对象的最大值(宏常量)
+
+
+
+
+
+2>:整数类型极限
+定义于头文件 <limits.h>
+	CHAR_BIT      字节位数(宏常量)
+	MB_LEN_MAX    多字节字符的最大字节数(宏常量)
+	CHAR_MIN      char 的最小值(宏常量)
+	CHAR_MAX      char 的最大值(宏常量)
+
+	SCHAR_MIN     signed char 最小值(c99 宏常量)
+	SHRT_MIN      short 最小值
+	INT_MIN       int 最小值
+	LONG_MIN      long 最小值
+	LLONG_MIN     long long 最小值
+
+	SCHAR_MAX signed char 最大值(c99 宏常量)
+	SHRT_MAX      short 最大值
+	INT_MAX       int 最大值
+	LONG_MAX      long 最大值
+	LLONG_MAX     long long 最大值
+
+	USCHAR_MAX    unsigned signed char 最大值(c99 宏常量)
+	USHRT_MAX     unsigned short 最大值
+	UINT_MAX      unsigned int 最大值
+	ULONG_MAX     unsigned long 最大值
+	ULLONG_MAX    unsigned long long 最大值
+
+
+
+
+
+3>:浮点类型极限
+定义于头文件 <float.h>
+FLT_RADIX 用于表示所有三种浮点数类型的底(整数基)(宏常量)
+DECIMAL_DIG (C99)将 long double转换成十进制小数, 
+再转回 long double 而保持同一值, 至少需要 DECIMAL_DIG 位小数:
+	此乃 long double 序列化/反序列化所需的十进制精度(宏常量)
+
+	FLT_DECIMAL_DIG (C11)(宏常量)
+	DBL_DECIMAL_DIG (C11)(宏常量)
+	LDBL_DECIMAL_DIG (C11)(宏常量)
+
+
+将 float/double/long double 转换成十进制小数再转换回同一值,
+至少需要 FLT_DECIMAL_DIG/DBL_DECIMAL_DIG/LDBL_DECIMAL_DIG 位小数:
+	此乃浮点值序列化/反序列化所需的十进制精度.
+	标准定义至少为6, 10, 10, 而IEEE float 为9, IEEE double 为17.
+
+	FLT_MIN      float 最小正规正值(宏常量)
+	DBL_MIN      double 最小正规正值
+	LDBL_MIN     long double 最小正规正值
+
+	FLT_MAX      float 最大正规正值(宏常量)
+	DBL_MAX      double 最大正规正值
+	LDBL_MAX     long double 最大正规正值
+
+	FLT_EPSILON  float (宏常量)
+	DBL_EPSILON  double (宏常量)
+	LDBL_EPSILON long double (宏常量)
+
+	分别为 1.0 与下一个可表示的float, double 和 long double 值之差;
+
+	FLT_DIG (宏常量)
+	DBL_DIG
+	LDBL_DIG 保证能从文本转换为 float/double/long double 再转换回文本, 而不会发生改变或上溢出的十进制位数(细节见C++模仿digits10)
+
+	FLT_MANT_DIG (宏常量)
+	DBL_MANT_DIG
+	LDBL_MANT_DIG 分别为 float, double 和 long double 所能表示而不损失精度的, 浮点尾数中的 FLT_RADIX 底位数
+
+	FLT_MIN_EXP (宏常量)
+	DBL_MIN_EXP
+	LDBL_MIN_EXP 分别为对应 float, double 和 long double 的最小负整数, 使得 FLT_RADIX 的该数减一次幂为正规
+
+	FLT_MIN_10_EXP (宏常量)
+	DBL_MIN_10_EXP
+	LDBL_MIN_10_EXP 分别为对应 float, double 和 long double 的最小负整数, 使得 10 的该数减一次幂为正规的
+
+	FLT_MAX_EXP (宏常量)
+	DBL_MAX_EXP
+	LDBL_MAX_EXP 分别为对应 float, double 和 long double 的最大正整数,使得 FLT_RADIX 的该数减一次幂为正规的
+
+	FLT_MAX_10_EXP (宏常量)
+	DBL_MAX_10_EXP
+	LDBL_MAX_10_EXP 分别为对应 float, double 和 long double 的最大正整数, 使得 10 的该数减一次幂为正规的
+
+	FLT_ROUNDS 浮点算术的舍入模式, 等于 float_round_style(宏常量)
+	FLT_EVAL_METHOD (C99)(宏常量)中间结果所用的扩展精度:
+		0 表示不使用, 1 表示用 double 替代 float, 2 表示使用 long double
+
+*/

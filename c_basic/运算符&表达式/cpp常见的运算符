@@ -1,0 +1,22 @@
+//
+// 逻辑运算符(实际是通过宏, 替换为英文来实现的)
+//
+<iso646.h>中定义的'逻辑运算符-替换宏':
+#define && and
+#define &= and_eq
+#define !  not
+#define != not_eq
+#define || or
+#define |= or_eq
+#define ^  xor
+#define ^= xor_eq
+
+
+
+'位运算符-替换宏':
+#define &  bitand		//与位-所有bit与位
+#define |  bitor		//或位-所有bit或位
+#define ~  compl		//反位-所有bit反位
+
+
+

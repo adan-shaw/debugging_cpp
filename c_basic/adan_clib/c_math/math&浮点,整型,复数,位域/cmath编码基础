@@ -1,0 +1,76 @@
+//
+// '浮点/整型/复数'之间的'cmath计算', 'type类型转换', 'if,for,while等逻辑判断':
+//
+/*
+	*1.
+		在c 语言里面, int,long 等整形格式, 
+		是绝对不能与float, double 浮点混合使用的.
+		不单只是赋值会出问题, 
+		if(), for(), while() 等逻辑判断语句, 也会因为数据格式不同而出错.
+
+		而且, 
+		int,long 与unsigned int,long 的区别, 只是最高位'是否表示负数'的问题.
+		在int,long整型中, 最高位=1表示负数, 最高位=0表示正数.
+		但是, 
+		float,double 不能用unsigned 修饰, 
+		float, double总是带正负的!!
+
+		同理, 对于一个'复数/浮点数', 
+		你更不能用传统的if(),for(),while()等逻辑判断语句;
+		如果对'复数/浮点数'进行if(){} 判别, 则会出现bug, 
+		时好时坏, 很难调试.
+		ps: 复数函数, 也是返回浮点类型!! (肯定!!)
+				本质上判别跟浮点差不多, 或者只是运算方法不同而已(猜测)
+
+		因此, 得出结论:
+			* 整形, 浮点数, 复数之间, 不能进行简单的'='等号转换, 需要用cmath API进行转换才行.
+			* '复数/浮点数'不能用于: if(),for(),while()等逻辑判断语句;
+				这些逻辑判断语句, 只能使用整形数.
+
+
+
+	*2.
+		下面解析一下int,long,float,double的存储大小区别:
+			short int = 16 bit
+			int = 32 bit
+			long = 32(win)/64(unix) bit
+			long long = 64 bit (长整型最好用long long, long 不要用)
+
+			float = 32 bit (没有long float !!)
+			double = 64 bit
+			long double = 128 bit
+
+
+
+	*3.
+		下面讲讲'整型存储数域'与'浮点存储数域':
+			signed int,long,short:
+				1 bit数符, 表示正负, 其余为‘指数域’.
+			unsigned int,long,short:
+				全部数位都是’指数域‘
+
+			signed float:
+				1 bit数符, 表示正负;
+				8 bit指数域, 表示整型数.
+				23 bit小数域, 其余为小数.(可以表示小数位后6-7个数字, 7个数字不安全)
+			signed double:
+				1 bit数符, 表示正负;
+				11 bit指数域, 表示整型数.
+				53 bit小数域, 其余为小数.(可以表示小数位后15-16个数字, 16个数字不安全)
+			signed long double:
+				1 bit数符, 表示正负;
+				11 bit指数域, 表示整型数.
+				106 bit小数域, 其余为小数.(可以表示小数位后18-19个数字, 19个数字不安全)
+
+
+
+	*4.编译选项: -lm
+
+*/
+
+
+
+
+
+
+

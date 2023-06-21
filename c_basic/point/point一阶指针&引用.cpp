@@ -9,7 +9,7 @@
 
 
 
-//引用不适合: 函数指针;  函数指针不应该'引用'
+//引用不适合: 函数指针; 函数指针不应该'引用';
 
 
 
@@ -77,15 +77,46 @@ void parr2_check(int (*parr)[32],int (*parr2)[32]){
 
 
 void pbody_test(struct body* pbody){
+	int tmp;
 	pbody->head = 1;
 	pbody->hand = 1;
 	pbody->penis = 1;
+	for(tmp=0; tmp<32; tmp++)
+		pbody->buf[tmp] = malloc(32);
 }
 
 void pbody_check(struct body* pbody){
+	int tmp;
 	std::cout << pbody->head << std::endl;
 	std::cout << pbody->hand << std::endl;
 	std::cout << pbody->penis << std::endl;
+	for(tmp=0; tmp<32; tmp++)
+		free(pbody->buf[tmp]);
+}
+
+
+
+void pbody_test2(struct body** pbody){
+	int tmp;
+	struct body* pbody1;
+	*pbody = (struct body*)malloc(sizeof(struct body));
+	pbody1 = *pbody;
+	pbody1->head = 1;
+	pbody1->hand = 1;
+	pbody1->penis = 1;
+	for(tmp=0; tmp<32; tmp++)
+		pbody1->buf[tmp] = malloc(32);
+}
+
+void pbody_check2(struct body** pbody){
+	int tmp;
+	struct body* pbody1 = *pbody;
+	std::cout << pbody1->head << std::endl;
+	std::cout << pbody1->hand << std::endl;
+	std::cout << pbody1->penis << std::endl;
+	for(tmp=0; tmp<32; tmp++)
+		free(pbody1->buf[tmp]);
+	free(*pbody);
 }
 
 
@@ -104,6 +135,7 @@ void test1(void){
 	int arr_i[64],arr_i2[64];
 	int arr2_i[32][32],arr2_i2[32][32];
 	struct body m_body;
+	struct body* pbody2 = NULL;
 	class father m_father;
 
 	//parr_test(arr_i,arr_i2);
@@ -112,6 +144,8 @@ void test1(void){
 	//parr2_check(arr2_i,arr2_i2);
 	pbody_test(&m_body);
 	pbody_check(&m_body);
+	pbody_test2(&pbody2);
+	pbody_check2(&pbody2);
 	pfather_test(&m_father);
 	pfather_check(&m_father);
 	return;

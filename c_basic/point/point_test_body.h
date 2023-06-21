@@ -16,6 +16,7 @@ struct body{
 	int head;
 	int hand;
 	int penis;
+	void* buf[32];
 };
 struct body m_body;
 
@@ -52,7 +53,7 @@ void** ppvoid = &pvoid;
 
 
 //变量实体:
-void __loveing_test(void){
+void __fucking_test(void){
 int t;
 int *pt;
 int **ppt;
@@ -75,8 +76,7 @@ ppt = &pt;							//'访问/修改'-二阶指针的值
 												//***省略*** 一般不'引用'二阶指针'指向的一阶指针'的存储地址
 												//***省略*** 一般不'引用'二阶指针'指向的一阶指针', 所指向的实体变量的存储地址
 
-//行指针引用, 比较麻烦, 用[][]方法简单写, 用*() 指针的方法, 比较麻烦;
-//参考: ./point一阶指针\&引用.cpp
+//行指针引用, 比较麻烦, 用[][]方法简单写, 用*() 指针的方法, 比较麻烦; 参考: ./point一阶指针\&引用.cpp
 }
 
 
