@@ -1,0 +1,26 @@
+c 语言其实也可以用inline, 只不过gcc 搞得这个标准有些奇怪而已,
+总的来说, gcc 还是遵守inline c99 规则的, c89 则没有加入inline 关键字,
+inline关键字是C99中新加的.
+
+
+
+static inline 与inline 的区别:
+	相同: 两种关键字, 都不能出现在.h 头文件中
+	不同: static inline 不能被其它.c文件引用,
+				inline 可以被其它.c文件引用.
+
+inline 和static 不能共用!!
+inline 告诉编译器, 将函数写实,
+static 告诉编译器, 将函数放到.bss 区(和全局变量放在一起?)
+
+inline 和static 共用, 有明显的语义冲突, 不能共用
+
+
+
+根据c 语言标准, 在.h 文件中是不能声明inline 关键字的,
+但为了引用inline 函数, 你可以:
+	(1)在.h 中, 添加函数声明(去掉inline 关键字, 其它不变), 使用时需要包含这个.h 头文件;
+	(2)在.c 中, 添加extern 函数声明, 直接引用inline 函数
+	(3)在c++ 中, 类定义中, 可以添加inline + 函数实现{}, 就不用这么麻烦了(c++ 对inline支持十分友好)
+		 但c++ 也继承了c 语言对inline 函数的使用规则, 
+		 你可以在类定义中使用inline 函数, 但你不能在.h 中定义inline 函数.

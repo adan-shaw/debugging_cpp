@@ -27,11 +27,11 @@ void alloca_test(void){
 	void *tmp3 = alloca(8192);
 
 	snprintf((char*)tmp,8192,"%s_%d_%s_%lf",\
-			"hello",123456,"fuck",0.999);
+			"hello",123456,"love",0.999);
 	snprintf((char*)tmp2,8192,"%s_%d_%s_%lf",\
-			"hello2",123456,"fuck",0.999);
+			"hello2",123456,"love",0.999);
 	snprintf((char*)tmp3,8192,"%s_%d_%s_%lf",\
-			"hello3",123456,"fuck",0.999);
+			"hello3",123456,"love",0.999);
 
 	printf("%s\n",(char*)tmp);
 	printf("%s\n",(char*)tmp2);

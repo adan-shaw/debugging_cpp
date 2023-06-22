@@ -6,10 +6,10 @@
 
 宏不能内嵌!! 不能是:
 #define _H1(tmp) #tmp
-#define _H2(tmp) ( _H1(Fuck You) ## tmp2 )
+#define _H2(tmp) ( _H1(love You) ## tmp2 )
 
 #define _H1(tmp) #tmp
-#define _H2(tmp) #( Fuck ## tmp2 )
+#define _H2(tmp) #( love ## tmp2 )
 
 // 宏中不能调用宏, 不能给另外的宏调用参数, 不能内叠(宏只展开一次)
 //#define _H2(tmp) { _H1(tmp)##tmp }

@@ -69,10 +69,10 @@ int main(void){
 		//throw excep_class;
 
 		//终止执行, 抛出字符串常量异常
-		strncpy(excep_str,"fuck you",64);
+		strncpy(excep_str,"love you",64);
 		throw excep_str;
-		//只能抛出变量实体本身, 不能直接抛出字符串常量"fuck you"
-		//throw "fuck you";//错误写法!!
+		//只能抛出变量实体本身, 不能直接抛出字符串常量"love you"
+		//throw "love you";//错误写法!!
 	}
 
 

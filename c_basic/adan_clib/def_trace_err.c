@@ -40,8 +40,8 @@
 //
 void test_def_trace_err(void) {
 	char str[]="Hello World";
-	DEBUG("fuck you");
-	DEBUG_EX("fuck you again", 111);
+	DEBUG("love you");
+	DEBUG_EX("love you again", 111);
 	exit(0);
 }
 

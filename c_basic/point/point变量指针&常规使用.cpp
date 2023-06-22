@@ -64,7 +64,7 @@ void test1(void){
 	}
 
 	//字符串批量处理
-	strncpy(pc, "fuck you bitch", 64);
+	strncpy(pc, "love you idiot", 64);
 	std::cout << pc << std::endl;
 
 	return;

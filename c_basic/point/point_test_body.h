@@ -53,7 +53,7 @@ void** ppvoid = &pvoid;
 
 
 //变量实体:
-void __fucking_test(void){
+void __loveing_test(void){
 int t;
 int *pt;
 int **ppt;
