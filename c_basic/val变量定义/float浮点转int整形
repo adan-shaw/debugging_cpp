@@ -1,0 +1,77 @@
+//'整形'与'浮点'的转换(要加编译选项: -lm)
+/*
+	fix()函数, 朝零方向取整, 如:(gcc 中已经被删除)
+		fix(-1.3)=-1;
+		fix(1.3)=1;
+
+	floor()函数(地板), 朝负无穷方向取整:
+		double floor(double x);
+		float floorf(float x);
+		long double floorl(long double x);
+		例子:
+			floor(-1.3)=-2;
+			floor(1.3)=1;
+
+	ceil()函数(天花板), 朝正无穷方向取整:
+		double ceil(double x);
+		float ceilf(float x);
+		long double ceill(long double x);
+		例子:
+			ceil(-1.3)=-1; 
+			ceil(1.3)=2;
+
+	round()函数(四舍五入), 四舍五入到最近的整数:
+		double round(double x);
+		float roundf(float x);
+		long double roundl(long double x);
+		例子:
+			round(-1.3)=-1;
+			round(-1.52)=-2;
+			round(1.3)=1;
+			round(1.52)=2
+*/
+
+
+
+//浮点数的部分全局定义(宏定义)
+	/*
+	>1:变量类型<fenv.h>
+		fenv_t								表示整体浮点环境的类型
+		fexcept_t							集中表示所有浮点异常状态标志的类型
+
+	2>:函数
+		feclearexcept (C99)   清除指定的浮点异常状态标志
+		fetestexcept  (C99)   确认设置了哪些浮点异常状态标志
+		feraiseexcept (C99)   引发指定的浮点异常状态标志
+
+		fegetexceptflag (C99) 获取指定的浮点环境->浮点异常状态标志
+		fesetexceptflag (C99) 设置指定的浮点环境->浮点异常状态标志
+
+		fegetround (C99)      获取数字的舍入方向
+		fesetround (C99)      设置数字的舍入方向
+
+		fegetenv (C99)        获取当前的异常的标志和数字的舍弃模式
+		fesetenv (C99)        设置当前的异常的标志和数字的舍弃模式
+
+		feholdexcept (C99)    保存当前环境的异常状态标志, 再清除所有异常状态标志, 并忽略所有未来错误
+		feupdateenv (C99)     恢复之前保存的浮点环境, 并引发之前已经引发过的异常, 使其存在于当前内存环境中
+
+	3>:宏
+		3.1:浮点异常
+		FE_ALL_EXCEPT
+		FE_DIVBYZERO
+		FE_INEXACT
+		FE_INVALID
+		FE_OVERFLOW
+		FE_UNDERFLOW (C99)
+
+		3.2:浮点舍入方向
+		FE_DOWNWARD
+		FE_TONEAREST
+		FE_TOWARDZERO
+		FE_UPWARD (C99)
+
+		3.3:默认浮点环境
+		FE_DFL_ENV (C99)
+*/
+

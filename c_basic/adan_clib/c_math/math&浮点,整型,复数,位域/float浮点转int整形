@@ -65,7 +65,7 @@
 
 
 	3>:宏
-		3.1：浮点异常
+		3.1:浮点异常
 		FE_ALL_EXCEPT
 		FE_DIVBYZERO
 		FE_INEXACT
@@ -73,13 +73,13 @@
 		FE_OVERFLOW
 		FE_UNDERFLOW (C99)
 
-		3.2：浮点舍入方向
+		3.2:浮点舍入方向
 		FE_DOWNWARD
 		FE_TONEAREST
 		FE_TOWARDZERO
 		FE_UPWARD (C99)
 
-		3.3：默认浮点环境
+		3.3:默认浮点环境
 		FE_DFL_ENV (C99)
 */
 

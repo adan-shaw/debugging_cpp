@@ -1,0 +1,60 @@
+//变量的字节大小
+/*
+	0.signed or unsigned:
+		有符号or 没有符号; 有符号, 一般最高位为: 表示正负
+
+	1.void:
+		空值类型(实际是没有值的, 不能引用)
+
+	2.int/uint整形:
+		在16 bit 系统里面(win16), int = 16bit, long = 32bit, p = 32bit(暂时无16 bit 的unix,linux)
+		在32bit 系统里面(win32,unix32,linux32) int=32;long=32;p=32.
+		在64bit 系统里面(win64) int=32;long=32;p=64.
+		在64bit 系统里面(unix,linux) int=32;long=64;p=64(部分老旧的unix, int=64bit, 但很少见)
+		(64bit 系统中int 仍然是32bit)
+
+	3.long int:
+		等价与long, 至少32bit, 64bit系统的linux and unix为64bit
+
+	4.long long:
+		统一都是64bit
+
+	5.short int:
+		统一都是16 bit
+
+	6.float:
+		统一为32bit
+
+	7.double:
+		统一为64bit
+
+	8.long double:
+		统一为128 bit
+
+	9.point*:
+		16位系统,p=32 bit
+		32位系统,p=32 bit
+		64位系统,p=64 bit
+
+	10.bool:
+		8bit, 1字节, 编译器会将bool 指向的所有值, 自动转化为0/1
+		(非0就是1, 就这么简单, 预编译的时候全部会被处理掉, gcc编译器预先执行, 就跟常量表达式一样, 会被自动编译优化)
+		null=false=0
+
+
+	11.char 窄字符:
+		统一为8bit, 1字节.(32/64bit system都不影响char 的字节大小)
+
+	12.wchat_t 宽字符:
+		unicode=32bit=4字节, 
+		windows=16bit=utf-16=2字节
+
+	13.char16_t:
+		utf-16=16bit=2字节
+
+	14.char32_t:
+		utf-32=32bit=4字节
+*/
+
+
+

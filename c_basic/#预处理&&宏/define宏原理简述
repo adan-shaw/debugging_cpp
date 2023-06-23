@@ -161,8 +161,8 @@
 		#define PSQR2(x) printf("the square of %s=%d\n",#x,((x)*(x)))
 	执行:
 		int tmp=5;
-		PSQR(tmp);  //结果：the square of x=25.
-		PSQR2(tmp); //结果：the square of x=25.
+		PSQR(tmp);  //结果:the square of x=25.
+		PSQR2(tmp); //结果:the square of x=25.
 
 
 
@@ -194,7 +194,7 @@
 		int tmp_1=0;
 		int tmp_2=10;
 		tmp_1 = ADD_LABEL(2)+=1;//实际等于:tmp_1 = tmp_2+=1;
-														//又等于:tmp_1 = (tmp_2+=1);//优先级问题
+														//又等于:  tmp_1 = (tmp_2+=1);//优先级问题
 		所以:
 			printf("tmp_1=%d,tmp_2=%d\n",tmp_1,tmp_2);
 		结果:
@@ -238,15 +238,15 @@
 	 (不同的编译器, 预定义宏不一样, clang编译器, 预定义宏很多)
 
 	ANSI C标准中有几个标准预定义宏(也是常用的):
-		__LINE__: 在源代码中插入当前源代码行号;
-		__FILE__: 在源文件中插入当前源文件名;
-		__DATE__: 在源文件中插入当前的编译日期
-		__TIME__: 在源文件中插入当前编译时间;
-		__STDC__: 当要求程序严格遵循ANSIC标准时该标识被赋值为1;
+		__LINE__:     在源代码中插入当前源代码行号;
+		__FILE__:     在源文件中插入当前源文件名;
+		__DATE__:     在源文件中插入当前的编译日期
+		__TIME__:     在源文件中插入当前编译时间;
+		__STDC__:     当要求程序严格遵循ANSIC标准时该标识被赋值为1;
 
 
-		__cplusplus: 当编写C++程序时该标识符被定义.
-								 通常配合 extern "C" {} 使用
+		__cplusplus:  当编写C++程序时该标识符被定义.
+								  通常配合 extern "C" {} 使用
 
 		C++内部察看当前函数名, 根据C++标准如下:
 		__FUNCTION__: 打印当前调用函数(但不会打印系统API函数,是用户自定义的函数)
@@ -254,7 +254,7 @@
 
 		但是有的IDE也支持其它格式, 比如VisualStudio, 如下:
 		__FUNCDNAME__ 函数修饰名
-		__FUNCSIG__ 函数签名
+		__FUNCSIG__   函数签名
 
 
 

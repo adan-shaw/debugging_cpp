@@ -1,0 +1,135 @@
+//整型简介:
+/*
+	signed 带符号的整形(1bit做数符, 表示正负, 其它都是'数值域', 有负数):
+		short int = short 16bit
+		int               32bit
+		long int  = long  32/64bit(最好不要用)
+		long long         64bit
+
+	unsigned 不带符号的整形(所有数位bit, 都是'数值域', 没有负数):
+		unsigned short int = unsigned short
+		unsigned int       = unsigned int
+		unsigned long int  = unsigned long
+		unsigned long long = unsigned long long
+
+
+	signed, unsigned 整型类型转换要注意的问题:
+		unsigned int = signed int(int 强转为unsigned int, 错误!! 如果是负数, 会导致数据错乱)
+		signed int = unsigned int(unsigned int 强转为int, 数值过大会溢出)
+*/
+
+
+
+
+
+//<stdint.h> 整形'极限宏'头文件
+//(可以不用, 这个头文件, 用来减少typedef unsigned int uint; 这类语句而已)
+/*
+	>1:变量类型
+		int8_t  - 8位
+		int16_t - 16位
+		int32_t - 32位
+		int64_t - 64位
+		uint8_t  - 8位
+		uint16_t - 16位
+		uint32_t - 32位
+		uint64_t - 64位
+
+		int_fast8_t  - 8 bit
+		int_fast16_t - 16 bit
+		int_fast32_t - 32 bit
+		int_fast64_t - 64 bit
+		uint_fast8_t  - 8 bit
+		uint_fast16_t - 16 bit
+		uint_fast32_t - 32 bit
+		uint_fast64_t - 64 bit
+
+		int_least8_t  - 8
+		int_least16_t - 16
+		int_least32_t - 32
+		int_least64_t - 64
+		uint_least8_t  - 8
+		uint_least16_t - 16
+		uint_least32_t - 32
+		uint_least64_t - 64
+
+		intmax_t  最大宽度的有符号整数类型
+		intptr_t  足以保有指针的有符号整数类型
+		uintmax_t 最大宽度的无符号整数类型
+		uintptr_t 足以保有指针的无符号整数类型
+
+
+
+	>2:宏常量
+		INT8_MIN  - int8_t
+		INT16_MIN - int16_t
+		INT32_MIN - int32_t
+		INT64_MIN - int64_t
+		INT8_MAX  - int8_t
+		INT16_MAX - int16_t
+		INT32_MAX - int32_t
+		INT64_MAX - int64_t
+
+		INT_FAST8_MIN  - int_fast8_t
+		INT_FAST16_MIN - int_fast16_t
+		INT_FAST32_MIN - int_fast32_t
+		INT_FAST64_MIN - int_fast64_t
+		INT_FAST8_MAX  - int_fast8_t
+		INT_FAST16_MAX - int_fast16_t
+		INT_FAST32_MAX - int_fast32_t
+		INT_FAST64_MAX - int_fast64_t
+
+
+		INT_LEAST8_MIN  - int_least8_t
+		INT_LEAST16_MIN - int_least16_t
+		INT_LEAST32_MIN - int_least32_t
+		INT_LEAST64_MIN - int_least64_t
+		INT_LEAST8_MAX  - int_least8_t
+		INT_LEAST16_MAX - int_least16_t
+		INT_LEAST32_MAX - int_least32_t
+		INT_LEAST64_MAX - int_least64_t
+
+		INTPTR_MIN - intptr_t
+		INTMAX_MIN - intmax_t
+		INTPTR_MAX - intptr_t
+		INTMAX_MAX - intmax_t
+
+
+		//unsigned 整形, 最小值永远为0, 所以没有最小值宏, 只有最大值宏
+		UINT8_MAX  - uint8_t
+		UINT16_MAX - uint16_t
+		UINT32_MAX - uint32_t
+		UINT64_MAX - uint64_t
+
+		UINT_FAST8_MAX  - uint_fast8_t
+		UINT_FAST16_MAX - uint_fast16_t
+		UINT_FAST32_MAX - uint_fast32_t
+		UINT_FAST64_MAX - uint_fast64_t
+
+		UINT_LEAST8_MAX  - uint_least8_t
+		UINT_LEAST16_MAX - uint_least16_t
+		UINT_LEAST32_MAX - uint_least32_t
+		UINT_LEAST64_MAX - uint_least64_t
+
+		UINTPTR_MAX - uintptr_t
+		UINTMAX_MAX - uintmax_t
+
+
+
+	3:最小宽度整数常量的函数宏
+		INT8_C   - 展开变成int_least8_t 宏函数(返回int_least8_t 类型)
+		INT16_C  - int_least16_t
+		INT32_C  - int_least32_t
+		INT64_C  - int_least64_t
+		INTMAX_C - 展开变成intmax_t 宏函数(返回int_least8_t 类型)
+
+		UINT8_C   - 展开变成uint_least8_t 宏函数(返回uint_least8_t 类型)
+		UINT16_C  - uint_least16_t
+		UINT32_C  - uint_least32_t
+		UINT64_C  - uint_least64_t
+		UINTMAX_C - 展开变成uintmax_t 宏函数(返回uint_least8_t 类型)
+
+
+
+	4: UINT64_C(0x123) 可以展开成 0x123ULL 或 0x123UL
+*/

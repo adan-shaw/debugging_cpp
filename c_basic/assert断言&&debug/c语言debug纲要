@@ -25,7 +25,7 @@
 //3.关于边界检查函数(windows 才有的私货, 不要妄想!!):
 /*
 	边界检查<windows才有, linux一般用'buf截断函数'来实现: strncpy>
-	windows 标准库提供了一些既存函数的边界检查版本：
+	windows 标准库提供了一些既存函数的边界检查版本:
 		(gets_s, fopen_s, printf_s, strcpy_s,
 		 wcscpy_s, mbstowcs_s, qsort_s, getenv_s等).
 
