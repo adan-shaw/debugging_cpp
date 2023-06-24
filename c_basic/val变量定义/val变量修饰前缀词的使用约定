@@ -1,0 +1,23 @@
+由于c/c++ 语言对编码限制较少, 因此程序员在编码的时候, 是需要适当做一些约定限制的, 例如:
+	定义变量时, 有如下限制:
+		定义struct, class, union, enum 时, 不能加前缀!!
+		(不能加的前缀包括: const, static, redistor, auto 四大变量定义前缀)
+
+	创建变量实体时, 可以加四大变量定义前缀: const, static, redistor, auto
+	可以加四大变量定义前缀的变量有:
+		* 普通常规变量
+		* struct
+		* class
+		* union
+		* enum
+		* function API
+
+	其中, function API 非常特殊, function API 加前缀, 有比较多的变化, 
+	function 形参加前缀, 相对较为简单;
+	一般地:
+		形参加前缀, 只能加: const
+
+		function API 加前缀, 可以加: const/static
+		static function(){}: 把函数指针API, 从全局可见指针变量, 变成static静态-其他文件不可见-指针变量;
+												 (详情请看: static修饰词.c)
+		const function(){}:  仅表明函数的返回值, 是const 变量;

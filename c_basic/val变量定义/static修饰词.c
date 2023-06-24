@@ -1,3 +1,8 @@
+//编译:
+//		gcc -g3 ./static修饰词.c -o x
+
+
+
 /*
 前言:
 	阅读本文, 务必先阅读: 
@@ -55,6 +60,39 @@ static 关键字, 是多线程-线程安全函数杀手:
 */
 
 
+
+#include <stdio.h>
+ 
+/*
+证明:
+	static 只能把描述function API 的函数指针, 移到.bss/.data 区, 实现让其他.cpp 文件不可见的功能, 
+	默认这个function API 的函数指针是全局变量, 是其他.cpp 文件可见的;
+
+	static 修饰之后, 并不是整个函数挪到 .bss/.data 区;
+	只是将描述function API 的函数指针, 移到.bss/.data 区;
+	(默认也是在全局变量区, 也是在.bss/.data 区, 只不过转为static 就会变成隐藏属性);
+
+证据:
+	如果整个函数移到static 区, 则局部变量tmp 也会变成static 变量, 
+	此时tmp 应该会累加, 而不是每次执行前清0;
+
+其他:
+	static 关键字, 不能用在function 函数形参, 返回值上面;
+	因为函数形参, 返回值, 是要入栈的, 定义为static 变量, 无意义;
+*/
+
+static int print(int a){
+	int tmp = 0;
+	tmp =+ a;
+	printf("%d\n", tmp);
+	return tmp;
+}
+
+int main(void){
+	printf("%d\n", print(9));
+	printf("%d\n", print(9));
+	return 0;
+}
 
 
 
