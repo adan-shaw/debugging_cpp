@@ -15,21 +15,21 @@
 	元素访问
 		at								访问指定字符,有边界检查
 		operator[]				访问指定字符
-		front							访问首字符(c++11)
-		back							访问最后的字符(c++11)
+		front							访问首字符(C++11)
+		back							访问最后的字符(C++11)
 		data							返回指向字符串首字符的指针
 		c_str							返回字符串的不可修改的C字符数组版本
-		operatorbasic_string_view			返回到整个字符串的不可修改的basic_string_view(c++17)
+		operatorbasic_string_view			返回到整个字符串的不可修改的basic_string_view(C++17)
 
 	迭代器
 		begin							返回指向起始的迭代器
-		cbegin						(c++11)
+		cbegin						(C++11)
 		end								返回指向末尾的迭代器
-		cend							(c++11)
+		cend							(C++11)
 		rbegin						返回指向起始的逆向迭代器
-		crbegin						(c++11)
+		crbegin						(C++11)
 		rend							返回指向末尾的逆向迭代器
-		crend							(c++11)
+		crend							(C++11)
 
 	容量
 		empty							检查字符串是否为空
@@ -38,19 +38,19 @@
 		max_size					返回字符数的最大值
 		reserve						保留存储
 		capacity					返回当前对象分配的存储空间能保存的字符数量
-		shrink_to_fit			通过释放不使用内存减少内存使用(c++11)
+		shrink_to_fit			通过释放不使用内存减少内存使用(C++11)
 
 	操作
 		clear							清除内容
 		insert						插入字符
 		erase							移除字符
 		push_back					后附字符到结尾
-		pop_back					移除末尾字符(c++11)
+		pop_back					移除末尾字符(C++11)
 		append						后附字符到结尾
 		operator+=				后附字符到结尾
 		compare						比较二个字符串
-		starts_with				检查string是否始于给定前缀(c++20)
-		ends_with					检查string是否终于给定后缀(c++20)
+		starts_with				检查string是否始于给定前缀(C++20)
+		ends_with					检查string是否终于给定后缀(C++20)
 		replace						替换字符串的指定部分
 		substr						返回子串
 		copy							复制字符
@@ -78,27 +78,27 @@
 		operator>=				以字典序比较两个字符串
 		std::swap(std::basic_string)		特化 std::swap 算法
 		erase(std::basic_string)
-		erase_if(std::basic_string)			擦除所有满足特定判别标准的元素(c++20)
+		erase_if(std::basic_string)			擦除所有满足特定判别标准的元素(C++20)
 
 	输入/输出
 		operator<<
 		operator>>				执行字符串的流输入与输出
 		getline						从I/O流读取数据到字符串
 
-	数值转换(c++11)
-		stoi							转换字符串为有符号整数(c++11)
-		stol							(c++11)
-		stoll							(c++11)
-		stoul							转换字符串为无符号整数(c++11)
-		stoull						(c++11)
-		stof							转换字符串为浮点值(c++11)
-		stod							(c++11)
-		stold							(c++11)
-		to_string					转换整数或浮点值为string(c++11)
-		to_wstring				转换整数或浮点值为wstring(c++11)
+	数值转换(C++11)
+		stoi							转换字符串为有符号整数(C++11)
+		stol							(C++11)
+		stoll							(C++11)
+		stoul							转换字符串为无符号整数(C++11)
+		stoull						(C++11)
+		stof							转换字符串为浮点值(C++11)
+		stod							(C++11)
+		stold							(C++11)
+		to_string					转换整数或浮点值为string(C++11)
+		to_wstring				转换整数或浮点值为wstring(C++11)
 
 	字面量
-		operator""s				转换字符数组字面量为basic_string(c++14)
+		operator""s				转换字符数组字面量为basic_string(C++14)
 											定义于内联命名空间 std::literals::string_literals
 */
 
@@ -213,9 +213,9 @@ int main(void){
 
 
 	//其他测试函数
-	string2number();
-	snprintf_test();
-	sscanf_test();
+	//string2number();
+	//snprintf_test();
+	//sscanf_test();
 	return 0;
 }
 
