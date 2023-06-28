@@ -1,0 +1,149 @@
+(.s)2.编译	 -S <x.i> -o <x.s>
+	* 检查语法, 彻底检查'变量/结构体/类声明/函数声明'的用法, 是否正确.
+
+	* 生成汇编代码, 如果通过语法检查, 就生成对应的汇编码.
+
+
+
+总结:
+	阅读.s 文件, 是阅读汇编文最关键的一步!! 很大学问.
+
+
+
+例:
+
+#
+# 1.'变量定义与声明'的汇编码查看解说:
+#
+	# 被编译的源文件路径
+		.file	"cpp\347\274\226\350\257\221\345\216\237\347\220\206.cpp"
+
+
+		.globl	m_G_info
+		.bss
+		.align 4
+		.type	m_G_info, @object
+		.size	m_G_info, 12
+	m_G_info:
+		.zero	12
+
+		.globl	m_G_body
+		.align 4
+		.type	m_G_body, @object
+		.size	m_G_body, 12
+	m_G_body:
+		.zero	12
+
+		.globl	G_val					//.globl=全局变量: G_val
+		.bss									//.bss 段
+		.align 4							//unknow
+		.type	G_val, @object	//.type 类型=@object: 实体,非指针
+		.size	G_val, 4				//.size 变量的大小=4
+	G_val:
+		.zero	4								//unknow
+
+		.globl	G_str
+		.data
+		.align 64
+		.type	G_str, @object
+		.size	G_str, 64
+	G_str:
+		.string	"hello world"
+		.zero	52
+
+		.globl	G_arr
+		.align 4
+		.type	G_arr, @object	//数组也是实体,非指针
+		.size	G_arr, 20
+	G_arr:
+		.long	1
+		.long	2
+		.long	3
+		.long	4
+		.long	5
+		.section	.rodata		//unknow
+
+
+
+
+
+#
+# 2.函数定义与声明
+#
+	// main() 函数所要用到的所有字符串常量
+	.LC0:
+		.string	"\"love you adan\""
+	.LC1:
+		.string	"%s\n\n"
+	.LC2:
+		.string	"%s: %d%d%d%d%d\n\n"
+		.align 4
+	.LC3:
+		.string	"struct G_info=%d\345\255\227\350\212\202  class G_body=%d\345\255\227\350\212\202\n"
+		.text
+		.globl	main
+		.type	main, @function		// 函数指针类型声明
+
+	//函数逻辑体
+		main:
+	.LFB0:
+		.cfi_startproc
+		leal	4(%esp), %ecx
+		.cfi_def_cfa 1, 0
+		andl	$-16, %esp
+		pushl	-4(%ecx)
+		pushl	%ebp
+		.cfi_escape 0x10,0x5,0x2,0x75,0
+		movl	%esp, %ebp
+		pushl	%esi						//描述数据赋值, 移动, 改变值等操作
+		pushl	%ebx
+		pushl	%ecx
+		.cfi_escape 0xf,0x3,0x75,0x74,0x6
+		.cfi_escape 0x10,0x6,0x2,0x75,0x7c
+		.cfi_escape 0x10,0x3,0x2,0x75,0x78
+		subl	$12, %esp
+		subl	$8, %esp
+		pushl	$.LC0
+		pushl	$.LC1
+		call	printf					//从.so共享链接库中,召唤printf API函数(描述中断调用call的操作)
+		addl	$16, %esp				//如果不知道如何找到.so 共享链接库
+		movl	G_arr+16, %esi	//请看: how2阅读:链接处理后的.exe文件
+		movl	G_arr+12, %ebx	//.s 文件, 只是做编译描述, 具体链接行为, 在.exe 中描述
+		movl	G_arr+8, %ecx
+		movl	G_arr+4, %edx
+		movl	G_arr, %eax			//描述数据移动/转移逻辑
+		subl	$4, %esp				//描述数值运算逻辑
+		pushl	%esi
+		pushl	%ebx
+		pushl	%ecx
+		pushl	%edx
+		pushl	%eax
+		pushl	$G_str
+		pushl	$.LC2
+		call	printf
+		addl	$32, %esp
+		subl	$4, %esp
+		pushl	$12
+		pushl	$12
+		pushl	$.LC3
+		call	printf
+		addl	$16, %esp
+		movl	$0, %eax
+		leal	-12(%ebp), %esp
+		popl	%ecx
+		.cfi_restore 1
+		.cfi_def_cfa 1, 0
+		popl	%ebx
+		.cfi_restore 3
+		popl	%esi
+		.cfi_restore 6
+		popl	%ebp
+		.cfi_restore 5
+		leal	-4(%ecx), %esp
+		.cfi_def_cfa 4, 4
+		ret
+		.cfi_endproc
+	.LFE0:
+		.size	main, .-main
+		.ident	"GCC: (Debian 4.9.2-10+deb8u2) 4.9.2"
+		.section	.note.GNU-stack,"",@progbits
