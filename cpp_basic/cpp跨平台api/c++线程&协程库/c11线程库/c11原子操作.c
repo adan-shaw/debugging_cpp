@@ -1,3 +1,27 @@
+//编译:
+//		gcc -g3 -pthread ./c11原子操作.c -o x
+
+
+
+//判断编译器是否支持c11 原子操作库
+#ifdef __STDC_NO_ATOMICS__
+	#error [ Not Support C11 stdatomic.h ]
+#else
+	#pragma message("Support C11 stdatomic.h")
+	#include <stdatomic.h>
+#endif
+
+#ifdef __STDC_NO_THREADS__
+	#error [ Not Support C11 threads.h ]
+#else
+	#pragma message("Support C11 threads.h")
+	#include <threads.h>
+#endif
+
+#include <stdio.h>
+
+//c11 线程库, 只能用在纯c 语言里面, 估计插入c++ 里面需要使用extern "C" {}, 不能单纯插入*.cpp 代码中, 否则会有很多报错;
+
 //c11 原子操作
 /*
 若编译器定义宏常量__STDC_NO_ATOMICS__(C11), 则不提供头文件<stdatomic.h>、关键词_Atomic以及所有列于此的名称;
@@ -93,6 +117,81 @@
 	atomic_uintmax_t									_Atomic uintmax_t
 
 */
+
+
+
+//
+// 1.call_once() 测试
+//
+atomic_int call_once_sum;
+
+void call_once_func(void){
+	int tmp = 9999;
+	for(;tmp > 0;tmp--){
+		atomic_fetch_add(&call_once_sum,1);	//标准的多线程竞争加法运算
+		//call_once_sum+=1;									//不标准的加法
+		printf("call_once_func: call_once_sum = %d\n", (int)call_once_sum);
+		//printf("atomic_int call_once_sum is lock free? %s\n", atomic_is_lock_free(&call_once_sum) ? "true" : "false");
+	}
+	return;
+}
+
+//函数原型: void call_once( once_flag* flag, void (*func)(void) );
+void call_once_test(void){
+	call_once_sum = 0;										//初始化全局原子int 变量
+	once_flag flag;												//一个函数, 一个once_flag; 调用一次后就会失效, 不能调用第二次;
+	printf("call_once_func go\n");				//once_flag + call_once(), 可以保证多个线程对某个函数只调用一次;
+	call_once(&flag, call_once_func);
+	printf("call_once_func go again(not gonna run again)\n");
+	call_once(&flag, call_once_func);
+	return ;
+}
+
+
+
+//
+// 2.多线程抢夺原子变量test
+//
+void many_thrd_killing_eachother(void){
+	thrd_t t1, t2, t3, t4;
+	thrd_create(&t1, call_once_func, NULL);
+	thrd_create(&t2, call_once_func, NULL);
+	thrd_create(&t3, call_once_func, NULL);
+	thrd_create(&t4, call_once_func, NULL);
+
+	thrd_join(t1, NULL);
+	thrd_join(t2, NULL);
+	thrd_join(t3, NULL);
+	thrd_join(t4, NULL);
+	return;
+}
+
+
+
+//
+// 3.原子操作赋值exchange
+//
+void many_thrd_exchange(void* parg){
+	int tmp = 9999;
+
+	//赋值(在原子操作中, 赋值需要用atomic_exchange()来操作)
+	atomic_exchange(&call_once_sum, (int)parg);
+
+	for(;tmp > 0;tmp--){
+		atomic_fetch_add(&call_once_sum,1);
+		printf("many_thrd_exchange: call_once_sum = %d\n", (int)call_once_sum);
+	}
+	return;
+}
+
+
+
+int main(void){
+	call_once_test();
+	many_thrd_killing_eachother();
+	many_thrd_exchange((void*)800);
+	return 0;
+}
 
 
 
