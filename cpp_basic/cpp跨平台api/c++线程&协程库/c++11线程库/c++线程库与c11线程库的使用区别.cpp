@@ -53,13 +53,15 @@
 
 
 
-//4.c11原子操作库不能用的问题:
+//4.c11原子操作库bug:
 /*
-	c11原子操作库的支持非常差, 甚至包含头文件都会出错, 非常无语:
+	c11原子操作库的支持非常差, c/c++ 不能通用, 甚至包含头文件都会出错, 非常无语:
 		#include <stdatomic.h>
 
 	'c11线程库'头文件可以用:
 		#include <threads.h>
+
+	(推荐彻底区分c/c++, c语言用c语言的库, c++用c++的线程库)
 */
 
 
@@ -67,14 +69,14 @@
 #include <cstdio>
 
 //'c11线程库'
-//#include <stdatomic.h>					//不能用, 不知道为何(一包含这个头文件就一大堆报错)
+//#include <stdatomic.h>					//c++不能用c11 的原子库头文件, 不知道为何(一包含这个头文件就一大堆报错)
 #include <threads.h>							//可以用
 
 //'c++线程库'
 #include <atomic>
 #include <thread>
 
-void c11(void){										//弃用(c11 不太完善, 直接弃用)
+void c11(void){										//弃用(c++ 不支持c11 原子库, 非常无语)
 	/*
 	atomic_int tmp;
 	tmp = 10;
