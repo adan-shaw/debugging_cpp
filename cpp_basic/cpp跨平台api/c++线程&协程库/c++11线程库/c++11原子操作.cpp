@@ -120,30 +120,30 @@ void call_once_test(void){
 void many_thrd_killing_eachother(void){
 	std::thread t1, t2, t3, t4;
 
-	printf("*.joinable(): %d\n", t1.joinable());//创建std::thread 类, 默认线程是false 不活跃状态的
-	printf("*.joinable(): %d\n", t2.joinable());
-	printf("*.joinable(): %d\n", t3.joinable());
-	printf("*.joinable(): %d\n", t4.joinable());
+	printf("t1.joinable(): %d\n", t1.joinable());//创建std::thread 类, 默认线程是false 不活跃状态的
+	printf("t2.joinable(): %d\n", t2.joinable());
+	printf("t3.joinable(): %d\n", t3.joinable());
+	printf("t4.joinable(): %d\n", t4.joinable());
 
 	t1 = std::thread(call_once_func);						//重新调用构造函数, 传入线程函数&参数, 激活线程
 	t2 = std::thread(call_once_func);
 	t3 = std::thread(call_once_func);
 	t4 = std::thread(call_once_func);
 
-	printf("*.joinable(): %d\n", t1.joinable());//检查线程状态again
-	printf("*.joinable(): %d\n", t2.joinable());
-	printf("*.joinable(): %d\n", t3.joinable());
-	printf("*.joinable(): %d\n", t4.joinable());
+	printf("t1.joinable(): %d\n", t1.joinable());//检查线程状态again
+	printf("t2.joinable(): %d\n", t2.joinable());
+	printf("t3.joinable(): %d\n", t3.joinable());
+	printf("t4.joinable(): %d\n", t4.joinable());
 
 	t1.join();																	//等待线程结束
 	t2.join();
 	t3.join();
 	t4.join();
 
-	printf("*.joinable(): %d\n", t1.joinable());//检查线程状态again
-	printf("*.joinable(): %d\n", t2.joinable());
-	printf("*.joinable(): %d\n", t3.joinable());
-	printf("*.joinable(): %d\n", t4.joinable());
+	printf("t1.joinable(): %d\n", t1.joinable());//检查线程状态again
+	printf("t2.joinable(): %d\n", t2.joinable());
+	printf("t3.joinable(): %d\n", t3.joinable());
+	printf("t4.joinable(): %d\n", t4.joinable());
 
 	return;
 }
