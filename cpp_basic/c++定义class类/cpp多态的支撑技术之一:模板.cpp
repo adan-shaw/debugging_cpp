@@ -1,5 +1,5 @@
 //编译:
-//		g++ -g3 ./template类模板.cpp -o x
+//		g++ -g3 ./cpp多态的支撑技术之一\:模板.cpp -o x
 
 
 
