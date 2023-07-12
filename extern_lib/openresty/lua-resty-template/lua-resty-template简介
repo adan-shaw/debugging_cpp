@@ -1,0 +1,22 @@
+#
+# openresty 支持类似php+html+css+js 的内嵌式编码, 只是功能没有那么多而已;
+#
+
+hello_world.html:
+	<!DOCTYPE html>
+	<html>
+	<body>
+		<h1>{{message}}</h1>
+	</body>
+	</html>
+
+hello_world.lua:
+	local template = require "resty.template"
+	template.render_file("lua_home/my_test/views/hello_world.html", { message = "Hello, World!" })
+
+这样可以实现动态web 编程, 类似jsp, php, 切换关键部分的代码;
+也可以支持html 之间互相内嵌, 支持载入js/css 文件;
+
+最终将直接结果输出到标准output, 执行原理还是根据fastCGI, 
+最终根据标准io的output, 通过tcp 线路, 返回到web浏览器中;
+

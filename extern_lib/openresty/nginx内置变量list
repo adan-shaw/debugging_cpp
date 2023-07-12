@@ -1,0 +1,253 @@
+#
+# 前言
+#
+根据这些内置变量, 你可以使用openresty 做很多编码工作,
+因此, 使用lua 做判断, 利用nginx 做应用开发, 也未尝不可.
+
+
+在OpenResty中如何引用这些变量呢(规则很简单)?
+如, 引用$remote_addr, 在OpenResty里面使用就是ngx.var.remote_adddr(已经被内置到openresty 中了, 直接引用即可)
+可参考下面:
+	openresty 打印所有nginx 内置变量
+
+
+
+
+[
+[单次互交, 未断开socket 链接之前, 所有计数都遵从单次互交原则]
+[
+$nginx_version					Nginx版本号
+$pid										worker进程的PID
+$hostname								Nginx服务器的hostname[与gethostbyname()调用返回的值相同]
+$server_addr						表示服务器地址 
+$server_name						表示Nginx服务器名称 
+$server_port						表示Nginx服务器端口 
+$server_protocol				表示Nginx服务器向客户端发送响应的协议, 如HTTP/1.1或 HTTP/1.0
+
+
+
+$remote_addt						客户端IP地址
+$remote_port						客户端端口号
+$remote_user						客户端用户名, 通常在Auth Basic模块时定义的用户名
+$binary_remote_addr			二进制格式的客户端地址, 例如: \x0A\xE0B\x0E(通常会和限速模块一起使用)
+$realip_remote_addr			保留原来的客户地址, 在real_ip模块中使用
+
+
+
+$host										表示客户端请求头部中的Host字段.
+												如果Host字段不存在, 则以实际处理的server(虚拟主机)名称代替. 
+												如果Host字段中带有端口, 如IP:PORT, 那么$host是去掉端口的, 它的值为IP. 
+												$host 是全小写的. 这些特性与http_XXX中的http_host不同, http_host只取出Host头部对应的值. 
+$http_XXX								表示当前HTTP请求中相应头部的值. XXX名称全小写. 例如: 
+														示请求中 Host头部对应的值 用 $http_host表 
+$sent_http_XXX					表示返回客户端的HTTP响应中相应头部的值. XXX名称全小写. 例如: 
+														用$sent_http_content_type表示响应中Content-Type头部对应的值 
+
+
+
+$http_referer						表示请求是从哪个页面链接过来的
+$http_user_agent				客户端浏览器的相关信息
+
+
+
+$arg_PARAMETER					HTTP 请求中某个参数的值. 例如, /index.php?site=www.ttlsa.com, 可以用$arg_site取得www.ttlsa.com这个值.
+$args 									HTTP 请求中的完整参数. 例如, 在请求/index.php?width=400&height=200 中, $args表示字符串width=400&height=200.
+$arg_name								指URL请求中的参数, name是参数的名字
+$document_root					表示当前请求所使用的root 配置项的值
+$uri										表示当前请求的URI, 不带任何参数
+$document_uri						与$uri 含义相同
+$request_uri						表示客户端发来的原始请求URI, 带完整的参数. 
+												$uri和$document_uri未必是用户的原始请求, 在内部重定向后可能是重定向后的URI, 
+												而$request_uri 永远不会改变, 始终是客户端的原始URI.
+
+
+
+$bytes_set							发送给客户端的字节总数
+$body_bytes_sent				表示在向客户端发送的http响应中, 包体部分的字节数
+$content_length					表示客户端请求头部中的Content-Length 字段
+$content_type						表示客户端请求头部中的Content-Type 字段
+$cookie_name						name即Cookie名字, 可得到Cookie信息
+$cookie_XXX							表示在客户端请求头部中cookie XXX字段
+
+
+
+$request_filename				用户请求中的URI经过root或alias转换后的文件路径
+$request_time						请求被nginx接收后, 一直到相应数据返回给客户端所用时间
+$request								记录请求的URL和HTTP
+$request_length					请求的长度, 包括请求行、请求头和请求正文
+$request_method					请求的方式, 如GET、POST
+$request_body						表示HTTP请求中的包体, 该参数只在 proxy_pass或 fastcgi_pass中有意义 
+$request_body_file			表示HTTP请求中的包体存储的临时文件名 
+$request_completion			当请求已经全部完成时, 其值为"ok". 
+												若没有完成, 就要返回客户端, 则其值为空字符串;
+												或者在断点续传等情况下使用HTTP range访问的并不是文件的最后一块, 那么其值也是空字符串. 
+
+
+
+$scheme									请求的协议, 如HTTP、HTTPS; 例: 在请求https://nginx.com/中表示 https 
+$sent_http_name					任意响应头, name为响应头的名字, 注意name要小写
+$pipe										如果请求是HTTP流水线发送的, pipe值为"p",否则为"."
+$connection_request			当前通过一个连接获得的请求数量
+$status									HTTP请求状态
+$msec										日志写入时间(单位为秒, 精确到毫秒)
+$time_local							在通用日志格式下的本地时间
+$geoip_city							城市名称, 在geoip模块中使用
+$is_args								表示请求中的 URI是否带参数, 如果带参数, $is_args值为?, 如果不带参数, 则是空字符串 
+$limit_rate							表示当前连接的限速是多少, 0表示无限速 
+$query_string						请求URI中的参数, 与$args相同, 然而$query_string是只读的不会改变 
+
+
+
+
+
+
+
+
+
+
+[
+[单次互交, 未断开socket 链接之前, 所有计数都遵从单次互交原则]
+[
+$upstream_http_XXX				单次从'上游服务器'返回的HTTP的头部, 提取出对应的值, 如: upstream_http_host, XXX=host
+$upstream_trailer_XXX			单次从'上游服务器'返回的HTTP的尾部, 提取出对应的值, 如: upstream_trailer_abc, XXX=abc
+$upstream_cookie_XXX			单次从'上游服务器'返回的HTTP的头部, Set-Cookie中, 提取出对应的值, 如: upstream_cookie_def, XXX=def
+
+$upstream_addr						'上游服务器'的IP地址, 格式为字符串, 例如: 127.0.0.1:8080
+$upstream_port						'上游服务器'的端口号
+$upstream_status					此次互交, 从'上游服务器'得到的HTTP响应状态码
+$upstream_cache_status		此次互交, 从'上游服务器'得到的'缓存命中码', 取值范围: MISS/EXPIRED/UPDATING/STALE/HIT (表示是否命中缓存)
+
+$upstream_connect_time		与'上游服务器'建立链接消耗的时间(单位为秒, 精确到毫秒)
+$upstream_header_time			接收'上游服务器', 回发响应http头部所消耗的时间(单位为秒, 精确到毫秒)
+$upstream_response_time		接收完整的'上游服务器'发的所有数据, 所消耗的时间(单位为秒, 精确到毫秒)
+$upstream_response_length	从'上游服务器'返回的响应包体长度[单位为字节]
+$upstream_bytes_received	从'上游服务器'接收到的响应数据, 累计总长度[单位为字节]
+
+
+
+
+
+
+#
+# openresty 打印所有nginx 内置变量
+#
+location /print_all_ngx_var {
+	access_by_lua '
+		ngx.say(nginx_version)
+		ngx.say(pid)
+		ngx.say(hostname)
+		ngx.say(server_addr)
+		ngx.say(server_name)
+		ngx.say(server_port)
+		ngx.say(server_protocol)
+		ngx.say(remote_addt)
+		ngx.say(remote_port)
+		ngx.say(remote_user)
+		ngx.say(binary_remote_addr)
+		ngx.say(realip_remote_addr)
+		ngx.say(host)
+		ngx.say(http_referer)
+		ngx.say(http_user_agent)
+		ngx.say(args)
+		ngx.say(arg_name)
+		ngx.say(document_root)
+		ngx.say(uri)
+		ngx.say(document_uri)
+		ngx.say(request_uri)
+		ngx.say(bytes_set)
+		ngx.say(body_bytes_sent)
+		ngx.say(content_length)
+		ngx.say(content_type)
+		ngx.say(cookie_name)
+		ngx.say(request_filename)
+		ngx.say(request_time)
+		ngx.say(request)
+		ngx.say(request_length)
+		ngx.say(request_method)
+		ngx.say(request_body)
+		ngx.say(request_body_file)
+		ngx.say(request_completion)
+		ngx.say(scheme)
+		ngx.say(sent_http_name)
+		ngx.say(pipe)
+		ngx.say(connection_request)
+		ngx.say(status)
+		ngx.say(msec)
+		ngx.say(time_local)
+		ngx.say(geoip_city)
+		ngx.say(is_args)
+		ngx.say(limit_rate)
+		ngx.say(query_string)
+		ngx.say(upstream_addr)
+		ngx.say(upstream_port)
+		ngx.say(upstream_status)
+		ngx.say(upstream_cache_status)
+		ngx.say(upstream_connect_time)
+		ngx.say(upstream_header_time)
+		ngx.say(upstream_response_time)
+		ngx.say(upstream_response_length)
+		ngx.say(upstream_bytes_received)
+	';
+}
+
+
+
+
+
+#
+# nginx 所有内置变量去备注版
+#
+$nginx_version
+$pid
+$hostname
+$server_addr
+$server_name
+$server_port
+$server_protocol
+$remote_addt
+$remote_port
+$remote_user
+$binary_remote_addr
+$realip_remote_addr
+$host
+$http_referer
+$http_user_agent
+$args
+$arg_name
+$document_root
+$uri
+$document_uri
+$request_uri
+$bytes_set
+$body_bytes_sent
+$content_length
+$content_type
+$cookie_name
+$request_filename
+$request_time
+$request
+$request_length
+$request_method
+$request_body
+$request_body_file
+$request_completion
+$scheme
+$sent_http_name
+$pipe
+$connection_request
+$status
+$msec
+$time_local
+$geoip_city
+$is_args
+$limit_rate
+$query_string
+$upstream_addr
+$upstream_port
+$upstream_status
+$upstream_cache_status
+$upstream_connect_time
+$upstream_header_time
+$upstream_response_time
+$upstream_response_length
+$upstream_bytes_received
