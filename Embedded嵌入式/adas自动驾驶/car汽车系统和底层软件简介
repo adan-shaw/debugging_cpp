@@ -27,8 +27,10 @@ ADAS汽车智能驾驶辅助功能开发, 常见的技术简介:
 			AUTOSAR 标准的中间件平台(很出名), 基于AUTOSAR 标准实现的方案有:
 				adaptive autosar(AP-AUTOSAR):
 					德国推出的汽车专用的AUTOSAR 中间件解决方案;
+					AP -- 偏向于Soc 硬件平台, 一般常见于整车系统集成, 这个是未来的方向, 因为芯片工艺会越来越好;
+
 				classic platform autosar(CP-AUTOSAR):
-					一般是MCU 供应商常用的, 去迎合AUTOSAR 做的;
+					CP -- 偏向于MCU, 一般是MCU 供应商常用的, 去迎合AUTOSAR 做的;
 					也有基于CP-AUTOSAR, 自己实现的AUTOSAR 中间件解决方案;
 
 			ROS2:
