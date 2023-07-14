@@ -74,6 +74,34 @@
 
 
 
+class B;
+
+class A{
+public:
+	std::shared_ptr<B> sPtr_b;
+	A(){};
+	~A(){ std::cout << "~A()" << std::endl; };
+};
+
+class B{
+public:
+	std::shared_ptr<A> sPtr_a;
+	B(){};
+	~B(){ std::cout << "~B()" << std::endl; };
+};
+
+//std::shared_ptr 智能指针: 循环引用的问题(导致内部计数永远不为0, 因此无法释放, 造成内存泄漏)
+//ps: 进程结束时, 同样会被内核回收, 但进程不接受的话, 内存消耗一直存在
+void test(void){
+	std::shared_ptr<A> sPtr = std::make_shared<A>();
+	std::shared_ptr<B> sPtr2 = std::make_shared<B>();
+	a->sPtr_b = b;
+	b->sPtr_a = a;
+	return;
+}
+
+
+
 int main(void) {
 	int a = 10, b = 20;
 	int *pb = &a;

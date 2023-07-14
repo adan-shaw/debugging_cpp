@@ -1,5 +1,5 @@
 //编译:
-//		g++ -g3 ./unique_ptr智能指针.cpp -o x
+//		g++ -std=c++11 -g3 ./unique_ptr智能指针.cpp -o x
 
 
 
