@@ -1,5 +1,5 @@
 //编译:
-//		g++ -g3 ./test_all_space.cpp -o x
+//		g++ -g3 ./oneSpace.h ./twoSpace.h ./alloc.h ./test_all_space.cpp -o x
 
 
 
@@ -86,8 +86,8 @@ int main(void){
 		p = m_twoSpace.mallocEx(1);
 		m_twoSpace.freeEx(p,1);
 	}
-	std::cout << "print info:" << std::endl;
-	m_twoSpace.print_pool_info();
+	//std::cout << "print info:" << std::endl;
+	//m_twoSpace.print_pool_info();
 
 
 
@@ -98,8 +98,8 @@ int main(void){
 		pAA->destory();
 		m_twoSpace.freeEx(pAA,sizeof(AA));
 	}
-	std::cout << "print info:" << std::endl;
-	m_twoSpace.print_pool_info();
+	//std::cout << "print info:" << std::endl;
+	//m_twoSpace.print_pool_info();
 
 
 
@@ -118,8 +118,8 @@ int main(void){
 		pvec->~vector();
 		m_twoSpace.freeEx(pvec,sizeof(std::vector<int>));
 	}
-	std::cout << "print info:" << std::endl;
-	m_twoSpace.print_pool_info();
+	//std::cout << "print info:" << std::endl;
+	//m_twoSpace.print_pool_info();
 
 
 

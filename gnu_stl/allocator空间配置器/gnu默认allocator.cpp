@@ -1,5 +1,5 @@
 //编译:
-//		g++ -g3 gnu_allocator.cpp -o x
+//		g++ -g3 gnu默认allocator.cpp -o x
 
 
 

@@ -16,7 +16,7 @@ class father{
 			this->id = id;
 		}
 		void test(void){
-			std::cout << "hello world you loveer, id = " << id << std::endl;
+			std::cout << "hello world you fucker, id = " << id << std::endl;
 		}
 	private:
 		int id;
@@ -49,6 +49,7 @@ struct _Tune{
 	bool      _M_force_new;					//是否直接使用new和delete; 根据是否设置getenv("GLIBCXX_FORCE_NEW")
 };
 */
+
 int main(){
 	mtAlloc pool;
 
@@ -80,3 +81,4 @@ int main(){
 
 	return 0;
 }
+
