@@ -16,7 +16,7 @@ class father{
 			this->id = id;
 		}
 		void test(void){
-			std::cout << "hello world you loveer, id = " << id << std::endl;
+			std::cout << "hello world you lover, id = " << id << std::endl;
 		}
 	private:
 		int id;
