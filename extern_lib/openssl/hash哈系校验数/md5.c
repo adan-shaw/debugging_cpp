@@ -1,5 +1,5 @@
 //编译: 散列算法(签名算法)(哈系算法)
-//		g++ -lcrypto -g3 md5.cpp -o x
+//		gcc -lcrypto -g3 md5.c -o x
 
 
 

@@ -1,5 +1,5 @@
 //编译: 散列算法(签名算法)(哈系算法)
-//		g++ -g3 -lcrypto shaX.cpp -o x
+//		gcc -g3 -lcrypto shaX.c -o x
 
 
 
