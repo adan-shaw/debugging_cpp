@@ -119,8 +119,6 @@ void print_text(char* data){
 
 
 
-
-
 //4.3des ebc 加密
 /*
 	(注意: strlen(key_str),意味着只能传入一串字符串,而且长度不能超出8 字节.)
@@ -242,8 +240,7 @@ void des_ebc3_decrypt(char* key_str,char* data,char* ret,int buf_len){
 
 
 //6.3des cbc 加密(char* key_str长度不限, char* ivec必须为8字节)
-void des_cbc3_encrypt(char* key_str, \
-		char* ivec, char* data, char* ret, int buf_len){
+void des_cbc3_encrypt(char* key_str, char* ivec, char* data, char* ret, int buf_len){
 	DES_cblock key, key2, key3, key_ivec;
 	DES_key_schedule schedule, schedule2, schedule3;
 	int ivec_len = strlen(ivec) + 1;
@@ -307,8 +304,7 @@ void des_cbc3_encrypt(char* key_str, \
 
 
 //7.3des cbc 解密
-void des_cbc3_decrypt(char* key_str, \
-		char* ivec, char* data, char* ret, int buf_len){
+void des_cbc3_decrypt(char* key_str, char* ivec, char* data, char* ret, int buf_len){
 	DES_cblock key, key2, key3, key_ivec;
 	DES_key_schedule schedule, schedule2, schedule3;
 	int ivec_len = strlen(ivec) + 1;

@@ -3,7 +3,6 @@
 
 
 
-
 //des 加密算法的加密模式(只举例ebc, cbc, 还有更多没有举例)
 /*
 //使用ECB模式进行加密
@@ -386,8 +385,7 @@ void des_cbc_encrypt_test(void){
 	int des_cbc_buf_len = 512+8;
 
 	//执行加密
-	des_cbc_encrypt(des_cbc_key,\
-			des_cbc_ivce,des_cbc_data,des_cbc_ret,des_cbc_buf_len);
+	des_cbc_encrypt(des_cbc_key, des_cbc_ivce,des_cbc_data,des_cbc_ret,des_cbc_buf_len);
 
 	print_text(des_cbc_data);									//结束打印
 	print_encrypted(des_cbc_ret);
@@ -407,8 +405,7 @@ void des_cbc_decrypt_test(void){
 	int des_cbc_buf_len = 512+8;
 
 	//执行加密
-	des_cbc_decrypt(des_cbc_key,\
-			des_cbc_ivce,smart_point,des_cbc_ret,des_cbc_buf_len);
+	des_cbc_decrypt(des_cbc_key, des_cbc_ivce,smart_point,des_cbc_ret,des_cbc_buf_len);
 
 	print_text(des_cbc_ret);									//结束打印
 
