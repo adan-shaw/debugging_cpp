@@ -18,7 +18,7 @@ char *smart_point;
 /*
 	如果填充3 个char buf[8], 实在太麻烦了, 因此这里固定一种模式, 由1 to 3.
 	如果被人发现了, 大不了修改1 to 3 函数咯, 方便比较重要.
-	务必保证key size = 8, 否则内存溢出。
+	务必保证key size = 8, 否则内存溢出;
 */
 void key1_to3(char* in_out1, char* out2, char* out3);
 
@@ -74,7 +74,7 @@ int main(void){
 /*
 	如果填充3 个char buf[8], 实在太麻烦了, 因此这里固定一种模式, 由1 to 3.
 	如果被人发现了, 大不了修改1 to 3 函数咯, 方便比较重要.
-	务必保证key size = 8, 否则内存溢出。
+	务必保证key size = 8, 否则内存溢出;
 */
 void key1_to3(char* in_out1, char* out2, char* out3){
 	char tmp[4] = "";
