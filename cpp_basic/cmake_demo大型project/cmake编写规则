@@ -1,0 +1,326 @@
+1.基本结构
+	1.主CMakeLists.txt文件(一个目录只有一个), 可包含的子目录的CMakeLists.txt;
+	2.在CMakeLists.txt中, 使用project()指定项目名称, add_subdirectory()添加子目录及其子CMakeLists.txt;
+	3.子目录CMakeLists.txt将从父目录CMakeLists.txt继承设置;
+
+
+
+
+
+2.基础语法
+	1.#注释
+
+	2.变量:
+		使用set()命令显式定义及赋值, 
+		在非if语句中, 使用${}引用, if中直接使用变量名引用;
+
+	3.set(var a;b;c)         # 定义一个string list, 赋值为: a;b;c
+		set(var a b c)         # (等价写法)
+		add_executable(${var}) # 变量使用${var}引用
+		add_executable(a b c)  # (等价写法)
+
+	4.command (args ...)     # 命令不分大小写; 参数使用空格分隔; 可用双引号,输入多参数;
+
+	5.条件语句:
+		# 普通判断FALSE/TRUE (0=N=No=OFF=FALSE=NOTFOUND, NOT FALSE = TRUE):
+		if(var)
+			...
+		elseif()
+			...
+		else()
+			...
+		endif(D)
+		# 比较'变量var'与字符串
+		if(${CMAKE_BUILD_TYPE} MATCHES "debug")
+			...
+		else()
+			...
+		endif()
+
+	7.for循环语句
+		set(var a b c)
+		foreach(f ${var})
+			...
+		Endforeach(f)
+
+	8.while循环语句
+		while(var)
+			...
+		endwhile(var)
+
+	逻辑判断和比较:
+		if(NOT exp)           # 与或非
+		if(var1 AND var2)
+		if(var1 OR var2)
+		if(COMMAND cmd)       # 如果cmd 确实是命令并可调用为真(cmd=/usr/bin 里面的exe文件)
+		if(EXISTS dir)        # 如果目录or 文件存在为真
+		if(EXISTS file)
+		if(f1 IS_NEWER_THAN f2) # 当f1 比f2 新, 或f1/f2 中有一个不存在时为真(文件名需使用全路径)
+		if(IS_DIRECTORY dir)  # 当dir 是目录时为真
+		if(DEFINED var)       # 如果变量被定义为真
+		if(var MATCHES regex) # 给定的'变量or字符串', 能够匹配正则表达式regex 时为真(此处可用var, 也可用${var})
+		if(str MATCHES regex)
+
+	数字比较:
+		if(var LESS 1)        # LESS 小于
+		if(str LESS 1)
+		if(var GREATER 1)     # GREATER 大于
+		if(str GREATER 1)
+		if(var EQUAL 1)       # EQUAL 等于
+		if(str EQUAL 1)
+
+	字母表顺序比较:
+		if(var STRLESS str_list)
+		if(str STRLESS str_list)
+		if(var STRGREATER str_list)
+		if(str STRGREATER str_list)
+		if(var STREQUAL str_list)
+		if(str STREQUAL str_list)
+
+	9.打印语句
+		# 普通打印
+		#MESSAGE("* cmake version: ${CMAKE_PATCH_VERSION}")
+
+		# 输出到<STATUS>频道: 打印进度字符串, 会自动添加'--'(非全功能打印, 不能打印宏, 最好别用)
+		#MESSAGE(STATUS "cmake version: ${CMAKE_PATCH_VERSION}")
+
+		# 输出到<FATAL_ERROR>频道: 打印字符串, 并终止cmake
+		#MESSAGE(FATAL_ERROR "stop MESSAGE")
+
+
+
+
+
+3.内部变量
+	CMAKE_C_COMPILER        # 指定C编译器
+	CMAKE_CXX_COMPILER      # 指定C++编译器
+	CMAKE_C_FLAGS           # 指定编译C选项, 如-g(也可以通过add_definitions添加编译选项)
+	EXECUTABLE_OUTPUT_PATH  # 指定可执行文件的存放路径
+	LIBRARY_OUTPUT_PATH     # 指定库文件路径
+	CMAKE_BUILD_TYPE=Debug  # 指定target类型(Debug, Release, ...)
+	BUILD_SHARED_LIBS=ON    # 强制使用动态链接库(OFF 等于整个项目静态编译)
+
+	PROJECT_SOURCE_DIR      # 工程的根目录
+	PROJECT_BINARY_DIR      # 运行cmake 命令的目录, 通常是 ${PROJECT_SOURCE_DIR}/build
+	PROJECT_NAME            # 返回通过project 命令定义的项目名称
+	CMAKE_CURRENT_SOURCE_DIR# 当前处理的CMakeLists.txt 所在的路径
+	CMAKE_CURRENT_BINARY_DIR# target 编译目录
+	CMAKE_CURRENT_LIST_DIR  # CMakeLists.txt 的完整路径
+	CMAKE_CURRENT_LIST_LINE # 当前所在的行
+	CMAKE_MODULE_PATH       # 定义自己的cmake 模块所在的路径, SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake), 然后可以用INCLUDE命令来调用自己的模块
+	EXECUTABLE_OUTPUT_PATH  # 重新定义目标二进制可执行文件的存放位置
+	LIBRARY_OUTPUT_PATH     # 重新定义目标链接库文件的存放位置
+
+	­CMAKE_MAJOR_VERSION     # cmake 主版本号, 比如3.4.1 中的3
+	­CMAKE_MINOR_VERSION     # cmake 次版本号, 比如3.4.1 中的4
+	­CMAKE_PATCH_VERSION     # cmake 补丁等级, 比如3.4.1 中的1
+	********************************************************************
+	­CMAKE_SYSTEM            # 系统名称, 比如: Linux-­2.6.22(过时)
+	­CMAKE_SYSTEM_NAME       # 不包含版本的系统名, 比如: Linux(过时)
+	­CMAKE_SYSTEM_VERSION    # 系统版本, 比如2.6.22(过时)
+	­CMAKE_SYSTEM_PROCESSOR  # 处理器名称, 比如i686(过时)
+	********************************************************************
+	CMAKE_HOST_SYSTEM_NAME  # 当前编译主机系统name, Linux/Windows
+	CMAKE_HOST_SYSTEM       # (无用)
+	CMAKE_HOST_UNIX         # 当前编译主机是否是unix, 是=1(不能用作if 判断)
+	CMAKE_HOST_WIN32        # 当前编译主机是否是win, 是=1(不能用作if 判断)
+	­UNIX                    # 在所有的类UNIX 平台下该值为TRUE, 包括OS X 和cygwin
+	­WIN32                   # 在所有的win32 平台下该值为TRUE, 包括cygwin
+
+	直接在cmake 命令中, 使用内置变量:
+	cmake -DBUILD_SHARED_LIBS=OFF
+
+	# 其他内部变量
+	VAR#1-1  : CMAKE_AR                    静态库的归档工具名字;
+	VAR#1-2  : CMAKE_BINARY_DIR            构建树的顶层路径;
+	VAR#1-3  : CMAKE_BUILD_TOOL            实际构建过程中使用的工具;
+	VAR#1-4  : CMAKE_CACHEFILE_DIR         文件CMakeCache.txt所在的路径;
+	VAR#1-5  : CMAKE_CACHE_MAJOR_VERSION   用于创建CMakeCache.txt文件的CMake的主版本号;
+	VAR#1-6  : VCMAKE_CACHE_MINOR_VERSION  用于创建CMakeCache.txt文件的CMake的子版本号;
+	VAR#1-7  : CMAKE_CACHE_PATCH_VERSION   用于创建CMakeCache.txt文件的CMake的补丁号;
+	VAR#1-8  : CMAKE_CFG_INTDIR            构建时, 与构建配置相对应的输出子路径(只读);
+	VAR#1-9  : CMAKE_COMMAND               指向CMake可执行文件的完整路径;
+	VAR#1-10 : CMAKE_CROSSCOMPILING        指出CMake是否正在交叉编译;
+	VAR#1-11 : CMAKE_CTEST_COMMAND         与cmake一起安装的ctest命令的完整路径;
+	VAR#1-12 : CMAKE_CURRENT_BINARY_DIR    当前正在被处理的二进制目录的路径;
+	VAR#1-13 : CMAKE_CURRENT_LIST_DIR      当前正在处理的listfile的完整目录;
+	VAR#1-14 : CMAKE_CURRENT_LIST_FILE     当前正在处理的listfile的完整路径;
+	VAR#1-15 : CMAKE_CURRENT_LIST_LINE     当前正在处理的listfile的行号;
+	VAR#1-16 : CMAKE_CURRENT_SOURCE_DIR    指向正在被处理的源码目录的路径;
+	VAR#1-17 : CMAKE_DL_LIBS               包含dlopen和dlclose函数的库的名称;
+	VAR#1-18 : CMAKE_EDIT_COMMAND          指向cmake-gui或ccmake的完整路径;
+	VAR#1-26 : CMAKE_LINK_LIBRARY_SUFFIX   需要链接的库的后缀;
+	VAR#1-27 : CMAKE_MAJOR_VERSION         cmake的主版本号(例如2.X.X中的2);
+	VAR#1-28 : CMAKE_MAKE_PROGRAM          参见CMAKE_BUILD_TOOL;
+	VAR#1-29 : CMAKE_MINOR_VERSION         cmake的次版本号(例如X.4.X中的4);
+	VAR#1-30 : CMAKE_PARENT_LIST_FILE      当前正在被处理listfile的父listfile的全路径;
+	VAR#1-31 : CMAKE_PATCH_VERSION         cmake的补丁号(例如X.X.3中的3);
+	VAR#1-32 : CMAKE_PROJECT_NAME          当前工程的工程名;
+	VAR#1-33 : CMAKE_RANLIB                静态库的随机化工具的名字(比如linux下的ranlib);
+	VAR#1-34 : CMAKE_ROOT                  CMake的安装路径;
+	VAR#1-20 : CMAKE_EXTRA_GENERATOR       构建本工程所需要的额外生成器;
+	VAR#1-22 : CMAKE_GENERATOR             用于构建该工程的生成器;
+	VAR#1-23 : CMAKE_HOME_DIRECTORY        指向源码树顶层的路径;
+	VAR#1-39 : CMAKE_SIZEOF_VOID_P         void指针的长度;
+	VAR#1-40 : CMAKE_SKIP_RPATH            如果变量为真, 不为编译出的可执行文件添加运行时的路径信息;默认添加;
+	VAR#1-41 : CMAKE_SOURCE_DIR            源码树的顶层路径;
+	VAR#1-42 : CMAKE_STANDARD_LIBRARIES    链接到所有可执行文件和共享库上的库;这是一个list;
+	VAR#1-45 : CMAKE_TWEAK_VERSION         cmake的tweak版本号(例如X.X.X.1中的1);
+	VAR#1-46 : CMAKE_USING_VC_FREE_TOOLS   如果用到了免费的visual studio工具, 设置为真;
+	VAR#1-47 : CMAKE_VERBOSE_MAKEFILE      设置该变量为真将创建完整版本的makefile;
+	VAR#1-48 : CMAKE_VERSION               cmake的完整版本号;格式为major.minor.patch[.tweak[-id]];
+	VAR#1-49 : PROJECT_BINARY_DIR          指向工程构建目录的全路径;
+	VAR#1-50 : PROJECT_NAME                向project命令传递的工程名参数;
+	VAR#1-51 : PROJECT_SOURCE_DIR          当前工程的源码路径;
+	VAR#1-52 : [Project name]_BINARY_DIR   给定工程的二进制文件顶层路径;
+	VAR#1-53 : [Project name]_SOURCE_DIR   给定工程的源码顶层路径;
+	VAR#1-19 : CMAKE_EXECUTABLE_SUFFIX(_<LANG>)      本平台上可执行文件的后缀;
+	VAR#1-21 : CMAKE_EXTRA_SHARED_LIBRARY_SUFFIXES   附加的共享库后缀(除CMAKE_SHARED_LIBRARY_SUFFIX以外, 其他可以识别的共享库的后缀名)
+	VAR#1-24 : CMAKE_IMPORT_LIBRARY_PREFIX(_<LANG>)  需要链接的导入库的前缀;
+	VAR#1-25 : CMAKE_IMPORT_LIBRARY_SUFFIX(_<LANG>)  需要链接的导入库的后缀;
+	VAR#1-35 : CMAKE_SHARED_LIBRARY_PREFIX(_<LANG>)  被链接的共享库的前缀;
+	VAR#1-36 : CMAKE_SHARED_LIBRARY_SUFFIX(_<LANG>)  被链接的共享库的后缀;
+	VAR#1-37 : CMAKE_SHARED_MODULE_PREFIX(_<LANG>)   被链接的可加载模块的前缀;
+	VAR#1-38 : CMAKE_SHARED_MODULE_SUFFIX(_<LANG>)   被链接的共享库的后缀;
+	VAR#1-43 : CMAKE_STATIC_LIBRARY_PREFIX(_<LANG>)  被链接的静态库的前缀;
+	VAR#1-44 : CMAKE_STATIC_LIBRARY_SUFFIX(_<LANG>)  被链接的静态库的后缀;
+
+
+
+
+4.常用命令:
+	set(HOME_DIR "/home/adan/project_home")
+
+	project(x)              # 指定生成的exe 文件
+
+	include_directories(${HOME_DIR}/headfile)   # 指定头文件的搜索路径, 相当于gcc的-I参数
+
+	link_directories(${HOME_DIR}/library)       # 动态链接库or 静态链接库的搜索路径, 相当于gcc的-L参数
+
+	target_link_libraries(x -pthread)           # 添加链接库, 相同于指定-l参数(单个target x 添加-pthread)
+
+	link_libraries(-pthread)                    # 添加链接库, 相同于指定-l参数(所有target x x2 x3 添加-pthread, 如果有多个target 的话)
+
+	add_subdirectory(${HOME_DIR}/son_dir)       # 包含子目录
+
+	add_executable(x demo.cpp)                  # 指定编译生成exe可执行程序, 相当于gcc的-o参数
+
+	add_library(x.a demo.cpp)                   # 指定编译生成静态库.a
+
+	add_definitions(-DDEBUG)                    # 添加编译参数
+	add_definitions("-Wall -ansi -pedantic -g3")
+
+	注意:
+		gcc 命令的本质demo: gcc -g3 -lpthread ./demo.cpp -o x
+		本质上就是对targer x, 添加-lpthread
+		但有时候, 会碰到编译出多个target 的情况, 这时候可能会用到link_libraries(), 应该比较少用!!
+
+
+
+
+
+5.FAQ
+	1.怎样获得一个目录下的所有源文件
+		# 将dir中所有源文件(不包括头文件)保存到变量variable中, 然后可以add_executable (ss7gw ${variable})这样使用;
+		aux_source_directory(<dir> <variable>)
+
+	2.怎样添加动态库和静态库
+		target_link_libraries()
+
+	3.怎样在执行CMAKE时打印消息
+		message([SEND_ERROR | STATUS | FATAL_ERROR] "message to console" ...)
+
+	4.怎样指定'头文件&库文件'的搜索路径
+		include_directories()
+		link_directories()
+
+	5.怎样设置条件编译? (例如debug版的设置, 并且影响指定的子CMakelist.txt 路径
+		# 使用option command, eg:
+		option(debug_mode "msg: ON for debug, OFF for release" ON)
+		IF(debug_mode)
+			add_definitions(-DDEBUG)
+		ENDIF()
+
+	>> 使其生效的方法:
+		 首先cmake生成makefile, 然后make edit_cache编辑编译选项;
+		 Linux下会打开一个文本框, 可以更改, 该完后再make生成目标文件(emacs不支持make edit_cache)
+	>> 局限:
+		 这种方法不能直接设置生成的makefile, 而是必须使用命令在make前设置参数;
+		 对于debug、release版本, 相当于需要两个目录, 分别先cmake一次, 然后分别make edit_cache一次;
+	>> 期望的效果:
+		 在执行cmake时直接通过参数指定一个开关项, 生成相应的makefile(可以这样做, 例如cmake -DDEBUGVERSION=ON)
+
+	6.怎样添加编译宏定义
+		使用add_definitions()
+
+	7.怎样添加编译依赖项(必须保证依赖先安装进系统)
+		使用add_dependencies()
+
+	8.怎样指定目标文件目录
+		# 建立一个新的目录, 在该目录中执行cmake生成Makefile文件, 这样编译结果会保存在该目录
+		RUNTIME_OUTPUT_DIRECTORY("${BIN_DIR}")
+
+	9.怎样指定依赖的cmake版本
+		cmake_minimum_required(VERSION 2.6)
+
+	10.怎样打印make的输出
+	make VERBOSE=1
+
+
+
+
+
+#
+# c++版本支持检测(需要先指定了编译器, 才能检测出来信息)
+#
+IF(CMAKE_CXX_COMPILER_LOADED)
+	# 包含/usr/share/cmake-3.13/Modules/CheckCXXSourceCompiles.cmake
+	INCLUDE(CheckCXXCompilerFlag)
+
+	# 检查gcc 支持的c++ 版本
+	CHECK_CXX_COMPILER_FLAG(-std=c++2a SUPPORT_CPP20)
+	CHECK_CXX_COMPILER_FLAG(-std=c++11 SUPPORT_CPP11)
+	CHECK_CXX_COMPILER_FLAG(-std=c++0x SUPPORT_CPP0X)
+	IF(SUPPORT_CPP20)
+		# c++20
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
+		MESSAGE("* using flag -std=c++2a ")
+	ELSEIF(SUPPORT_CPP11)
+		# c++11
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+		MESSAGE("* using flag -std=c++11 ")
+	ELSEIF(SUPPORT_CPP0X)
+		# c++03
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+		MESSAGE("* using flag -std=c++0x ")
+	ELSE()
+		MESSAGE(FATAL_ERROR "unknow error: the compiler c++ version problems: ${CMAKE_CXX_COMPILER}")
+	ENDIF()
+ENDIF()
+
+
+
+#
+# 编译器版本检测(需要先指定了编译器, 才能检测出来信息)
+#
+# 检查是否装载c 编译器
+IF(CMAKE_C_COMPILER_LOADED)
+	MESSAGE("* CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
+	MESSAGE("* CMAKE_C_COMPILER_VERSION: ${CMAKE_C_COMPILER_VERSION}")
+ELSE()
+	#MESSAGE("* c compiler is not loaded ")
+	MESSAGE(FATAL_ERROR "STOP!! c compiler is not loaded;")
+ENDIF()
+# 检查是否装载c++ 编译器
+IF(CMAKE_CXX_COMPILER_LOADED)
+	MESSAGE("* CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+	MESSAGE("* CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
+ELSE()
+	#MESSAGE("* c++ compiler is not loaded ")
+	MESSAGE(FATAL_ERROR "STOP!! c++ compiler is not loaded;")
+ENDIF()
+# 当前使用的是否是交叉编译链
+MESSAGE("* CMAKE_CROSSCOMPILING: ${CMAKE_CROSSCOMPILING}")
+
+
+
