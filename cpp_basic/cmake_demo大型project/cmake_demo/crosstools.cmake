@@ -28,12 +28,15 @@ SET(CMAKE_FIND_ROOT_PATH ${TOOLCHAIN_HOME})
 
 # The second search path         [非必须]指定编译器--sysroot编译参数(CMAKE_SYSROOT只有在3.0以上的版本才有效)
 # 默认先搜索CMAKE_FIND_ROOT_PATH, 之后搜索CMAKE_SYSROOT, 最后搜索其他non-rooted路径;
-# 默认路径: /usr/x86_64-linux-gnu (很诡异, 这个路径下只有include)
-SET(CMAKE_SYSROOT ${TOOLCHAIN_HOME}/x86_64-linux-gnu)
+# 默认路径: / (即系统根路径, 一般来说, unix 永恒为: "/")
+SET(CMAKE_SYSROOT "/")
+# for test only
+#SET(CMAKE_SYSROOT ${TOOLCHAIN_HOME}/include/x86_64-linux-gnu)
+#MESSAGE("* CMAKE_SYSROOT=${CMAKE_SYSROOT} ")
 
 # C/C++ compiler path            [必需]编译器bin 路径
-#SET(CMAKE_C_COMPILER ${TOOLCHAIN_HOME}/bin/x86_64-linux-gnu-gcc)
-#SET(CMAKE_CXX_COMPILER ${TOOLCHAIN_HOME}/bin/x86_64-linux-gnu-g++)
+SET(CMAKE_C_COMPILER ${TOOLCHAIN_HOME}/bin/x86_64-linux-gnu-gcc)
+SET(CMAKE_CXX_COMPILER ${TOOLCHAIN_HOME}/bin/x86_64-linux-gnu-g++)
 
 SET(CMAKE_AR "${TOOLCHAIN_HOME}/bin/ar")
 SET(CMAKE_C_COMPILER_AR "${TOOLCHAIN_HOME}/bin/gcc-ar")

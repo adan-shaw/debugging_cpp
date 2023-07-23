@@ -16,7 +16,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.13 FATAL_ERROR)
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 
-
 # 指定交叉编译链(注: 这两条命令应该放在文件的开始位置(cmake_minimum_required命令之下, 在其他命令之上, 否则可能无效)
 INCLUDE(./crosstools.cmake)
 
@@ -31,7 +30,11 @@ GET_FILENAME_COMPONENT(FLODER_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
 # 设置生成目标'可执行exe文件'的名
 SET(target_name "obj_out")
-PROJECT(${target_name})
+PROJECT(
+	${target_name}
+	LANGUAGES CXX
+	VERSION "1.0.0"
+)
 
 # 显示项目主路径(即主CMakeLists.txt 所在地)
 MESSAGE("* HOME = ${PROJECT_SOURCE_DIR}")
@@ -57,36 +60,6 @@ ENDIF()
 # 	添加链接选项
 # 	添加编译target
 #
-
-
-
-# 包含*.cmake, 用INCLUDE()
-# 包含子文件夹中的CMakeLists.txt, 用INCLUDE_DIRECTORIES() [一个文件夹, 只有一个CMakeLists.txt]
-
-# 本层CMakeLists.txt 的结构描述体(描述本层目录的文件&文件夹详情)
-INCLUDE_DIRECTORIES(
-	.
-)
-
-# 添加包含'二级CMakeLists.txt'的子目录
-ADD_SUBDIRECTORY(dynamic_lib)
-ADD_SUBDIRECTORY(static_lib)
-ADD_SUBDIRECTORY(src1)
-ADD_SUBDIRECTORY(src2)
-
-
-
-# 当前目录下所有源文件赋给DIR_SRCS
-AUX_SOURCE_DIRECTORY(. DIR_SRCS)
-
-# 变量指明, 所有的头文件
-SET(SRC "../*.cpp")
-
-# 变量指明, 所有的源文件
-SET(HEAD "../*.h")
-
-# 变量指明,所有的.o文件
-SET(TMP_O "../*.o")
 
 
 
@@ -129,55 +102,124 @@ ENDIF()
 
 ########################################################
 
-# 指定库文件路径
+# 设置使用文件夹属性
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+
+
+# 包含*.cmake, 用INCLUDE()
+# 包含子文件夹中的CMakeLists.txt, 用INCLUDE_DIRECTORIES() [一个文件夹, 只有一个CMakeLists.txt]
+
+# 找头文件
+INCLUDE_DIRECTORIES(
+	.
+)
+
+# 找库文件(只找现成的)
 LINK_DIRECTORIES(
 	"./static_lib/"
 	"./dynamic_lib/"
 )
 
+
+
+# 添加子CMakeLists.txt(如果'子CMakeLists.txt'中, 有INCLUDE_DIRECTORIES()找头文件, 则等同于包含头文件)
+ADD_SUBDIRECTORY(dynamic_lib)
+ADD_SUBDIRECTORY(static_lib)
+
+# 当前目录下所有源文件赋给DIR_SRCS(简单项目, 会用)
+#AUX_SOURCE_DIRECTORY(. DIR_SRCS)
+
+# 自定义搜索: 源文件(复杂项目会用)
+file(GLOB static_lib_h ./static_lib/headfile/*.h)
+file(GLOB static_lib_src ./static_lib/*.cpp)
+file(GLOB dynamic_lib_h ./dynamic_lib/headfile/*.h)
+file(GLOB dynamic_lib_src ./dynamic_lib/*.cpp)
+
+# for test only
+#MESSAGE("* headfile: ${static_lib_h}")
+#MESSAGE("* src_file: ${static_lib_src}")
+
 # 添加生成目标='共享链接库', 并自动编译生成: 
-# target=静态.a
-ADD_LIBRARY("./static_lib/static_lib.a" STATIC "./static_lib/static_lib.cpp")
-SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "static_lib")
+# target=静态.a [.a 静态链接库不需要链接, 就可以生成]
+ADD_LIBRARY("static" STATIC ${static_lib_src} ${static_lib_h} )
+SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libstatic.a")
+SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.0 SOVERSION 1)
+
+ADD_LIBRARY("static2" STATIC ${static_lib_src} ${static_lib_h} )
+SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libstatic2.a")
 SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.2 SOVERSION 1)
 
-ADD_LIBRARY("./static_lib/static_lib2.a" STATIC "./static_lib/static_lib2.cpp")
-SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "static_lib2")
-SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.2 SOVERSION 1)
+# target=动态.so (必须要链接, 才能生成.so 共享链接库)
+ADD_LIBRARY("dynamic" SHARED ${dynamic_lib_src} ${dynamic_lib_h} )
+SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libdynamic.so")
+SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.1 SOVERSION 1)
 
-# target=动态.so
-ADD_LIBRARY("./dynamic_lib/libdynamic.so" SHARED "./dynamic_lib/libdynamic.cpp")
-SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libdynamic")
-SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.2 SOVERSION 1)
+# 查找./dynamic_lib/static_lib.a 文件是否存在
+FIND_FILE(isExist_static_lib static_lib.a ./static_lib/)
+IF(NOT isExist_static_lib)
+	MESSAGE(FATAL_ERROR "./static_lib/static_lib.a not found")
+ENDIF()
+
+# 查找./dynamic_lib/static_lib2.a 文件是否存在
+FIND_FILE(isExist_static_lib2 static_lib2.a ./static_lib/)
+IF(NOT isExist_static_lib2)
+	MESSAGE(FATAL_ERROR "./static_lib/static_lib2.a not found")
+ENDIF()
+
+# 指认生成的library 文件所需的.a/.so 共享链接库
+# (实际上libdynamic.so 不需要任何依赖库, 只是展示LINK_LIBRARIES() 的用途)
+LINK_LIBRARIES(
+	libdynamic.so 
+	${PROJECT_SOURCE_DIR}/build/libstatic.a 
+	${PROJECT_SOURCE_DIR}/build/libstatic2.a
+)
 
 
 
-# 指认生成的target .exe 文件所需的.a/.so 链接库.
-TARGET_LINK_LIBRARIES(${target_name} static_lib.a)
-TARGET_LINK_LIBRARIES(${target_name} static_lib2.a)
-TARGET_LINK_LIBRARIES(${target_name} libdynamic.so)
+# 添加包含'二级CMakeLists.txt'的子目录
+ADD_SUBDIRECTORY(src1)
+ADD_SUBDIRECTORY(src2)
+
+# 自定义搜索: 源文件(复杂项目会用)
+file(GLOB Srcs ./*.cpp ./src1/*.cpp ./src2/*.cpp )
+
+# 自定义搜索: 头文件(复杂项目会用)
+file(GLOB Incs ./*.h ./dynamic_lib/*.h ./src1/*.h ./src2/*.h ./static_lib/*.h)
+
+# add resource (qt 项目可能会用)
+#set(RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/SiltSLAM.qrc)
+#qt5_add_resources(RESOURCE_ADDED ${RESOURCE})
 
 # 添加生产目标='.o 半成品-可执行程序', 并自动编译生成:
 # target=.o
-ADD_EXECUTABLE(${target_name} ${DIR_SRCS})
+ADD_EXECUTABLE(${target_name} ${Srcs} ${Incs})
 
-# 执行编译各个.a 子静态库
-#ADD_EXECUTABLE("g++ -c static_lib2.cpp")
-#ADD_EXECUTABLE("g++ -c static_lib2.cpp")
-#ADD_EXECUTABLE("ar cr static_lib.a static_lib.o")
-#ADD_EXECUTABLE("ar cr static_lib2.a static_lib2.o")
+# 查找./dynamic_lib/lib_dynamic.so 文件是否存在
+FIND_FILE(isExist_lib_dynamic lib_dynamic.so ./dynamic_lib/)
+IF(NOT isExist_lib_dynamic)
+	MESSAGE(FATAL_ERROR "./dynamic_lib/lib_dynamic.so not found")
+ENDIF()
+
+# 指认生成的target .exe 文件所需的.so 共享链接库
+TARGET_LINK_LIBRARIES(
+	${target_name} 
+	${PROJECT_SOURCE_DIR}/static_lib/static_lib.a 
+	${PROJECT_SOURCE_DIR}/static_lib/static_lib2.a 
+	${PROJECT_SOURCE_DIR}/dynamic_lib/dynamic_lib.so
+)
 
 ########################################################
 
 
 
-# 生成Makefile后, 运行make test 来执行测试
-ADD_TEST(test1 ${target_name} "fuck you 参数")
-ADD_TEST(test2 ${target_name} "fuck you 参数2")
-# 如果没有在'同一个'CMakeLists.txt中, 打开ENABLE_TESTING()指令,
-# 任何ADD_TEST()都是无效的.
 
-# 打开make test 开关
+
+# 生成Makefile后, 运行make test 来执行测试
+ADD_TEST(test1 ${target_name} "love you 参数")
+ADD_TEST(test2 ${target_name} "love you 参数2")
+
+# 打开make test 开关(如果没有在'同一个'CMakeLists.txt中, 打开ENABLE_TESTING()指令, 则任何ADD_TEST()都是无效的)
 ENABLE_TESTING()
 
 

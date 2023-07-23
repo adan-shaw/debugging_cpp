@@ -92,6 +92,7 @@
 
 
 3.内部变量
+	CMAKE_SYSROOT           # host 系统根路径, 一般为: "/"
 	CMAKE_C_COMPILER        # 指定C编译器
 	CMAKE_CXX_COMPILER      # 指定C++编译器
 	CMAKE_C_FLAGS           # 指定编译C选项, 如-g(也可以通过add_definitions添加编译选项)
@@ -197,28 +198,25 @@
 
 	link_directories(${HOME_DIR}/library)       # 动态链接库or 静态链接库的搜索路径, 相当于gcc的-L参数
 
-	target_link_libraries(x -pthread)           # 添加为target动态链接库, 相同于指定-l参数
+	target_link_libraries(x -pthread)           # 添加为target动态链接库, 相同于指定-l参数(必须用${PROJECT_SOURCE_DIR} 绝对路径, 唯一的巨坑)
 
-	link_libraries(x pthread.a)                 # 添加为target静态链接库, 相同于指定-l参数
+	link_libraries(x.a pthread.a)               # 添加为library静态链接库, 相同于指定-l参数(必须用${PROJECT_SOURCE_DIR} 绝对路径, 唯一的巨坑)
+	link_libraries(x.so pthread.a)
 
 	add_subdirectory(${HOME_DIR}/son_dir)       # 包含子目录
 
 	add_executable(x demo.cpp)                  # 指定编译生成exe可执行程序, 相当于gcc的-o参数
 
-	add_library(x.a STATIC demo.cpp)            # 指定编译生成target=静态库.a
-
-	add_library(x.so SHARED demo.cpp)           # 指定编译生成target=动态库.so
+	add_library(x.a STATIC demo.cpp)            # 指定编译生成target=静态库.a, .a然后添加到工程中去
+																							# OBJECT = 生产后, 不添加到工程中去
+	add_library(x.so SHARED demo.cpp)           # 指定编译生成target=动态库.so, .so然后添加到工程中去
 
 	add_definitions(-DDEBUG)                    # 添加编译参数
 	add_definitions("-Wall -ansi -pedantic -g3")
 
-	注意:
-		在cmake语法中, link_libraries和target_link_libraries是很重要的两个链接库的方式, 虽然写法上很相似, 但功能上有很大区别:
-		-1.link_libraries()用在add_executable()之前, 
-			 target_link_libraries()用在add_executable()之后;
-		-2.link_libraries()用来链接静态库, 
-			 target_link_libraries()用来链接导入库;
-			 (即按照header file + .lib + .dll方式隐式调用动态库的.lib库)
+	target_include_directories(x PUBLIC ${CMAKE_SOURCE_DIR}/public) # 添加头文件目录
+
+	target_compile_options(x PUBLIC -Wall)      # 添加编译选项-Wall
 
 
 
