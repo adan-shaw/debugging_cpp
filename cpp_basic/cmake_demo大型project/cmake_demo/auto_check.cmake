@@ -16,7 +16,8 @@ MESSAGE("* cmake version: ${CMAKE_MINOR_VERSION}")
 # 补丁版本好, 0
 MESSAGE("* cmake version: ${CMAKE_PATCH_VERSION}")
 
-
+# 显示'系统环境'变量: $PATH (使用 $ENV{NAME} 指令就可以显示'系统的环境变量'的字符串了)
+MESSAGE("PATH 路径: $ENV{PATH}")
 
 # 检查操作系统info
 IF(WIN32)

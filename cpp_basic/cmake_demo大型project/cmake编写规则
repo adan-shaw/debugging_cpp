@@ -191,29 +191,34 @@
 4.常用命令:
 	set(HOME_DIR "/home/adan/project_home")
 
-	project(x)              # 指定生成的exe 文件
+	project(x)                                  # 指定生成的exe 文件
 
 	include_directories(${HOME_DIR}/headfile)   # 指定头文件的搜索路径, 相当于gcc的-I参数
 
 	link_directories(${HOME_DIR}/library)       # 动态链接库or 静态链接库的搜索路径, 相当于gcc的-L参数
 
-	target_link_libraries(x -pthread)           # 添加链接库, 相同于指定-l参数(单个target x 添加-pthread)
+	target_link_libraries(x -pthread)           # 添加为target动态链接库, 相同于指定-l参数
 
-	link_libraries(-pthread)                    # 添加链接库, 相同于指定-l参数(所有target x x2 x3 添加-pthread, 如果有多个target 的话)
+	link_libraries(x pthread.a)                 # 添加为target静态链接库, 相同于指定-l参数
 
 	add_subdirectory(${HOME_DIR}/son_dir)       # 包含子目录
 
 	add_executable(x demo.cpp)                  # 指定编译生成exe可执行程序, 相当于gcc的-o参数
 
-	add_library(x.a demo.cpp)                   # 指定编译生成静态库.a
+	add_library(x.a STATIC demo.cpp)            # 指定编译生成target=静态库.a
+
+	add_library(x.so SHARED demo.cpp)           # 指定编译生成target=动态库.so
 
 	add_definitions(-DDEBUG)                    # 添加编译参数
 	add_definitions("-Wall -ansi -pedantic -g3")
 
 	注意:
-		gcc 命令的本质demo: gcc -g3 -lpthread ./demo.cpp -o x
-		本质上就是对targer x, 添加-lpthread
-		但有时候, 会碰到编译出多个target 的情况, 这时候可能会用到link_libraries(), 应该比较少用!!
+		在cmake语法中, link_libraries和target_link_libraries是很重要的两个链接库的方式, 虽然写法上很相似, 但功能上有很大区别:
+		-1.link_libraries()用在add_executable()之前, 
+			 target_link_libraries()用在add_executable()之后;
+		-2.link_libraries()用来链接静态库, 
+			 target_link_libraries()用来链接导入库;
+			 (即按照header file + .lib + .dll方式隐式调用动态库的.lib库)
 
 
 

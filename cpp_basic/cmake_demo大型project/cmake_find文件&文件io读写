@@ -1,0 +1,83 @@
+#
+# 1.查找宏(找不到会自动中断'cmake 程序')
+# 
+
+# *1.查找'文件'是否存在('path路径'必须指定具体文件名):
+FIND_FILE(<VAR> name1 path1 path2 ...)
+
+# *2.查找'.a/.so 库文件'是否存在('path路径'必须指定具体文件名)
+FIND_LIBRARY(<VAR> name1 path1 path2 ...)
+
+# *3.查找'文件夹'是否存在
+FIND_PATH(<VAR> name1 path1 path2 ...)
+
+# *4.查找'程序bin'是否存在(证明该程序安装了,并且在/bin or /usr/bin 这种,可全局执行)
+FIND_PROGRAM(<VAR> name1 path1 path2 ...)
+
+# *5.查找'模块'是否存在
+# 用来调用预定义在CMAKE_MODULE_PATH下的Find<name>.cmake模块, 你也可以自己定义Find<name>模块, 
+# 通过SET(CMAKE_MODULE_PATH dir)将其放入工程的某个目录中, 供工程使用.
+FIND_PACKAGE(<name> [major.minor] [QUIET][NO_MODULE] [[REQUIRED|COMPONENTS] [componets...]])
+
+
+
+#
+# 示例:
+#
+
+# 查找./dynamic_lib/lib_dynamic.so 文件是否存在
+FIND_FILE(isExist_lib_dynamic lib_dynamic.so ./dynamic_lib/)
+IF(NOT isExist_lib_dynamic)
+	MESSAGE(FATAL_ERROR "./dynamic_lib/lib_dynamic.so not found")
+ENDIF()
+
+# 查找./dynamic_lib/static_lib.a 文件是否存在
+FIND_FILE(isExist_static_lib static_lib.a ./static_lib/)
+IF(NOT isExist_static_lib)
+	MESSAGE(FATAL_ERROR "./static_lib/static_lib.a not found")
+ENDIF()
+
+# 查找./dynamic_lib/static_lib2.a 文件是否存在
+FIND_FILE(isExist_static_lib2 static_lib2.a ./static_lib/)
+IF(NOT isExist_static_lib2)
+	MESSAGE(FATAL_ERROR "./static_lib/static_lib2.a not found")
+ENDIF()
+
+# 查找/lib/x86_64-linux-gnu/libc.so.6 库是否存在
+FIND_LIBRARY(glibc_runtime libc.so.6 /lib/x86_64-linux-gnu)
+IF(NOT glibc_runtime)
+	MESSAGE(FATAL_ERROR "glibc_runtime not found")
+ENDIF()
+
+
+
+
+
+
+
+
+#
+# 2.cmake 文件读写操作指令:
+#
+# 写操作: 如果文件已经存在,则覆盖;如果不存在,则创建;
+FILE(WRITE readme "All rights (are) reserved.\n")
+
+# 追加操作: 在已经存在的文件最后, 追加字符串.
+FILE(APPEND readme "adan_shaw@qq.com")
+
+
+# 读操作: 以'文本格式'读取数据, 读取10个字符串, 从0位置开始
+FILE(READ readme text10 10 0)
+MESSAGE(text10)
+
+
+# 读操作: 以行读取的方式, 存储到变量list中. 一个list元素 = 一行字符
+FILE(STRINGS readme line1)
+MESSAGE(line1)
+
+
+
+
+
+
+

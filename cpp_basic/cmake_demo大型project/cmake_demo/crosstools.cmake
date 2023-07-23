@@ -48,7 +48,8 @@ SET(CMAKE_LINKER "${TOOLCHAIN_HOME}/bin/ld")
 
 
 # The install path               [非必须]cmake执行install目标时默认路径
-SET(CMAKE_INSTALL_PREFIX /home/adan/)
+#SET(CMAKE_INSTALL_PREFIX /home/adan/)
+SET(CMAKE_INSTALL_PREFIX "./build")
 
 
 
