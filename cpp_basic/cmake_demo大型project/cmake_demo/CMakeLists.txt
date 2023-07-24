@@ -115,10 +115,10 @@ INCLUDE_DIRECTORIES(
 	.
 )
 
-# 找库文件(只找现成的)
+# 找库文件( 只找现成的, 可以用: ${PROJECT_SOURCE_DIR} )
 LINK_DIRECTORIES(
-	"./static_lib/"
-	"./dynamic_lib/"
+	"./static_lib"
+	"./dynamic_lib"
 )
 
 
@@ -142,37 +142,37 @@ file(GLOB dynamic_lib_src ./dynamic_lib/*.cpp)
 
 # 添加生成目标='共享链接库', 并自动编译生成: 
 # target=静态.a [.a 静态链接库不需要链接, 就可以生成]
-ADD_LIBRARY("static" STATIC ${static_lib_src} ${static_lib_h} )
-SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libstatic.a")
+ADD_LIBRARY("_static" STATIC ${static_lib_src} ${static_lib_h} )
+SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "lib_static.a")
 SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.0 SOVERSION 1)
 
-ADD_LIBRARY("static2" STATIC ${static_lib_src} ${static_lib_h} )
-SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libstatic2.a")
+ADD_LIBRARY("_static2" STATIC ${static_lib_src} ${static_lib_h} )
+SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "lib_static2.a")
 SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.2 SOVERSION 1)
 
 # target=动态.so (必须要链接, 才能生成.so 共享链接库)
-ADD_LIBRARY("dynamic" SHARED ${dynamic_lib_src} ${dynamic_lib_h} )
-SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "libdynamic.so")
+ADD_LIBRARY("_dynamic" SHARED ${dynamic_lib_src} ${dynamic_lib_h} )
+SET_TARGET_PROPERTIES(PROPERTIES OUTPUT_NAME "lib_dynamic.so")
 SET_TARGET_PROPERTIES(PROPERTIES VERSION 1.1 SOVERSION 1)
 
-# 查找./dynamic_lib/static_lib.a 文件是否存在
-FIND_FILE(isExist_static_lib static_lib.a ./static_lib/)
+# 查找./dynamic_lib/lib_static.a 文件是否存在
+FIND_FILE(isExist_static_lib lib_static.a ./static_lib/)
 IF(NOT isExist_static_lib)
-	MESSAGE(FATAL_ERROR "./static_lib/static_lib.a not found")
+	MESSAGE(FATAL_ERROR "./static_lib/lib_static.a not found")
 ENDIF()
 
-# 查找./dynamic_lib/static_lib2.a 文件是否存在
-FIND_FILE(isExist_static_lib2 static_lib2.a ./static_lib/)
+# 查找./dynamic_lib/lib_static2.a 文件是否存在
+FIND_FILE(isExist_static_lib2 lib_static2.a ./static_lib/)
 IF(NOT isExist_static_lib2)
-	MESSAGE(FATAL_ERROR "./static_lib/static_lib2.a not found")
+	MESSAGE(FATAL_ERROR "./static_lib/lib_static2.a not found")
 ENDIF()
 
-# 指认生成的library 文件所需的.a/.so 共享链接库
-# (实际上libdynamic.so 不需要任何依赖库, 只是展示LINK_LIBRARIES() 的用途)
+# 指认生成的library 文件所需的.a/.so 共享链接库(会自动根据命名规则libxxx.so 来获取-l 编译选项, 不用操心)
+# (实际上lib_dynamic.so 不需要任何依赖库, 只是展示LINK_LIBRARIES() 的用途)
 LINK_LIBRARIES(
-	libdynamic.so 
-	${PROJECT_SOURCE_DIR}/build/libstatic.a 
-	${PROJECT_SOURCE_DIR}/build/libstatic2.a
+	lib_dynamic.so
+	${PROJECT_SOURCE_DIR}/build/lib_static.a
+	${PROJECT_SOURCE_DIR}/build/lib_static2.a
 )
 
 
@@ -185,7 +185,7 @@ ADD_SUBDIRECTORY(src2)
 file(GLOB Srcs ./*.cpp ./src1/*.cpp ./src2/*.cpp )
 
 # 自定义搜索: 头文件(复杂项目会用)
-file(GLOB Incs ./*.h ./dynamic_lib/*.h ./src1/*.h ./src2/*.h ./static_lib/*.h)
+file(GLOB Incs ./*.h ./dynamic_lib/headfile/*.h ./src1/*.h ./src2/*.h ./static_lib/headfile/*.h)
 
 # add resource (qt 项目可能会用)
 #set(RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/SiltSLAM.qrc)
@@ -201,12 +201,20 @@ IF(NOT isExist_lib_dynamic)
 	MESSAGE(FATAL_ERROR "./dynamic_lib/lib_dynamic.so not found")
 ENDIF()
 
+# 手动添加编译选项-l
+set_target_properties(
+	${target_name}
+	PROPERTIES
+	#LINK_OPTIONS "-l_static -l_static2 -l_dynamic"
+	LINK_FLAGS "-l_static -l_static2 -l_dynamic"
+)
+
 # 指认生成的target .exe 文件所需的.so 共享链接库
 TARGET_LINK_LIBRARIES(
-	${target_name} 
-	${PROJECT_SOURCE_DIR}/static_lib/static_lib.a 
-	${PROJECT_SOURCE_DIR}/static_lib/static_lib2.a 
-	${PROJECT_SOURCE_DIR}/dynamic_lib/dynamic_lib.so
+	${target_name}
+	${PROJECT_SOURCE_DIR}/static_lib/lib_static.a
+	${PROJECT_SOURCE_DIR}/static_lib/lib_static2.a
+	${PROJECT_SOURCE_DIR}/dynamic_lib/lib_dynamic.so
 )
 
 ########################################################

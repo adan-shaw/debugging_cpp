@@ -36,3 +36,12 @@ cmake .. -D CMAKE_BUILD_TYPE=Debug -Wdev
 		但cmake 十分诡异, 如果后面的语句有问题, 甚至会导致cmake 运行过程中, gcc/g++ 编译器都找不到, 非常痛苦;
 		编写cmake 真的一句一句添加比较可靠, 如果实在不行的话;
 !
+
+
+
+# 运行编译成功后的文件
+cd build
+make
+
+home=$(pwd)
+/bin/sh -c "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$home $home/obj_out"

@@ -199,7 +199,7 @@
 	link_directories(${HOME_DIR}/library)       # 动态链接库or 静态链接库的搜索路径, 相当于gcc的-L参数
 
 	target_link_libraries(x -pthread)           # 添加为target动态链接库, 相同于指定-l参数(必须用${PROJECT_SOURCE_DIR} 绝对路径, 唯一的巨坑)
-
+																							# (会自动根据命名规则libxxx.so 来获取-l 编译选项, 不用操心)
 	link_libraries(x.a pthread.a)               # 添加为library静态链接库, 相同于指定-l参数(必须用${PROJECT_SOURCE_DIR} 绝对路径, 唯一的巨坑)
 	link_libraries(x.so pthread.a)
 
@@ -211,12 +211,14 @@
 																							# OBJECT = 生产后, 不添加到工程中去
 	add_library(x.so SHARED demo.cpp)           # 指定编译生成target=动态库.so, .so然后添加到工程中去
 
-	add_definitions(-DDEBUG)                    # 添加编译参数
-	add_definitions("-Wall -ansi -pedantic -g3")
-
-	target_include_directories(x PUBLIC ${CMAKE_SOURCE_DIR}/public) # 添加头文件目录
+	add_definitions(-DDEBUG)                    # 添加编译宏
+	add_definitions("-Wall -ansi -pedantic -g3")# 也可以用来添加编译选项?
 
 	target_compile_options(x PUBLIC -Wall)      # 添加编译选项-Wall
+
+	target_include_directories(x PUBLIC ${CMAKE_SOURCE_DIR}/public)                  # 添加头文件目录
+
+	set_target_properties(x PROPERTIES LINK_FLAGS "-l_static -l_static2 -l_dynamic") # 添加链接库选项
 
 
 

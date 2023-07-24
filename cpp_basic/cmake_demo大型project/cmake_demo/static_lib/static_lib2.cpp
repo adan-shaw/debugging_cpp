@@ -1,5 +1,5 @@
 //编译:
-//		g++ -c static_lib2.cpp; ar cr static_lib2.a static_lib2.o
+//		g++ -c static_lib2.cpp; ar cr lib_static2.a static_lib2.o
 
 #include <stdio.h>
 int static_lib_f2(void){
