@@ -1,3 +1,4 @@
+//#inlcude <stdbool.h>
 //
 // '常用的嵌入式-位操作宏'
 //
@@ -25,7 +26,8 @@
 
 
 /* 判断x 的第n位bit是否为1, 是就返回true(一般不这样用, 这个宏会触发2次if, 只做示范, 不推荐使用) */
-#define IF_BIT(x, bit) (((x) & (1 << (bit))) ? true : false)
+//#define IF_BIT(x, bit) (((x) & (1 << (bit))) ? true : false)
+#define IF_BIT(x, bit) (((x) & (1 << (bit))) ? 1 : 0)
 /*
 一般用法(直接if):
 	if(x & (1 << bit)){
