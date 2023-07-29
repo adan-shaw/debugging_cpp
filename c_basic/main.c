@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
 				break;
 			case 'n':
 				//str to number
-				options.flags = (unsigned int)strtoul(optarg, NULL, 16);
+				options.flags = (unsigned int)strtoul(optarg, NULL, 0);
 				break;
 			case 'v':
 				options.val += 1;
