@@ -1,0 +1,49 @@
+#
+# 1.gdb 启动之后, 用gdb 命令进行装载
+#
+
+首先确定:
+	你调试的.cpp 文件, 哪个API 报错, 需要找到glibc 源文件, 例如:
+		随机数API initstate_r() 出错, 发现:
+			random_r.c: No such file or directory.
+
+	此时, 你需要去到glibc 源码目录下, find 查找:
+		cd /usr/src/glibc/glibc-2.28
+		find . -name "random_r.c"
+
+	结果找到random_r.c 在stdlib中:
+		/usr/src/glibc/glibc-2.28/stdlib
+
+
+
+	那么, 执行gdb 命令:
+		directory /usr/src/glibc/glibc-2.28/stdlib
+
+
+
+
+
+
+
+#
+# 2.修改gdb 配置文件
+#
+如果项目太大, 想要配置大量gdb 启动命令, 可以直接配置: ~/.gdbinit
+这样gdb 启动之后, 就会自动装载这些语句了.
+例如:
+	你需要调试: directory /usr/src/glibc/glibc-2.28/stdlib
+	那么直接:
+		echo "directory /usr/src/glibc/glibc-2.28/stdlib" >> ~/.gdbinit
+		(可以添加多句)
+	这样就可以实现, 用gdb 调试大规模程序了.
+	而不需要每一次都重复输入gdb 配置命令
+
+
+	小程序, 一般不需要这么搞.
+
+	daemon 程序, 也可以设置--args 启动参数, 这样更快捷, 不需要重复修改, 
+	直接启动: gdb ./x
+	就可以直接调试daemon 程序了.
+
+	所以, 其实调试一次, 就需要修改一次' ~/.gdbinit '
+	一个项目一个'~/.gdbinit'是很正常的事情.

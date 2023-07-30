@@ -1,0 +1,4 @@
+# gcc 编译时, 依赖ldd 工具进行链接, 链接到glibc 中.
+# 你可以查看ldd --version, 来获取ldd 绑定的glibc版本信息.
+
+ldd --version
