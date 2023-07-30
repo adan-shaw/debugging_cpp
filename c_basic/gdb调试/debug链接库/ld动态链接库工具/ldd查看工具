@@ -1,0 +1,92 @@
+*
+* 0.ldd 常用命令:
+*
+# 快捷命令(ldd 本身就一个功能, 就是查看'.so动态共享链接库'的依赖关系):
+ldd ./x
+
+
+
+--help:	 显示帮助信息
+--version:打印指令版本号
+
+
+
+-v:详细信息模式, 打印所有相关信息(显示'程序'执行过程中, 使用过的所有so 库信息和过程);
+ldd -v ./x
+
+
+-u:打印未使用的直接依赖(显示'程序'执行过程中, 包含了但没有使用的so 库);
+ldd -u ./x
+
+
+-d:执行重定位和报告任何丢失的对象(对'程序'所有的so 库重定位, 报告丢失的so 库);
+ldd -d ./x
+
+
+-r:执行数据对象和函数的重定位, 并且报告任何丢失的对象和函数(单纯只是-d 的超集);
+ldd -r ./x
+
+
+
+
+
+
+
+
+
+*
+* 1.ldd 工具使用概述:
+*
+ldd 工具, 主要用来查看'.so动态共享链接库'的依赖关系, 是否完整.
+如果依赖关系不完整, 就会出现==> not found
+
+有时候, 程序找不到'.so动态共享链接库', 但你却在:
+	./
+	/lib
+	/usr/lib
+	/usr/local/lib
+	中找到了该'.so动态共享链接库', 说明该'.so动态共享链接库'还没被系统收纳, 
+	你需要强行刷新一下ld装载器:
+		ldconfig
+
+
+
+
+
+
+
+
+*
+* 2.ldd 工作原理:
+*
+2.1)
+	ldd不是一个可执行程序, 而只是一个'shell脚本'.
+	ldd能够显示可执行模块的dependency(所属), 其原理是通过设置一系列的环境变量, 如下:
+		LD_TRACE_LOADED_OBJECTS、
+		LD_WARN、
+		LD_BIND_NOW、
+		LD_LIBRARY_VERSION、
+		LD_VERBOSE等. 
+
+	例如:
+		当LD_TRACE_LOADED_OBJECTS环境变量不为空时, 
+		任何可执行程序在运行时, 它都会只显示模块的dependency(所属), 而程序并不真正执行. 
+		要不你可以在shell终端测试一下, 如下: 
+			export LD_TRACE_LOADED_OBJECTS=1 
+		再执行任何的程序, 如ls等, 看看程序的运行结果. 
+
+	当然,ldd 提供更多信息显示, 远比LD_TRACE_LOADED_OBJECTS 好用, 稍后介绍.
+
+
+
+2.2)
+	ldd显示可执行模块的dependency(所属)的工作原理, 其实质是通过ld-linux.so(elf动态库的装载器)来实现的. 
+	我们知道, ld-linux.so模块会先于executable模块程序工作, 并获得控制权, 
+	因此当上述的那些环境变量被设置时, ld-linux.so选择了显示可执行模块的dependency(所属).
+	实际上可以直接执行ld-linux.so模块, 如:
+		/lib/ld-linux.so.2 --list program(这相当于ldd program)
+		(debian 下是: /lib64/ld-linux-x86-64.so.2)
+
+
+
+

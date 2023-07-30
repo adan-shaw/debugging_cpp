@@ -1,0 +1,172 @@
+<< gdb 字符串是逐个扫描匹配的, Tab 可以补全 !! 
+	 按两下Tab 可以弹出候选词, great >>
+
+
+
+1.<gdb 快速简单使用>
+
+#1.1 装载文件
+gdb ./obj_out #gdb && file ./obj_out
+
+# 装载core 核心转存文件
+gdb ./obj_out core.11127
+
+# 附加运行
+gdb ./obj_out 11237
+
+# 弹出小窗, 用来显示运行中的10 行代码, 永久显示, 很好用(winheight)
+  (中文全部失效, 乱码)
+  (上, 下, 左, 右 方向键, 还能移动窗口位置, 可以直接当成阅读器使用)
+  (鼠标滚轮同样可以上下滚动代码)
+  (但上, 下 方向键不能再显示上一条操作命令了)
+  (list, u 等命令仍然可以影响小窗的视觉位置)
+wh
+
+# 打断程序运行, 回到gdb 命令输入状态, 你可以重新设置断点
+Ctrl + C
+
+
+
+#1.2 设置断点(必须设置断点才叫调试吧, 放心, 行数绝对准确, 你想在代码中哪行设置断点, 就直接断点哪行就行)
+# 断点123 行(break)
+b 123
+
+# 查看所有断点 (info breakpoints)
+info b
+
+# 删除断点(delete)
+del 1
+
+# 默认删除第一个断点, 可以指定删除第n 个(clear)
+cle
+
+
+
+#1.3 运行程序
+# 执行程序, 跑到断点处(run)--不能加行号
+r
+
+# 只要程序被断点撞停, u 可以[定位]任意的程序位置(until)
+u 128
+
+# 查看当前断点的位置, 在哪个函数, 哪一行(backtrace)
+bt
+# 与bt 一样, 在哪个函数, 哪一行
+where
+
+# 下一步(next)
+n
+
+# 深入式的下一步(step)--别对公共api 做这个, 对自己封装的函数可以跳进去看看
+s
+
+# 结束step 深入的函数, 结束当前函数(finish)--经常与step 连用
+f
+
+# 继续运行程序, 直至碰到断点(continue)
+c
+
+# 命令强制当前函数返回0(return)
+ret 0
+
+
+
+#1.4 查看/打印, 断点处的[变量/源代码]信息
+# 打印tmp 变量的值(等价于: print tmp, 可以同样用Tab 来不全变量名)
+p tmp
+
+# 将tmp 变量的值+1, 再显示(修改正在运行的程序的值)
+p ++tmp
+
+# 查看附近的源代码
+list +
+# 查看fun1 函数附近的10 行代码
+list fun1
+
+# 查询变量类型(whatis)
+wha tmp
+# 查询函数的[输入参数&&返回值]的类型
+whatis fun1
+
+# 查看设置好的参数
+show args
+
+
+
+#1.5 查看/打印, 变量的类型信息(可打印普通类型, 结构体, 类等信息)
+ptype tmp
+
+
+
+#1.6 修改, 断点处的[变量值]
+# 直接调用系统api, [不需要当前位置有这个函数], 显示返回值
+call getppid()
+
+# 直接令tmp 变量获取ppid 的值, 不需要当前位置有getppid() 这个函数, 返回值直接赋值给tmp
+set tmp=getppid()
+
+# 令tmp=1
+set tmp=1
+
+# 直接结束当前函数, 返回0
+return 0
+# 直接结束当前函数, 返回tmp 变量的值
+return tmp
+
+# 设置'被调试程序的运行参数'
+set args -i 123 -o 222
+
+
+
+#1.7 预装载参数调试
+gdb --args ./x -l srv.log -i 192.168.56.99 -p 6666
+
+
+
+#1.8 全局查看info 命令列表
+info address -- Describe where symbol SYM is stored
+info all-registers -- List of all registers and their contents
+info args -- Argument variables of current stack frame
+info auto-load -- Print current status of auto-loaded files
+info auxv -- Display the inferior's auxiliary vector
+info bookmarks -- Status of user-settable bookmarks
+info breakpoints -- Status of specified breakpoints (all user-settable breakpoints if no argument)
+info checkpoints -- IDs of currently known checkpoints
+info classes -- All Objective-C classes
+info common -- Print out the values contained in a Fortran COMMON block
+info copying -- Conditions for redistributing copies of GDB
+info dcache -- Print information on the dcache performance
+info display -- Expressions to display when program stops
+info exceptions -- List all Ada exception names
+info extensions -- All filename extensions associated with a source language
+info files -- Names of targets and files being debugged
+info float -- Print the status of the floating point unit
+info frame -- All about selected stack frame
+info frame-filter -- List all registered Python frame-filters
+info functions -- All function names
+
+# 来查看程序的是否在运行, 进程号, 被暂停的原因
+info program
+
+# 显示当前堆栈页的所有变量
+info locals
+
+
+
+
+
+#2.x 杂项
+**分割窗口**
+layout:       用于分割窗口, 可以一边查看代码, 一边测试: 
+layout src:   显示源代码窗口
+layout asm:   显示反汇编窗口
+layout regs:  显示源代码/反汇编和CPU寄存器窗口
+layout split: 显示源代码和反汇编窗口
+Ctrl + L:     刷新窗口
+
+
+#未知项: 改变堆栈显示的深度?
+up/down
+
+
+
