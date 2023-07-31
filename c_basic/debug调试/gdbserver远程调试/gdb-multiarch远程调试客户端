@@ -1,0 +1,53 @@
+ubuntu ip: 192.168.2.202
+arm    ip: 192.168.2.200
+
+可执行程序名: x.exe
+coredump文件名: core.QThread.998.1603867475
+
+
+
+# 将可执行文件.exe 发送到arm 板子上(用局域网scp 发过去, ftp 亦可;)
+scp -P 22 ./x.exe 192.168.2.200:/home/adan
+
+
+
+# arm 端启动gdbserver
+gdbserver 192.168.2.202:1234 ./x.exe
+#gdbserver 127.0.0.1:1234 ./x.exe
+
+
+
+# (使用gdb 亦可远程调试, 只是gdb-multiarch 支持的平台很多, 详情请看: gdb的multiarch-软件开发平台及语言笔记大全(超详细).html)
+
+# 启动gdb-multiarch
+gdb-multiarch
+
+# ubuntu PC 端使用gdb-multiarch远程连接到gdbserver
+target remote 192.168.2.202:1234
+#target remote 127.0.0.1:1234
+
+
+
+#
+# 调试过程
+#
+1.先设置断点, gdbserver 不支持r 命令
+b main
+
+2.直接选择c 继续
+c
+
+3.然后使用n 逐句运行
+n
+n
+n
+
+4.s 进入函数
+s
+
+5.f 退出函数, 立即返回
+f
+
+6.p 打印变量值
+p tmp
+
