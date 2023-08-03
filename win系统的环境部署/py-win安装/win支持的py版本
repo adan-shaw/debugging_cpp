@@ -1,0 +1,27 @@
+从python 版本支持看出:
+	python 2.7
+	python 3.7 的重要性;
+
+	debian10, windows 都支持python 2.7, python 3.7, 其他版本都难以支持;
+	因此, 在2018-2020 这段时间内, 开源世界里面, 其实最顶尖的python 版本就是python 2.7/3.7
+	这两个版本的python 支持w7/debian10, 也就是完美兼容大部分的操作系统;
+
+	后续的w8.1/debian10+, 这些系统支持什么版本的python, 有待敲定;
+	反正python 是不会再搞python4 了, 这就行了;
+	python 3.7 虽然很多高级语法糖不能用, 但基础语法还是能用得很舒服的, 加油吧;
+
+
+
+从w7 支持的最新版本python 看待这个开源世界支持的最强python 版本;
+
+开源, 免费, 注定没有那么完美, 这都是现实;
+
+
+
+win7 sp1, 安装高版本python3, 会出现报错:
+	Windows 7 Service Pack 1 and all applicable updates are required to install Python 3.X
+	解决方法:
+		安装系统补丁: Service Pack for Microsoft Windows (KB976932)
+
+	但由于作者本人的w7 是盗版, 而且被我深度优化了, 所以Windows Update 功能被我搞坏了, 所以我也没安装成功;
+	如果这个问题解决了, win7 可以最高安装python3.8.10 

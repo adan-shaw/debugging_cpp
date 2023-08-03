@@ -1,0 +1,16 @@
+w7 安装python3.7, 也会失败, 主要有两个点需要修复:
+	1.安装路径在:
+		C:\Users\x\AppData\Local\Programs\Python\Python37
+
+
+	2.python.exe, 默认与python.exe 冲突(2.7),
+		因此, windows 需要把原本的python.exe, 改名为python3.exe
+
+
+	3.添加安装路径到PATH 路径下;
+		# python3 一键全部安装路径, 最好新建一个变量, 不过懒的话, 全部加到PATH里面也行
+		C:\Users\x\AppData\Local\Programs\Python\Python37;C:\Users\x\AppData\Local\Programs\Python\Python37\DLLs;C:\Users\x\AppData\Local\Programs\Python\Python37\include;C:\Users\x\AppData\Local\Programs\Python\Python37\Lib;C:\Users\x\AppData\Local\Programs\Python\Python37\libs;C:\Users\x\AppData\Local\Programs\Python\Python37\Tools;C:\Users\x\AppData\Local\Programs\Python\Python37\tcl;C:\Users\x\AppData\Local\Programs\Python\Python37\Scripts;
+
+
+	4.py2/py3 必须要安装:
+		vc_redist.x86.exe

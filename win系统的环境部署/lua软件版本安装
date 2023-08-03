@@ -1,0 +1,18 @@
+lua5.1 默认安装路径:
+	C:\Program Files (x86)\Lua
+
+
+
+luajit 是绿色版, 需要自己创建文件夹安装, 一般地:
+	C:\luajit
+
+	然后修改PATH:
+		C:\luajit
+
+	由于luajit 是/bin /lib 全部放在一个文件夹里面的, 
+	所以, 很简单, 不用再设置其它路径了, 一个C:\luajit 即可;
+
+
+
+lua/luajit 必须要安装:
+	vc_redist.x86.exe

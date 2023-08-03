@@ -1,0 +1,166 @@
+mingw 版本说明:
+	MinGW-W64 GCC-8.1.0 win下gcc编译版本, 压缩包里包括四个版本, 分别是:
+		x86_64-posix-sjlj
+		x86_64-posix-seh
+		x86_64-win32-sjlj
+		x86_64-win32-seh
+	其中, posix和win32是os接口类型sjlj, seh是异常处理方案, 
+	如果不确定, 一般安装posix-seh即可, 解压即用;
+	注意:
+		安装路径不要有空格或中文路径;
+
+	新版gcc 8, 11, 12 版本, 多半是绿色版, 
+	安装时, 直接复制粘贴就行, 
+	找到cygwin 的安装路径, 然后覆盖/bin /lib 等路径;
+	(直接复制粘贴, 重叠混合就行)
+
+	ps:
+		无论是mingw, 还是cygwin, 看到installer 网络安装版本, 都别用, 还要下载数据的, 直接抛弃不用;
+		MinGW-W64-install.exe
+
+
+配置路径, 要配置:
+	# 全部路径合并即可, 直接堆叠到path 里面就行, 不用想太多(c:\cygwin 是默认安装路径)
+	c:\cygwin\bin;c:\cygwin\lib;c:\cygwin\include;c:\cygwin\libexec;
+	c:\cygwin\i686-w64-mingw32\bin;c:\cygwin\i686-w64-mingw32\lib;c:\cygwin\i686-w64-mingw32\include;
+	c:\cygwin\x86_64-w64-mingw32\bin;c:\cygwin\x86_64-w64-mingw32\lib;c:\cygwin\x86_64-w64-mingw32\include;c:\cygwin\x86_64-w64-mingw32\lib32;
+
+	# 压缩版
+	c:\cygwin\bin;c:\cygwin\lib;c:\cygwin\include;c:\cygwin\libexec;c:\cygwin\i686-w64-mingw32\bin;c:\cygwin\i686-w64-mingw32\lib;c:\cygwin\i686-w64-mingw32\include;c:\cygwin\x86_64-w64-mingw32\bin;c:\cygwin\x86_64-w64-mingw32\lib;c:\cygwin\x86_64-w64-mingw32\include;c:\cygwin\x86_64-w64-mingw32\lib32;
+
+	标准定义法(弃用, 比较麻烦):
+		C_INCLUDEDE_PATH:
+		CPLUS_INCLUDE_PATH:
+		LIBRARY_PATH:
+		PATH:
+
+
+
+cygwin+mingw 合并安装的2 个办法:
+	* 旧版mingw5.1.0:
+		cygwin, mingw5.1.0, 安装路径都是: c:\cygwin
+		(合并/bin /lib /include ... 等)
+		最后, 改path 路径参数(电脑右键->属性->环境变量)
+
+	* 新版mingw 8.1.0-12:
+		先安装cygwin, 然后解压新版本mingw, 复制粘贴到cygwin 的安装路径: c:\cygwin
+		(合并/bin /lib /include ... 等)
+		最后, 改path 路径参数(电脑右键->属性->环境变量)
+
+
+
+
+
+#
+# 编程支撑说明:
+#
+gcc 8.1.0 基本上都支持c++11, 更高版本的gcc, 支持更多c++ thread 库的东西, 也就是支持跨平台thread 线程库;
+带有posix 后缀的mingw, 也就是支持posix pthread 线程库, 还有一些posix 函数?? (有待验证)
+
+
+
+
+
+#
+# 等价说明:
+#
+gcc = clang = mingw
+glibc = llvm = cygwin
+
+
+
+
+
+#
+# MinGW 2018-05-24 的gcc 版本是8.1.0 (旧版mingw 5.1.0 一般都是gcc 3.4.5)
+#
+MinGW-W64 Online Installer
+MinGW-W64-install.exe
+MinGW-W64 GCC-8.1.0
+x86_64-posix-sjlj
+x86_64-posix-seh
+x86_64-win32-sjlj
+x86_64-win32-seh
+i686-posix-sjlj
+i686-posix-dwarf
+i686-win32-sjlj
+i686-win32-dwarf
+MinGW-W64 GCC-7.3.0
+x86_64-posix-sjlj
+x86_64-posix-seh
+x86_64-win32-sjlj
+x86_64-win32-seh
+i686-posix-sjlj
+i686-posix-dwarf
+i686-win32-sjlj
+i686-win32-dwarf
+MinGW-W64 GCC-6.4.0
+x86_64-posix-sjlj
+x86_64-posix-seh
+x86_64-win32-sjlj
+x86_64-win32-seh
+i686-posix-sjlj
+i686-posix-dwarf
+i686-win32-sjlj
+i686-win32-dwarf
+MinGW-W64 GCC-5.4.0
+x86_64-posix-sjlj
+x86_64-posix-seh
+x86_64-win32-sjlj
+x86_64-win32-seh
+i686-posix-sjlj
+i686-posix-dwarf
+i686-win32-sjlj
+i686-win32-dwarf
+Source: README.rst, updated 2018-05-24
+
+
+
+
+
+#
+# debian 上面的mingw 安装包, mingw 是一个跨平台编译器;
+#
+binutils-mingw-w64 - Cross-binutils for Win32 and Win64 using MinGW-w64
+binutils-mingw-w64-i686 - Cross-binutils for Win32 (x86) using MinGW-w64
+binutils-mingw-w64-x86-64 - Cross-binutils for Win64 (x64) using MinGW-w64
+g++-mingw-w64 - GNU C++ compiler for MinGW-w64
+g++-mingw-w64-i686 - GNU C++ compiler for MinGW-w64 targeting Win32
+g++-mingw-w64-x86-64 - GNU C++ compiler for MinGW-w64 targeting Win64
+gcc-mingw-w64 - GNU C compiler for MinGW-w64
+gcc-mingw-w64-base - GNU Compiler Collection for MinGW-w64 (base package)
+gcc-mingw-w64-i686 - GNU C compiler for MinGW-w64 targeting Win32
+gcc-mingw-w64-x86-64 - GNU C compiler for MinGW-w64 targeting Win64
+gfortran-mingw-w64 - GNU Fortran compiler for MinGW-w64
+gfortran-mingw-w64-i686 - GNU Fortran compiler for MinGW-w64 targeting Win32
+gfortran-mingw-w64-x86-64 - GNU Fortran compiler for MinGW-w64 targeting Win64
+gnat-mingw-w64 - GNU Ada compiler for MinGW-w64
+gnat-mingw-w64-i686 - GNU Ada compiler for MinGW-w64 targeting Win32
+gnat-mingw-w64-x86-64 - GNU Ada compiler for MinGW-w64 targeting Win64
+gobjc++-mingw-w64 - GNU Objective-C++ compiler for MinGW-w64
+gobjc++-mingw-w64-i686 - GNU Objective-C++ compiler for MinGW-w64 targeting Win32
+gobjc++-mingw-w64-x86-64 - GNU Objective-C++ compiler for MinGW-w64 targeting Win64
+gobjc-mingw-w64 - GNU Objective-C compiler for MinGW-w64
+gobjc-mingw-w64-i686 - GNU Objective-C compiler for MinGW-w64 targeting Win32
+gobjc-mingw-w64-x86-64 - GNU Objective-C compiler for MinGW-w64 targeting Win64
+gdb-mingw-w64 - Cross-debugger for Win32 and Win64 using MinGW-w64
+gdb-mingw-w64-target - Cross-debugger server for Win32 and Win64 using MinGW-w64
+golang-github-siddontang-go-dev - Collection of siddontang libraries for Go
+libassuan-mingw-w64-dev - IPC library for the GnuPG components -- Windows port
+libconfig++-dev - parsing/manipulation of structured config files (C++ development)
+libconfig++9v5 - parsing/manipulation of structured configuration files (C++ binding)
+libconfig-dev - parsing/manipulation of structured config files (development)
+libconfig-doc - parsing/manipulation of structured config files (Documentation)
+libconfig9 - parsing/manipulation of structured configuration files
+libgcrypt-mingw-w64-dev - LGPL Crypto library - Windows development
+libgpg-error-mingw-w64-dev - library of error values and messages in GnuPG (Windows development)
+libksba-mingw-w64-dev - X.509 and CMS support library (Windows development)
+libz-mingw-w64 - compression library - Windows runtime
+libz-mingw-w64-dev - compression library - Windows development files
+mingw-w64 - Development environment targeting 32- and 64-bit Windows
+mingw-w64-common - Common files for Mingw-w64
+mingw-w64-i686-dev - Development files for MinGW-w64 targeting Win32
+mingw-w64-tools - Development tools for 32- and 64-bit Windows
+mingw-w64-x86-64-dev - Development files for MinGW-w64 targeting Win64
+libnpth-mingw-w64-dev - replacement for GNU Pth using system threads (Windows dev)
+
