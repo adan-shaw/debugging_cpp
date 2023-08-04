@@ -76,6 +76,34 @@ void parr2_check(int (*parr)[32],int (*parr2)[32]){
 
 
 
+void parr_test(int* parr, void* parr2){
+	int *ptmp;
+	int n = 5;
+
+	//普通指针后移
+	ptmp = parr;				//int 指针ptmp, +1 即后移一个int, 4byte字节
+	ptmp = ptmp++;			//int ptmp++, 等于+1
+	ptmp += 1;					//等价于ptmp++
+	ptmp += 4;					//后移4字节*4
+	ptmp += n;					//后移4字节*n
+
+	//void* 指针后移(唯一特殊的指针)
+	/*
+		因为void* 指针没有明确变量类型, 
+		所以没办法明确每次后移多少字节, 
+		一旦出现void* 指针后移操作, 编译器会报错!!
+		正确的使用方式:
+			先明确void* 指针的类型, 再后移;
+	*/
+	ptmp = (int*)parr2;	//明确void* 指针的类型的方法1: 多创建一个指针, 表示其类型
+	ptmp++;
+	(int*)parr2++;			//明确void* 指针的类型的方法2: 强转
+}
+
+
+
+
+
 void pbody_test(struct body* pbody){
 	int tmp;
 	pbody->head = 1;
@@ -131,7 +159,10 @@ void pfather_check(class father* pfather){
 
 
 
-void test1(void){
+
+
+int main(void){
+	//一阶指针引用
 	int arr_i[64],arr_i2[64];
 	int arr2_i[32][32],arr2_i2[32][32];
 	struct body m_body;
@@ -142,22 +173,13 @@ void test1(void){
 	//parr_check(arr_i,arr_i2);
 	//parr2_test(arr2_i,arr2_i2);
 	//parr2_check(arr2_i,arr2_i2);
+	parr_test(arr_i,arr_i2);
+
 	pbody_test(&m_body);
 	pbody_check(&m_body);
 	pbody_test2(&pbody2);
 	pbody_check2(&pbody2);
 	pfather_test(&m_father);
 	pfather_check(&m_father);
-	return;
-}
-
-
-
-
-
-int main(void){
-	//一阶指针引用
-	test1();
-
 	return 0;
 }

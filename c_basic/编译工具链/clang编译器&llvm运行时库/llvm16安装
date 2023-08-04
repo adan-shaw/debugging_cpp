@@ -1,0 +1,13 @@
+apt-get install llvm-16*
+
+apt-get install clang-16*
+
+apt-get install clang++-16*
+
+apt-get install clang-format-16
+
+apt-get install clangd-16*
+
+apt-get install libclang*
+
+apt-get install lldb-16 liblldb-16 liblldb-16-dev

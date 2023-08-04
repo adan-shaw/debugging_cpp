@@ -1,0 +1,95 @@
+0.查看当前glibc 的版本
+	# 直接查看libc.so.6 动态库文件的信息(直接运行.so 动态库, 一般可以看到介绍信息)
+	/lib/x86_64-linux-gnu/libc.so.6
+
+	# 通过ldd 链接管理器, 查看glibc 版本信息
+	ldd --version
+
+	# 通过linux 全局变量宏来获取glibc 版本信息
+	getconf GNU_LIBC_VERSION
+
+
+
+
+
+1.glibc 简介:
+	glibc 有大规模的重新封装kernel 态的sys/socket, sys/shm 等系统API, 以实现跨平台c语言运行时库glibc 的支撑;
+	glibc 也有socket 库, 但这套socket 库实际是对内核态的sys/socket的重封装, 目的当然是为了实现跨平台啦, 先而易见;
+	用glibc 重封装一下, 就可以应付各大平台上的/sys/* 差异, 具体重封装细节, 还是要看各大平台的/sys 的具体实现细节;
+	(kernel内核, gcc编译器, glibc运行时库, makefile, 等等几乎混为一体)
+
+
+
+
+
+2.libc 与glibc 的区别
+	libc 是ANSI C标准的C语言运行时库, glibc 是gnu 标准的C语言运行时库;
+	两者本身是有区别的, 但只要你使用linux内核, 使用gcc 编译器, 则一般会使用glibc;
+	ps:
+		使用linux 内核, 也可以是llvm 系列的clang 编译器 + cpp 运行时库;(clang 是纯c++ 编译器)
+
+
+
+
+
+3.glibc 包含一些linux 主要的功能:
+	(1)string,  字符串处理
+	(2)signal,  信号处理
+	(3)dlfcn,   管理共享库的动态加载
+	(4)direct,  文件/目录操作
+	(5)elf,     共享库的动态加载器, 也即interpreter
+	(6)iconv,   不同字符集的编码转换
+	(7)inet,    socket接口的实现
+	(8)intl,    国际化, 也即gettext的实现
+	(9)io
+	(10)linuxthreads
+	(11)locale, 本地化
+	(12)login,  虚拟终端设备的管理, 及系统的安全访问
+	(13)malloc, 动态内存的分配与管理
+	(14)nis
+	(15)stdlib, 其它基本功能
+
+	此外还有: 正则表达式库, 模式匹配, 数学计算等;
+	此外还有: g++ (c++ 标准库的gnu实现)
+
+
+
+
+
+4.gcc 与glibc 的关系:
+	glibc 对gcc 是没关系的, 但gcc 对glibc 有单向依赖关系;
+
+	gcc 使用的glibc 版本, 是在gcc 编译期决定的, 
+	一旦gcc 编译好之后, 你将无法更改该gcc 所指定的glibc 版本,
+	(一旦更改了, 则gcc 报废, 不能再编译程序了)
+
+	想更改gcc 默认指定的glibc, 只能通过编译出原始gcc, 然后再编译glibc, 最后再编译全功能gcc, 
+	差不多等于交叉编译链重建了一次;
+
+
+
+
+
+5.linux kernel 与glibc 的关系:
+	linux kernel 对glibc 是没关系的, 但glibc 对linux kernel 有单向依赖关系;
+
+	glibc 编译时, 必须指定linux kernel 版本, 必须指定linux kernel 头文件所在目录;
+	否则没办法编译出glibc!!
+
+	编译linux kernel 需要的是原始gcc, 完全不依赖glibc 库;
+
+
+
+
+
+6.为什么要安装glibc 对应版本的源码?
+	任何c 库函数调用出错, 都需要依赖'glibc 源码'来查看原因, 否则你只会知道是哪个API 出错, 并不能查看出错的内部细节;
+	一般认为:
+		glibc 库是不可能出错的, 但实际上, glibc 库绝非100% 正确, 你也发现过glibc 有错误的地方;
+		不过普遍认为, glibc 基本不会出问题就是了, 
+		所以, 不安装glibc 库源码, 也没什么大不了的;
+
+
+
+
+

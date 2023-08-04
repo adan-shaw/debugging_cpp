@@ -1,0 +1,51 @@
+ANSI C标准中有几个标准预定义宏(也是常用的): 
+
+	__LINE__: 在源代码中插入当前源代码行号; 
+	__FILE__: 在源文件中插入当前源文件名; 
+	__DATE__: 在源文件中插入当前的编译日期
+	__TIME__: 在源文件中插入当前编译时间; 
+	__STDC__: 当要求程序严格遵循ANSIC标准时该标识被赋值为1; 
+
+
+	__cplusplus: 当编写C++程序时该标识符被定义. 
+							 通常配合 extern "C" {} 使用
+
+
+	编译器在进行源码编译的时候, 会自动将这些宏替换为相应内容.
+	这些宏都是编译器自动识别的, 不用你自己解析或平凑,
+	编译器会在编译的时候自动在 -g 选项加插的地方, 在辅助代码里面加插这些内容,
+	如果你不添加 -g 选项, 可能这些编译宏就会失效也不一定(未证实)
+
+	但可以肯定的是, 这些编译宏都是编译器内置的,
+	不需要定义就能使用.
+
+
+
+C++内部察看当前函数名, 根据C++标准如下: 
+__FUNCTION__
+
+
+但是有的IDE也支持其它格式, 比如VisualStudio, 如下: 
+__FUNCDNAME__ 函数修饰名
+__FUNCSIG__ 函数签名
+
+
+
+//
+// 例子:
+//
+#include <stdio.h>
+int main(void){
+	printf("%s\n",__FILE__);
+	printf("%d\n",__LINE__);
+	printf("%s\n",__DATE__);
+	printf("%s\n",__TIME__);
+	printf("%s\n",__FUNCTION__);
+}
+
+D:\MyDownloads\Download\sublimetext3\Sublime Text Build 3176 x86\Data\Packages\User\5.c
+13
+Jul 31 2018
+15:40:23
+main
+

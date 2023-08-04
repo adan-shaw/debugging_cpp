@@ -1,0 +1,11 @@
+#
+# libclang 常见的组建
+#
+libclangLex:     该库用于预处理和词法分析, 处理宏、令牌和pragma构造
+libclangAST:     该库为构建、操作和遍历抽象语法树(AST)增加了其他功能
+libclangParse:   该库用于使用词法分析阶段的结果进行逻辑解析
+libclangSema:    该库用于语义分析, 语义分析为AST验证提供操作
+libclangCodeGen: 该库使用编译目标的信息来生成LLVM IR代码
+libclangAnalysis:该库包含用于静态分析的资源
+libclangRewrite: 该库用于支持代码重写, 并为构建代码重构工具提供基础架构
+libclangBasic:   该库提供一组实用程序, 包括内存分配抽象、源代码位置和诊

@@ -1,0 +1,30 @@
+1.gcc 搜索头文件的顺序(从1->4 优先级递减):
+  1> /usr/local/include
+     (自定义安装的gcc, 如果有.)
+
+  2> libdir/gcc/target/version/include
+     (如果不知道libdir 在哪里, 可以用whereis gcc 查看.)
+     [这里是GCC 基于CPU 架构的基本实现'头文件']
+     debian: /usr/lib/gcc/x86_64-linux-gnu/6/include/
+
+  3> /usr/target/include (部分版本路径不一样, debian : /usr/include/target )
+     debian: /usr/include/x86_64-linux-gnu/
+     大部分是'与平台相关的库'
+
+  4> /usr/include
+     大部分是'与平台无关的库', 如网络协议栈, 各种安装软件的头文件,xfce,xorg 等.
+     但是内部实现大部分是指向: linux kernel 文件的.
+     不过你仍然最好用这里的定义, 因为这样比较'具备跨平台性能'.
+
+
+
+
+
+2./usr/include/linux 内核头文件声明, 有需要你可以看看.
+
+
+
+
+
+
+

@@ -1,0 +1,134 @@
+1.gcc 基础选项:
+	-E       仅作预处理, 得出.i 文件;
+	-S       仅进行预处理+'编译', 得出.s 文件;
+	-c       仅进行预处理+'编译'+汇编, 得出.o 文件;
+	-o       进行预处理+'编译'+汇编+链接, 得出.exe 文件;
+
+	-v       打印较多信息, 方便'编译时调用'的程序;
+	-j4      多线程编译;
+
+	-include 包含某个文件,例: gcc hello.c -include /root/pianopan.h
+
+	-static  倾向于使用静态库进行编译;
+	-share   倾向于使用动态库进行编译;
+
+	-D       添加编译宏, 例: -DNDEBUG, 表示'禁用assert()';
+
+	-m32     生成32位机器上的代码;
+	-m64     生成64位机器上的代码;
+
+
+
+
+2.gcc 指定编译所用的语言标准:
+	-x         指定编译时所使用的'编程语言标准': c, objective-c, c-header, c++, cpp-output, assembler, assembler-with-cpp, none
+
+	-ansi      指定支持符合ANSI 标准的C程序, 关闭GNU C中某些不兼容ANSI C的特性(ps: -ansi c = c89)
+
+	-std=c89   指明使用标准ISO C89 作为标准来编译程序
+	-std=c99   指明使用标准ISO C99 作为标准来编译程序
+	-std=c11
+
+	-std=c++98
+	-std=c++99
+	-std=c++0x 指明使用标准ISO C++11
+	-std=c++1y 指明使用标准ISO C++1y
+
+	-std=gnu99 指明使用GNU C99 拓展特性
+
+
+
+
+
+3.开启/关闭gcc 编译过程中产生的警告信息:
+	-w              禁止显示所有警告信息;
+	-W              打印一些额外警告信息(-Wextra);
+	-Wall           会打开一些很有用的警告选项, 建议编译时加此选项;
+	-Wshadow        当一个局部变量遮盖住了另一个局部变量, 或者全局变量时, 给出警告;
+	-Wpointer-arith 对函数指针或者void *类型的指针进行算术操作时给出警告;
+
+
+
+
+
+4.gcc 编译时附加'Debug调试信息':
+	-g3       posix 标准的调试信息(1-3 级别)
+
+	-ggdb3    GNU 标准的调试信息(1-3 级别)
+	-pg       GNU 特有的性能调试信息(性能调试工具是: gprof)
+
+	-gstabs   使用stabs 格式, 不包含gdb扩展, stabs常用于BSD系统的DBX调试器.
+	-gcoff    产生COFF格式的调试信息, 常用于System V下的SDB调试器;
+	-gxcoff   产生XCOFF格式的调试信息, 用于IBM的RS/6000下的DBX调试器;
+	-gdwarf-2 产生DWARF version2 的格式的调试信息, 常用于IRIXX6上的DBX调试器, GCC会使用DWARF version3的一些特性.
+
+
+
+
+
+5.gcc 自动编译优化选项: (可以与debug 选项联合使用, 调试程序时也可加入优化选项)
+	-O0 禁止编译器进行优化(默认为此项)
+	-O  尝试优化编译时间和可执行文件大小(即是: -O1 级别). 
+	-O2 更多的优化, 会尝试几乎全部的优化功能, 但不会进行'空间换时间'的优化方法. 
+	-O3 在-O2 的基础上再打开一些优化选项: -finline-functions, -funswitch-loops, -fgcse-after-reload
+	-Os 对生成文件大小进行优化. 它会打开-O2 开的全部选项, 并且尽量静态编译(内核编译经常用)
+
+
+
+
+
+6.gcc 特殊的编译优化选项:
+	针对c 语言的编译选项:
+		-fno-asm              此选项实现ansi选项的功能的一部分, 他禁止将asm,inline和typeof用作关键字;
+		-fcond-mismatch       允许条件表达式的第二和第三参数类型不匹配, 表达式的值将为void类型;
+
+		-funsigned-char       编译器标志会将所有"char"字符类型设为无符号;
+		-fno-signed-char      等价于-funsigned-char;
+		-fsigned-char         编译器标志会将所有"char"字符类型设为有符号;
+		-fno-unsigned-char    等价于-fsigned-char;
+
+		-traditional          尝试支持传统C编译器的某些方面. 详见GNU C手册;
+		-fno-builtin          不接受没有__builtin_ 前缀的函数作为内建函数(-fno-builtin-function 也是一样);
+		-trigraphs            支持ANSI C的三联符(trigraphs). `-ansi'选项隐含声明了此选项;
+		-fsigned-bitfields    如果没有明确声明`signed'或`unsigned'修饰符, 这些选项用来定义有符号位域或无符号位域;
+													缺省情况下, 位域是有符号的, 因为它们继承的基本整数类型, 如int, 是有符号数.(-funsigned-bitfields 也是一样);
+		-Wstrict-prototypes   如果函数的声明或定义没有指出参数类型, 编译器就发出警告;
+		-Wmissing-prototypes  如果没有预先声明就定义了全局函数, 编译器就发出警告; 即使函数定义自身提供了函数原形也会产生这个警告; 这个选项的目的是检查没有在头文件中声明的全局函数;
+		-Wnested-externs      如果某extern声明出现在函数内部, 编译器就发出警告;
+
+
+
+	针对c++ 语言的编译选项:
+		-fno-strict-prototype 只对g++起作用,使用这个选项, g++将对不带参数的函数, 都认为是没有显式的对参数的个数和类型说明, 而不是没有参数;
+													而gcc无论是否使用这个参数, 都将对没有带参数的函数, 认为城没有显式说明的类型;
+		-fthis-is-varialble   就是向传统c++看齐, 能够使用this当一般变量使用;
+		-ffor-scope           从头开始执行程序, 也允许进行重定向;
+		-fno-rtti             关闭对 dynamic_cast 和 typeid 的支持, 如果你不需要这些功能, 关闭它会节省一些空间;
+		-Wctor-dtor-privacy   当一个类没有用时给出警告, 因为构造函数和析构函数会被当作私有的;
+		-Wnon-virtual-dtor    当一个类有多态性, 而又没有虚析构函数时, 发出警告(-Wall会开启这个选项);
+		-Wreorder             如果代码中的成员变量的初始化顺序和它们实际执行时初始化顺序不一致, 给出警告;
+		-Wno-deprecated       使用过时的特性时不要给出警告;
+		-Woverloaded-virtual  如果函数的声明隐藏住了基类的虚函数, 就给出警告;
+
+
+
+	针对intel 芯片优化选择项:
+		-mtune='cpu-type' 为指定cpu-type, 可以是: i386, i486, i586, pentium, i686, pentium4等;
+
+		-msse             使用SSE指令集
+		-msse2            使用SSE2指令集
+		-mmmx             使用MMX指令集
+		-mno-sse          禁用SSE指令集
+		-mno-sse2         禁用SSE2指令集
+		-mno-mmx          禁用MMX指令集
+
+		-mpush-args       使用push 指令来进行存储参数, 默认启用;
+		-mno-push-args    禁用push 指令来进行存储参数;
+
+		-mregparm=num     当传递整数参数时, 控制所使用寄存器的个数;
+
+
+
+
+
+

@@ -1,0 +1,87 @@
+声明: 
+	gcc编译器只是一个翻译工具软件, 不会涉及到平台差异, 只会设计到'c/c++语言标准的差异'.
+	glibc + linux_kernel, 一般会版本互锁, 
+	所以gcc编译器版本, 可以根据代码的'c/c++语言标准', 随意更换.
+	(只要glibc + linux_kernel 支持的话)
+
+	gcc 版本差异, 只体验在'c/c++语法翻译'上的差异, 
+	平台新旧差异, 主要体现在glibc, linux kernel内核的版本新旧差异, 项目代码可能相同.
+	平台cpu差异, 主要体现在glibc, linux kernel内核的版本cpu架构差异, 项目代码必然不同.
+
+旧平台升级gcc:
+	你需要有旧平台的gcc,g++,make,automake,glibc,linux kernel 等关键工具,
+	利用旧编译链, 编译出新的gcc, 支持新的c/c++ 语法.
+
+异构平台, 搭建交叉编译链gcc:
+	你需要有intel x86 PC平台的gcc,g++,make,automake,glibc,linux kernel 等关键工具,
+	利用intel x86 PC平台的编译链, 编译出最小化的gcc,
+	再用最小化的gcc, 编译出异构平台的glibc + linux kernel 的组合.
+	最后, 再根据异构平台的glibc + linux kernel 的组合, 编译出全功能gcc.
+
+
+
+
+
+1.查看系统安装了多少个gcc
+	ls /usr/bin/gcc*
+
+
+
+
+
+2.使用update-alternatives切换GCC:
+	[最后一个参数, 谁的数值大, 谁就是当前的gcc 版本, 数值少的默认不启用]
+	update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.4 50
+	update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.5 40
+	update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
+
+
+
+
+
+3.安装GCC 多版本支持
+	gcc-6 - GNU C compiler
+	gcc-6-base    - GCC, the GNU Compiler Collection (base package)
+	gcc-6-hppa64  - linux-gnu - GNU C compiler (cross compiler for hppa64)
+	gcc-6-locales - GCC, the GNU compiler collection (native language support files) # 本地化支持
+	gcc-6-multilib     - GNU C compiler (multilib support) # 多个编译器支持
+	gcc-6-plugin-dev   - Files for GNU GCC plugin development # 插件开发支持
+	gcc-6-source       - Source of the GNU Compiler Collection # gcc 源代码
+	gcc-6-test-results - Test results for the GCC test suite # gcc 测试代码
+
+
+	sudo apt-get install gcc-6 gcc-6-multilib gcc-6-locales \
+	g++-6 g++-6-multilib g++-6-locales
+
+
+
+
+
+4.查询异构平台的gcc编译器
+  apt-cache search gcc arm
+  apt-cache search gcc mips
+  apt-cache search gcc powerpc
+  apt-cache search gcc mingw
+
+
+
+
+
+5.gcc 支持的语言特性分析:
+  目前C语言的标准有:
+  	C89(ANSI C)、C90、C95、C99(ISO C)、C11(C1x)...
+  目前C++语言的标准有:
+  	C++98、C++03(对98小幅修改)、C++11(全面进化)、C++14、C++17...
+
+
+	C++17:
+		gcc7完全支持, gcc6和gcc5部分支持, gcc6支持度当然比gcc5高, gcc4及以下版本不支持. 
+	C++14:
+		gcc5就可以完全支持, gcc4部分支持, gcc3及以下版本不支持. 
+	C++11:
+		gcc4.8.1及以上可以完全支持. gcc4.3部分支持, gcc4.3以下版本不支持. 
+
+	 
+
+
+

@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://gcc.gnu.org/projects/cxx-status.html#cxx11 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+
+  
+ 
+  <title>
+C++ Standards Support in GCC
+- GNU Project</title>
+<style>
+/* CSS for the GCC web site.
+
+   Gerald Pfeifer <gerald@pfeifer.com>
+ */
+
+body      { background-color: white; color: black; }
+
+a:link    { color: #0066bb; text-decoration: none; }
+a:visited { color: #003399; text-decoration: none; }
+a:hover   { color: darkorange; text-decoration: none; }
+
+h1        { color: darkslategray; text-align:center; }
+h2        { color: darkslategray; }
+
+.highlight{ color: darkslategray; font-weight:bold; }
+.smaller  { font-size: 80%; }
+
+.left     { text-align:left; }
+.right    { text-align:right; }
+.center   { text-align:center; margin-left:auto; margin-right:auto; }
+.top      { vertical-align:top; }
+.middle   { vertical-align:middle; }
+
+.width33  { width:33%; }
+.border0  { border-width:0; }
+
+.no-margin-top { margin-top:0; }
+.twocolumns { column-count:2; }
+.imgleft { margin: 5px 20px; float: left; }
+
+img.right { float: right; }
+
+td.news      { width: 50%; padding-right: 8px; vertical-align: top; }
+td.news h2   { font-size: 1.2em; margin-top: 0; margin-bottom: 2%; }
+td.news dl   { margin-top:0; }
+td.news dt   { color:darkslategrey; font-weight:bold; margin-top:0.3em; }
+td.news dd   { margin-left:3ex; margin-top:0.1em; margin-bottom:0.1em; }
+td.news .date { color:darkslategrey; font-size:90%; margin-left:0.1ex; }
+
+td.status    { width: 50%; padding-left: 12px; vertical-align: top;
+               border-left: #3366cc thin solid; }
+td.status h2 { font-size: 1.2em; margin-top:0; margin-bottom: 1%; }
+td.status dl { margin-top:0; }
+td.status .version { font-weight:bold; }
+td.status .regress { font-size: 80%; }
+td.status dd { margin-left:3ex; }
+
+table.nav {
+  padding-left: 32px;
+  border-spacing: 0pt;
+}
+
+table.nav td {
+  border-width: 0;
+}
+
+table.navitem {
+  width: 100%;
+  border-spacing: 0pt;
+}
+
+table.navitem tr:nth-child(1) {
+  border-color: #3366cc;
+  border-style: solid;
+  border-width: thin;
+  color: #f2f2f9;
+  background-color: #0066dd;
+  font-weight: bold;
+}
+table.navitem tr:nth-child(2) {
+  padding-top: 3px;
+  padding-left: 8px;
+  padding-bottom: 3px;
+  background-color: #f2f2f9;
+  font-size: smaller;
+}
+
+div.copyright {
+  clear: both;
+  font-size: smaller;
+  background: #f2f2f9;
+  border: 2px solid #3366cc;
+  border-style: solid;
+  border-width: thin;
+  padding: 4px;
+}
+div.copyright p:nth-child(3) { margin-bottom: 0; }
+
+.bold        { font-weight:bold; }
+.boldcyan    { font-weight:bold; color:cyan; }
+.boldlime    { font-weight:bold; color:lime; }
+.boldmagenta { font-weight:bold; color:magenta; }
+.boldred     { font-weight:bold; color:red; }
+.boldgreen   { font-weight:bold; color:green; }
+.boldblue    { font-weight:bold; color:blue; }
+.red         { color:red; }
+.green       { color:green; }
+.blue        { color:blue; }
+.blackbg     { color:white; background-color: #000000; }
+
+/* Quote an e-mail.  The first <div> has the sender, the second the quote. */
+blockquote.mail div:nth-child(2) { border-left: solid blue; padding-left: 4pt; }
+
+/* This comes close to <table border="1">, alas a bit less bordersome. */
+table.border    th { border:2px solid; }
+
+/* C++ status tables. */
+table.cxxstatus th, table.cxxstatus td { border: 1px solid gray; }
+table.cxxstatus td:nth-child(3) { text-align:center; }
+table.cxxstatus tr.separator { background: #f2f2f9; }
+
+/* C++ Defect Report table. */
+table.cxxdrstatus th, table.cxxdrstatus td { border: 1px solid gray; }
+table.cxxdrstatus td:nth-child(4) { text-align:center; }
+table.cxxdrstatus tr.separator { background: #f2f2f9; }
+table.cxxdrstatus { width: 65%; }
+
+/* OpenMP status tables. */
+table.ompstatus thead th, table.cxxstatus thead td { border: 1px solid gray; }
+table.ompstatus tbody td:nth-child(2) { text-align:center; }
+table.ompstatus thead tr { background: #f2f2f9; }
+
+/* Padded tables. */
+table.padding5 th, td { border: 1px solid gray; padding:5px; }
+
+.supported   { background-color: lightgreen; }
+.unsupported { background-color: lightsalmon; }
+.other { background-color: lightgray; }
+.partial { background-color: lightyellow; }
+.open { color: #AAAAAA; }
+
+/* Online documentation. */
+
+pre.smallexample { 
+  font-size: medium;
+  background: #f2f2f9;
+  padding: 4px; 
+  display: inline-block;
+}
+
+/* Classpath versus libgcj merge status page. */
+
+.classpath-only         { background-color: #FFFFAA; }
+.libgcj-only            { background-color: #FFFFAA; }
+.VM-specific            { background-color: #CCCCFF; }
+.GCJ-specific           { background-color: #CCCCFF; }
+.needsmerge             { background-color: #FF9090; }
+.merged                 { background-color: #22FF22; }
+.merged-expected-diff   { background-color: #22FF22; }
+.merged-unexpected-diff { background-color: #FF4444; }
+
+</style>
+   </head>
+ 
+
+<body>
+
+
+
+  <h1>C++ Standards Support in GCC</h1>
+
+  GCC supports different dialects of C++, corresponding to the multiple
+  published ISO standards.  Which standard it implements can be selected using
+  the <code>-std=</code> command-line option.
+
+  <ul>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx98">C++98</a></li>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx11">C++11</a></li>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx14">C++14</a></li>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx17">C++17</a></li>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx20">C++20</a></li>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#cxx23">C++23</a></li>
+    <li><a href="https://gcc.gnu.org/projects/cxx-status.html#tses">Technical Specifications</a></li>
+  </ul>
+  
+  <p>For information about the status of C++ defect reports, please see
+  <a href="https://gcc.gnu.org/projects/cxx-dr-status.html">this page</a>.
+  </p>
+
+  <p>For information about the status of the library implementation, please see
+  the <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html">
+   Implementation Status</a> section of the Libstdc++ manual.
+  </p>
+
+  <h2 id="cxx23">C++23 Support in GCC</h2>
+
+  <p>GCC has experimental support for the next revision of the C++
+  standard, which is expected to be published in 2023.</p>
+
+  <p>C++23 features are available since GCC 11. To enable C++23
+      support, add the command-line parameter <code>-std=c++2b</code>
+      to your <code>g++</code> command line. Or, to enable GNU
+      extensions in addition to C++23 features,
+    add <code>-std=gnu++2b</code>.</p>
+
+  <p><strong>Important</strong>: Because the ISO C++23 standard is still
+    evolving, GCC's support is <strong>experimental</strong>.  No attempt will
+    be made to maintain backward compatibility with implementations of C++23
+    features that do not reflect the final standard.</p>
+
+  <h2>C++23 Language Features</h2>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Language Feature</th>
+      <th>Proposal</th>
+      <th>Available in GCC?</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+    <tr>
+      <td> Literal Suffix for (signed) size_t </td>
+      <td><a href="https://wg21.link/p0330r8">P0330R8</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> </td>
+      <td> __cpp_size_t_suffix &gt;= 202006L </td>
+    </tr>
+    <tr>
+      <td> Make () more optional for lambdas </td>
+      <td><a href="https://wg21.link/p1102r2">P1102R2</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> DR: Declarations and where to find them</td>
+      <td><a href="https://wg21.link/p1787r6">P1787R6</a> </td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR98939">No</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> <code>if consteval</code> </td>
+      <td> <a href="https://wg21.link/p1938r3">P1938R3</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> __cpp_if_consteval &gt;= 202106L </td>
+    </tr>
+    <tr>
+      <td> C++ Identifier Syntax using Unicode Standard Annex 31 </td>
+      <td> <a href="https://wg21.link/p1949r7">P1949R7</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Allow Duplicate Attributes </td>
+      <td> <a href="https://wg21.link/p2156r1">P2156R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Narrowing contextual conversions to bool </td>
+      <td> <a href="https://wg21.link/p1401r5">P1401R5</a></td>
+      <td class="supported">9</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Trimming whitespaces before line splicing </td>
+      <td> <a href="https://wg21.link/p2223r2">P2223R2</a></td>
+      <td class="supported">Yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Mixed string literal concatenation </td>
+      <td> <a href="https://wg21.link/p2201r1">P2201R1</a></td>
+      <td class="supported">Yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Make declaration order layout mandated </td>
+      <td> <a href="https://wg21.link/p1847r4">P1847R4</a></td>
+      <td class="supported">Yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Removing Garbage Collection Support </td>
+      <td> <a href="https://wg21.link/p2186r2">P2186R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/968
+    <tr>
+      <td> Simpler implicit move </td>
+      <td> <a href="https://wg21.link/p2266r1">P2266R1</a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR101165">No</a></td>
+      <td> </td>
+    </tr>
+    -->
+    <!-- https://github.com/cplusplus/papers/issues/115 -->
+    <tr>
+      <td> Deducing this </td>
+      <td> <a href="https://wg21.link/p0847r7">P0847R7</a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR102609">No</a></td>
+      <td> __cpp_explicit_this_parameter &gt;= 202110L </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/766 -->
+    <tr>
+      <td> Change scope of lambda trailing-return-type </td>
+      <td> <a href="https://wg21.link/p2036r3">P2036R3</a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR102610">No</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/845 -->
+    <tr>
+      <td> Multidimensional subscript operator </td>
+      <td> <a href="https://wg21.link/p2128r6">P2128R6</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> __cpp_multidimensional_subscript &gt;= 202110L </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/941 -->
+    <tr>
+      <td> Non-literal variables (and labels and gotos) in constexpr functions </td>
+      <td> <a href="https://wg21.link/p2242r3">P2242R3</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> __cpp_constexpr &gt;= 202110L </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/942 -->
+    <tr>
+      <td> Character encoding of diagnostic text </td>
+      <td> <a href="https://wg21.link/p2246r1">P2246R1</a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR102613">No</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/998 -->
+    <tr>
+      <td> Character sets and encodings </td>
+      <td> <a href="https://wg21.link/p2314r4">P2314R4</a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR102614">No</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/1000 -->
+    <tr>
+      <td> Consistent character literal encoding </td>
+      <td> <a href="https://wg21.link/p2316r2">P2316R2</a></td>
+      <td class="supported"> Yes</td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/1016 -->
+    <tr>
+      <td> Add support for preprocessing directives elifdef and elifndef </td>
+      <td> <a href="https://wg21.link/p2334r1">P2334R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/1034 -->
+    <tr>
+      <td> Extend init-statement to allow alias-declaration </td>
+      <td> <a href="https://wg21.link/p2360r0">P2360R0</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/293 -->
+    <tr>
+      <td> auto(x): decay-copy in the language </td>
+      <td> <a href="https://wg21.link/p0849r8">P0849R8</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <!-- https://github.com/cplusplus/papers/issues/1006 -->
+    <tr>
+      <td> Labels at the end of compound statements </td>
+      <td> <a href="https://wg21.link/p2324r1">P2324R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-13/changes.html#cxx">13</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> CWG 2397: auto specifier for pointers and references to arrays </td>
+      <td> <a href="https://wg21.link/cwg2397">CWG2397</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> CWG 2481: Cv-qualification of temporary to which a reference is bound </td>
+      <td> <a href="https://wg21.link/cwg2481">CWG2481</a></td>
+      <td class="supported">Yes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Attributes on lambda-expressions </td>
+      <td> <a href="https://wg21.link/p2173r1">P2173R1</a></td>
+      <td class="supported"> 9 </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> A type trait to detect reference binding to temporary </td>
+      <td> <a href="https://wg21.link/p2255r2">P2255R2</a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR104477">No</a> </td>
+      <td> </td>
+    </tr>
+    <!--
+    <tr>
+      <td> </td>
+      <td> <a href="https://wg21.link/p"></a></td>
+      <td class="unsupported"> <a href="https://gcc.gnu.org/PR">No</a></td>
+      <td> </td>
+    </tr>
+    -->
+  </tbody></table>
+
+  <h2 id="cxx20">C++20 Support in GCC</h2>
+
+  <p>GCC has experimental support for the latest revision of the C++
+  standard, which was published in 2020.</p>
+
+  <p>C++20 features are available since GCC 8. To enable C++20
+      support, add the command-line parameter <code>-std=c++20</code>
+      (use <code>-std=c++2a</code> in GCC 9 and earlier)
+      to your <code>g++</code> command line. Or, to enable GNU
+      extensions in addition to C++20 features,
+    add <code>-std=gnu++20</code>.</p>
+
+  <p><strong>Important</strong>: Because the ISO C++20 standard is
+  very recent, GCC's support is <strong>experimental</strong>.</p>
+
+  <h2>C++20 Language Features</h2>
+
+  <p>The following table lists new language features that have been
+  accepted into the C++20 working draft. The "Proposal" column
+  provides a link to the ISO C++ committee proposal that describes the
+  feature, while the "Available in GCC?" column indicates the first
+  version of GCC that contains an implementation of this feature (if
+  it has been implemented).</p>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Language Feature</th>
+      <th>Proposal</th>
+      <th>Available in GCC?</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+    <tr>
+      <td> Default member initializers for bit-fields </td>
+      <td><a href="https://wg21.link/p0683r1">P0683R1</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Fixing const-qualified pointers to members </td>
+      <td><a href="https://wg21.link/p0704r1">P0704R1</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Allow lambda capture <code>[=, this]</code> </td>
+      <td><a href="https://wg21.link/p0409r2">P0409R2</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> <code>__VA_OPT__</code> for preprocessor comma elision </td>
+      <td><a href="https://wg21.link/p0306r4">P0306R4</a><br>
+      <a href="https://wg21.link/p1042r1">P1042R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a>
+        (partial, no <code>#__VA_OPT__</code> support) <br>
+      <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a>
+        (partial, no placemarker token handling changes) <br>
+      <a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Designated initializers </td>
+      <td><a href="https://wg21.link/p0329r4">P0329R4</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> __cpp_designated_initializers &gt;= 201707 </td>
+    </tr>
+    <tr>
+      <td> Familiar template syntax for generic lambdas </td>
+      <td><a href="https://wg21.link/p0428r2">P0428R2</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> __cpp_generic_lambdas &gt;= 201707 </td>
+    </tr>
+    <tr>
+      <td> List deduction of vector </td>
+      <td><a href="https://wg21.link/p0702r1">P0702R1</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td rowspan="12"> Concepts </td>
+      <td><a href="https://wg21.link/p0734r0">P0734R0</a></td>
+      <td class="supported" rowspan="11"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a> </td>
+      <td rowspan="4"> __cpp_concepts &gt;= 201907 </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p0857r0">P0857R0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1084r2">P1084R2</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1141r2">P1141R2</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p0848r3">P0848R3</a></td>
+      <td> __cpp_concepts &gt;= 202002 </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1616r1">P1616R1</a></td>
+      <td rowspan="7"> __cpp_concepts &gt;= 201907 </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1452r2">P1452R2</a></td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1972r0">P1972R0</a></td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1980r0">P1980R0</a></td>
+    </tr>
+    <!-- from Prague -->
+    <tr>
+      <td><a href="https://wg21.link/p2092r0">P2092R0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p2103r0">P2103R0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p2113r0">P2113R0</a></td>
+      <td class="partial center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10.2</a> (no reversed operator handling)</td>
+    </tr>
+    <tr>
+      <td> Range-based for statements with initializer </td>
+      <td><a href="https://wg21.link/p0614r1">P0614R1</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Simplifying implicit lambda capture </td>
+      <td><a href="https://wg21.link/p0588r1">P0588R1</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> ADL and function templates that are not visible </td>
+      <td><a href="https://wg21.link/p0846r0">P0846R0</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> <code>const</code> mismatch with defaulted copy constructor </td>
+      <td><a href="https://wg21.link/p0641r2">P0641R2</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Less eager instantiation of <code>constexpr</code> functions </td>
+      <td><a href="https://wg21.link/p0859r0">P0859R0</a></td>
+      <td class="supported"> 5.2 (mostly)<br> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> (P0859R0) </td>
+      <td> __cpp_constexpr_in_decltype &gt;= 201711 </td>
+    </tr>
+    <tr>
+      <td rowspan="10"> Consistent comparison (<code>operator&lt;=&gt;</code>)</td>
+      <td><a href="https://wg21.link/p0515r3">P0515R3</a></td>
+      <td rowspan="4" class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td rowspan="10"> __cpp_impl_three_way_comparison &gt;= 201711 </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p0905r1">P0905R1</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1120r0">P1120R0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1185r2">P1185R2</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1186r3">P1186R3</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1630r1">P1630R1</a></td>
+      <td rowspan="3" class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1946r0">P1946R0</a></td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1959r0">P1959R0</a></td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p2002r1">P2002R1</a></td>
+      <td rowspan="2" class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10.2</a></td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p2085r0">P2085R0</a></td>
+    </tr>
+    <tr>
+      <td> Access checking on specializations </td>
+      <td><a href="https://wg21.link/p0692r1">P0692R1</a></td>
+      <td class="supported"> Yes </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Default constructible and assignable stateless lambdas </td>
+      <td><a href="https://wg21.link/p0624r2">P0624R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Lambdas in unevaluated contexts </td>
+      <td><a href="https://wg21.link/p0315r4">P0315R4</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Language support for empty objects </td>
+      <td><a href="https://wg21.link/p0840r2">P0840R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Relaxing the range-for loop customization point finding rules </td>
+      <td><a href="https://wg21.link/p0962r1">P0962R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Allow structured bindings to accessible members </td>
+      <td><a href="https://wg21.link/p0969r0">P0969R0</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Relaxing the structured bindings customization point finding rules </td>
+      <td><a href="https://wg21.link/p0961r1">P0961R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Down with typename! </td>
+      <td><a href="https://wg21.link/p0634r3">P0634R3</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td rowspan="2"> Allow pack expansion in lambda init-capture </td>
+      <td><a href="https://wg21.link/p0780r2">P0780R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> __cpp_init_captures &gt;= 201803 </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p2095r0">P2095R0</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Proposed wording for likely and unlikely attributes </td>
+      <td><a href="https://wg21.link/p0479r5">P0479R5</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Deprecate implicit capture of this via [=] </td>
+      <td><a href="https://wg21.link/p0806r2">P0806R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Class Types in Non-Type Template Parameters </td>
+      <td><a href="https://wg21.link/p0732r2">P0732R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> __cpp_nontype_template_parameter_class &gt;= 201806 </td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td>Inconsistencies with non-type template parameters </td>
+      <td><a href="https://wg21.link/p1907r1">P1907R1</a></td>
+      <td class="supported">
+        <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a>
+        (no floating point, union, or subobject template args)<br>
+        <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> (complete)
+      </td>
+      <td> __cpp_nontype_template_args &gt;= 201911 </td>
+    </tr>
+    <tr>
+      <td> Atomic Compare-and-Exchange with Padding Bits </td>
+      <td><a href="https://wg21.link/p0528r3">P0528R3</a></td>
+      <td class="partial"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> (compiler side only) </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Efficient sized delete for variable sized classes </td>
+      <td><a href="https://wg21.link/p0722r3">P0722R3</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> __cpp_impl_destroying_delete &gt;= 201806 </td>
+    </tr>
+    <tr>
+      <td> Allowing Virtual Function Calls in Constant Expressions </td>
+      <td><a href="https://wg21.link/p1064r0">P1064R0</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Prohibit aggregates with user-declared constructors </td>
+      <td><a href="https://wg21.link/p1008r1">P1008R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> explicit(bool) </td>
+      <td><a href="https://wg21.link/p0892r2">P0892R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> __cpp_conditional_explicit &gt;= 201806 </td>
+    </tr>
+    <tr>
+      <td> Signed integers are two's complement </td>
+      <td><a href="https://wg21.link/p1236r1">P1236R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> char8_t </td>
+      <td><a href="https://wg21.link/p0482r6">P0482R6</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> __cpp_char8_t &gt;= 201811 </td>
+    </tr>
+    <tr>
+      <td rowspan="2"> Immediate functions (consteval) </td>
+      <td><a href="https://wg21.link/p1073r3">P1073R3</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a>
+        (no <code>consteval virtual</code>)
+      <br><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> (full)</td>
+      <td rowspan="2"> __cpp_consteval &gt;= 201811 </td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p1937r2">P1937R2</a></td>
+      <td class="supported center"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a> </td>
+    </tr>
+    <tr>
+      <td> std::is_constant_evaluated </td>
+      <td><a href="https://wg21.link/p0595r2">P0595R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Nested inline namespaces </td>
+      <td><a href="https://wg21.link/p1094r2">P1094R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td rowspan="6"> Relaxations of constexpr restrictions </td>
+      <td><a href="https://wg21.link/p1002r1">P1002R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1327r1">P1327R1</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1330r0">P1330R0</a></td>
+      <td class="supported center"> <a href="https://gcc.gnu.org/gcc-9/changes.html#cxx">9</a> </td>
+      <td> __cpp_constexpr &gt;= 202002 </td>
+    </tr>
+    <tr>
+      <template></template>
+      <td><a href="https://wg21.link/p1331r2">P1331R2</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td> __cpp_constexpr &gt;= 201907 </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1668r1">P1668R1</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p0784r7">P0784R7</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td> __cpp_constexpr_dynamic_alloc &gt;= 201907 </td>
+    </tr>
+    <tr>
+      <td> Feature test macros </td>
+      <td><a href="https://wg21.link/p0941r2">P0941R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (<code>__cpp_</code> macros) <br>
+        <a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a> (<code>__has_cpp_attribute</code>) </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td rowspan="10"> Modules </td>
+      <td><a href="https://wg21.link/p1103r3">P1103R3</a></td>
+      <td class="partial"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> (requires <code>-fmodules-ts</code>)<br>
+	(No Private Module Fragment,<br>
+	Parser-level Global Module Entity Merging,<br>
+	Global Module Implications of <code>extern "C/C++"</code>,<br>
+	or Partition-specific Definition Visibility) </td>
+      <td> <code>__cpp_modules &gt;= 201810L</code><br> (Date of p1103r3)</td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1766r1">P1766R1</a> </td>
+      <td class="unsupported center"> No </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1811r0">P1811R0</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="https://wg21.link/p1703r1">P1703R1</a> (superceded by p1857)</td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1874r1">P1874R1</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1979r0">P1979R0</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p1779r3">P1779R3</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p1857r3">P1857R3</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p2115r0">P2115R0</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p1815r2">P1815R2</a></td>
+      <td class="unsupported center"> No </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Coroutines </td>
+      <td><a href="https://wg21.link/p0912r5">P0912R5</a>
+      as applied to <a href="https://wg21.link/n4861">n4861</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10 </a>
+       (requires -fcoroutines)</td>
+      <td> __cpp_impl_coroutine &gt;= 201902</td>
+    </tr>
+    <tr>
+      <td rowspan="2"> Parenthesized initialization of aggregates </td>
+      <td><a href="https://wg21.link/p0960r3">P0960R3</a><br>
+      </td><td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a> </td>
+      <td> __cpp_aggregate_paren_init &gt;= 201902</td>
+    </tr>
+    <tr>
+      <!-- from Belfast -->
+      <td><a href="https://wg21.link/p1975r0">P1975R0</a></td>
+      <td class="supported center"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>DR: array size deduction in <i>new-expression</i></td>
+      <td><a href="https://wg21.link/p1009r2">P1009R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <!-- from Prague-->
+      <td>DR: Converting from <code>T*</code> to <code>bool</code> should be considered narrowing</td>
+      <td><a href="https://wg21.link/p1957r2">P1957R2</a>
+      </td><td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a> (C++20 mode only),
+	<a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> (all modes)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td> Stronger Unicode requirements </td>
+      <td><a href="https://wg21.link/p1041r4">P1041R4</a><br>
+      <a href="https://wg21.link/p1139r2">P1139R2</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Structured binding extensions </td>
+      <td><a href="https://wg21.link/p1091r3">P1091R3</a><br>
+      <a href="https://wg21.link/p1381r1">P1381R1</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a> <br>
+        <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a> </td>
+      <td> </td>
+    </tr>
+    <!-- Cologne 2019 papers -->
+    <tr>
+      <td>Deprecate <code>a[b,c]</code></td>
+      <td><a href="https://wg21.link/p1161r3">P1161R3</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Deprecating some uses of <code>volatile</code></td>
+      <td><a href="https://wg21.link/p1152r4">P1152R4</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>[[nodiscard("with reason")]]</code></td>
+      <td><a href="https://wg21.link/p1301r4">P1301R4</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>using enum</code></td>
+      <td><a href="https://wg21.link/p1099r5">P1099R5</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td rowspan="2">Class template argument deduction for aggregates</td>
+      <td><a href="https://wg21.link/p1816r0">P1816R0</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td rowspan="3">__cpp_deduction_guides &gt;= 201907L</td>
+    </tr>
+    <tr>
+      <!-- from Prague -->
+      <td><a href="https://wg21.link/p2082r1">P2082R1</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+    </tr>
+    <tr>
+      <td>Class template argument deduction for alias templates</td>
+      <td><a href="https://wg21.link/p1814r0">P1814R0</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+    </tr>
+    <tr>
+      <td>Permit conversions to arrays of unknown bound</td>
+      <td><a href="https://wg21.link/p0388r4">P0388R4</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>constinit</code></td>
+      <td><a href="https://wg21.link/p1143r2">P1143R2</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a></td>
+      <td>__cpp_constinit &gt;= 201907</td>
+    </tr>
+    <tr>
+      <td>Layout-compatibility and Pointer-interconvertibility Traits</td>
+      <td><a href="https://wg21.link/p0466r5">P0466R5</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-12/changes.html#cxx">12</a></td>
+      <td>(in library)</td>
+    </tr>
+    <tr>
+      <!-- Rapperswil 2018 -->
+      <td>DR: Checking for abstract class types</td>
+      <td><a href="https://wg21.link/p0929r2">P0929R2</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <!-- Cologne 2019 papers -->
+      <td>DR: More implicit moves (merge P0527R1 and P1155R3)</td>
+      <td><a href="https://wg21.link/p1825r0">P1825R0</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> (C++20 mode)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <!-- Prague 2020 -->
+      <td>DR: Pseudo-destructors end object lifetimes</td>
+      <td><a href="https://wg21.link/p0593r6">P0593R6</a></td>
+      <td class="supported center"><a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a></td>
+      <td></td>
+    </tr>
+  </tbody></table>
+
+  <h2 id="cxx17">C++17 Support in GCC</h2>
+
+  <p>GCC has almost full support for the previous revision of the C++
+  standard, which was published in 2017.
+  Some library features are missing or incomplete, as described in
+  <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#status.iso.2017">the library documentation</a>.
+  </p>
+
+  <p>C++17 features are available since GCC 5.  This mode is the default
+  in GCC 11; it can be explicitly selected with the <code>-std=c++17</code>
+  command-line flag, or <code>-std=gnu++17</code> to enable GNU extensions
+  as well.</p>
+
+  <h2>C++17 Language Features</h2>
+
+  <p>The following table lists new language features that have been
+  accepted into the C++17 working draft. The "Proposal" column
+  provides a link to the ISO C++ committee proposal that describes the
+  feature, while the "Available in GCC?" column indicates the first
+  version of GCC that contains an implementation of this feature (if
+  it has been implemented).</p>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Language Feature</th>
+      <th>Proposal</th>
+      <th>Available in GCC?</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+    <tr>
+      <td> Removing trigraphs </td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4086.html">N4086</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>u8</code> character literals </td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4267.html">N4267</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a> </td>
+      <td> __cpp_unicode_characters &gt;= 201411 </td>
+    </tr>
+    <tr>
+      <td> Folding expressions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4295.html">N4295</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a> </td>
+      <td> __cpp_fold_expressions &gt;= 201411</td>
+    </tr>
+    <tr>
+      <td> Attributes for namespaces and enumerators </td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4266.html">N4266</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (namespaces) <br>
+        <a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a> (enumerators) </td>
+      <td>
+        __cpp_namespace_attributes &gt;= 201411 <br>
+        __cpp_enumerator_attributes &gt;= 201411
+      </td>
+    </tr>
+    <tr>
+      <td> Nested namespace definitions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4230.html">N4230</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a> </td>
+      <td> __cpp_nested_namespace_definitions &gt;= 201411</td>
+    </tr>
+    <tr>
+      <td> Allow constant evaluation for all non-type template arguments</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4268.html">N4268</a> </td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a> </td>
+      <td>__cpp_nontype_template_args &gt;= 201411 </td>
+    </tr>
+    <tr>
+      <td> Extending <code>static_assert</code> </td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3928.pdf">N3928</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a></td>
+      <td> __cpp_static_assert &gt;= 201411 </td>
+    </tr>
+    <tr>
+      <td>New Rules for auto deduction from braced-init-list</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3922.html">N3922</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Allow typename in a template template parameter</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4051.html">N4051</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td> <code>[[fallthrough]]</code> attribute </td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0188r1.pdf">P0188R1</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td> __has_cpp_attribute(fallthrough)</td>
+    </tr>
+    <tr>
+      <td> <code>[[nodiscard]]</code> attribute</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0189r1.pdf">P0189R1</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-4.8/changes.html#cxx">4.8</a> (<code>[[gnu::warn_unused_result]]</code>)<br>
+	<a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a> (P0189R1)</td>
+      <td> __has_cpp_attribute(nodiscard)</td>
+    </tr>
+    <tr>
+      <td> <code>[[maybe_unused]]</code> attribute</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0212r1.pdf">P0212R1</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-4.8/changes.html#cxx">4.8</a> (<code>[[gnu::unused]]</code>)<br>
+        <a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a> (P0212R1)</td>
+      <td> __has_cpp_attribute(maybe_unused)</td>
+    </tr>
+    <tr>
+      <td> Extension to aggregate initialization</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0017r1.html">P0017R1</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td> __cpp_aggregate_bases &gt;= 201603</td>
+    </tr>
+    <tr>
+      <td> Wording for <code>constexpr</code> lambda </td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0170r1.pdf">P0170R1</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td> __cpp_constexpr &gt;= 201603</td>
+    </tr>
+    <tr>
+      <td> Unary Folds and Empty Parameter Packs</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0036r0.pdf">P0036R0</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a></td>
+      <td> __cpp_fold_expressions &gt;= 201603</td>
+    </tr>
+    <tr>
+      <td> Generalizing the Range-Based For Loop</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0184r0.html">P0184R0</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a></td>
+      <td> __cpp_range_based_for &gt;= 201603</td>
+    </tr>
+    
+    <tr>
+      <td> Lambda capture of <code>*this</code> by Value</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0018r3.html">P0018R3</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td> __cpp_capture_star_this &gt;= 201603</td>
+    </tr>
+    <tr>
+      <td> Construction Rules for <code>enum class</code> variables</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0138r2.pdf">P0138R2</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> Hexadecimal floating literals for C++</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0245r1.html">P0245R1</a></td>
+      <td class="supported">3.0</td>
+      <td> __cpp_hex_float &gt;= 201603</td>
+    </tr>
+    <tr>
+      <td>Dynamic memory allocation for over-aligned data</td>
+      <td><a href="https://wg21.link/p0035">P0035R4</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_aligned_new &gt;= 201606</td>
+    </tr>
+    <tr>
+      <td>Guaranteed copy elision</td>
+      <td><a href="https://wg21.link/p0135">P0135R1</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_guaranteed_copy_elision &gt;= 201606</td>
+    </tr>
+    <tr>
+      <td>Refining Expression Evaluation Order for Idiomatic C++</td>
+      <td><a href="https://wg21.link/p0145">P0145R3</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>constexpr</code> if</td>
+      <td><a href="https://wg21.link/p0292">P0292R2</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_if_constexpr &gt;= 201606</td>
+    </tr>
+    <tr>
+      <td>Selection statements with initializer</td>
+      <td><a href="https://wg21.link/p0305">P0305R1</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Template argument deduction for class templates</td>
+      <td><a href="https://wg21.link/p0091">P0091R3</a><br>
+        <a href="https://wg21.link/p0512r0">P0512R0</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a><br>
+        <a href="https://gcc.gnu.org/gcc-8/changes.html#cxx">8</a></td>
+      <td> __cpp_deduction_guides &gt;= 201606<br>
+        __cpp_deduction_guides &gt;= 201611</td>
+    </tr>
+    <tr>
+      <td>Declaring non-type template parameters with auto</td>
+      <td><a href="https://wg21.link/p0127">P0127R2</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_template_auto &gt;= 201606<br>
+        __cpp_nontype_template_parameter_auto &gt;= 201606</td>
+    </tr>
+    <tr>
+      <td>Using attribute namespaces without repetition</td>
+      <td><a href="https://wg21.link/p0028">P0028R4</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Ignoring unsupported non-standard attributes</td>
+      <td><a href="https://wg21.link/p0283">P0283R2</a></td>
+      <td class="supported">Yes</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Structured bindings</td>
+      <td><a href="https://wg21.link/p0217">P0217R3</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_structured_bindings &gt;= 201606</td>
+    </tr>
+    <tr>
+      <td>Remove Deprecated Use of the <code>register</code> Keyword</td>
+      <td><a href="https://wg21.link/p0001">P0001R1</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Remove Deprecated <code>operator++(bool)</code></td>
+      <td><a href="https://wg21.link/p0002">P0002R1</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Make exception specifications be part of the type system</td>
+      <td><a href="https://wg21.link/p0012">P0012R1</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_noexcept_function_type &gt;= 201510</td>
+    </tr>
+    <tr>
+      <td><code>__has_include</code> for C++17</td>
+      <td><a href="https://wg21.link/p0061">P0061R1</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Rewording inheriting constructors (core issue 1941 et al)</td>
+      <td><a href="https://wg21.link/p0136">P0136R1</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_inheriting_constructors &gt;= 201511</td>
+    </tr>
+    <tr>
+      <td>Inline variables</td>
+      <td><a href="https://wg21.link/p0386r2">P0386R2</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_inline_variables &gt;= 201606</td>
+    </tr>
+    <tr>
+      <td>DR 150, Matching of template template arguments</td>
+      <td><a href="https://wg21.link/p0522r0">P0522R0</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_template_template_args &gt;= 201611</td>
+    </tr>
+    <tr>
+      <td>Removing dynamic exception specifications</td>
+      <td><a href="https://wg21.link/p0003r5">P0003R5</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Pack expansions in <i>using-declarations</i></td>
+      <td><a href="https://wg21.link/p0195r2">P0195R2</a> </td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td>__cpp_variadic_using &gt;= 201611</td>
+    </tr>
+    <tr>
+      <td>A <code>byte</code> type definition</td>
+      <td><a href="https://wg21.link/p0298r0">P0298R0</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-7/changes.html#cxx">7</a></td>
+      <td></td>
+    </tr>
+  </tbody></table>
+
+  <h2 id="tses">Technical Specifications</h2>
+
+  <p>GCC also implements experimental support for some language Technical
+    Specifications published by the C++ committee.</p>
+
+  <p><strong>Important</strong>: Because these Technical Specifications are
+    still evolving toward future inclusion in a C++ standard, GCC's support
+    is <strong>experimental</strong>. No attempt will be made to maintain
+    backward compatibility with implementations of features that do not reflect
+    the final standard.</p>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Technical Specification</th>
+      <th>Document</th>
+      <th>Available in GCC?</th>
+      <th>Compiler Option</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+    <tr>
+      <td>Concepts</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4377.pdf">N4377</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a></td>
+      <td>-fconcepts</td>
+      <td> __cpp_concepts &gt;= 201507 </td>
+    </tr>
+    <tr>
+      <td>Transactional Memory</td>
+      <td><a href="http://www.open-std.org/Jtc1/sc22/wg21/docs/papers/2015/n4514.pdf">N4514</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-6/changes.html#cxx">6</a> (no atomic_cancel)</td>
+      <td>-fgnu-tm</td>
+      <td> __cpp_transactional_memory &gt;= 201505 </td>
+    </tr>
+    <tr>
+      <td> Coroutines </td>
+      <td><a href="https://wg21.link/n4649">N4649</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-10/changes.html#cxx">10</a> </td>
+      <td>-fcoroutines</td>
+      <td>__cpp_impl_coroutine &gt;= 201902L</td>
+    </tr>
+    <tr>
+      <td> Modules </td>
+      <td><a href="https://wg21.link/n4720">N4720</a></td>
+      <td class="supported"> <a href="https://gcc.gnu.org/gcc-11/changes.html#cxx">11</a> </td>
+      <td>-fmodules-ts</td>
+      <td>__cpp_modules &gt;= 201810L</td>
+    </tr>
+  </tbody></table>
+
+  <h2 id="cxx14">C++14 Support in GCC</h2>
+
+  <p>GCC has full support for the of the 2014 C++ standard.</p>
+
+  <p>This mode is the default in GCC 6.1 up until GCC 10 (including); it can
+  be explicitly selected with the <code>-std=c++14</code> command-line flag,
+  or <code>-std=gnu++14</code> to enable GNU extensions as well.</p>
+
+  <h2>C++14 Language Features</h2>
+
+  <p>The following table lists new language features that are part of
+  the C++14 standard. The "Proposal" column
+  provides a link to the ISO C++ committee proposal that describes the
+  feature, while the "Available in GCC?" column indicates the first
+  version of GCC that contains an implementation of this feature.</p>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Language Feature</th>
+      <th>Proposal</th>
+      <th>Available in GCC?</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+  <tr>
+      <td>Tweak to certain C++ contextual conversions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3323.pdf">N3323</a></td>
+      <td class="supported"><a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Binary literals</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3472.pdf">N3472</a></td>
+      <td class="supported">
+        <a href="https://gcc.gnu.org/gcc-4.3/changes.html#cxx">4.3</a> (GNU)
+	<br><a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (N3472)</td>
+      <td>__cpp_binary_literals &gt;= 201304</td>
+
+    </tr>
+    <tr>
+      <td>Return type deduction for normal functions</td>
+      <td><a href="https://isocpp.org/files/papers/N3638.html">N3638</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-4.8/changes.html#cxx">4.8</a> (N3386)
+	<br><a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (N3638)</td>
+      <td>__cpp_decltype_auto &gt;= 201304</td>
+
+    </tr>
+    <tr>
+      <td>Generalized lambda capture (init-capture)</td>
+      <td><a href="https://isocpp.org/files/papers/N3648.html">N3648</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-4.5/changes.html#cplusplus">4.5</a> (partial)
+	<br><a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (N3648)</td>
+      <td>__cpp_init_captures &gt;= 201304</td>
+
+    </tr>
+    <tr>
+      <td>Generic (polymorphic) lambda expressions</td>
+      <td><a href="https://isocpp.org/files/papers/N3649.html">N3649</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a>
+      </td>
+      <td>__cpp_generic_lambdas &gt;= 201304</td>
+
+    </tr>
+    <tr>
+      <td>Variable templates</td>
+      <td><a href="https://isocpp.org/files/papers/N3651.pdf">N3651</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a>
+      </td>
+      <td>__cpp_variable_templates &gt;= 201304</td>
+
+    </tr>
+    <tr>
+      <td>Relaxing requirements on constexpr functions</td>
+      <td><a href="https://isocpp.org/files/papers/N3652.html">N3652</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a>
+      </td>
+      <td>__cpp_constexpr &gt;= 201304</td>
+    </tr>
+    <tr>
+      <td>Member initializers and aggregates</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3653.html">N3653</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a>
+      </td>
+      <td>__cpp_aggregate_nsdmi &gt;= 201304</td>
+    </tr>
+    <tr>
+      <td>Clarifying memory allocation</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3664.html">N3664</a></td>
+      <td>N/A</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Sized deallocation</td>
+      <td><a href="https://isocpp.org/files/papers/n3778.html">N3778</a></td>
+      <td class="supported">
+	<a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a>
+      </td>
+      <td>__cpp_sized_deallocation &gt;= 201309</td>
+    </tr>
+    <tr>
+      <td>[[deprecated]] attribute</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3760.html">N3760</a></td>
+      <td class="supported">
+        <a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (N3797)</td>
+      <td>__has_cpp_attribute(deprecated) &gt;= 201309</td>
+    </tr>
+    <tr>
+      <td>Single-quotation-mark as a digit separator</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3781.pdf">N3781</a></td>
+      <td class="supported">
+        <a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (N3797)</td>
+      <td>__cpp_digit_separator &gt;= 201309</td>
+    </tr>
+  </tbody></table>
+
+  <p>This feature was briefly part of the C++14 working paper, but was not
+    part of the published standard; as a result, it has been removed from
+    the compiler.</p>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Language Feature</th>
+      <th>Proposal</th>
+      <th>Available in GCC?</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+    <tr>
+      <td>Runtime-sized arrays with automatic storage duration
+      <br>(Removed from the standard)</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3639.html">N3639</a></td>
+      <td class="supported">?.? (GNU VLAs)
+	<br><a href="https://gcc.gnu.org/gcc-4.9/changes.html#cxx">4.9</a> (N3639)
+        <br><a href="https://gcc.gnu.org/gcc-5/changes.html#cxx">5</a> (GNU VLAs)</td>
+      <td>__cpp_runtime_arrays &gt;= 198712</td>
+    </tr>
+  </tbody></table>
+
+  <h2 id="cxx11">C++11 Support in GCC</h2>
+
+  <p>GCC 4.8.1 was the first feature-complete implementation of the 2011 C++
+    standard, previously known as C++0x.</p>
+  <p>This mode can be selected with
+    the <code>-std=c++11</code> command-line flag, or <code>-std=gnu++11</code>
+    to enable GNU extensions as well.</p>
+
+  <p>For information about C++11 support in a specific version of GCC,
+  please see:</p>
+  <ul>
+    <li><a href="https://gcc.gnu.org/gcc-4.3/cxx0x_status.html">GCC 4.3 C++0x Status</a></li>
+    <li><a href="https://gcc.gnu.org/gcc-4.4/cxx0x_status.html">GCC 4.4 C++0x Status</a></li>
+    <li><a href="https://gcc.gnu.org/gcc-4.5/cxx0x_status.html">GCC 4.5 C++0x Status</a></li>
+    <li><a href="https://gcc.gnu.org/gcc-4.6/cxx0x_status.html">GCC 4.6 C++0x Status</a></li>
+    <li><a href="https://gcc.gnu.org/gcc-4.7/cxx0x_status.html">GCC 4.7 C++11 Status</a></li>
+    <li><a href="https://gcc.gnu.org/gcc-4.8/cxx0x_status.html">GCC 4.8 C++11 Status</a></li>
+  </ul>
+
+  <table class="cxxstatus">
+    <tbody><tr class="separator">
+      <th>Language Feature</th>
+      <th>Proposal</th>
+      <th>Available in GCC?</th>
+      <th>SD-6 Feature Test</th>
+    </tr>
+    <tr>
+      <td>Rvalue references</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2118.html">N2118</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC 4.3</a></td>
+      <td>__cpp_rvalue_references &gt;= 200610</td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rvalue references for <code>*this</code></td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2439.htm">N2439</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8.1</a></td>
+      <td>__cpp_ref_qualifiers &gt;= 200710</td>
+    </tr>
+    <tr>
+      <td>Initialization of class objects by rvalues</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1610.html">N1610</a></td>
+      <td>Yes</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Non-static data member initializers</td>
+      <td><a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2756.htm">N2756</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.7/changes.html">GCC 4.7</a></td>
+      <td>__cpp_nsdmi &gt;= 200809</td>
+    </tr>
+    <tr>
+      <td>Variadic templates</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2242.pdf">N2242</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC
+      4.3</a></td>
+      <td>__cpp_variadic_templates &gt;= 200704</td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;Extending variadic template template parameters</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2555.pdf">N2555</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC
+      4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Initializer lists</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm">N2672</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td>__cpp_initializer_lists &gt;= 200806</td>
+    </tr>
+    <tr>
+      <td>Static assertions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1720.html">N1720</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC 4.3</a></td>
+      <td>__cpp_static_assert &gt;= 200410</td>
+    </tr>
+    <tr>
+      <td><code>auto</code>-typed variables</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1984.pdf">N1984</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;Multi-declarator <code>auto</code></td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1737.pdf">N1737</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;Removal of auto as a storage-class specifier</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2546.htm">N2546</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;New function declarator syntax</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2541.htm">N2541</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>New wording for C++0x lambdas</td>
+      <td><a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2927.pdf">N2927</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td>__cpp_lambdas &gt;= 200907</td>
+    </tr>
+    <tr>
+      <td>Declared type of an expression</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2343.pdf">N2343</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC
+      4.3</a></td>
+      <td>__cpp_decltype &gt;= 200707</td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;decltype and call expressions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf">N3276</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8.1</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Right angle brackets</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html">N1757</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC
+      4.3</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Default template arguments for function templates</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#226">DR226</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC
+      4.3</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Solving the SFINAE problem for expressions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2634.html">DR339</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC
+      4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Template aliases</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2258.pdf">N2258</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.7/changes.html">GCC 4.7</a></td>
+      <td>__cpp_alias_templates &gt;= 200704</td>
+    </tr>
+    <tr>
+      <td>Extern templates</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1987.htm">N1987</a></td>
+      <td>Yes</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Null pointer constant</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2431.pdf">N2431</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Strongly-typed enums</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf">N2347</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC
+      4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Forward declarations for enums</td>
+      <td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2764.pdf">N2764
+      </a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Generalized attributes</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2761.pdf">N2761</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td>__cpp_attributes &gt;= 200809;<br>__has_cpp_attribute(noreturn) &gt;= 200809;<br>
+          __has_cpp_attribute(carries_dependency) == 0 (not implemented)</td>
+    </tr>
+    <tr>
+      <td>Generalized constant expressions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2235.pdf">N2235</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td>__cpp_constexpr &gt;= 200704</td>
+    </tr>
+    <tr>
+      <td>Alignment support</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2341.pdf">N2341</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td></td>
+    </tr>
+    <!-- Skipped N1627: Conditionally-support behavior -->
+    <!-- Skipped N1727: Changing Undefined Behavior into Diagnosable Errors -->
+    <tr>
+      <td>Delegating constructors</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1986.pdf">N1986</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.7/changes.html">GCC 4.7</a></td>
+      <td>__cpp_delegating_constructors &gt;= 200604</td>
+    </tr>
+    <tr>
+      <td>Inheriting constructors</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2540.htm">N2540</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td>__cpp_inheriting_constructors &gt;= 200802</td>
+    </tr>
+    <tr>
+      <td>Explicit conversion operators</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2437.pdf">N2437</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>New character types</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2249.html">N2249</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td>__cpp_unicode_characters &gt;= 200704</td>
+    </tr>
+    <tr>
+      <td>Unicode string literals</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2442.htm">N2442</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td>__cpp_unicode_literals &gt;= 200710</td>
+    </tr>
+    <tr>
+      <td>Raw string literals</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2442.htm">N2442</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td>__cpp_raw_strings &gt;= 200710</td>
+    </tr>
+    <tr>
+      <td>Universal character name literals</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2170.html">N2170</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>User-defined literals</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2765.pdf">N2765</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.7/changes.html">GCC 4.7</a></td>
+      <td>__cpp_user_defined_literals &gt;= 200809</td>
+    </tr>
+    <tr>
+      <td>Standard Layout Types</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2342.htm">N2342</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Defaulted and deleted functions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2346.htm">N2346</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC
+      4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Extended friend declarations</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1791.pdf">N1791</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.7/changes.html">GCC 4.7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Extending <code>sizeof</code></td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2253.html">N2253</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Inline namespaces</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2535.htm">N2535</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC
+      4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Unrestricted unions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2544.pdf">N2544</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Local and unnamed types as template arguments</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm">N2657</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Range-based for</td>
+      <td><a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2930.html">N2930</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td>__cpp_range_based_for &gt;= 200907</td>
+    </tr>
+    <tr>
+      <td>Explicit virtual overrides</td>
+      <td><a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2928.htm">N2928</a>
+	<br><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3206.htm">N3206</a>
+<br><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3272.htm">N3272</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.7/changes.html">GCC 4.7</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Minimal support for garbage collection and reachability-based leak detection</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2670.htm">N2670</a></td>
+      <td>No</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Allowing move constructors to throw [noexcept]</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3050.html">N3050</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Defining move special member functions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3053.html">N3053</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.6/changes.html">GCC 4.6</a></td>
+      <td></td>
+    </tr>
+
+    <tr class="separator">
+      <th colspan="4">Concurrency</th>
+    </tr>
+
+    <tr>
+      <td>Sequence points</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2239.html">N2239</a></td>
+      <td>Yes</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Atomic operations</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2427.html">N2427</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Strong Compare and Exchange</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2748.html">N2748</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.5/changes.html">GCC 4.5</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Bidirectional Fences</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2752.htm">N2752</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>Memory model</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2429.htm">N2429</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Data-dependency ordering: atomics and memory model</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2664.htm">N2664</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a><br>(memory_order_consume)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Propagating exceptions</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2179.html">N2179</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.4/changes.html">GCC 4.4</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Abandoning a process and at_quick_exit</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2440.htm">N2440</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Allow atomics use in signal handlers</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2547.htm">N2547</a></td>
+      <td>Yes</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Thread-local storage</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2659.htm">N2659</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.8/changes.html">GCC 4.8</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Dynamic initialization and destruction with concurrency</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2660.htm">N2660</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC 4.3</a></td>
+      <td>__cpp_threadsafe_static_init &gt;= 200806</td>
+    </tr>
+
+    <tr class="separator">
+      <th colspan="4">C99 Features in C++11</th>
+    </tr>
+
+    <tr>
+      <td><code>__func__</code> predefined identifier</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2340.htm">N2340</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC 4.3</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>C99 preprocessor</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1653.htm">N1653</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC
+      4.3</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>long long</code></td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1811.pdf">N1811</a></td>
+      <td><a href="https://gcc.gnu.org/gcc-4.3/changes.html">GCC 4.3</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Extended integral types</td>
+      <td><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1988.pdf">N1988</a></td>
+      <td>Yes</td>
+      <td></td>
+    </tr>
+  </tbody></table>
+
+  <h2 id="cxx98">C++98 Support in GCC</h2>
+
+  GCC has full support for the 1998 C++ standard as modified by the 2003
+  technical corrigendum and some later defect reports, excluding
+  the <code>export</code> feature which was later removed from the language.
+
+  <p>This mode is the default in GCC versions prior to 6.1; it can be
+  explicitly selected with the <code>-std=c++98</code> command-line flag,
+  or <code>-std=gnu++98</code> to enable GNU extensions as well.</p>
+
+
+
+
+<!-- ==================================================================== -->
+
+<div class="copyright">
+
+<address>For questions related to the use of GCC,
+please consult these web pages and the
+<a href="https://gcc.gnu.org/onlinedocs/">GCC manuals</a>. If that fails,
+the <a href="mailto:gcc-help@gcc.gnu.org">gcc-help@gcc.gnu.org</a>
+mailing list might help.
+Comments on these web pages and the development of GCC are welcome on our
+developer list at <a href="mailto:gcc@gcc.gnu.org">gcc@gcc.gnu.org</a>.
+All of <a href="https://gcc.gnu.org/lists.html">our lists</a>
+have public archives.
+</address>
+
+<p>Copyright (C)
+<a href="https://www.fsf.org/">Free Software Foundation, Inc.</a>
+Verbatim copying and distribution of this entire article is
+permitted in any medium, provided this notice is preserved.</p>
+
+<p>These pages are
+<a href="https://gcc.gnu.org/about.html">maintained by the GCC team</a>.
+Last modified 2022-05-09<!-- IGNORE DIFF
+--><a href="http://validator.w3.org/check/referer">.</a></p>
+
+</div>
+
+<!-- ==================================================================== -->
+
+
+
+
+</body></html>
