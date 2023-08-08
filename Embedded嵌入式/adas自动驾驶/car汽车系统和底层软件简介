@@ -60,8 +60,8 @@ ADAS汽车智能驾驶辅助功能开发, 常见的技术简介:
 			有大量的软件可供修改, 可供使用, 可供参考的软件很多(需要也要从异步软件改为强实时软件, 但可参考的软件库很大, 很多, 也不错);
 
 		一般地:
-			adaptive autosar支持:         QNX, Linux;
-			classic platform autosar支持: Linux
+			adaptive autosar支持:         QNX, Linux
+			classic platform autosar支持: QNX, Linux
 			ROS2/Cyber RT/Autoware支持:   Linux
 
 
