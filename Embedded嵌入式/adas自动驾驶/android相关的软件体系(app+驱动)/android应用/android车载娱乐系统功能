@@ -4,8 +4,8 @@
 
 
 
-'android车载娱乐系统功能'(Over the Air Technology)简述:
-	实际上, 'android车载娱乐系统功能', 是离不开android 系统 + tbox 无线电远程通信系统的;
+'OTA远程管理功能'(Over the Air Technology)简述:
+	实际上, 'OTA远程管理功能', 是离不开android 系统 + tbox 无线电远程通信系统的;
 	而且, OTA 必须以android 系统的软件app 模式, 来嵌入到整车系统中;
 
 	实际上, 汽车里面的android 系统, 坐舱娱乐, 主要也是:
@@ -20,9 +20,19 @@
 		* 导航
 		* 远程监控汽车健康, OTA在线管理系统(这部分, 是一体的, 都是android 系统的)
 		* 汽车监控camera 摄像头系统(行车记录仪)
+		* '汽车门, 窗, 灯, 雨刷控制系统(坐舱控制系统)'
 
 	远程无线电通信, 主要依赖tbox, 
-	因此, 'android车载娱乐系统功能', 其实还是android app;
+	因此, 'OTA远程管理功能', 其实还是android app;
+
+ps:
+	OTA 系统基本上是车载android 的大统领, 基本上统领了:
+		* android 系统安全
+		* tbox 通信系统
+		* 行车记录仪
+		* 车载娱乐系统
+		* 用户远程状态info 查看app
+		* '汽车门, 窗, 灯, 雨刷控制系统(坐舱控制系统)'
 
 
 
