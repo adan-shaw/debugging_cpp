@@ -1,0 +1,36 @@
+toradex.cn 平台:
+
+
+
+Soc 供应商(需要Modules 板卡的主控芯片):
+	NXP
+	NVIDIA
+	德州科技
+
+Modules 板卡SoM(需要母板):
+	Apalis Family
+	Verdin Family
+	Colibri Family
+	相当于主机
+
+
+
+Carrier Board 母板(需要Modules 板卡):
+	Apalis Evaluation Board
+	Ixora Carrier Board
+	相当于io 拓展坞
+
+
+
+系统层, 支持的系统(写入固存的os):
+	WinCE
+	android
+	QNX
+
+
+
+toradex.cn 工具下载(编程工具链 & 系统工具):
+	Toradex Easy Installer
+
+
+
