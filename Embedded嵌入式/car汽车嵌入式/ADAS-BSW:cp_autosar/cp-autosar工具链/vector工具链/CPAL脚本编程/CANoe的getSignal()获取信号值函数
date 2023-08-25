@@ -1,0 +1,40 @@
+CANoe的getSignal()用法:
+	float getSignal(Signal aSignal);   // form 1 [参数为信号变量]
+	float getSignal(char signalName[]);// form 2 [参数为信号info 字符串]
+
+
+
+
+
+float getSignal(Signal aSignal);// form 1
+Return Values:
+	* If the signal is available (already appeared on the bus), this function returns the current signal value.
+		如果信号可用(已出现在总线上),此函数将返回当前信号值.
+	* If the signal is not yet available (did not appear on the bus until function call), 
+		this function returns the Initial Value of the database (GenSigStartValue).
+		如果信号还不可用(直到函数调用才出现在总线上),此函数将返回arxml数据库的初始值(GenSigStartValue).
+	* If a start value is defined in the Start Values window, 
+		or if the old signal value from the last measurement was taken over 
+		(CANoe options: Values of signal = do not change), this value is reported.
+		如果在"开始值"窗口中定义了开始值[CANoe 信号面板],
+		或者如果上次测量的旧信号值被接管(CANoe选项:信号值=不变),则报告该值.
+
+Example:
+	float value;
+	//Node and signal [根据节点信号名, 获取信号值]
+	value = getSignal(LightSwitch::OnOff);
+	//Channel and signal [根据总线bus名, 获取信号值]
+	value = getSignal(CAN1::Status);
+
+
+
+float getSignal(char signalName[]);// form 2
+Return Values:
+	Value of the signal; 0.0 if the signal is not found.
+
+
+
+
+
+
+

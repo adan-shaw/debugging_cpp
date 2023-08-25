@@ -1,0 +1,74 @@
+Classes in CAPL
+	In CAPL predefined data types are available that can be used like classes in object-oriented programming languages such as C++.
+	Classes (predefined data types)
+		Timer, MsTimer
+		File
+		TcpSocket
+		UdpSocket
+		TestCheck
+		TestStimulus
+		DiagRequest
+		DiagResponse
+		Associative fields
+		CAN
+		Classes of CAN Disturbance Interface
+		Classes of Scope
+
+中文解析:
+	经典编程接口 in CAPL:
+		在CAPL中,预定义的数据类型是可用的,可以像C++等面向对象编程语言中的类一样使用.
+		c++类(预定义的数据类型):
+			Timer, MsTimer
+			File
+			TcpSocket
+			UdpSocket
+			TestCheck
+			TestStimulus
+			DiagRequest
+			DiagResponse
+			Associative fields
+			CAN
+			Classes of CAN Disturbance Interface
+			Classes of Scope
+
+
+
+想要发数据, 只能像C++ socket 编程一样, 自己链接, 绑定, 处理io 收发?
+其实如果像c++ socket 编程一样, 
+那么CANoe 节点代码的编写, 仿真客户端代码的编写, 实际上就是client 客户端代码的编写;
+CANoe 的信号抓取函数, 实际上类似于抓包, 是用作偷窥的, 不能发送数据, 只能监视, 抓包;
+
+因此, 编写CANoe 节点源码, 实际上就是在写c++ 代码, CAPL 中的C++ 代码!!
+CAPL 编码, 也有字符串处理函数, math 数学处理函数, 实际上就是脚本式C++, 跟GO/RUST 没有啥区别, 甚至可以说是GO/RUST 的祖先;
+
+因此, 编写CAPL 编码, 也不难;
+不过AUTOSAR 上面使用的SomeIP/DDS/UDP组播, 这些网络协议, CANoe 是否支持, 就很难说了;
+
+
+
+CANoe 手册, 支持关键字搜索:
+	支持SOME/IP:
+		CAPL Functions » Ethernet » SOME/IP Interaction Layer
+	支持IP / IPsec / UDP / TCP:
+		CAPL Functions » TCP/IP CAPL Functions
+	支持DDS:
+		CANoe中开始支持DDS 随着DDS开始在汽车电子领域的应用, Vector应客户需求在CANoe 16 SP3版本中开始支持DDS的仿真、分析与测试.
+		[旧版本一律不支持]
+
+还有各种冷漠CAN 标准, 啥ISO11783[拖拉机CAN], LIN 等, 可以使用关键字搜素自己找到]
+CAN 标准有很多小型标准, ISO11783 只是CAN 标准的一个小分支, 详细自己根据业务需求, 再找;
+
+CAN 关键字, 搜索到的资料十分庞大, 请根据CAN 下面的细分标准号来查找数据, 例如拖拉机专用的CAN-ISO11783, 就直接找ISO11783 即可;
+德国人造的仿真系统, 这么多年积累的技术, 还真是挺牛的, 真的要你付费十几万, 没商量[你可以不买];
+
+
+
+有网络编程接口, 有disk读写函数, 有字符串/math函数, 单线程即可, 还有什么不能编程的?
+一个CANoe, 仿真所有工控网络协议!!
+
+
+
+
+CANoe » Libraries & Add-ons » CANoe IL CAN » Database Settings DBC
+Database Settings DBC
+[CANoe DBC++ 响应事件]

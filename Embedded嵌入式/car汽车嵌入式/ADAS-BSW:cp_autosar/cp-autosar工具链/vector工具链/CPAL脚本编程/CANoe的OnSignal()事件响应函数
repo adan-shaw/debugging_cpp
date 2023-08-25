@@ -1,0 +1,31 @@
+Response to Signal Changes[信号改变时, 只触发一次这个函数, 改变一次, 触发一次]:
+英文注释:
+	Enter the following syntax if your procedure is to be called with every signal change
+	[on signal_change has, therefore, the same semantics as on signal]
+
+函数定义:
+	# 等价函数(功能都一样的, 只取一个即可):
+	on signal <signal_name>
+	on signal_change <signal_name>
+
+
+
+
+
+Response to every signal reception[每次信号出现时, 无论值是否改变, 都触发这个函数]:
+英文注释:
+	Enter the following syntax if your procedure is to be called with every signal reception
+
+函数定义:
+	on signal_update <signal_name>
+
+
+
+
+
+Response to several signals[信号组内的信号改变时, 只触发一次这个函数, 改变一次, 触发一次]:
+英文注释:
+	Enter the following syntax if your procedure is to be called if several signals change
+
+函数定义(一个函数多用的情况):
+	on signal (<signal_name1> | <signal_name2> | ...)

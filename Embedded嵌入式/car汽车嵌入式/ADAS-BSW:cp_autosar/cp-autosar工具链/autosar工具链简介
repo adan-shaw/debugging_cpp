@@ -1,0 +1,144 @@
+ECU 单元:
+	electronic control unit电子控制单元, 即车载电脑, 由微控制器和外围电路组成;
+	(ps: 微控制器, 可以是多个MCU 组合在一起的, 不会是单纯一个MCU 一个ECU, 而是多个MCU 组成一个功能ECU)
+
+
+
+autosar工具链简介:
+	严格意义上的autosar 工具链, 是包括: ap autosar + cp autosar;
+	然后, 通过autosar 配置工具链, 可以自动生成ap/cp 的大量基础代码, 实现汽车产品的快速设计, 快速投产;
+
+	但有些autosar 工具链供应商, 只会提供cp-autosar 配置工具链(生成以ECU 为单元的'节点功能实现/节点诊断/节点仿真');
+	单纯提供cp-autosar 配置工具链的供应商, 主要是方便大量下游汽车零配件生产商, 生产汽车零配件;
+	(这种autosar 工具链供应商, 可能跟芯片厂商深度绑定)
+
+	ap autosar 工具链供应商, 是可以另外购买的(一般称职为: autosar 中间件解决方案),
+	反正cp autosar, ap autosar 的沟通桥梁, 就是arxml 文件, 里面定义了: 
+		汽车底盘BSW 到汽车应用app 的所有信号描述信息;
+
+	因此你会发现, 使用etas/eb/vector 工具链的整车厂商, 偶尔也有使用adaptive autosar 中间件解决方案的;
+	(整车厂商为了开发速度, 是不太愿意自己开发一套ap-autosar 系统的, 浪费时间, 后续维护成本也很高, 影响整车研发出车速度)
+	常见的ap-autosar 中间件解决方案:
+		* adaptive autosar
+		* ROS2
+		* Autoware(基于ROS)
+		* Cyber RT(基于ROS, 百度自研)
+		...
+
+	行业默契:
+		一般地, cp autosar, ap autosar 的沟通桥梁, 就是arxml 文件;
+		不同cp/ap autosar供应商之间, 应该也会以这个标准, 去编写软件的, 
+		就算不是, 做一个转换, 貌似也不是很难(就xml to ???);
+
+
+	买什么cp-autosar 工具链, 主要是车厂在生产成本和设计速度上, 做考量;
+	选择对了, 可以很大的降低成本, 实现自产汽车, 这是整车汽车生产商要面临的问题;
+
+
+
+etas/eb/vector 工具链:
+	etas/eb/vector 工具链, 都可以通过rte工具链生成: rte, swc, cdd;
+	然后在swc和cdd中填写业务逻辑, matlab里做的就是swc;
+
+
+
+* BSW 层, cp-autosar, 主要通过CANoe 一系列的工具, 生成以ECU 为单元的'节点功能实现/节点诊断/节点仿真', 
+	最终, 导出一个arxml 文件, 这个文件也用作与ap-autosar 匹配;
+
+* 应用层, ap-autosar, 主要通过'UCM配置管理器', 结合arxml, 结合adaptive autosar 软件框架, 
+	生成ap-autosar 应用群的代码, 
+	最终编译出ap-autosar 应用程序群(后台程序);
+	然后, 利用CANoe 仿真环境, 进行双端仿真测试, 这样可以加快汽车投产, 减少很多不必要的麻烦;
+
+
+
+
+
+#
+# BSW 层工具简介(以vector 为例)
+#
+* CANdelaStudio 诊断需求定义工具(诊断协议开发软件);
+	CANdelaStudio 用于定义ECU的诊断功能, 并且生成诊断数据库-CDD文件来优化整个诊断开发过程, 为"CANdela方法"提供了强力支持; 
+
+	CANdelaStudio 支持文档模板, 可以满足不同厂商对同一个标准工具的各种特殊要求:
+		在内容上, 一个文档模板对应于一种诊断, 这样方便用来做自动化诊断, 配套的工具有如下: 
+			CANoe.Diva基于CANoe.DiVa的诊断协议、刷写和诊断应用的自动化测试, 
+			CANoe.Diva可以通过导入cdd或odx文件, 自动生成全面的测试用例;
+			再在CANoe中导入用例执行测试即可生成测试报告(主要用于测试CAN的诊断功能)
+
+
+
+* Vector汽车电子开发软件:
+	1.CANbedded
+		专业的CAN通信嵌入式软件组件, 它能够满足汽车应用的基本通信需求, 是以源代码的形式提供的可重用的组件, 包括:
+			CAN,Driver,交互层(IL),网络管理(NM),传输层(TP),诊断层(CANdesc),通信测量和标定协议(CCP,XCP),通信控制层(CCL)等多个模块;
+
+	2.Davinci Configurator Pro
+		AUTOSAR基础软件(BSW)配置工具, 专门用于配置并生成ECU中的BasicSoftware(BSW)以及RTE;
+
+	3.Davinci Developer
+		AUTOSAR软件组件设计(SWC)工具, Davinci Developer是一个专门用于符合AUTOSAR标准的ECU软件开发工具, 
+		它可以用来配置并生成ECU的RTE(Run Time Environment)描述文件;
+		用户可以利用Davinci Developer的图形用户界面开发应用程序(SWC)以及定义应用程序接口, 并可以方便的调用Davinci系列的其他工具;
+
+	4.MICROSAR
+		符合AUTOSAR标准的基础软件集, MICROSAR是Vector根据autosar标准开发的一系列产品级软件模块, 包括RTE,CAL,OS,COM,IO,SYS和Diag等;
+
+	5.PREEvision
+		PREEvision可以使得E/E工程更高效, 更易于管理和更轻松;
+		借助中央数据库, 来自不同地点的团队将始终使用最新信息
+		(顺便一提E/E就是我们目前以ECU为节点, 总线连接的汽车架构;
+		 往后由于ECU的不断增加, 集中式的E/E架构会成为新的主流)
+		这个工具说白了就是OEM用来设计整车架构用的, 
+		架构里需要哪些ECU, 总线如何分布等内容;
+		如果做的更细, 可以把SWC架构也一并设计了, 主要有以下优势: 
+			* 在一个工具中设计, 管理和记录完整的E/E系统
+			* 综合可追溯性
+			* 图中的图形建模
+			* 全面支持AUTOSAR方法
+			* 安全相关系统的设计 符合ISO 26262
+			* 变体和产品线管理
+			* 基于单一来源完成从架构到线束的开发
+
+	6.vVIRTUALtarget
+		这个软件是一个仿真软件, 作用是再OEM设计整车时, 由于设计之初还没有现成的ECU供使用;
+		所以Vector就设计出这么各软件, 可以仿真ECU的功能, 使得OEM在没有实物的情况下也能顺利开发和测试, 优势如下:
+			* vVIRTUALtarget可在所有典型的Windows PC上运行
+			* 以实时或独立的方式执行您的软件
+			* 即使在没有目标硬件的情况下, 从应用软件, 通过AUTOSAR Basic软件到硬件驱动程序, 也可以设置并运行整个ECU软件的测试
+			* 修改并模拟真实硬件的配置
+			* 实际和虚拟硬件的配置始终保持一致
+			* 与其他测试工具的简单连接
+
+
+
+
+
+#
+# 新版Vector 工具链简介
+#
+Vector AddOn Package Daimler			Vector Daimler插件包
+Vector Aerospace Message Editor		Vector 航空工业Message编辑器
+Vector Application Updater				Vector 应用更新
+Vector AUTOSAR Explorer						Vector AUTOSAR 浏览器(可以看到CANoe 下面AUTOSAR 框架相关的所有信号的相关详细信息)
+Vector CANdb++ 3.1								Vector DBC 数据库工具
+Vector CANdeiaStudio 15						Vector CANdeia工作室
+Vector CANoe 15										Vector CANoe 开发环境IDE
+Vector CANoe Test Report Viewer		Vector CANoe 专用测试工具
+Vector FIBEX Explorer							Vector FIBEX 浏览器
+Vector Hardware Configuration			Vector 硬件配置config
+Vector LDF Explorer								Vector LDF 浏览器
+Vector License Client							Vector 授权协议客户端
+Vector ODXStudio 8								Vector 诊断工作室
+Vector Platform Manager						Vector 平台管理器(汇总入口程序)
+Vector Security Manager						Vector 安全验证管理器
+Vector Support Assistant					Vector 服务助手(在线支持)
+Vector vTESTstudio Viewer 6				Vector 测试工作室(有多个test 子软件)
+
+
+
+专业术语简介:
+	DBC是DataBase CAN的缩写, 代表CAN的数据库文件, 
+	在此文件中详细定义了CAN通信的相关信息, 比如消息名, 消息ID, 信号名, 信号的布局等等;
+
+vecotr启动需要加密狗启动, 安装了也不能用, 是付费软件;

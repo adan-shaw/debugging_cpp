@@ -1,0 +1,37 @@
+CAPL Functions 分类:
+  General Functions                           General CAPL Functions [包含大量工具函数, str/math 库等]
+  General Event Procedures                    CAPL 关键函数说明(on key, on signal, on signal_update, on preStart, on start, on preStop等关键系统函数说明)
+  Unconditional (Boxed) Event Procedures      无条件(盒装)活动程序[作用不大]
+  System Variables                            CAPL 系统变量设置/获取
+  Signal Access                               CAPL 信号处理API
+  Struct Byte Access                          CAPL 结构体操作API(memcpy, memset之类的)
+  Associative Fields                          关联字段[作用不大]
+  Classes in CAPL                             CAPL 功能类API()
+
+
+
+不要强官方文档的job, 官方文档已经写得很清楚了, 不要重复劳动, 拿来就用;
+(这里只做简单的说明, 带你阅读官方文档)
+
+
+
+比较重要的有:
+  * Classes in CAPL:
+			Timer, MsTimer
+			File
+			TcpSocket
+			UdpSocket
+			TestCheck
+			TestStimulus
+			DiagRequest
+			DiagResponse
+			Associative fields
+			CAN
+			Classes of CAN Disturbance Interface
+			Classes of Scope
+
+  * Signal Access
+  * System Variables
+  * General Event Procedures
+  * General Functions:
+			General CAPL Functions

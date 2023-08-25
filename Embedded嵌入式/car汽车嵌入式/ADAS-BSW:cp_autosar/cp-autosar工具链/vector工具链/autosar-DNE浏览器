@@ -1,0 +1,19 @@
+arxml 文件的作用:
+	每个CANoe 仿真工程, 都有一个arxml 文件, 
+	arxml 定义了总线类型, 所有ECU 节点, 每个ECU 节点的PDUs 信号, 每个信号的类型, 字节大小, 格式... 等详细信息;
+	(一个CANoe 仿真工程, 只有一个arxml 文件,
+	 一个arxml 文件, 定义了整个CANoe 仿真工程的所有信号集, 所有信号, 信号格式, 信号字节大小, 信号数据类型等信息)
+
+
+
+autosar-DNE浏览器的作用:
+	* 可以查看这个arxml 文件的详细内容, 查看有多少个ECU, 每个ECU 有多少个PDUs 信号, 每个PDUs 信号的相信信息;
+
+	* 可以把arxml 里面的数据, 导出为csv 序列化文件, 
+		最终得到一个execl list, 记录了整个arxml 里面的所有PDUs 信号的详细描述信息;
+		(现成的转换工具, 可以轻松做csv to execl 的转换)
+
+
+
+如何编辑arxml 文件:
+	使用CANdb++ 可以对arxml 进行合理编辑, 编程, 详情请看: CANdb++ 工具和编程的简介;

@@ -1,0 +1,117 @@
+/*@!Encoding:1252*/
+
+
+
+//
+//1.CANoe-CAPL 自动化测试语言简介
+//
+CANoe-CAPL 是一种仿c 语言的编码语言:
+	* 需要包含头文件
+	* 需要有*.can 源文件
+	* 需要编译
+	* 备注方式也跟c 语言一样;
+也可以接入DLL 动态链接库, 唯一不好的地方就是: 
+	CANoe-CAPL 运行在windows 平台上面, 是不能迁移到linux 上面的, 
+	所以动态链接库也只能是DLL 封装格式的;
+
+
+//CANoe-CAPL 普通'变量类型'列表:
+/*
+  Integers type:      size[Byte]     unsigned/signed
+    byte               1              unsigned
+    word               2              unsigned
+    dword              4              unsigned
+    qword              8              unsigned
+    int                2              signed
+    long               4              signed
+    int64              8              signed
+
+  Char type:
+    char               1
+
+  Floating point numbers:
+    float              8
+    double             8
+*/
+
+
+//CANoe-CAPL 特殊'变量类型'列表:
+/*
+  * array数组
+  * 枚举体
+  * 联合体
+  * 结构体
+  - CANoe-CAPL 不支持class 类定义;
+*/
+
+
+
+
+
+//
+//2.CANoe-CAPL 编码样板(经典3段式)
+//
+
+//*1.头文件引用区, 可以引用*.cin / *.can 文件
+includes
+{
+}
+
+//*2.全局变量定义区(CANoe-CAPL 只有全局变量, 函数内没有静止变量?)
+/*
+	一般用作声明:
+		* 普通变量
+		* array数组
+		* 枚举体
+		* 联合体
+		* 结构体
+	普通变量可以初始化, '数组/结构体/枚举体/联合体'不能初始化)
+*/
+variables
+{
+}
+
+
+
+//*3.各种on xxx{} 系统自带的函数(你也自定义一些函数):
+
+
+
+//预启动函数, 启动主函数前的init 初始化动作(可以初始化全局变量)
+on preStart
+{
+	//本函数内部可以定义局部变量(其他函数也可以, 有on xxx{} 的函数, 都可以定义局部变量)
+	//局部变量会随着函数返回而释放, 跟c 语言一样;
+}
+
+
+//定时器函数
+on timer myTimer
+{
+  //一般定时器函数, 执行完就结束, 下次唤醒再执行
+  write("myTimer(): quit");
+}
+
+
+//主逻辑函数, 等同于main()
+on start
+{
+	//设置定时器(激活定时器)
+	setTimer(writeTimer,gTimeout);
+}
+
+
+on preStop
+{
+	//预结束函数, 跟_exit() 函数类似, 做结束前的准备工作
+}
+
+
+
+//重新扩展全局变量, 支持二次使用
+variables
+{
+  long gTimeout = 1000;
+}
+
+

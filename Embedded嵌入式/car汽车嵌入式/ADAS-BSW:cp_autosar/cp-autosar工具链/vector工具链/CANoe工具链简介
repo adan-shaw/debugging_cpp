@@ -1,0 +1,27 @@
+Vector AddOn Package Daimler			Vector Daimler插件包
+Vector Aerospace Message Editor		Vector 航空工业Message编辑器
+Vector Application Updater				Vector 应用更新
+Vector AUTOSAR Explorer						Vector AUTOSAR 浏览器(可以看到CANoe 下面AUTOSAR 框架相关的所有信号的相关详细信息)
+Vector CANdb++ 3.1								Vector DBC 数据库工具
+Vector CANdeiaStudio 15						Vector CANdeia工作室
+Vector CANoe 15										Vector CANoe 开发环境IDE
+Vector CANoe Test Report Viewer		Vector CANoe 专用测试工具
+Vector FIBEX Explorer							Vector FIBEX 浏览器
+Vector Hardware Configuration			Vector 硬件配置config
+Vector LDF Explorer								Vector LDF 浏览器
+Vector License Client							Vector 授权协议客户端
+Vector ODXStudio 8								Vector 诊断工作室
+Vector Platform Manager						Vector 平台管理器(汇总入口程序)
+Vector Security Manager						Vector 安全验证管理器
+Vector Support Assistant					Vector 服务助手(在线支持)
+Vector vTESTstudio Viewer 6				Vector 测试工作室(有多个test 子软件)
+
+
+
+
+
+专业术语简介:
+	DBC是DataBase CAN的缩写, 代表CAN的数据库文件, 
+	在此文件中详细定义了CAN通信的相关信息, 比如消息名, 消息ID, 信号名, 信号的布局等等;
+
+vecotr启动需要加密狗启动, 安装了也不能用, 是付费软件;

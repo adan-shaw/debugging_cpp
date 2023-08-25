@@ -1,0 +1,11 @@
+dlt 日志系统是github 上面的一个project, dlt 日志系统包含的app:
+
+	dlt-daemon   : dlt 日志service 守护程序
+
+	dlt-receive  : dlt 日志client 客户端接收器
+
+	DLTViewer    : dlt 日志client 客户端接收器(可视化版)
+								 linux/windows 上面的ip log 网络日志查看器(qt project)
+
+
+
