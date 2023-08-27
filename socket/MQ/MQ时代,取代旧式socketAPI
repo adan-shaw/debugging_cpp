@@ -17,7 +17,7 @@ MQ时代,取代旧式socketAPI:
 	http/ftp:      apache/nginx proxy
 	sip实时通话:    freeSwitch 网关
 	app server:    异步MQ(互联网MQ 大部分是异步的, 种类非常多)
-	工业总线server: fastDDS/openDDS
+	工业总线server: fastDDS/openDDS/vsomeip
 	lua游戏后端:    skynet 代理proxy(实际上也是一个proxy, 互联网app 后端server)
 
 	IBM MQ:        可能质量较高, 应该也是异步的, 但也在工业/银行里面用, 估计性能和稳定性较好的话, 质量介于互联网MQ-工业MQ之间;
