@@ -38,3 +38,44 @@ vsomeip 开发建议:
 	2.详细阅读capicxx-core-tools 所提供的SDK, 学会使用vsomeip;
 
 	3.详细阅读SomeIP 网络协议, 解决细节问题;
+
+
+
+
+
+#!/bin/sh
+
+# tarball vsomeip 的要素:
+:<<!
+1.需要cmake 版本: CMake 3.13.x (命令安装, 节省时间)
+2.安装boost(命令安装, 节省时间)
+3.安装tinyxml2(命令安装, 节省时间)
+4.tarball dlt-daemon
+5.tarball capicxx-core-runtime
+6.tarball capicxx-someip-runtime ??
+7.tarball vsomeip
+!
+
+
+
+# 升级cmake(略, 3.13.x 已经足够了)
+
+# 安装依赖
+sudo apt-get install source-highlight
+sudo apt-get install libsystemd-dev
+
+# 安装boost
+apt-get install libboost-all-dev
+
+
+
+# 安装依赖4 capicxx-core-runtime
+sudo apt-get install doxygen
+sudo apt-get install graphviz
+sudo apt-get install doxygen-doc doxygen-gui
+sudo apt-get install asciidoc fop
+
+# 安装依赖4 vsomeip
+sudo apt-get install source-highlight
+sudo apt-get install libboost-system1.71-dev libboost-thread1.71-dev libboost-log1.71-dev
+sudo apt-get install libsystemd-dev

@@ -41,5 +41,26 @@ Fast-DDS 开发建议:
 
 
 
+# tarball fastDDS 的要素:
+:<<!
+1.需要cmake 版本: CMake 3.16.x (命令安装, 节省时间) [debian 10 需要更新]
+2.安装boost(命令安装, 节省时间)
+3.安装tinyxml2(命令安装, 节省时间)
+4.tarball fast-cdr
+5.tarball foonathan_memory_vendor
+!
 
+
+
+# 升级cmake(略)
+
+# 安装tinyxml2
+apt-get install libtinyxml2.6.2v5 libtinyxml2-dev libtinyxml2.6.2v5-dbg
+
+# 安装boost
+apt-get install libboost-all-dev
+
+# tarball fast-cdr(待补充)
+
+# tarball foonathan_memory_vendor(待补充)
 
