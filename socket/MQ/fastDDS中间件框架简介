@@ -1,0 +1,45 @@
+Fast-DDS 中间件, 主要包含6 个project:
+	* Fast-DDS
+		The most complete DDS - Proven: Plenty of success cases.
+		(最完整的DDS 实现框架, 有大量成功案例; fastDDS MQ server 主体)
+
+	* Fast-DDS-docs
+		Documentation of Fast RTPS (MarkDown Files)
+		(fastDDS project 的说明文档Docs)
+
+	* Micro-XRCE-DDS
+		An XRCE DDS implementation
+		(XRCE DDS实现: server服务器)
+
+	* Micro-XRCE-DDS-Client
+		Micro XRCE-DDS Client repository
+		(XRCE DDS实现: client客户端)
+
+	* Micro-XRCE-DDS-Agent
+		Micro XRCE-DDS Agent respository
+		(XRCE DDS实现: Agent代理)
+
+	* Fast-DDS-Gen
+		Fast-DDS IDL code generator tool
+		(Fast-DDS IDL代码链接工具)
+
+
+
+
+
+Fast-DDS 开发建议:
+	1.将6 个Fast-DDS 软件包中, 除了Fast-DDS-docs 之外的包, tarball 一次, 
+		然后让其跑在vbox 或者其他虚拟机软件上面, 作为自己的开发环境;
+
+	2.详细阅读Fast-DDS-Gen 所提供的SDK, 学会使用Fast-DDS;
+
+	3.详细阅读DDS 网络协议, 解决细节问题;
+
+	4.看看什么是Micro-XRCE-DDS, 也可以学学这个DDS 标准;
+
+
+
+
+
+
+
