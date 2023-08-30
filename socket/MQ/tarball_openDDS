@@ -1,0 +1,17 @@
+openDDS 比较少人用, 都是用fastDDS 的比较多,
+
+而且openDDS 比较旧, 支持的语言很杂, 对python/java/c++ 都提供支持;
+
+因此openDDS 是一个复杂度较大的MQ server 框架, 在汽车上面可能用得比较少;
+
+fastDDS 是纯c++ 的MQ server 框架, 性能好, 也方便打包;
+
+
+
+(openDDS 编译过程中, 各种依赖太多, 要下载很多资源, 而且依赖包比较杂, 不方便移植/开发)
+
+openDDS 使用configure 进行编译, 比较老式;
+
+configure 执行时, 前期需要通过网络下载资源, 如果下载失败, 则编译不会通过的, 其实不好用;
+
+因此, openDDS 弃用;
