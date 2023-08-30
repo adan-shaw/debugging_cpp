@@ -1,0 +1,40 @@
+vsomeip 中间件, 主要包含6 个project:
+	* vsomeip:
+		An implementation of Scalable service-Oriented MiddlewarE over IP
+		(一种可扩展的面向服务的IP中间件的实现, 即SomeIP MQ server 主体)
+
+	* dlt-viewer
+		Diagnostic Log and Trace viewing program
+		(dlt 日志浏览器, 可视化gui 工具, 可接收局域网dlt 多播日志, 可查看翻阅dlt 日志)
+
+	* dlt-daemon
+		Diagnostic Log and Trace
+		(日志&追踪系统, 是挂载嵌入式主板上面的后台程序)
+
+	* vehicle_signal_specification
+		Vehicle Signal Specification - standardized way to describe automotive data
+		(车辆信号规范-描述汽车数据的标准化方法)
+
+	* capicxx-core-tools
+		Common API C++ core tools
+		(vsomeip server 链接引擎, 主要提供c++ 编程SDK, 供c++ 程序访问vsomeip, 类似于redis-server 的hiredis 链接引擎)
+
+	* capicxx-someip-runtime
+		Common API C++ SOMEIP runtime
+		(vsomeip 运行时库:
+			由于vsomeip 面向嵌入式开发, 因此会有大量芯片/平台需要兼容, 因此需要一个runtime 库;
+			传统的互联网server 程序, 都是基于Intel x86 实现的, 
+			因此不需要考虑跨平台跨芯片移植, 因此不需要考虑搭建一个runtime 库的问题, 
+			但vsomeip 需要考虑这些问题, 因此才会有一个runtime 库, 因此也会用更多的boost + c++ 新特性, 目的都很简单: 为跨平台c++ 开发, 提供便利)
+
+
+
+
+
+vsomeip 开发建议:
+	1.将6 个vsomeip 软件包中, 除了dlt-viewer 之外的包, tarball 一次, 
+		然后让其跑在vbox 或者其他虚拟机软件上面, 作为自己的开发环境;
+
+	2.详细阅读capicxx-core-tools 所提供的SDK, 学会使用vsomeip;
+
+	3.详细阅读SomeIP 网络协议, 解决细节问题;
