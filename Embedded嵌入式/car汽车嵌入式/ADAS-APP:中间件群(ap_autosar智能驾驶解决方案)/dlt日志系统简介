@@ -25,5 +25,8 @@ dlt 日志系统是vsomeip 下面的一个子project, dlt 日志系统包含的a
 
 
 
-dlt-receive: 有现成的.deb 包, 版本2.18.8(最好就不用tarball 了, 节省点时间)
-dlt-viewer: 有现成的.deb 包, 版本2.18.8(最好就不用tarball 了, 节省点时间)
+dlt-receive: 
+	有现成的.deb 包, 版本2.18.8(最好就不用tarball 了, 节省点时间, 但现成的包, 只能在debian 11 以上的版本使用, glibc 2.34.x ++)
+
+dlt-viewer:
+	有现成的.deb 包, 版本2.18.8

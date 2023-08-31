@@ -11,21 +11,23 @@ vsomeip 中间件, 主要包含6 个project:
 		Diagnostic Log and Trace
 		(日志&追踪系统, 是挂载嵌入式主板上面的后台程序)
 
-	* vehicle_signal_specification
+	* vehicle_signal_specification [不需要tarball, 用途未知]
 		Vehicle Signal Specification - standardized way to describe automotive data
 		(车辆信号规范-描述汽车数据的标准化方法)
 
-	* capicxx-core-tools
+	* capicxx-core-tools [不需要tarball, 不是源码project]
 		Common API C++ core tools
-		(vsomeip server 链接引擎, 主要提供c++ 编程SDK, 供c++ 程序访问vsomeip, 类似于redis-server 的hiredis 链接引擎)
 
-	* capicxx-someip-runtime
+	* capicxx-core-runtime
 		Common API C++ SOMEIP runtime
 		(vsomeip 运行时库:
 			由于vsomeip 面向嵌入式开发, 因此会有大量芯片/平台需要兼容, 因此需要一个runtime 库;
 			传统的互联网server 程序, 都是基于Intel x86 实现的, 
 			因此不需要考虑跨平台跨芯片移植, 因此不需要考虑搭建一个runtime 库的问题, 
 			但vsomeip 需要考虑这些问题, 因此才会有一个runtime 库, 因此也会用更多的boost + c++ 新特性, 目的都很简单: 为跨平台c++ 开发, 提供便利)
+
+	* capicxx-someip-runtime
+		(vsomeip server 链接引擎, 主要提供c++ 编程SDK, 供c++ 程序访问vsomeip, 类似于redis-server 的hiredis 链接引擎)
 
 
 
@@ -47,35 +49,25 @@ vsomeip 开发建议:
 
 # tarball vsomeip 的要素:
 :<<!
-1.需要cmake 版本: CMake 3.13.x (命令安装, 节省时间)
+安装顺序不能乱!!
+
+1.需要cmake 版本: CMake 3.13.x (命令安装, 节省时间, or tarball 更新最新版cmake)
 2.安装boost(命令安装, 节省时间)
 3.安装tinyxml2(命令安装, 节省时间)
 4.tarball dlt-daemon
-5.tarball capicxx-core-runtime
-6.tarball capicxx-someip-runtime ??
-7.tarball vsomeip
+5.tarball dlt-viewer
+6.tarball capicxx-core-runtime
+7.tarball capicxx-core-tools [不需要tarball, 不是源码project]
+8.tarball vsomeip
+9.tarball capicxx-someip-runtime
+10.vehicle_signal_specification [不需要tarball, 用途未知]
 !
 
 
 
-# 升级cmake(略, 3.13.x 已经足够了)
-
-# 安装依赖
-sudo apt-get install source-highlight
-sudo apt-get install libsystemd-dev
-
-# 安装boost
-apt-get install libboost-all-dev
+# 其他包, 自己参考具体的tarball 文档
 
 
 
-# 安装依赖4 capicxx-core-runtime
-sudo apt-get install doxygen
-sudo apt-get install graphviz
-sudo apt-get install doxygen-doc doxygen-gui
-sudo apt-get install asciidoc fop
 
-# 安装依赖4 vsomeip
-sudo apt-get install source-highlight
-sudo apt-get install libboost-system1.71-dev libboost-thread1.71-dev libboost-log1.71-dev
-sudo apt-get install libsystemd-dev
+
