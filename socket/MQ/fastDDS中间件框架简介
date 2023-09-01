@@ -39,6 +39,8 @@ Fast-DDS 开发建议:
 
 
 
+fastDDS 跟vsomeip 一样, 都有多个包组成一个软件群, 比较类似
+
 
 
 # tarball fastDDS 的要素:
@@ -48,11 +50,10 @@ Fast-DDS 开发建议:
 3.安装tinyxml2(命令安装, 节省时间)
 4.tarball fast-cdr
 5.tarball foonathan_memory_vendor
+6.tarball fastDDS
 !
 
 
-
-# 升级cmake(略)
 
 # 安装tinyxml2
 apt-get install libtinyxml2.6.2v5 libtinyxml2-dev libtinyxml2.6.2v5-dbg
@@ -60,7 +61,5 @@ apt-get install libtinyxml2.6.2v5 libtinyxml2-dev libtinyxml2.6.2v5-dbg
 # 安装boost
 apt-get install libboost-all-dev
 
-# tarball fast-cdr(待补充)
 
-# tarball foonathan_memory_vendor(待补充)
 
