@@ -7,6 +7,10 @@ Fast-DDS 中间件, 主要包含6 个project:
 		Documentation of Fast RTPS (MarkDown Files)
 		(fastDDS project 的说明文档Docs)
 
+	* Fast-DDS-Gen [不tarball]
+		Fast-DDS IDL code generator tool
+		(Fast-DDS IDL代码链接工具)
+
 	* Micro-XRCE-DDS
 		An XRCE DDS implementation
 		(XRCE DDS实现: server服务器)
@@ -19,9 +23,9 @@ Fast-DDS 中间件, 主要包含6 个project:
 		Micro XRCE-DDS Agent respository
 		(XRCE DDS实现: Agent代理)
 
-	* Fast-DDS-Gen
-		Fast-DDS IDL code generator tool
-		(Fast-DDS IDL代码链接工具)
+	* Micro-XRCE-DDS-Gen [不tarball]
+		Micro-XRCE-DDS IDL code generator tool
+		(Micro-XRCE-DDS IDL代码链接工具)
 
 
 
@@ -49,8 +53,16 @@ fastDDS 跟vsomeip 一样, 都有多个包组成一个软件群, 比较类似
 2.安装boost(命令安装, 节省时间)
 3.安装tinyxml2(命令安装, 节省时间)
 4.tarball fast-cdr
-5.tarball foonathan_memory_vendor
-6.tarball fastDDS
+5.tarball foonathan_memory
+6.tarball foonathan_memory_vendor
+7.tarball fastDDS
+
+Micro 微小MCU fastDDS:
+1.Micro-CDR
+2.Micro-XRCE-DDS-Client
+3.Micro-XRCE-DDS-Agent
+4.Micro-XRCE-DDS-Gen [不tarball]
+5.Micro-XRCE-DDS
 !
 
 
@@ -59,6 +71,7 @@ fastDDS 跟vsomeip 一样, 都有多个包组成一个软件群, 比较类似
 apt-get install libtinyxml2.6.2v5 libtinyxml2-dev libtinyxml2.6.2v5-dbg
 
 # 安装boost
+apt-get install libasio-dev
 apt-get install libboost-all-dev
 
 
