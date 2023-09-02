@@ -23,7 +23,7 @@ Fast-DDS 中间件, 主要包含6 个project:
 		Micro XRCE-DDS Agent respository
 		(XRCE DDS实现: Agent代理)
 
-	* Micro-XRCE-DDS-Gen [不tarball]
+	* Micro-XRCE-DDS-Gen [基于java 实现的自动生成c++ DDS 信号代码的工具]
 		Micro-XRCE-DDS IDL code generator tool
 		(Micro-XRCE-DDS IDL代码链接工具)
 
@@ -55,13 +55,14 @@ fastDDS 跟vsomeip 一样, 都有多个包组成一个软件群, 比较类似
 4.tarball fast-cdr
 5.tarball foonathan_memory
 6.tarball foonathan_memory_vendor
-7.tarball fastDDS
+7.tarball googletest
+8.tarball fastDDS
 
 Micro 微小MCU fastDDS:
 1.Micro-CDR
 2.Micro-XRCE-DDS-Client
 3.Micro-XRCE-DDS-Agent
-4.Micro-XRCE-DDS-Gen [不tarball]
+4.Micro-XRCE-DDS-Gen [基于java 实现的自动生成c++ DDS 信号代码的工具]
 5.Micro-XRCE-DDS
 !
 
