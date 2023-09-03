@@ -6,8 +6,8 @@ ldd ./x
 
 
 
---help:	 显示帮助信息
---version:打印指令版本号
+--help: 显示帮助信息
+--version: 打印指令版本号
 
 
 

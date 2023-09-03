@@ -15,8 +15,8 @@
 	-l pugixml       --pugixml xml 解析
 	-l boost_system  --boost 库
 	-l jemalloc      --jemalloc 内存管理器
-	-lssl            --openssl 对称加密库
-	-lcrypto         --openssl 校验算法库
+	-l ssl           --openssl 对称加密库
+	-l crypto        --openssl 校验算法库
 
 注意:
 	有时候, 库的添加顺序是不应该乱的, 有些非标准库不能乱序的, 标准库随意.
