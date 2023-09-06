@@ -48,10 +48,23 @@ NDK(Native Development Kit):
 
 
 JNI(Java Native Interface):
-	这部分是android java SDK, 里面描述了android 系统大量的编程SDK,
+	JNI 实际就是类似与LUA 与so 库互交的手段, 是C/C++ 拓展java 程序的一种附加方式,
+	JNI 遵循c/c++ java 数据接口, 类似c_lua API 一样的虚拟机编程接口,
+	根据这个接口, 你可以向java 机里面推入c/c++ 数据;
+
+	JNI 定义的就是c++ 和java 的互交标准, 你需要根据这个标准来编写NDK, 
+	至少NDK 需要跟jvm 打交道的时候, 需要用到JNI;
+
+
+
+
+
+android java SDK + java SDK:
+	这部分是android java SDK, 里面描述了android 系统大量的编程SDK, 可以用来支撑android app 应用编程;
+
 	如果要新增SDK, 需要自己使用NDK, 新增一个android 中间件, 来实现SDK 支撑;
 	完成SDK 支撑后, 就可以在android java 编程环境中, 调用这个库了, 
-	直接import 导入之后, 就可以调用这个库里面的编程接口了;
+	直接import 导入之后, 就可以调用这个库里面的java 编程接口了;
 
 
 
