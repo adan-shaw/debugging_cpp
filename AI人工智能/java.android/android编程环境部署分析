@@ -1,0 +1,59 @@
+ABI:
+	相当于芯片级c 语言运行时库, 实际上就是LLVM;
+	因为clang 是一个纯c++ 编译器, 因此ABI 实际上就是: 根据不同的芯片架构, 将LLVM 移植过去之后, 得到的就是最原始的ABI;
+
+	一般情况下, ABI 算是LLVM 的拓展集合!!
+	芯片厂商不会单纯移植LLVM 这么简单的, 这只是最简单的程序逻辑核心库, 
+	还有加密/压缩算法硬件加速, 音频/视频硬件加速, 摄像头成像硬件加速, 无线电数据处理硬件加速, 等等..
+
+	最终炒成一碟, c++ runtime库 + 芯片硬件加速库 = ABI;
+
+
+
+
+
+NDK(Native Development Kit):
+	android 系统的c++ 支撑库, 是以动态库的模式, 加插到android 系统中, 毕竟android 是基于linux 的宏内核系统,
+	NDK 编译出来的, 基本上都是.so, 然后将这些.so 和应用一起, 打包成apk, 
+	最后装进android 系统, 形成android 层的"驱动/底层应用", 实现自启动;
+
+	做android 中间件, 也是用NDK 来实现的, 用c/c++ 写好之后, 再通过apk 封装, 装进android 系统;
+	和linux 不一样, android 系统是吧核心模块, 以apk 的方式装进android 系统(虽然中间件apk 中大部分也是.so 共享库);
+	linux 是以.so 共享库的方式, 装进linux 内核;
+
+	但毕竟android 的系统编程语言是java, 因此, 使用apk 封装的.so 共享动态库, 支撑java 语言, 其实没啥毛病, 合理;
+	最终通过import java包, 把android NDK 中间件, 导入到java, 完成逻辑编程;
+
+
+
+	这样一来, 其实apk 就有两种:
+		* 系统支撑层中间件apk, 里面包含大量.so 共享链接库 + c++2java JNI 的转换编码;
+
+		* 纯android apk 应用, 基于java 语言, 没什么.so 共享链接库, 大部分是引用其他的共享链接库,
+			如果新增共享链接库, 也必然是应用自带的引擎, 如:
+				* 游戏引擎, .so 动态链接库支撑层
+				* 支付软件, .so 动态链接库加密校验层
+
+	最终, NDK 不只是为了提供支撑层应用, 也是为了提供支撑的.so 共享链接库, 提供支持;
+	如果有些应用需要接入一个android 系统没有的.so 共享链接库(比如说一些大型游戏引擎), 这时候也会用到NDK;
+
+	题外话:
+		NDK 以前支持mips, mips64, armeabi, 但在NDK r17之后, 移除了对这些ABI 的支持;
+		这也是为什么现在android 系统, 只剩下aarch64 芯片的支持了;
+		实际上随着android 的蓬勃发展, 后期要维护那么多芯片的NDK, 也是很困难, 所以说被移除了也很正常;
+		毕竟android 主cpu 需要一个制程先进的cpu, 性能要足够好;
+
+
+
+
+
+JNI(Java Native Interface):
+	这部分是android java SDK, 里面描述了android 系统大量的编程SDK,
+	如果要新增SDK, 需要自己使用NDK, 新增一个android 中间件, 来实现SDK 支撑;
+	完成SDK 支撑后, 就可以在android java 编程环境中, 调用这个库了, 
+	直接import 导入之后, 就可以调用这个库里面的编程接口了;
+
+
+
+
+
