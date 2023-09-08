@@ -12,7 +12,7 @@
 #   qt             = 跨平台c++ 可视化编码库
 #   socket         = socket 编码库
 #   win系统的环境部署 = windows 系统的部署gcc/python/lua/shell 开发环境
-# have some fun, young students, good luck.
+# have some fun here, young students, good luck.
 # 2022/07/25
 # 2023/07/06[landmark]
 # 2023/07/08[]
