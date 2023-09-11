@@ -1,0 +1,111 @@
+docker 项目的开发方式:
+	* 一个docker 运维project, 多个docker 容器;
+	* 一个应用, 一个docker 独立容器(等价于: 一个应用, 一个docker 独立环境);
+
+这样做的好处是:
+	极大地避免了应用之间产生的冲突, 让运维人员更好地配置应用, 效率更高, 可靠性更高!!
+	(性能也更高, 比普通VM 性能要搞很多)
+
+	这也是为什么, 像docker 这样的服务器软件, 在服务器市场如此火热;
+	节省资源, 节省人力, 可靠性也很高;
+
+
+
+
+
+docker_hub镜像仓库:
+	一般使用国内的镜像仓库, 下载docker 镜像需要网速+时间, 但一般来说: docker 镜像比linux 虚拟机镜像要小!!
+	docker 镜像, 大部分都是应用数据, 不会包含VM 虚拟机的数据, 
+	因此, docker 镜像体积相对较小(但也不是说太小, 就跟应用编译之后, 整个编译二进制包有多大, docker 镜像的大小, 大概就在这个额包的大小的上下)
+
+	因此, docker_hub镜像仓库, 实际上跟server 服务器app 商店差不多的,
+	一个docker 镜像, 跟一个app 安装包, 其实差不多的;
+	(所以这里面是可以有收费空间的)
+
+
+
+
+
+docker project 分析:
+	docker project 是运维开发人员需要编写的project, 这个project 主要保存的是:
+		* 这个project 需要多少个docker image, 需要指定docker_hub镜像仓库;
+
+		* 每个docker image 跑什么应用(一般每个官方docker 镜像, 本身就是一个app, 因此, 下载镜像, 本身就明确了跑什么app 了)
+			每个docker image 上面的app, 配置conf 文件(这个需要详细规划)
+
+		* docker-compose.yml 文件:
+			定义整个docker project 的信息:
+				- 有多少个docker image(多少个应用)
+
+				- 每个docker image 应用与host 的互交情况(教你怎么编写docker-compose.yml 文件):
+					image:       指定docker 容器使用哪个docker 镜像
+					user:        指定启动app 的用户名
+					ports:       与主机的端口映射描述
+					volumes:     包含哪些外部文件inside to docker容器(指定拷贝描述: 从外部拷贝到容器的指定路径位置, 分隔符号为: 冒号':')
+					working_dir: docker 容器启动后, 进入的home 目录
+					command:     docker 容器自启动命令(docker 容器一启动, 就进入到指定目录, 然后执行command 命令, 实现自启动)
+					env_file:    环境参数修改文件
+					entrypoint:  一般是openssl 配置启动shell
+					...
+
+		* fqdn.env:
+			docker 容器的环境配置文件
+
+
+
+
+
+docker project 的快捷使用:
+	# 带有docker-compose.yml 文件的路径, 就是<project_home>
+	cd <project_home>
+
+	# 自动下载docker 镜像资源, 并合并出所需的docker 镜像, 并根据docker-compose.yml 文件, 把app 部署上去
+	# (再一次调用docker-compose up -d, 可以更新docker-compose.yml 文件的内容)
+	docker-compose up -d
+
+	# 自动重新编译所有docker(慎用这个命令, 会冲掉很多临时数据)
+	docker-compose restart
+
+	# 如果你修改了app 的内容, 配置, 可以直接重启app 容器(但如果修改了docker-compose.yml 文件, 则只能重新docker-compose up -d 一次)
+	docker restart
+
+
+
+
+
+docker-compose up -d 命令的分析:
+	如果我们对docker-compose.yml 进行了修改, 比如, 增加或者修改了:
+		暴露的端口
+		映射出来的文件
+		环境变量
+	这时, 使用docker-compose up -d 可以使这些修改生效;
+
+	但要注意, docker-compose up -d 会:
+		停止原来的容器
+		删除原来的容器
+		使用新的参数, 结合原始镜像文件, 创建一个新的容器提供服务
+	这时, 在原有容器中做得修改, 如果没有使用 docker-commit 做持久化, 就会被冲掉, 不会留下来;
+	因此, 执行docker-compose up -d 之前, 如果需要保存应用数据, 则应该先保存应用数据first;
+
+
+
+
+
+docker restart 命令的分析:
+	如果在nginx 容器里面, 修改了nginx.conf, 这时候不一定需要执行docker-compose up -d,
+	直接docker restart 即可, 同样可以更新nginx.conf 配置;
+
+	docker-compose restart 与docker restart 是两个完全不同的概念:
+		docker-compose restart = 重新编译所有docker 容器
+		docker restart         = 重启docker 容器
+
+	docker-compose.yml 文件, 就是用来约束docker-compose restart 的;
+	docker-compose up -d 的作用范围, 都比docker-compose restart 小;
+	所以, docker-compose restart 这个命令慎用;
+
+
+
+
+
+
+

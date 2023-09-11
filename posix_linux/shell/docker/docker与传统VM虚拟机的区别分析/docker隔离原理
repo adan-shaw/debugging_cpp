@@ -1,0 +1,36 @@
+docker 隔离的技术原理:
+	docker 的隔离原理, 跟sandbox 沙盒比较类似, 
+	只是docker 可以更多地, 自主配置sandbox 沙盒环境而已(也可以配置sandbox 沙盒中的app config),
+
+	可以说docker 就是自主权比较大的sandbox 沙盒;
+	docker 是没有sandbox 沙盒的, docker-sandbox 通常指的就是docker 容器;
+	docker 容器本身就是一个sandbox;
+
+
+
+
+
+docker 容器使用cgroup posix API 来进行权限限制, 内核态还是没有隔绝的, syscall API 没有隔绝, 但cgroup posix API 隔绝了;
+实际上docker 容器并不是传统虚拟机的那种完全隔绝, docker 更像是sandbox 沙盒;
+但正因为如此, docker 容器的内耗更小, 可以兼容更多docker 容器, 而且响应速度更好;
+
+
+docker 隔离是通过cgroups(control groups 进程控制组)这个操作系统内核特性来实现的;
+Linux user namespace 为正在运行的进程提供安全相关的隔离(其中包括 uid 和 gid), 限制它们对系统资源的访问, 而这些进程却感觉不到这些限制的存在;
+包括用户的参数限制、帐户管理、资源(CPU,内存,磁盘I/O,网络)使用的隔离等;
+
+docker 在运行时可以为容器内进程指定用户和组(没有指定时默认是root)
+但因为隔离的原因, 并不会因此丧失安全性;
+传统上, 特定的应用都以特定的用户来运行, 在容器内进程指定运行程序的所属用户或组并不需要在host 中事先创建;
+
+
+
+
+
+docker的使用默认需要sudo权限, 或者将需要使用docker的用户拉入docker组当中; 
+使用docker镜像时, 一般默认以root用户进入镜像, 
+由于docker共享内核的特性, 此时容器的root用户与主机的root用户相同, 将带来主机安全问题;
+(例如, docker 允许用户在主机和容器间共享文件夹, 同时不需要限制容器的访问权限, 这就容易让容器突破资源限制; 
+ 例如, 恶意用户启动容器的时候将主机的根目录/映射到容器的 /host 目录中, 那么容器理论上就可以对主机的文件系统进行任意修改了)
+
+而借助Linux的User namespace, 可以将容器的root 用户映射到本地主机上的非root 用户, 减轻容器和主机之间因权限提升而引起的安全问题; 

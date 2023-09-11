@@ -1,0 +1,28 @@
+docker 是互联网应用, 不用tarball, 直接安装使用即可;
+
+直接攻命令, 拿来即用, 也就是一两天的时间学习命令, 十分简单;
+
+
+
+docker 安装:
+	# 安装依赖
+	sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+
+	# 安装docker[debian 10]
+	sudo apt-get install docker docker.io runc 
+
+	# 安装docker 的关键模块[debian 10]
+	sudo apt-get install docker-compose docker-registry
+
+	# 甚至docker service 开机自启动
+	sudo systemctl enable docker
+
+	# 创建docker 用户组(方便docker 内部的运作)
+	sudo groupadd docker
+
+	# 将adan 用户加入到docker 用户组(让linux 用户, 拥有docker 的内部运作权限)
+	sudo gpasswd -a ${USER} docker
+
+
+
+其他版本的docker 安装, 略!!

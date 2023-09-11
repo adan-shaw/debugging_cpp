@@ -1,0 +1,202 @@
+声明:
+	docker服务, 镜像, 容器的等级划分:
+		docker服务, 是一个负责管理docker镜像, docker容器的daemon service, 可以使用systemctl 进行管理;
+
+		docker镜像, 是一个类似于iso, img 的镜像文件, 只不过docker 提供了快捷生成镜像的管理手段而已;
+		docker镜像的管理手段包括:
+			* 从互联网自动下载docker 镜像(docker hub)
+			* 进行镜像管理, 增删操作等
+			* 进行镜像定制
+			...
+
+		docker容器, 容器才是真正的虚拟机!!
+		一个docker 镜像, 可以有n 个容器, 每个容器的运行环境都是独立的, docker 容器的隔离性是使用:
+				* Linux namespace 来隔离运行环境
+				* cgroup 限制容器占用的资源
+		docker 另外集成一系列的容器管理命令, 实际上就是虚拟机管理命令;
+
+
+
+
+
+#
+# 0.docker 是一个daemon server 程序, docker service管理命令
+#
+# 启动docker
+sudo systemctl start docker
+
+# 关闭docker
+sudo systemctl stop docker
+
+# 重启docker
+sudo systemctl restart docker
+
+# docker设置随服务启动而自启动
+sudo systemctl enable docker
+
+# 查看docker 运行状态
+sudo systemctl status docker
+
+
+
+
+
+#
+# 1.docker 镜像管理命令(repository同名镜像, 根据tag 来区分)
+#
+# 查看docker 镜像列表
+docker images
+
+# 搜索镜像
+docker search <镜像名>
+docker search --filter=STARS=9000 mysql
+
+# 从docker 外网仓库中, 拉取镜像(不加tag,则默认拉取tag=latest 版本; 加tag,则拉取指定tag版本)
+docker pull <镜像名>
+docker pull <镜像名>:tag
+
+# 运行镜像, 得到一个docker 容器
+docker run <镜像名>
+docker run <镜像名>:tag
+
+
+# 删除一个
+docker rmi -f <镜像名>/<镜像ID>
+# 删除多个
+docker rmi -f <镜像名>/<镜像ID> <镜像名>/<镜像ID> <镜像名>/<镜像ID>
+# 删除全部镜像(-a 意思为显示全部, -q 意思为只显示ID)
+docker rmi -f $(docker images -aq)
+
+# 保存镜像(将我们的镜像,保存为tar 文件,这样方便镜像转移和保存)
+docker save <镜像名>/<镜像ID> -o <镜像保存位置>
+
+# 加载镜像(将镜像装载进docker, 跟vbox 使用iso/img前, 需要先注册一样)
+docker load -i <镜像文件位置>
+
+
+# 修改镜像标签(也可以用来对镜像repository改名)
+docker tag <old镜像名>:oldtag <new镜像名>:newtag
+
+# 同名镜像改名, 改tag
+docker image tag <镜像id> <new镜像名>:newtag
+
+
+
+
+
+#
+# 2.docker 容器管理命令
+#
+# 查看docker 所有的容器(运行中的容器, PORTS = <镜像名:tag>)
+docker ps -a
+
+# 查看正在运行容器列表
+docker ps
+
+
+# 运行一个镜像, 创建一个容器
+# 	run:          指定要运行的'镜像名:tag'
+# 	-it:          表示与容器进行交互式启动
+# 	/bin/bash     交互控制台路径
+# 	-d:           表示可后台运行容器(守护式运行)
+# 	--name:       给要运行的容器起的别名
+# 	-p 8888:6379: 将容器的6379端口与docker宿主机的8888端口进行映射
+docker -d -it /bin/bash run <镜像名:tag> --name <别名>
+
+docker -d -it /bin/bash run <镜像名:tag> --name <别名> -p 8888:6379
+
+
+# 重启docker 容器
+docker restart <容器名/容器ID>
+
+# 进入docker 容器的控制台
+docker attach <容器名/容器ID>
+
+# 启动docker 容器
+docker start <容器名/容器ID>
+
+# 杀死一个docker 容器(强制关机)
+docker kill <容器名/容器ID>
+
+# 停止一个docker 容器(关机)
+docker stop <容器名/容器ID>
+
+# 删除一个docker 容器
+docker rm <容器名/容器ID>
+
+# 删除一个docker 容器
+docker rmi <容器名/容器ID>
+
+
+# 删除一个
+docker rm -f <容器名>/<容器ID>
+# 删除多个
+docker rm -f <容器名>/<容器ID> <容器名>/<容器ID> <容器名>/<容器ID>
+# 删除全部容器(-a 意思为显示全部, -q 意思为只显示ID)
+docker rm -f $(docker images -aq)
+
+
+# docker容器<->宿主机之间的文件拷贝
+# 从docker容器拷出file
+docker cp <容器名>/<容器ID>:容器内的路径  宿主机的路径
+
+# 从外部拷入file到docker容器内
+docker cp 宿主机的路径 <容器名>/<容器ID>:容器内的路径
+
+
+# 查看容器日志[--tail=要查看末尾多少行(默认all)]
+docker logs <容器名>/<容器ID>
+#docker logs -f --tail <容器名>/<容器ID>
+
+
+# 容器改别名
+docker rename youthful_a test_host
+
+
+
+
+
+# docker 的容器备份与恢复(docker 镜像备份与恢复容易, docker 容器备份与恢复比较麻烦)
+# 查看容器list
+docker ps -a
+
+# 将容器保存为镜像
+docker commit -p <容器id> <镜像名:tag>
+
+# 将镜像推送到docker 官网服务器
+# (略, 绝对不推送!! 傻子才暴露自己的设计)
+
+# 将镜像备份成tar 文件
+docker save -o ~/backup.tar <镜像名:tag>
+
+
+
+# 装载镜像到docker
+docker load -i ~/backup.tar
+
+# 查看装载后的镜像
+docker images
+
+# 直接通过镜像恢复容器
+docker run -d <镜像名:tag>
+
+# 启动容器
+docker start <容器id>
+docker start -i <容器id>
+
+# 进入容器
+docker attach <容器id>
+
+# 容器开启第二个terminal
+docker exec -it <容器名>/<容器ID> /bin/sh
+
+
+
+
+
+# 创建容器时, 设置自启动
+docker run -d --restart=always --name <容器名>/<容器ID>
+
+# 更新已有容器, 设置自启动
+docker update --restart=always <容器名>/<容器ID>
+
