@@ -124,8 +124,8 @@ docker stop <容器名/容器ID>
 # 删除一个docker 容器
 docker rm <容器名/容器ID>
 
-# 删除一个docker 容器
-docker rmi <容器名/容器ID>
+# 删除一个docker 镜像
+docker rmi <镜像名/镜像ID>
 
 
 # 删除一个
