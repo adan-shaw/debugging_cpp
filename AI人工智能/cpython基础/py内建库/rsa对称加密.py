@@ -1,4 +1,4 @@
-#coding=utf-8
+#coding=utf8
 
 # python 是否需要对称加密算法?
 '''

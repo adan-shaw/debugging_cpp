@@ -1,9 +1,10 @@
-#coding=utf-8
+#coding=utf8
 
 
 
 # 设置python2/3 的统一utf-8 编码格式的方式:
 import sys
+import random
 
 if(sys.version_info.major == 3):
 	if(sys.version_info.minor <= 3):
@@ -119,6 +120,12 @@ print(pstr[4:])		# 截取第4个字符, 到字符串结束为止!
 print(pstr[-5:])	# 截取倒数第5位, 到字符串结束为止!
 print(pstr[-1:])	# 截取最后一个字符
 
+xid = str(random.randint(0, 9999))
+print(xid[0:4])
+
+xid = str(random.randint(0, 999999999999))
+print(xid[0:12])
+
 
 
 # 迭代(iteration)
@@ -175,6 +182,9 @@ print(z)
 # x.常用的字符串API
 #
 pstr='   love you, asshole!! you are loveing love, love you again      中文  '
+
+# 数字, 其他类型, 强转为字符串
+print(str(1111111111199999999))
 
 # 获取字符串长度
 print(len(pstr))
@@ -262,4 +272,5 @@ translate()		返回被转换的字符串
 upper()				把字符串转换为大写
 zfill()				在字符串的开头填充指定数量的0 值
 '''
+
 

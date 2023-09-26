@@ -1,5 +1,5 @@
 '''更新单条数据'''
-#coding=utf-8
+#coding=utf8
 
 import pymysql
 
