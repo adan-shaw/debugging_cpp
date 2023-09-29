@@ -1,0 +1,26 @@
+# 查看当前版本号
+virtualenv --version
+
+# 清空非root用户的安装, 并重头开始创建隔离环境
+virtualenv --clear
+
+# 令隔离环境可以访问系统全局的site-package目录
+virtualenv --no-site-packages
+
+# 安装时解压Setuptools或Distribute
+virtualenv --unzip-setuptools
+
+# 重定位某个已存在的隔离环境
+virtualenv --relocatable
+
+# 使用Distribute代替Setuptools
+virtualenv --distribute
+
+# 用于查找setuptools/distribute/pip发布包的目录
+virtualenv --extra-search-dir=SEARCH_DIRS
+
+# 禁止从网上下载任何数据(禁止安装新的pip 包? 制作好运行环境, 可以试试看, 提高网络安全)
+virtualenv --never-download
+
+# 定义隔离环境的命令行前缀
+virtualenv --prompt==PROMPT

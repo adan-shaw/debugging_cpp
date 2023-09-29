@@ -1,0 +1,110 @@
+#
+# 1.安装venv 依赖包
+#
+:<<!
+简介:
+	Python3.3以上的版本通过venv模块原生支持虚拟环境;
+	Python2.7是virtualenv, 不是venv;
+
+# virtualenv什么时候成为内建模块?
+	Python3.3以上的版本通过'venv内建模块'支持虚拟环境, 可以代替之前pip的virtualenv;
+
+# 为什么需要venv 虚拟python环境?
+	在实际开发中, 创建虚拟隔离环境, 建立软件运行的python版本, 与系统自带的python 版本完全隔绝, 是运行python project 的首要条件;
+	linux 系统一般情况下, 不能随意更换系统自带的python 版本的(更换了linux 系统默认的python 版本, 容易导致系统崩溃);
+	因此, 创建一个新的venv 虚拟python环境, 来运行python 软件project, 是每个python 程序员都要会做的事;
+
+# venv 虚拟python环境, 怎么用pip?
+	Python3.3中使用"venv"命令创建的环境不包含"pip"，你需要进行手动安装;
+	Python3.4中改进了这一个缺陷, 进入了venv 目录之后, $venv/bin 里面就有pip 工具, 正常使用即可:
+		$venv/bin/pip install --upgrade pip
+		或者:
+		$venv/bin/python3 -m pip install --upgrade pip
+
+# 虚拟环境常用场景:
+	解决多人代码协作环境不一样, 导致代码报错;
+	解决云端环境与本地环境不一致, 导致报错;
+
+# 使用步骤:
+		创建虚拟环境->进入并激活虚拟环境->进入虚拟环境后下载运行代码所需要的模块->运行代码
+!
+
+
+
+# pip 安装方法
+#pip3 install --user virtualenv
+#pip2 install --user virtualenv
+
+
+
+# apt 安装方法(py3/py2 差异很大)
+# python3
+apt-get install python3-venv
+
+# python2 
+apt-get install python-virtualenv virtualenv-clone python-virtualenv-clone
+
+# python2 for windows(安装virtualenvwrapper-win)
+pip install virtualenvwrapper-win
+
+
+
+
+
+#
+# 2.创建python 虚拟环境venv
+#
+创建成功之后, 会在python 程序的当前路径下, 根据指定文件夹, 生成python 环境所需的所有文件
+如果想指定导出路径, 请使用绝对路径, 而非相对路径!!
+
+默认生成之后, 是最原始的python, 什么都没有, 需要自己通过pip 进行包填充!!
+
+
+# py2 生成venv
+python2 -m virtualenv /home/adan/odoo8.0/py2
+
+# py3 生成venv
+python3 -m venv /home/adan/odoo8.0/py3
+
+
+
+# 进入venv 环境
+cd /home/adan/odoo8.0/py2
+
+# 激活venv 环境
+source ./bin/activate
+
+# 查看pip 安装了多少个package
+pip list
+python -m pip list
+
+# 退出venv 环境
+deactivate
+
+
+
+ps:
+	进入venv 环境, 实际上比较类似于虚拟bash 环境, 只不过这里面是: bash + python + pip 而已;
+	python venv 环境, 实际上等于最原始的bash + python + pip 
+
+
+
+#
+# windows 版本
+#
+# 进入venv 环境
+cd /home/adan/odoo8.0/py2
+
+# 激活venv 环境
+source bin/activate.bat
+
+# 查看pip 安装了多少个package
+pip list
+python -m pip list
+
+# 退出venv 环境
+deactivate.bat
+
+
+
+
