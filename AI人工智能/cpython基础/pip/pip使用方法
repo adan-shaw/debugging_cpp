@@ -24,3 +24,6 @@
 	pip install -r ./ requirements.txt
 
 
+
+5.查看python 当前安装了多少个pip 包
+pip list

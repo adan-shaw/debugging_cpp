@@ -18,7 +18,6 @@ pip 不是一个c/c++ 项目, pip 工具是通过cpyhon 实现的,
 
 
 
-
 #
 # 2.pip.conf 配置文件
 #
@@ -39,7 +38,6 @@ adan/tarball 低级用户, 没办法执行export 命令, 因此, 通过:
 
 
 
-
 #
 # 3.操作系统补全pip 功能
 #
@@ -51,6 +49,25 @@ ps:
 	操作系统自带的cpyhon, 是剪裁过的cpython, 部分功能已被移除(包括pip 包管理工具)
 	所以, 想使用linux 系统自带的cpython, 则需要逐个模块逐个模块补全;
 
+
+
+
+
+
+#
+# 4.查看pip 的缓存位置
+#
+使用pip20.1 或更高版本, 您可以通过以下方式找到它:
+	pip cache dir
+
+对于macOS:
+	$ pip cache dir
+	/Users/hugo/Library/Caches/pip
+
+
+
+# 只要系统自带的python 才能看到, odoo绿色版runtime 里面的python 看不到
+python -m site
 
 
 
