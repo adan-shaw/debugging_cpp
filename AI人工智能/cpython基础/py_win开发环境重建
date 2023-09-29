@@ -1,0 +1,45 @@
+py_win开发环境重建:
+	windows 中安装python, 基本上都有现成的.exe 安装包, 自己下载安装即可;
+
+	windows 中安装python 库, 基本上都依赖pip, 不会像linux 那样, 在apt-get 命令中, 还能找到不少pip 库;
+	(主要是Linux 系统离不开python 软件, linux 大量自启动程序都依赖python,
+	 所以linux 系统一般不允许修改默认的python 版本, 否则极易容易导致linux 系统自启动失败;
+	 这不算是linux 内核报错, 但同样可以让你开不了机, 在linux 系统启动的过程中, 崩溃)
+
+	windows 系统可以完全脱离python, windows 是纯c++, MFC 搭建的软件框架, 可以完全剥离python 自动化工具, 自启动工具;
+	因此, 在windows 系统中使用python, 剥离性更强, 也暗示着: 你要还原全功能的python & pip, 需要做更多功夫;
+	(pip 在windows 系统上, 需要从0 开始安装所有模块)
+
+
+
+具体操作:
+	python2/python3, 安装后都是统一更新pip, 指定pip 更新站点(最好通过命令来配置, 因为你并不知道具体pip.conf 存放在哪里)
+	因此有:
+		* Win + R 打开运行, 输入cmd进入ms-dos, 打开cmd.exe
+
+		* 更新pip:
+			#python2.exe -m pip install --upgrade pip
+			#python3.exe -m pip install --upgrade pip
+			python2.exe -m pip install --upgrade pip --trusted-host mirrors.cloud.tencent.com
+			python3.exe -m pip install --upgrade pip --trusted-host mirrors.cloud.tencent.com
+
+		* 命令指定国内pip 站点:
+			(略)
+
+		* pip.conf 配置指定pip 站点:
+			windows 系统的pip.conf 存放路径:
+				# 不存在则自己手动创建
+					c:/user/xxx/pip/pip.ini
+
+				# 输入内容:
+					[global]
+					index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+					[install]
+					trusted-host = pypi.tuna.tsinghua.edu.cn
+
+		* 一次性指定pip 站点更新一个pip 包:
+			python2.exe -m pip install --upgrade pip --trusted-host mirrors.cloud.tencent.com
+			python3.exe -m pip install --upgrade pip --trusted-host mirrors.cloud.tencent.com
+
+			python2.exe -m pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --upgrade pip --trusted-host mirrors.tuna.tsinghua.edu.cn
+			python3.exe -m pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --upgrade pip --trusted-host mirrors.tuna.tsinghua.edu.cn
