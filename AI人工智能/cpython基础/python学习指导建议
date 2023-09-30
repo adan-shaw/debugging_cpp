@@ -100,8 +100,13 @@ anyway, 初级python 程序员, 只需要学会'*' 号的三个target 就能上�
 
 
 
+ps:
+	最后, 如果你用windows 系统来办公, 那么在windows 系统中部署python 开发环境, 建议先看看: ./py_win开发环境重建
 
-
+	省略all this bullshit, python 初级阶段上手就3 步:
+		1.学会安装, 部署python 开发环境/运行环境(初级重点, 会部署python 基本成功入门了python)
+		2.学习python 基础语法, 这不需要研究, python 是互联网语言, 轻松简单, 拿来就用的心态就行;
+		3.你做哪个行业, 用到哪些python 第三方库, 你就学哪些python 第三方库(这个没什么好说的)
 
 
 
