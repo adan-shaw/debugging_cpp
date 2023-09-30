@@ -1,0 +1,117 @@
+python 是一门互联网语言, 学习python 应该是非常轻松愉快的,
+所以不要问python 容不容易学, 很容易, 玩具一样;
+
+so here's my advice:
+	学习python 只有3 个target:
+		* 学会部署python 编程/运行环境
+		* 学会python 的基础语法
+		* 学会调用python 第三方库的api, 并且根据不同业务需求, 熟练这些库的使用;(中级)
+		- 学会用python 封装python, 实现一些python 业务库, 供下游用户调用, 属于二次封装;(中高级)
+		- 学会使用c++, 根据python & c++ 的对接标准, 去编写python 库, 提供SDK API 给python 程序员调用;(超高级, 必须精通c++)
+
+anyway, 初级python 程序员, 只需要学会'*' 号的三个target 就能上路了;
+
+
+
+
+
+详述:
+	* 学会部署python 编程/运行环境:
+		- 安装python2/3 原始程序
+			(一般linux/windows 都不需要重新部署sys 系统环境变量, 跟java 不一样, python 在windows 上面安装, 也是exe 安装包执行就完事了)
+			但对于python2.7.18, python3.7.x ++ 的版本,
+			由于python2.7.18 是最后一个版本, 已经停止更新了, 所以linux/windows 系统都非常容易获取;(但不建议学python2, 绝对不建议)
+			python3.7.x python3.8.x 是比较友好的版本, 可以轻松在windows7/windows10 上面安装,
+			再往后的版本, 不建议安装, 也别奢求太新的python 版本, 不会影响学习的, 不用担心;
+			(为什么不用python 最新版本, 能安装最好, 不能安装别勉强, tarball 过python 3.11.x 源码的, 都知道为什么, 这里不解释)
+
+		- 安装'pip 第三方库安装部署'工具:
+			使用python 就是为了使用python 庞大的第三方库, 简单易用, 功能多, 种类多;
+			所以用python 不用pip, 等于失去了灵魂;
+			详情请看: ./AI人工智能/cpython基础/pip/
+
+		- 学会使用venv 搭建一个'纯洁的python2/3 虚拟运行环境', 这对python 程序调试, 部署, 很重要:
+			详情请看: ./AI人工智能/cpython基础/venv搭建虚拟环境
+
+
+
+	* 学会python 的基础语法:
+		这个没办法, 自己啃语法, 不过唯一的一点建议就是:
+			不要提问题, 直接跟着写, 照抄, 照搬, 写两下熟悉一下就会了, 研究细节纯粹浪费时间;
+
+		写1-2 个月, 上手了之后, 可以看看: ./AI人工智能/cpython基础/py高效编码&执行优化技巧
+		提高一下编码精度, 陶冶一下情操 0.0
+
+
+
+	* 学会调用python 的第三方库api, 这个也没什么好说的, 
+		python 基础语法会了之后, 啥也别问, 做什么业务, 就用什么库, 上手就来, 别问问题;
+		其实第三方库, 也就几个明星项目比较常用:
+			自带的:
+				json
+				xml
+				hashlib(hash加密算法库4 python3, 包含:SHA1、SHA224、SHA256、SHA384、SHA512和MD5算法等) ps: python3 标准库中已移除了md5
+
+			第三方的:
+				py_execl:
+					openpyxl(高速)
+					pandas(功能强大, 便捷)
+				pydb数据库:
+					链接各种db server
+				jinja2模板编程:
+					进军python 职业程序员, 逼学, 用途非常广泛, 无论是网页编程, 自动化编码 ... 用途很杂很强大, 不解释;
+				selenium:
+					自动化web 测试工具, 可以自动调用google 浏览器进行web 测试;
+				uwsgi:
+					python 专用的cgi proxy 代理服务器, web 类的;
+					不理解uwsgi, 建议先了解一下什么叫cgi, 什么叫fastcgi, 什么是proxy 代理服务器, 什么叫正向代理, 反向代理;
+				...
+
+
+
+	* 学会用python 封装python, 实现一些python 业务库, 供下游用户调用, 属于二次封装;(中高级)
+		这种二次封装, 其实'py封装安装包'会很简单, 
+		直接在__init__.py 里面, import ***; 自己二次封装的包, 
+		然后编写setup.py 的细节, 按照标准填充就完事了, 根本不需要处理c/c++ 编译问题, 没有太多特殊难度, 所以很简单;
+		但是既然你要做python 二次封装包, 那么要看看: ./AI人工智能/cpython基础/py封装安装包
+
+
+
+	* 学会使用c++, 根据python & c++ 的对接标准, 去编写python 库, 提供SDK API 给python 程序员调用;(超高级, 必须精通c++)
+		这种深度封装, 通过c++ 实现部分硬件加速功能, 知识产权保护, 封装好之后, 以'DLL/.so' 共享链接库的形式, 提供给python 程序import 调用, 这里面会设计编译问题!!
+
+		如果你是直接拿人家的'DLL/.so' 共享链接库, 拿来就import, 那当然不会涉及编译问题;
+		如果你需要从源码进行编译, 编译出'DLL/.so' 共享链接库, 再import 包含进python, 这时候就要深度理解python 的封装安装包机制;
+		里面有:
+			__init__.py: '本python 包'初始化时, 需要引用哪些库, 作为全局变量, 在这个文件中声明;
+			setup.py:    提供'本python 包'安装过程控制(安装到哪里, python 版本要求, 依赖哪些关联库, 作者info 等等)
+			setup.cfg:   提供'本python 包'编译细节控制(使用哪些'DLL/.so' 共享链接库, 编译选项指定, 等等)
+			MANIFEST.in: 提供'本python 包'资源文件存放指导, 一般是logo 图片, 应用数据等等;
+
+		要用c++ 编写python 库, 根据'py封装安装包'标准来编写python 包安装细节, 只是成品发布手段, 收尾工作;
+		更艰巨的任务是:
+			阅读python 源码
+			了解python 对接C++ 的API
+			根据python 对接标准, 使用c++ 编写出c++ 代码, 实现具体target 功能, 并最终编译出'DLL/.so' 共享链接库
+			最后才是把这个'DLL/.so' 共享链接库, 根据一定的'py封装安装包'标准, 来编写带有setup.py 的python 封装包
+		(极度不建议学到这一层, 因为作者本人也不会 0.0 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
