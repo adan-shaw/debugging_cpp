@@ -107,4 +107,15 @@ deactivate.bat
 
 
 
+更新pip 时注意!! pip 跟母机共享'~'home 目录, cd ~, 同样进入到/home/adan 目录,
+
+因此, 修改pip.conf, 必然也是在: ~/.config/pip/pip.conf
+
+请自行修改~/.config/pip/pip.conf, 实现pip 快速链接国内的站点, 详情请看: pip.conf
+
+
+
+安装requirements.txt 中的依赖(请先修改pip.conf, 确保更新pip.conf 的速度):
+	cd ~
+	pip install -r ./requirements.txt --target ../../python/lib/python3.7/site-packages/
 
