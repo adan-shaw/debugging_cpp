@@ -6,6 +6,7 @@
 import sys
 
 if(sys.version_info.major == 3):
+	# 少于3.3 跟2.7 类似
 	if(sys.version_info.minor <= 3):
 		import imp
 		imp.reload(sys)

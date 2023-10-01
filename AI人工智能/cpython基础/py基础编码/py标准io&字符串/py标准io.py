@@ -5,6 +5,7 @@
 import sys
 
 if(sys.version_info.major == 3):
+	# 少于3.3 跟2.7 类似
 	if(sys.version_info.minor <= 3):
 		import imp
 		imp.reload(sys)
@@ -71,7 +72,7 @@ stdout(tmp)
 # 3.print格式化打印输出
 #
 # 格式化打印输出
-str_tmp='love you idiot'
+str_tmp='love you bitch'
 print("字符串: %s 的长度是: %d" %(str_tmp, len(str_tmp)))
 
 # 不允许多个 %() 格式化参数列表(一般只有一个)
