@@ -26,8 +26,9 @@ anyway, 初级python 程序员, 只需要学会'*' 号的三个target 就能上�
 			(为什么不用python 最新版本, 能安装最好, 不能安装别勉强, tarball 过python 3.11.x 源码的, 都知道为什么, 这里不解释)
 
 		- 安装'pip 第三方库安装部署'工具:
+			用python 不用pip, 等于失去了灵魂;
 			使用python 就是为了使用python 庞大的第三方库, 简单易用, 功能多, 种类多;
-			所以用python 不用pip, 等于失去了灵魂;
+			但由于python 第三方库过于庞大, 不可能把所有库都放进一个python 安装包, 因此才会有pip 包管理工具, 跟debian/ubuntu apt-get 包管理工具类似;
 			详情请看: ./AI人工智能/cpython基础/pip/
 
 		- 学会使用venv 搭建一个'纯洁的python2/3 虚拟运行环境', 这对python 程序调试, 部署, 很重要:
