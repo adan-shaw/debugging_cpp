@@ -10,18 +10,18 @@ if(sys.version_info.major == 3):
 		import imp
 		imp.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 	else:
 		import importlib
 		importlib.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 
 if(sys.version_info.major == 2):
 	import imp
 	imp.reload(sys)
 	if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-		sys.setdefaultencoding("utf-8")
+		sys.setdefaultencoding("UTF-8")
 
 
 

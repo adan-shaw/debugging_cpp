@@ -87,8 +87,8 @@ print(bytes([1,2,3,0]))
 # 当输入int n时, 返回n 个int 8bit的字节数组(无效?)
 print(bytearray(123))
 
-# 当输入str 时, str中, 每个char 都是一个元素, 可指定char 类型为'utf-8'
-print(bytearray('love you', 'utf-8'))
+# 当输入str 时, str中, 每个char 都是一个元素, 可指定char 类型为'UTF-8'
+print(bytearray('love you', 'UTF-8'))
 
 # 当输入number list 时, list 中每个元素, 都应该属于[0,255]区间内, 否则, 有一个元素不属于这个区间都报错(无效?)
 print(bytearray([1,2,3,0]))

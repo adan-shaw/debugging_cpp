@@ -52,7 +52,7 @@ def excel_write_xls_by_sheet_name(url,sheet_name,table_data):
 		return
 	if(not excel_write_xls_safe_check(table_data)):
 		return
-	workbook = xlwt.Workbook(encoding='utf8')
+	workbook = xlwt.Workbook(encoding='UTF-8')
 	# 判断sheet 名是否已经在
 	if(excel_if_xls_sheet_name(url,sheet_name)):
 		# 已存在, 则获取row,col

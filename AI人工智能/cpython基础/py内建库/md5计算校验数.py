@@ -37,7 +37,7 @@ import hashlib
 '''
 def md5_check(val: str) -> str:
 	md5 = hashlib.md5()
-	md5.update(val.encode('utf-8'))
+	md5.update(val.encode('UTF-8'))
 	return md5.hexdigest()
 
 pstr="i am adan shaw"
@@ -60,8 +60,8 @@ print("md5_check(): ",md5_check(pstr))
 	adan_shaw
 '''
 def md5_checkEx(val: str) -> str:
-	md5 = hashlib.md5(str(len(val)).encode('utf-8')+"adan_shaw".encode('utf-8'))
-	md5.update(val.encode('utf-8'))
+	md5 = hashlib.md5(str(len(val)).encode('UTF-8')+"adan_shaw".encode('UTF-8'))
+	md5.update(val.encode('UTF-8'))
 	return md5.hexdigest()
 
 pstr="i am adan shaw"

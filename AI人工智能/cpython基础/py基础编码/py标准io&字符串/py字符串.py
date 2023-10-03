@@ -2,7 +2,7 @@
 
 
 
-# 设置python2/3 的统一utf-8 编码格式的方式:
+# 设置python2/3 的统一UTF-8 编码格式的方式:
 import sys
 import random
 
@@ -12,18 +12,18 @@ if(sys.version_info.major == 3):
 		import imp
 		imp.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 	else:
 		import importlib
 		importlib.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 
 if(sys.version_info.major == 2):
 	import imp
 	imp.reload(sys)
 	if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-		sys.setdefaultencoding("utf-8")
+		sys.setdefaultencoding("UTF-8")
 
 
 
@@ -33,8 +33,8 @@ if(sys.version_info.major == 2):
 '''
 	表示一串unicode字符的字节'array数组', 即字符串实际是用'array数组'存储的;
 	Python2默认使用编码ascii, 不支持中文;
-	Python3默认使用编码utf-8, 支持中文, 其英文编码部分和ascii相同;
-	ascii = 1bit, utf-8 = 2bit;
+	Python3默认使用编码UTF-8, 支持中文, 其英文编码部分和ascii相同;
+	ascii = 1bit, UTF-8 = 2bit;
 
 	python 中的字符串是一个不可变类型, 跟c/c++ 中的字符串很不一样;
 	python 中的字符串可根据下标访问字符串中的单个字符, 但不能修改(只准访问,不允许修改), 否则报错:
@@ -217,7 +217,7 @@ print(pstr.index("love")) # 找到返回起始下标, 找不到会报错中断
 #ascii(1)
 #ascii('&')
 #ascii(9000000)
-# 中文用的比较多, 如果项目不支持utf8, 可能会需要用到ascii() 转换
+# 中文用的比较多, 如果项目不支持UTF-8, 可能会需要用到ascii() 转换
 #ascii('中文')
 
 

@@ -15,7 +15,7 @@ import sys
 import imp
 imp.reload(sys)
 if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-	sys.setdefaultencoding("utf-8")
+	sys.setdefaultencoding("UTF-8")
 	#print(sys.getdefaultencoding())
 	#sys.exit()
 

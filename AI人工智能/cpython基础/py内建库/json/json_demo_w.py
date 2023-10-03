@@ -50,19 +50,19 @@ print(type(jsonStr4), jsonStr4)
 
 
 # 打开file, 写入json压缩字符串
-f=io.open("test.json", "w",encoding='utf8',newline=None)
+f=io.open("test.json", "w",encoding='UTF-8',newline=None)
 
-f.write(jsonStr1.encode('utf-8').decode('utf-8'))
-f.write("\n".encode('utf-8').decode('utf-8'))
+f.write(jsonStr1.encode('UTF-8').decode('UTF-8'))
+f.write("\n".encode('UTF-8').decode('UTF-8'))
 
-#f.write(jsonStr2.encode('utf-8').decode('utf-8'))
-#f.write("\n".encode('utf-8').decode('utf-8'))
+#f.write(jsonStr2.encode('UTF-8').decode('UTF-8'))
+#f.write("\n".encode('UTF-8').decode('UTF-8'))
 
-f.write(jsonStr3.encode('utf-8').decode('utf-8'))
-f.write("\n".encode('utf-8').decode('utf-8'))
+f.write(jsonStr3.encode('UTF-8').decode('UTF-8'))
+f.write("\n".encode('UTF-8').decode('UTF-8'))
 
-f.write(jsonStr4.encode('utf-8').decode('utf-8'))
-f.write("\n".encode('utf-8').decode('utf-8'))
+f.write(jsonStr4.encode('UTF-8').decode('UTF-8'))
+f.write("\n".encode('UTF-8').decode('UTF-8'))
 
 f.flush()
 f.close()

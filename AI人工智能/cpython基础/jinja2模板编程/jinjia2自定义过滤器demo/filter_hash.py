@@ -19,10 +19,10 @@ def jinja2_filter_hash(value, hash_type="md5"):
 	hash_func = getattr(hashlib, hash_type, None)
 
 	# 提速版
-	computed_hash = hash_func(value.encode("utf-8")).hexdigest()
+	computed_hash = hash_func(value.encode("UTF-8")).hexdigest()
 	'''
 	if hash_func:
-		computed_hash = hash_func(value.encode("utf-8")).hexdigest()
+		computed_hash = hash_func(value.encode("UTF-8")).hexdigest()
 	else:
 		raise AttributeError("No hashing function named {hname}".format(hname=hash_type))
 	'''

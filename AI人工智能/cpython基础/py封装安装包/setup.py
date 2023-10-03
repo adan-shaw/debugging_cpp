@@ -5,7 +5,7 @@
 
 
 
-#coding:utf8
+#coding:UTF-8
 from setuptools import setup, find_packages
 setup(
 	# python 版本要求
@@ -45,7 +45,7 @@ setup(
 	# 忽略转换doc&tests 文档, 只转换py 代码
 	convert_2to3_doctests=['doc/README.txt'],
 	# fixers固定器list
-	use_2to3_fixers=['zope.fixers']),
+	use_2to3_fixers=['zope.fixers'],
 
 
 

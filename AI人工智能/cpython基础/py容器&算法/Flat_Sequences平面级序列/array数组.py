@@ -32,7 +32,7 @@ array 常用的数据类型:
 		'd'		double					float						8
 
 	Python2默认使用编码ascii, 不支持中文;
-	Python3默认使用编码utf-8, 支持中文, 其英文编码部分和ascii相同;
+	Python3默认使用编码UTF-8, 支持中文, 其英文编码部分和ascii相同;
 	在array 容器中, 兼容两者比较困难;
 	建议直接用str() 强转为字符串来处理;
 
@@ -44,7 +44,7 @@ array 常用的数据类型:
 	n维数组, 请用numpy;
 '''
 
-# 初始化字符array(等价于字符串, 基本不用, 废弃!! python2 打印array时, 会多带一个'u' 表示输出字符串是utf-8 字符)
+# 初始化字符array(等价于字符串, 基本不用, 废弃!! python2 打印array时, 会多带一个'u' 表示输出字符串是UTF-8 字符)
 arr_str=array.array('u', u"hello world")
 print(arr_str)
 

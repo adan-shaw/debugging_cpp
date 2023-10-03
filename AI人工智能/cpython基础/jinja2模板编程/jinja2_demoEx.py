@@ -2,7 +2,7 @@
 
 
 
-# 设置python2/3 的统一utf-8 编码格式的方式:
+# 设置python2/3 的统一UTF-8 编码格式的方式:
 import sys
 
 if(sys.version_info.major == 3):
@@ -11,18 +11,18 @@ if(sys.version_info.major == 3):
 		import imp
 		imp.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 	else:
 		import importlib
 		importlib.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 
 if(sys.version_info.major == 2):
 	import imp
 	imp.reload(sys)
 	if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-		sys.setdefaultencoding("utf-8")
+		sys.setdefaultencoding("UTF-8")
 
 
 
@@ -44,7 +44,7 @@ students_info = [
 
 content = 'This is about page'
 
-file_loader = FileSystemLoader('.', 'utf-8', False)
+file_loader = FileSystemLoader('.', 'UTF-8', False)
 env = Environment(loader=file_loader)
 
 template = env.get_template('about.html')

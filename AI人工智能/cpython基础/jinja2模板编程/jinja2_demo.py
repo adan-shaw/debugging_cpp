@@ -2,7 +2,7 @@
 
 
 
-# 设置python2/3 的统一utf-8 编码格式的方式:
+# 设置python2/3 的统一UTF-8 编码格式的方式:
 import sys
 
 if(sys.version_info.major == 3):
@@ -11,18 +11,18 @@ if(sys.version_info.major == 3):
 		import imp
 		imp.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 	else:
 		import importlib
 		importlib.reload(sys)
 		if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-			sys.setdefaultencoding("utf-8")
+			sys.setdefaultencoding("UTF-8")
 
 if(sys.version_info.major == 2):
 	import imp
 	imp.reload(sys)
 	if(sys.getdefaultencoding() != sys.getfilesystemencoding()):
-		sys.setdefaultencoding("utf-8")
+		sys.setdefaultencoding("UTF-8")
 
 
 
@@ -103,7 +103,7 @@ school = [
 ]
 
 # 扫描'指定文件路径下的所有文件'(最好别扫描太多, 否则会触发循环遍历深入扫描)
-file_loader = FileSystemLoader('.', 'utf-8', False)
+file_loader = FileSystemLoader('.', 'UTF-8', False)
 # 把扫描到的文件路径都装进env (jinja2 的固定用法)
 env = Environment(loader=file_loader)
 # 使用jinja2 解析指定的file
@@ -129,7 +129,7 @@ school2 = [
 	{'name': 'Dragomir', 'age': 54},
 ]
 
-file_loader = FileSystemLoader('.', 'utf-8', False)
+file_loader = FileSystemLoader('.', 'UTF-8', False)
 env = Environment(loader=file_loader)
 env.trim_blocks = True
 env.lstrip_blocks = True
@@ -152,7 +152,7 @@ cars = [
 	{'name': 'Volkswagen', 'price': 21300}
 ]
 
-file_loader = FileSystemLoader('.', 'utf-8', False)
+file_loader = FileSystemLoader('.', 'UTF-8', False)
 env = Environment(loader=file_loader)
 
 template = env.get_template('tmp3.txt')
@@ -167,7 +167,7 @@ print(output)
 # 8.jinja2 模板代码之间的内嵌(about.html 中内嵌base.html, 内嵌是通过extends指令完成的)
 content = 'This is about page'
 
-file_loader = FileSystemLoader('.', 'utf-8', False)
+file_loader = FileSystemLoader('.', 'UTF-8', False)
 env = Environment(loader=file_loader)
 
 template = env.get_template('about.html')
