@@ -1,4 +1,4 @@
-#coding=utf8
+#coding=UTF-8
 
 
 
@@ -14,7 +14,7 @@ python类似shell, 可以指明使用哪个python机(一般不推荐指认固定
 
 然后是文本编码格式声明:
 	# -*- coding: UTF-8 -*-
-	#coding=utf8
+	#coding=UTF-8
 '''
 
 

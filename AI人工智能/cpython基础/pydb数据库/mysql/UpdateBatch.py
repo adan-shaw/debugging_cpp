@@ -1,5 +1,5 @@
 '''更新多条数据'''
-#coding=utf8
+#coding=UTF-8
 
 import pymysql
 # 打开数据库连接
