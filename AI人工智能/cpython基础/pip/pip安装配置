@@ -30,7 +30,10 @@ adan/tarball 低级用户, 没办法执行export 命令, 因此, 通过:
 
 
 如果不想指定pip.conf, 可以使用临时指定url 镜像源的方式, 更新pip, 例如:
-	pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ 
+	pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --trusted-host=mirrors.tuna.tsinghua.edu.cn
+
+强制指定版本:
+	pip install numpy==1.0.1 -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --trusted-host=mirrors.tuna.tsinghua.edu.cn
 
 
 

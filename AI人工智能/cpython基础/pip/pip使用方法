@@ -11,7 +11,7 @@
 	pip install numpy 
 
 	# 从'指定站点中'安装pip包(速度快):
-	pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ 
+	pip install numpy -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --trusted-host=mirrors.tuna.tsinghua.edu.cn
 
 
 
@@ -22,6 +22,9 @@
 
 4.批量安装pip 软件
 	pip install -r ./ requirements.txt
+
+	# 强制执行升级替换
+	pip install --upgrade -r ./ requirements.txt
 
 
 
