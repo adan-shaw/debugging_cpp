@@ -35,6 +35,8 @@ adan/tarball 低级用户, 没办法执行export 命令, 因此, 通过:
 强制指定版本:
 	pip install numpy==1.0.1 -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --trusted-host=mirrors.tuna.tsinghua.edu.cn
 
+强行指定路径:
+	pip install numpy==1.0.1 -i https://mirrors.tuna.tsinghua.edu.cn/pypi/simple/ --trusted-host=mirrors.tuna.tsinghua.edu.cn --target ../../../runtime/python/lib/python2.7/site-packages/
 
 
 
