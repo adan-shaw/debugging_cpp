@@ -6,6 +6,8 @@ pip freeze
 # 导出pip 包信息
 pip freeze -l > requirements.txt
 
+./python -m pip freeze -l > requirements.txt
+
 # 创建文件夹, 装载导出的pip包
 mkdir pip_packages
 cd pip_packages

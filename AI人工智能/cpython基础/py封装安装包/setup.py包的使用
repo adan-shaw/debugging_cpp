@@ -51,6 +51,9 @@ usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
 
 
 常用的命令:
+	# 检查包的完整性(检查依赖是否安装正确, 必须第一步执行)
+	python setup.py check
+
 	# 编译
 	python setup.py build
 
@@ -60,8 +63,8 @@ usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
 	# 安装(整个包, 包括: 头文件.h, 库文件.so, 执行文件.py/.exe)
 	python setup.py install
 
-	# 检查包的完整性
-	python setup.py check
+	# 指定路径安装
+	python setup.py install --prefix=../../lib/python2.7/site-packages/
 
 	# 遗憾的是: 没有卸载命令, 卸载需要手动删除/pip 进行卸载
 

@@ -1,0 +1,18 @@
+pip 查看包依赖, 需要安装pipdeptree
+
+# python2
+pip install pipdeptree
+
+# python3
+apt-get install python3-pipdeptree
+
+pip3 install pipdeptree
+
+
+
+
+
+# 查看哪些包依赖xxxx包
+pipdeptree -p xxxx包名 -r
+
+pipdeptree -p ./xxxx包名 -r
