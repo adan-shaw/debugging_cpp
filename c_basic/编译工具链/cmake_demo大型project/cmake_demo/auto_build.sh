@@ -23,7 +23,7 @@ cd $build_home
 
 # -Wdev: 默认选项, 有等于没有
 #cmake -G "NMake Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev
-cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev -D CMAKE_C_COMPILER=gcc -D CMAKE_CXX_COMPILER=g++
+cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev -D 
 
 # --debug-output: 普通日志输出
 #cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release --debug-output
