@@ -12,14 +12,24 @@ cd $build_home
 
 
 
+# -G 指定编译时的Buildsystem 是什么系统(母系统, 不是target 系统, makefile 主要跑在Buildsystem 上面, 不需要跑在target 系统上)
+:<<!
+	cmake -G "NMake Makefiles" ..					# 生成Windows平台的Makefile 的相关选项
+	cmake -G "Unix Makefiles"  ..					# 生成Linux/Unix平台下标准的Makefile 的相关选项
+	cmake -G "Visual Studio"  ..					# 生成Visual Studio项目与解决方案的相关选项
+	cmake -G "Ninja"  ..									# 生成编译优化Ninja 的相关选项
+	cmake -G "Xcode"  ..									# 生成Xcode项目
+!
+
 # -Wdev: 默认选项, 有等于没有
-cmake .. -D CMAKE_BUILD_TYPE=Debug -Wdev
+#cmake -G "NMake Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev
+cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev -D CMAKE_C_COMPILER=gcc -D CMAKE_CXX_COMPILER=g++
 
 # --debug-output: 普通日志输出
-#cmake .. -D CMAKE_BUILD_TYPE=Debug --debug-output
+#cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release --debug-output
 
 # --trace: 详细日志输出
-#cmake .. -D CMAKE_BUILD_TYPE=Debug --trace
+#cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release --trace
 
 
 
@@ -40,7 +50,7 @@ cmake .. -D CMAKE_BUILD_TYPE=Debug -Wdev
 
 
 # 运行编译成功后的文件
-cd build
+cd ./build
 make
 
 home=$(pwd)

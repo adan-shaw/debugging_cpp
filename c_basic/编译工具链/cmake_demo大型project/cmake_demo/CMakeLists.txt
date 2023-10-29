@@ -16,6 +16,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.13 FATAL_ERROR)
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 
+
 # 指定交叉编译链(注: 这两条命令应该放在文件的开始位置(cmake_minimum_required命令之下, 在其他命令之上, 否则可能无效)
 INCLUDE(./crosstools.cmake)
 
@@ -36,10 +37,16 @@ PROJECT(
 	VERSION "1.0.0"
 )
 
+# 指定c++ 版本
+set(CMAKE_CXX_STANDARD 20)
+# C++11 C++14 C++17 C++20
+set(CMAKE_CXX_FLAGS "-std=c++20")
+MESSAGE("* CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} ")
+
 # 显示项目主路径(即主CMakeLists.txt 所在地)
 MESSAGE("* HOME = ${PROJECT_SOURCE_DIR}")
 
-# 默认设置为debug 版本
+# 如果没有设置编译版本, 则默认设置为debug 版本
 IF(NOT CMAKE_BUILD_TYPE)
 	#SET(CMAKE_BUILD_TYPE Release)
 	SET(CMAKE_BUILD_TYPE Debug)
