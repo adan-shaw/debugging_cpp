@@ -1,0 +1,41 @@
+导出测试数据:
+	一般情况下, 通过stdout 标准输出, 导出log 到file, 然后进行分析,
+	这种模式在互联网场合, 是没有问题的, 因为互联网程序的响应粒度, 是50ms, 绝对可以满足需求;
+
+	一般情况下, 如果只是校验工业数据的有效性, 检验数据是否安全, 这种导出log 的方法, 也是安全的;
+	因为你不需要考虑实时性, 只需要考虑数据是否正确, 报文内容是否正确, 这时候一般问题也不大;
+
+
+	但如果你要测试工业系统的性能, 工业系统的实时性(实时安全: on place on time)
+	这种情况下, 通过printf 打印到stdout, 已经是冗余了, 因为stdout 是进程内共享的, 容易造成阻塞;
+	通过' > '重定向到file, 写入file 的io 操作, 更是致命的, 不允许这么干;
+	因为很多工业实时程序, 都是us 级别的;
+
+	我们来温故一下时间粒度的区分:
+		1s = 1000ms
+		1ms = 1000us
+		1us = 1000ns
+
+	c++ 的高精度时钟timer, 默认是ns 为单位的, 例如:
+		std::chrono::high_resolution_clock::time_point start, end;
+
+	c++ 的时差计算器, 倒是可以转换为: double + s/ms/us/ns
+		start=std::chrono::high_resolution_clock::now();
+		end=std::chrono::high_resolution_clock::now();
+		# 如果变量类型出错, 那就直接使用auto 代替变量类型, 省得自己找
+		#auto start=std::chrono::steady_clock::now();
+
+		# 强转类型, 直接赋值
+		double dr_s=std::chrono::duration<double>(end-start).count();							//double + 秒s
+		double dr_ms=std::chrono::duration<double,std::milli>(end-start).count();	//double + 毫秒级ms
+		double dr_us=std::chrono::duration<double,std::micro>(end-start).count();	//double + 微妙级us
+		double dr_ns=std::chrono::duration<double,std::nano>(end-start).count();	//double + 纳秒级ns
+
+	ps:
+		c++ 高精度时钟timer 是线程安全的, 调用时, 内部会有互斥锁保证timer 的数据安全;
+
+
+
+	因此, 实时工业程序, 一般只能在纯c++ 程序内部, 进行离散计算和统计,
+	最终, 直接把结果printf 打印出来, 这样可以维护实时性, 保证测试真实有效;
+	所以, 测试原始数据, 通过打印出stdouot, 再通过stdout 重定向到file, 再把数据导入execl 表再分析的做法, 有些场合是不太合理的;
