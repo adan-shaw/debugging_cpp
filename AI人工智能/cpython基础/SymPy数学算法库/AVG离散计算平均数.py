@@ -4,11 +4,9 @@ import time
 import array
 import math
 
-# 使用离散的方式, 算平均数, 方差, 标准差
+# 使用离散的方式, 算平均数, 方差, 标准差(计算机离散算法, 和数学公式不太一样; 计算机需要存储, 需要另外的方法进行计算)
 
-
-
-# 计算机离散算法, 和数学公式不太一样; 计算机需要存储, 需要另外的方法进行计算
+# 本方法比较接近传统数学思维(即: 连续数学)
 
 
 
@@ -45,14 +43,14 @@ def main():
 	count = 0
 	variance_sum = 0.0
 	while(count < test_count):
-		# 方差和
+		# 计算方差和
 		variance_sum += math.pow((data[count]-avg),2)
 		count+=1;
 
-	# 方差
+	# 计算方差
 	variance = variance_sum / test_count
 
-	# 标准差(等价公式: math.pow(variance，0.5) = math.sqrt(variance))
+	# 计算标准差(等价公式: math.pow(variance，0.5) = math.sqrt(variance))
 	#math.pow(variance，0.5)
 	std_deviation = math.sqrt(variance)
 
