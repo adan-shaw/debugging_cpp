@@ -1,0 +1,6 @@
+windows 生成coredump 的方式有很多, 其中比较常见的是:
+	1.系统右键, 属性里面配置的, 全局变量coredump, 任何程序崩溃, 都会产生coredump, 这点和linux 很像;
+
+	2.程序员自定义, API 式开启coredump 模式, 这时不用配置任何配置, 崩溃自动生成coredump;
+
+	3.win 新版任务管理器, 找到进程, 右键可以生成瞬时coredump;

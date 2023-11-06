@@ -1,0 +1,109 @@
+#
+# 1.创建一个c:\adan_app_home 文件夹, 用作存放所有的编码app
+#
+mkdir c:\adan_app_home
+
+mkdir /cygdrive/c
+
+
+
+
+
+#
+# 2.各个app 详细path 配置(安装过程就不明确表示了)
+#
+
+# lua (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\Lua\5.1;
+C:\adan_app_home\Lua\5.1\clibs;
+C:\adan_app_home\Lua\5.1\lua\?.luac;
+
+# python2 (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\Python27\;
+C:\Python27\Scripts;
+
+# python3 (需要在安装时, 先指定安装路径, 此软件带安装包) -- 还要将python.exe 改名为python3.exe
+C:\Python27\;
+C:\Python27\Scripts;
+# python3 默认安装路径, 找不到就到这里找
+C:\Users\Administrator\AppData\Local\Programs\Python\Python37;
+C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts;
+
+# java 1.8.0 (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\Oracle\Java\javapath;
+
+# cygwin64
+C:\adan_app_home\cygwin64\bin
+C:\adan_app_home\cygwin64\lib
+C:\adan_app_home\cygwin64\lib32
+C:\adan_app_home\cygwin64\libexec\gcc\x86_64-w64-mingw32\11.2.0
+C:\adan_app_home\cygwin64\include
+
+# mingw
+C:\adan_app_home\cygwin64\x86_64-w64-mingw32\bin
+C:\adan_app_home\cygwin64\x86_64-w64-mingw32\lib
+C:\adan_app_home\cygwin64\x86_64-w64-mingw32\lib32
+C:\adan_app_home\cygwin64\x86_64-w64-mingw32\include
+
+# boost_1_67_0 (boost = 头文件, lib64-msvc-14.1 = 动态库文件, 名字可能会变动)
+C:\adan_app_home\boost\boost
+C:\adan_app_home\boost\lib64-msvc-14.1
+
+# cmake (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\CMake\bin;
+
+# gamek (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\GnuWin32\bin;
+
+# adb
+C:\adb-tools;
+
+# putty (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\PuTTY\;
+
+# jemalloc
+C:\jemalloc\all4ReleaseLib64bit;
+C:\jemalloc\include;
+
+# curl (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\curl\bin;
+C:\adan_app_home\curl\lib;
+C:\adan_app_home\curl\include;
+
+# ffmpeg
+C:\adan_app_home\ffmpeg-master-latest-win64-gpl\bin;
+
+# vc++ 的cl 编译器(安装了vc++, 也默认找不到cl 编译器, 需要自己指定出来, vc++ 默认不告诉你编译器在哪里)
+C:\adan_app_home\Microsoft Visual Studio 14.0\VC\bin;
+
+# MSBuild (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\MSBuild\12.0\Bin;
+C:\adan_app_home\MSBuild\15.0\FileTracker;
+C:\adan_app_home\MSBuild\Microsoft.Cpp\v4.0\v140;
+
+# qt (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\Qt\6.5.3\msvc2019_64\bin;
+C:\Qt\6.5.3\msvc2019_64\lib;
+C:\Qt\6.5.3\msvc2019_64\include;
+
+# qt 打包工具 (自动跟随qt 安装进来)
+C:\Qt\Tools\QtInstallerFramework\4.6\bin;
+
+# redis (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\adan_app_home\Redis\;
+
+# pgsql (需要在安装时, 先指定安装路径, 此软件带安装包)
+C:\pgsql\bin;
+C:\pgsql\lib;
+C:\pgsql\include;
+
+# pgAdmin (自动跟随pgsql 安装进来)
+C:\pgsql\pgAdmin4\python;
+C:\pgsql\pgAdmin4\runtime;
+C:\pgsql\pgAdmin4\web;
+
+
+
+
+
+

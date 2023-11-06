@@ -1,0 +1,16 @@
+1.打开cmd.exe
+
+
+
+2.在cmd.exe 中输入下面字符串, 启动powershell:
+start powershell
+
+
+
+3.设置powershell宏变量
+$client = new-object System.Net.WebClient
+
+
+
+4.下载具体文件(跟wget 类似)
+$client.DownloadFile('URL', '保存位置/文件名称.文件类型')

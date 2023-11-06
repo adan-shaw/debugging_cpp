@@ -1,0 +1,44 @@
+windows 平台下, 想要快捷开发c++, 还是什么都别想了, 直接用vs 2015 or 更新的版本, 安装vc++ 才是真理;
+
+windows 平台下, 重建c/c++ 编译工具链是非常艰巨的, 尤其是:
+	vc++ 的恢复难度十分大, mingw 倒是很容易, 但意义不大;
+	mingw 功能少, 编译出来的程序性能差, 基本上比较难用;
+	(一般用windows 就是图它高性能, 如果性能需求一般, qt 不香吗?)
+
+既然你离不开vs 开发工具, 人家就不可能免费送你用, 也就不可能让你轻松重建vc++ 编译工具链;
+
+
+
+vc++ 开发环境, 安装vc++ 之后, 只有vc++ 专用的terminal, 才能看到vc++ 的编译工具链;
+(普通的terminal 都看不到vc++ 工具链, 非常恶心, 系统默认的terminal, power shell, 都是看不到的)
+
+
+
+vc++ 专用的terminal, 存放在(安装vs 之后生成的快捷方式home):
+	:: vc++ 编译器环境 + shell (用power shell for 20xx 最好)
+	C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2019\Visual Studio Tools
+	C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2015\Visual Studio Tools
+
+	:: 各种debug 工具
+	C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Windows Kits
+
+	:: 可以不用, 只是界面比较好看
+	C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Windows PowerShell
+
+默认有power shell for 2019 可以用, 稍微有点心里安慰(power shell 也好用些);
+
+
+
+:: 只能用这个东西打开vc++ 开发环境控制台, 否则你怎么配置, 都很难配的对的, windows 平台的开发工具链, 极其难以恢复;
+
+:: 没有vs 专门提供的terminal, 你很难找到他们的开发工具链;
+
+:: 有vs 专门提供的terminal, 你也得用windows 专用的命令, power shell 都是用不了的, 这就是现实;
+
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\Tools\VsDevCmd.bat"
+
+
+
+
+
+
