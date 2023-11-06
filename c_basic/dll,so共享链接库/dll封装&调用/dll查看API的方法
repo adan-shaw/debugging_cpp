@@ -1,0 +1,27 @@
+windows 平台下, 开发c/c++ 程序, 默认都必须安装vc++ 套件(一般来说, 都是使用visual studio IDE);
+
+如果不安装visual studio IDE, 则:
+	* 不能做coredump
+	* 不能轻松地敏捷开发
+	* 不能使用dumpbin 查看.exe/.dll 二进制封装文件(即:不能解读elf 头)
+	* 不能轻松断点debug
+	* 不能轻松查看断点堆栈的详细信息
+	* 不能使用cl 编译器和微软编译工具链, 就算使用mingw 编译出来的程序, 一般性能也很一般(高端场合不适用)
+	...
+
+综合各种因素, 在windows 平台下开发, 必须安装visual studio IDE中的vc++ 组件;
+
+安装之后, 设置path 全局变量路径:
+	C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin
+即可找到cl.exe 编译器和dumpbin.exe 工具;
+
+
+
+
+
+dumpbin.exe 工具的使用:
+	# 查看dll 导出函数符号list
+	dumpbin.exe -exports .\hiredis.dll
+
+	# 查看.exe 二进制封装文件的elf 头和各段内容分布
+	dumpbin.exe -LINENUMBERS .\redis-server.exe
