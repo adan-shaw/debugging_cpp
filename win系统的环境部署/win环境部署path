@@ -76,7 +76,7 @@ C:\adan_app_home\ffmpeg-master-latest-win64-gpl\bin;
 # vc++ 的cl 编译器(安装了vc++, 也默认找不到cl 编译器, 需要自己指定出来, vc++ 默认不告诉你编译器在哪里)
 C:\adan_app_home\Microsoft Visual Studio 14.0\VC\bin;
 
-# MSBuild (需要在安装时, 先指定安装路径, 此软件带安装包)
+# MSBuild (需要在安装时, 先指定安装路径, 此软件带安装包) -- 恢复vc++ 工具链, 单纯从path 恢复, 有点天真
 C:\adan_app_home\MSBuild\12.0\Bin;
 C:\adan_app_home\MSBuild\15.0\FileTracker;
 C:\adan_app_home\MSBuild\Microsoft.Cpp\v4.0\v140;
@@ -98,9 +98,9 @@ C:\pgsql\lib;
 C:\pgsql\include;
 
 # pgAdmin (自动跟随pgsql 安装进来)
-C:\pgsql\pgAdmin4\python;
-C:\pgsql\pgAdmin4\runtime;
-C:\pgsql\pgAdmin4\web;
+C:\pgsql\pgAdmin 4\python;
+C:\pgsql\pgAdmin 4\runtime;
+C:\pgsql\pgAdmin 4\web;
 
 
 
