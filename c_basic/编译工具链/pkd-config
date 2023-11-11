@@ -1,0 +1,129 @@
+#
+# 1.pkg-config 简介
+#
+pkg:        是bsd 二进制包管理工具;
+pkg-config: 是bsd 源码包管理工具;
+
+安装:
+	apt-get install pkg-config
+
+
+
+
+
+#
+# 2.pkg-config 使用
+#
+# 查看pkg-config 版本
+pkg-config --version
+
+# 查看当前系统安装了多少个pkg-config 模块包
+pkg-config --list-all
+
+# 查看某个模块包的版本
+pkg-config --modversion libzip
+pkg-config --modversion zlib
+
+# 查看某个模块包是否有静态链接库(如果没有, 输出空)
+pkg-config --static libzip
+pkg-config --static zlib
+
+# 查看某个模块包的link 链接选项(-l 链接选项)
+pkg-config --libs libzip
+pkg-config --libs zlib
+
+# 查看某个模块包的错误(安装错误? 是否安装完整? 装载完整?)
+pkg-config --print-errors libzip
+pkg-config --print-errors zlib
+
+# 查看某个模块包是否有编译选项(编译/链接, 是两个不同的事情)
+pkg-config --cflags libzip
+pkg-config --cflags zlib
+
+# 查看某个模块包的详细debug 信息
+pkg-config --debug libzip
+pkg-config --debug zlib
+
+
+
+
+
+#
+# 3.pkg-config 核心信息查看
+#
+pkg-config 是不能查找包, 不能安装包的, 只有编译过程中, 缺少这个pkg-config 包的时候, 你才需要找对应的apt-get 包进行安装;
+如果找不到, 你就可能得源码进行安装;
+
+# 查找pkg-config home
+find /usr -type d -name pkgconfig
+
+# 一般的, pkg-config home:
+/usr/local/lib/pkgconfig
+/usr/lib/pkgconfig
+/usr/lib/x86_64-linux-gnu/pkgconfig
+
+# 显示当前系统的pkg-config home
+echo $PKG_CONFIG_PATH
+
+# 添加路径到pkg-config home(相当于windows 系统的电脑->属性->path 全局变量)
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH
+
+
+
+
+
+#
+# 4.pkg-config 参与到编译中:
+#
+# 自动添加opencv 的编译选项, 链接选项到编译链接过程中:
+# 写法1:
+g++ $(pkg-config --cflags --libs opencv) ./hello.c -o hello
+# 写法2:
+g++ `pkg-config --cflags --libs opencv` ./hello.c -o hello
+
+# 自动添加opencv 的编译选项, 链接选项到makefile/CMakeLists.txt 中:
+CFLAGS=$(pkg-config --cflags opencv)
+LDFLAGS=`pkg-config --libs opencv`
+
+
+
+
+
+#
+# 5.pkg-config 命令帮助(--help 原版)
+#
+Application Options:
+  --version                               output version of pkg-config
+  --modversion                            output version for package
+  --atleast-pkgconfig-version=VERSION     require given version of pkg-config
+  --libs                                  output all linker flags
+  --static                                output linker flags for static linking
+  --short-errors                          print short errors
+  --libs-only-l                           output -l flags
+  --libs-only-other                       output other libs (e.g. -pthread)
+  --libs-only-L                           output -L flags
+  --cflags                                output all pre-processor and compiler flags
+  --cflags-only-I                         output -I flags
+  --cflags-only-other                     output cflags not covered by the cflags-only-I option
+  --variable=NAME                         get the value of variable named NAME
+  --define-variable=NAME=VALUE            set variable NAME to VALUE
+  --exists                                return 0 if the module(s) exist
+  --print-variables                       output list of variables defined by the module
+  --uninstalled                           return 0 if the uninstalled version of one or more module(s) or their dependencies will be used
+  --atleast-version=VERSION               return 0 if the module is at least version VERSION
+  --exact-version=VERSION                 return 0 if the module is at exactly version VERSION
+  --max-version=VERSION                   return 0 if the module is at no newer than version VERSION
+  --list-all                              list all known packages
+  --debug                                 show verbose debug information
+  --print-errors                          show verbose information about missing or conflicting packages (default unless --exists or --atleast/exact/max-version given on the command line)
+  --silence-errors                        be silent about errors (default when --exists or --atleast/exact/max-version given on the command line)
+  --errors-to-stdout                      print errors from --print-errors to stdout not stderr
+  --print-provides                        print which packages the package provides
+  --print-requires                        print which packages the package requires
+  --print-requires-private                print which packages the package requires for static linking
+  --validate                              validate a package's .pc file
+  --define-prefix                         try to override the value of prefix for each .pc file found with a guesstimated value based on the location of the .pc file
+  --dont-define-prefix                    don't try to override the value of prefix for each .pc file found with a guesstimated value based on the location of the .pc file
+  --prefix-variable=PREFIX                set the name of the variable that pkg-config automatically sets
+
+
