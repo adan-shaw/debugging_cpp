@@ -29,3 +29,5 @@ gdb <bin文件路径> <coredump文件路径>
 bt full
 
 
+
+
