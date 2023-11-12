@@ -1,0 +1,88 @@
+1.dll/so 的API 导出方式:
+	win 导出dll 函数的方式, 和linux不一样(win有特殊机制);
+	win 有def 导出函数, 用来API导出前缀宏, 更容易实现在dll 中集中管理公开和隐藏部分函数;
+
+	为了提高跨平台兼容性, 尽量使用API导出前缀宏, 实现跨平台dll/so 共享链接库编辑;
+	windows 定义一个新的.def 文件, 编译时将会十分麻烦, cmake 都不好用;
+
+	如果不加API导出前缀宏, 默认是dll/so 的内部函数, 外部不可见;
+
+	linux .so API导出前缀:
+		__attribute__ ((visibility("default")))
+		如果对函数设置__attribute__ ((visibility("default")))参数, 使特定的函数仍然按默认的public属性处理, 
+		则-fvisibility=hidden参数不会对该函数起作用;
+		所以, 设置了-fvisibility=hidden参数之后, 只有设置了__attribute__ ((visibility("default")))的函数才是对外可见的, 
+		效果等同于Visual Studio下的__declspec(dllexport)定义;
+
+		在linux下, 源文件中的所有函数都有一个默认的visibility属性为public, 
+		在编译命令中加入-fvisibility=hidden参数, 会将所有默认的public的属性变为hidden;
+
+	windows .dll API导出前缀:
+		# 导出API
+		__declspec(dllexport)
+		# 导入API(不知道有什么用, 可能在dll 中引用其他dll 的API 时会用到)
+		__declspec(dllinport)
+
+
+
+	无论是windows/linux, 只要以c 语言标准去封装dll/so, 都必须加: extern "C" {};
+	如果想以c++ 标准封装dll/so, 则自己保证导出API 函数符号的准确性(一般情况下, c++ 导出API 函数的符号很难保证准确)
+
+
+
+
+
+2.dll/so 的程序段:
+	dll/so 是一个独立的二进制程序, 有独立的段空间: .code .data 段 堆栈段等;
+	这将会影响到dll/so 二进制程序的封装&调用, 这是物理原则的差异;
+	(基本上相当于两个进程在通信, 与共享内存mmap() + shared memory 有与曲同工之妙)
+
+	但dll/so 共享的并不是data, 而是函数API, 
+	因此, 设计要求更高级, 
+	dll/so 是直接把具体某个API 函数体, 直接mmap 映射到不同进程的段空间中,
+	因此, dll/so 依赖, 都是二进制程序exe 运行前就预先检查的,
+	如果系统中缺少这个dll/so, 就会拒绝执行该二进制程序exe, 报错某个函数: undefined symbol: ***
+	因此, dll/so 只影响进程的启动时间, 对运行后的进程性能, 没有太大影响;
+	这点可能比共享内存好一点;
+
+
+
+
+
+3.dll/so 的应用场景:
+	* 大型软件的知识产权保密封装, 这在各大中小设备厂商中, 非常常见;
+
+	* 大型互联网程序的支撑层, 如: 国产数据库支撑功能模块;
+
+	* 操作系统的基础软件支撑层, 如: android 系统中间件封装, linux/windows/android 功能拓展编码库封装;
+
+	* 新的操作系统SDK 封装, 如: 国产小型操作系统的封装, 成品都会对外提供SDK, 这个SDK 实际上也是一般以动态链接库的形式, 对外公开;
+		(公开SDK, 才能调用系统功能接口, 如disk, 网络协议栈, 内存管理器等; 
+		 芯片 + gcc编译器 + c语言runtime + c++runtime + glibc, 那都是c/c++ 语法支撑, 不是操作系统功能SDK 封装;
+		 操作系统功能SDK 封装, 常见的有: VM 虚拟化技术, socket 套接字协议栈, 各种工业网络协议栈, 等等)
+
+	* 芯片runtime 运行时库的封装, 如: 国产arm 芯片runtime, risc-v 芯片runtime 等
+		(这种封装, 等级比较高, 基本上是用最原始的c 语言, 封装出全功能的c 语言, 然后再封装出全功能的glibc, 最后封装出全功能glibc, 任务比较艰巨, 语法考验难度大)
+
+	* go/python/java/lua 等脚本机的新插件封装, 如: python 的pip 库封装, java 标准库封装, 这种封装也比较高级, 有一个很出名的project: swig;
+		(也可以用各种脚本机的c++ 通信接口进行封装, 估计会高效一点, 但不能转移平台)
+
+	* linux kernel 驱动: 如: 所有linux kernel 驱动, 基本上也是以.ko 二进制链接库的模式, 装载进Linux 内核;
+		(linux kernel 子模块[驱动], 这个其实也是动态链接库, 只不过是内核态的而已, 使用syscall + 原始级gcc + linux kernel 规则, 编写出来的原始级ko 共享链接库)
+
+	ps:
+		总的来说, dll/so 封装的工作, 其实也是很艰难的, 要求编码精度较高, 虽然不需要处理太多多线程/多进程的同步问题, 不需要处理太多业务问题;
+		但dll/so 封装的工作, 对编码精度要求比较高;
+
+
+
+
+
+4.如果防止动态调用dll/so API 时, 被注入攻击:
+	可以在动态装载dll/so 时, 对dll/so 进行hash 校验数算法校验, 不是自己的dll/so, 拒绝运行程序;
+	(其实也蛮简单的设计, 但后续需要经常更新hash 校验码, 也挺麻烦)
+
+
+
+
+
