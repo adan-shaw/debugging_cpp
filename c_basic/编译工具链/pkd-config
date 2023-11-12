@@ -7,6 +7,9 @@ pkg-config: 是bsd 源码包管理工具;
 安装:
 	apt-get install pkg-config
 
+pkg-config 是一个比较重要的软件管理平台, 对接bsd 平台的软件, c/c++ 没有pkg-config, ffmpeg, opencv 等核心软件都是没办法用;
+还有android, iphone, 这些核心软件都是没办法用的;
+
 
 
 

@@ -7,6 +7,14 @@ mkdir /cygdrive/c
 
 
 
+windows 系统中的linux 子内核版本:
+	windows WSL2: 不太好用, 慎用;
+	cygwin:       shell 环境最齐全, 但编译器还得依赖mingw
+	msys2:        基于cygwin, 最像linux 的shell 平台(msys2 搞了一个pacman 包管理器, 非常像apt-get 包管理系统)
+	mingw:        唯一的gcc 编译器, 支持c++20
+
+
+
 
 
 #
@@ -19,12 +27,12 @@ C:\adan_app_home\Lua\5.1\clibs;
 C:\adan_app_home\Lua\5.1\lua\?.luac;
 
 # python2 (需要在安装时, 先指定安装路径, 此软件带安装包)
-C:\Python27\;
-C:\Python27\Scripts;
+C:\adan_app_home\Python27\;
+C:\adan_app_home\Python27\Scripts;
 
 # python3 (需要在安装时, 先指定安装路径, 此软件带安装包) -- 还要将python.exe 改名为python3.exe
-C:\Python27\;
-C:\Python27\Scripts;
+C:\adan_app_home\Python37\;
+C:\adan_app_home\Python37\Scripts;
 # python3 默认安装路径, 找不到就到这里找
 C:\Users\Administrator\AppData\Local\Programs\Python\Python37;
 C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts;
@@ -53,17 +61,17 @@ C:\adan_app_home\boost\lib64-msvc-14.1
 C:\adan_app_home\CMake\bin;
 
 # gamek (需要在安装时, 先指定安装路径, 此软件带安装包)
-C:\GnuWin32\bin;
+C:\adan_app_home\GnuWin32\bin;
 
 # adb
-C:\adb-tools;
+C:\adan_app_home\adb-tools;
 
 # putty (需要在安装时, 先指定安装路径, 此软件带安装包)
 C:\adan_app_home\PuTTY\;
 
 # jemalloc
-C:\jemalloc\all4ReleaseLib64bit;
-C:\jemalloc\include;
+C:\adan_app_home\jemalloc\all4ReleaseLib64bit;
+C:\adan_app_home\jemalloc\include;
 
 # curl (需要在安装时, 先指定安装路径, 此软件带安装包)
 C:\adan_app_home\curl\bin;
@@ -82,25 +90,25 @@ C:\adan_app_home\MSBuild\15.0\FileTracker;
 C:\adan_app_home\MSBuild\Microsoft.Cpp\v4.0\v140;
 
 # qt (需要在安装时, 先指定安装路径, 此软件带安装包)
-C:\Qt\6.5.3\msvc2019_64\bin;
-C:\Qt\6.5.3\msvc2019_64\lib;
-C:\Qt\6.5.3\msvc2019_64\include;
+C:\adan_app_home\Qt\6.5.3\msvc2019_64\bin;
+C:\adan_app_home\Qt\6.5.3\msvc2019_64\lib;
+C:\adan_app_home\Qt\6.5.3\msvc2019_64\include;
 
 # qt 打包工具 (自动跟随qt 安装进来)
-C:\Qt\Tools\QtInstallerFramework\4.6\bin;
+C:\adan_app_home\Qt\Tools\QtInstallerFramework\4.6\bin;
 
 # redis (需要在安装时, 先指定安装路径, 此软件带安装包)
 C:\adan_app_home\Redis\;
 
 # pgsql (需要在安装时, 先指定安装路径, 此软件带安装包)
-C:\pgsql\bin;
-C:\pgsql\lib;
-C:\pgsql\include;
+C:\adan_app_home\pgsql\bin;
+C:\adan_app_home\pgsql\lib;
+C:\adan_app_home\pgsql\include;
 
 # pgAdmin (自动跟随pgsql 安装进来)
-C:\pgsql\pgAdmin 4\python;
-C:\pgsql\pgAdmin 4\runtime;
-C:\pgsql\pgAdmin 4\web;
+C:\adan_app_home\pgsql\pgAdmin 4\python;
+C:\adan_app_home\pgsql\pgAdmin 4\runtime;
+C:\adan_app_home\pgsql\pgAdmin 4\web;
 
 
 
