@@ -1,10 +1,6 @@
 #include "terminalwidget.h"
 #include <QApplication>
 
-//
-void changeValue(void){
-	return ;
-}
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
