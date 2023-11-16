@@ -1,0 +1,57 @@
+windows 平台开发经验[跨平台开发经验]:
+	windows 的编译工具链, 实际上是极度不愿意开放的;
+	如果你不安装vc++, 你根本找不到编译工具链;
+
+	安装了vc++, 也只能在指定的路径下, 指定的terminal 下, 使用vc++ 编译工具链;
+	ps:
+		windows/qt 的c/c++ 编译工具链, 编译器性能烂得一逼, 
+		每次编译, 都需要清空一下缓存, 非常消耗时间;
+		windows/qt 的c/c++ 编译工具链, 做增量编译, 差异编译, 做得非常烂;
+
+
+
+	vc++ 安装路径:
+		C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
+
+	重建path:
+		没办法重建!! terminal 打开在哪个路径, 你就将project 路径放在哪个路径下!!
+		改变一下开发习惯, 省时间;
+		你想重建开发环境? 整死你, vc++ 安装路径: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
+		有多套工具, 多个bin, lib, include
+		这些工具全部弄在一起, 要重建整套编译链, 没有微软的指导, 很艰难;
+
+	别浪费时间!!
+
+
+
+
+
+由于IDE 编译工具链, 在windows 系统都是几乎不能用的;
+因此, qt 只做画界面, visual studio 只做coredump 调试, cmake 做编译链接, boost 实现socket + 多进程, c++ 实现多线程;
+
+用这些绝对可靠的工具, 比你在IDE 中傻逼点点点调试, 要有效很多;
+(c++ 标准库的东西, 比win/qt 封装的东西, 可靠多了)
+
+
+
+对于qt 所需的图形库, 是可以通过cmake 搜索找齐的, qt 目前也支持创建cmake project;
+
+
+
+
+
+nmake 工具, 是微软对标gmake 的工具, 一样的, 使用方法是:
+	-A					不检测文件更新时间差异, 强制更新所有文件(没更改时间的不更新)
+	-B					强制更新所有文件(没更改时间的也强制更新)
+	-D					make时显示文件新旧信息
+	-P					一个比较有用的选择, make时显示详细的信息
+
+	nmake 使用习惯				gmake 使用习惯
+	nmake								make
+
+	nmake 没有多线程选项, 编译开启多少个线程, 由windows 系统自动指派;
+
+
+
+
+
