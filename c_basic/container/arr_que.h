@@ -31,7 +31,6 @@
 		aq_type cache[aq_cache_max];
 	}aq_t;
 
-
 	//初始化队列
 	#define aq_init(paq) { \
 		paq->errno = 0; \
@@ -39,7 +38,7 @@
 		paq->pos_front = 0; \
 		paq->pos_rear = 0; }
 
-	//销毁队列(带mutex锁才有, 无锁版arr_queue无destroy函数)
+	//销毁队列(带rwlock锁才有, 无锁版arr_queue无destroy函数)
 	//void aq_destroy(aq_t* paq);
 
 	//从队列front压入一个元素(写锁互斥)

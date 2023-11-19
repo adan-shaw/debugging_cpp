@@ -2,7 +2,7 @@
 	-nostartfiles = 没有开始函数的.c 源文件file, 
 	-e 表示自定义开始函数(需要用exit(0) 结束自定义开始函数, 否则必然会Segmentation fault溢出)
 	局部编译(方便局部调试):
-		gcc -g3 -nostartfiles arr_stack_mini.h arr_stack_mini.c -e test_as_basic -o x
+		gcc -g3 -DNODEBUG -nostartfiles arr_stack_mini.h arr_stack_mini.c -e test_as_basic -o x
 */
 
 
@@ -80,4 +80,5 @@ void test_as_basic(void){
 	free(buf4test);
 	exit(0);
 }
+
 

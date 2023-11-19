@@ -33,7 +33,6 @@
 		pthread_rwlock_t rwlock;
 	}aq_t;
 
-
 	//初始化队列
 	#define aq_init(paq) { \
 		paq->errno = 0; \
