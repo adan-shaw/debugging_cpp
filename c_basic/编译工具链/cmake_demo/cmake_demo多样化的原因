@@ -1,0 +1,12 @@
+cmake_demo多样化的原因:
+	实际开发过程中, 很多情况下, 不可能让你从0 开始慢慢摸, 慢慢搭建一个cmake project;
+	有时候需要快速搭建一个cmake project, 做敏捷开发!!
+	因此, 你可以不用管太多交叉编译选项, 平台检索选项, 直接默认编译环境, 快速出击;
+	因此, cmake project demo 就需要多样化了:
+		cmake_big_demo:				大型交叉编译cmake project, 从0 开始搭建大型project cmake, 可以参考;
+		cmake_easiest_demo:		qt 跨平台小程序, 可以参考(原型cmake project, 出错时回顾而已, 参考价值不大);
+		cmake_easy_demo:			qt/boost 跨平台小程序, 敏捷开发最佳参考对象;
+
+
+
+	有以上多个使用场景的cmake demo, 相信可以帮助你完成跨平台cmake project 的快速搭建, 做敏捷开发
