@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.8)
 
+# ${PROJECT_NAME} = boost_sync
 project(boost_sync LANGUAGES CXX)
 
+# qt 专属cmake 编译宏
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -14,12 +16,12 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 # 添加执行文件
-add_executable(boost_sync
+add_executable(${PROJECT_NAME}
   main.cpp
 )
 
-# 链接qt 库
-target_link_libraries(boost_sync Qt${QT_VERSION_MAJOR}::Core)
+# 链接动态链接库
+target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core)
 
 # 包含gnu 头
 include(GNUInstallDirs)
