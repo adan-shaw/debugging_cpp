@@ -1,0 +1,190 @@
+GPT-3.5 Chatbot
+
+This app provides you full access to GPT-3.5 (4096 token limit). You don't need any OPENAI API key.
+
+Chatbot
+
+帮我用qt写一个简单的message收发服务器和客户端，tcp，同步io操作，有一个界面，标准输出打印到一个text browser控件上，有一个启动按钮，停止按钮
+
+以下是一个使用Qt编写的简单的消息收发服务器和客户端的示例代码，可以在界面上通过启动按钮启动服务器和客户端，通过停止按钮停止它们。服务器和客户端之间使用TCP进行通信，并将标准输出打印到一个文本浏览器控件上。
+
+// mainwindow.h
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QTextBrowser>
+
+class MainWindow : public QMainWindow
+{
+Q_OBJECT
+
+public:
+MainWindow(QWidget *parent = nullptr);
+~MainWindow();
+
+private slots:
+void startServer();
+void stopServer();
+void startClient();
+void stopClient();
+void handleMessage();
+
+private:
+void printMessage(const QString& message);
+
+QTcpServer *m_server;
+QTcpSocket *m_client;
+QTextBrowser *m_textBrowser;
+};
+
+#endif // MAINWINDOW_H
+
+// mainwindow.cpp
+#include “mainwindow.h”
+#include <QPushButton>
+#include <QVBoxLayout>
+
+MainWindow::MainWindow(QWidget *parent)
+: QMainWindow(parent)
+{
+m_textBrowser = new QTextBrowser(this);
+
+QPushButton *startServerButton = new QPushButton(“Start Server”, this);
+connect(startServerButton, &QPushButton::clicked, this, &MainWindow::startServer);
+
+QPushButton *stopServerButton = new QPushButton(“Stop Server”, this);
+connect(stopServerButton, &QPushButton::clicked, this, &MainWindow::stopServer);
+
+QPushButton *startClientButton = new QPushButton(“Start Client”, this);
+connect(startClientButton, &QPushButton::clicked, this, &MainWindow::startClient);
+
+QPushButton *stopClientButton = new QPushButton(“Stop Client”, this);
+connect(stopClientButton, &QPushButton::clicked, this, &MainWindow::stopClient);
+
+QVBoxLayout *layout = new QVBoxLayout;
+layout->addWidget(m_textBrowser);
+layout->addWidget(startServerButton);
+layout->addWidget(stopServerButton);
+layout->addWidget(startClientButton);
+layout->addWidget(stopClientButton);
+
+QWidget *centralWidget = new QWidget(this);
+centralWidget->setLayout(layout);
+setCentralWidget(centralWidget);
+
+m_server = new QTcpServer(this);
+connect(m_server, &QTcpServer::newConnection, this, &MainWindow::handleMessage);
+
+m_client = new QTcpSocket(this);
+
+// Set up initial states
+stopServerButton->setEnabled(false);
+startClientButton->setEnabled(false);
+stopClientButton->setEnabled(false);
+}
+
+MainWindow::~MainWindow()
+{
+}
+
+void MainWindow::startServer()
+{
+if (!m_server->listen(QHostAddress::Any, 12345)) {
+printMessage(“Failed to start server.”);
+return;
+}
+
+printMessage(“Server started.”);
+
+// Update button states
+startServerButton->setEnabled(false);
+stopServerButton->setEnabled(true);
+startClientButton->setEnabled(true);
+}
+
+void MainWindow::stopServer()
+{
+m_server->close();
+printMessage(“Server stopped.”);
+
+// Update button states
+stopServerButton->setEnabled(false);
+startClientButton->setEnabled(false);
+stopClientButton->setEnabled(false);
+}
+
+void MainWindow::startClient()
+{
+m_client->connectToHost(QHostAddress::LocalHost, 12345);
+
+if (!m_client->waitForConnected()) {
+printMessage(“Failed to connect to server.”);
+return;
+}
+
+printMessage(“Client connected.”);
+
+// Update button states
+startClientButton->setEnabled(false);
+stopClientButton->setEnabled(true);
+}
+
+void MainWindow::stopClient()
+{
+m_client->disconnectFromHost();
+printMessage(“Client disconnected.”);
+
+// Update button states
+stopClientButton->setEnabled(false);
+startClientButton->setEnabled(true);
+}
+
+void MainWindow::handleMessage()
+{
+QTcpSocket *socket = m_server->nextPendingConnection();
+connect(socket, &QTcpSocket::readyRead, socket, this{
+QString message = socket->readAll();
+printMessage("Received message: " + message);
+});
+}
+
+void MainWindow::printMessage(const QString& message)
+{
+m_textBrowser->append(message);
+}
+
+
+// main.cpp
+#include “mainwindow.h”
+#include <QApplication>
+
+int main(int argc, char *argv[])
+{
+QApplication a(argc, argv);
+MainWindow w;
+w.show();
+return a.exec();
+}
+
+在.pro文件中添加以下内容：
+
+QT += widgets network
+
+以上代码创建了一个具有启动按钮和停止按钮的Qt窗口，以及一个文本浏览器控件。单击“Start Server”按钮将启动服务器，并开始监听TCP端口。单击“Stop Server”按钮将关闭服务器。单击“Start Client”按钮将连接到服务器，并发送文本消息。单击“Stop Client”按钮将断开与服务器的连接。
+
+注意，以上示例中的服务器和客户端都使用了同一台计算机上的“localhost”地址和端口号12345。如果你想在不同的计算机上运行服务器和客户端，需要修改代码中的地址和端口号。
+
+希望以上示例可以满足你的需求。如果你有任何问题，请随时提问。
+
+Type an input and press Enter
+
+Run
+
+Status code from OpenAI server
+
+Parameters▼
+
+Built with Gradio
