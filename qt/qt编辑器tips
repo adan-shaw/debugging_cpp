@@ -1,0 +1,9 @@
+* qt IDE, 可以通过打开指定的cmake, *.pro 文件, 来打开一个c++ project
+
+* qt IDE, 打开编辑器后, 必然会生成*.pro.user 文件, qt IDE 所有的项目描述info, 都存放在这个文件里面;
+	(这个*.pro.user 文件如果被删除, 重新打开/创建qt project, 需要重新配置c++ 编译工具链;
+	 ps: 虽然配置qt 编译工具链十分容易, qt 做成可视化配置模式, 点按钮就能完成配置)
+
+* qt build 等临时文件, 默认都会存放在<qt_project>/.. 上级目录, 且起一个乱七八糟的名;
+	如果你不喜欢这个qt build 临时文件夹, 可以直接删除*.pro.user 文件, 触发重新配置,
+	这时候你还可以删掉release, debug, profiling(性能debug), 这三个默认目标, 一般保留release 即可;
