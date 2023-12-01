@@ -1,0 +1,25 @@
+list:
+	exe 路径,  显示/隐藏,  日志/标准输出+err, 状态    pid
+	exe_path, show/hide, logging/stdout, status  pid
+
+
+
+exe 标准:
+	执行普通exe 二进制程序:
+		* 标准输出stdout, 直接打印到自己的屏幕里面, 也支持重定向到file;
+		* 标准错误输出stderr, 打印到main 窗口的textBrowser 中
+			(这个功能不能删掉, 否则这款软件, 没有任何存在意义!! exe 二进制程序完全脱离main 主进程, stdout, stderr, 不会有任何交流)
+
+	支持启动多个exe 二进制程序, exe 二进制程序的类型不限, 是tty 命令行二进制程序即可, 主要截获标准输出stdout, stderr;
+
+	支持单个exe 二进制程序停止, 杀死;
+
+	以list 列表的方式, 定义信息参数, 保留一个textBrowser, 作为全局err 输出;
+
+	一个进程一个log 文件
+
+	exe 统一使用fprintf(stderr/stdout, 区分打印, 这点很重要)
+
+
+
+	新增一个保存config 按钮? 不增加复杂度, 不搞!!
