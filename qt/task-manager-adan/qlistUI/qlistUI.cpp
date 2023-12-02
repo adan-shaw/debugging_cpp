@@ -217,7 +217,7 @@ void qlistUI::lockRow(){
 		clean_items_info();
 
 	//items_info->size() == row_cur == 0
-	for(row=0; row < row_running; row++){
+	for(row=0; row < row_cur; row++){
 		str = tableWidget->item(row,0)->text();										//第一行为空, 则报错!!
 		if(!str.isEmpty()){
 			p = new item_t();																				//创建新节点item_t 容器
@@ -241,6 +241,7 @@ void qlistUI::lockRow(){
 			tableWidget->item(row,col_pid)->setText(QString::number(p->pid,'g',17));//修改pid 所在的item 单元的值
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): %3, %4, %5 statue=1, pid=%6").arg(textBrowser_count++).arg(row).arg(p->exe_path).arg(p->hide).arg(p->logging).arg(p->pid));
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): QProcess started!!").arg(textBrowser_count++).arg(row));
+			row_running+=1;
 		}
 		else{
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): exe path can not be empty!!").arg(textBrowser_count++).arg(row));
