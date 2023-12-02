@@ -2,6 +2,8 @@
 
 TerminalWidget::TerminalWidget(int x, int y)
 {
+	QStringList strList;
+	long long pid;
 	QTextCursor editCursor = textCursor();
 	QTextBlockFormat textBlockFormat;
 
@@ -25,25 +27,21 @@ TerminalWidget::TerminalWidget(int x, int y)
 
 	setWindowTitle("qt terminal[QTextEdit], input/output both");
 
-	//创建一个新进程, 运行terminal
-	proc = new QProcess();
+	proc = new QProcess();						//创建一个新进程, 运行terminal [QProcess 子进程独立运行, 独享stdout, stderr, 但会重qt信号槽定向到main 主窗口, 信号槽支持跨进程通信;]
+	#ifdef defined(Q_OS_WIN)
+		proc->setProgram("cmd");				//设置启动的exe 的path
+	#elif defined(Q_OS_LINUX)
+		proc->setProgram("/usr/bin/bash");
+	#else
+		assert(false);
+	#endif
+	proc->setArguments(strList);			//设置启动参数
 	// 将stdout, 重定向到QTextEdit 容器的信号槽里面(锁死操作)
 	connect(proc,SIGNAL(readyReadStandardOutput()),this,SLOT(myReadStdoutSlot()));
 	// 将stderr, 重定向到QTextEdit 容器的信号槽里面(锁死操作)
 	connect(proc,SIGNAL(readyReadStandardError()),this,SLOT(myReadStderrSlot()));
-
-	//QProcess 子进程独立运行, 不共享stdout, stderr, 但会重qt信号槽定向到main 主窗口, 信号槽支持跨进程通信;
-#ifdef defined(Q_OS_WIN)
-	//阻塞, 直至QProcess 子进程结束, main 主进程100% 替换到子进程[包括stdout/stdin/stderr], 相当于替换式exec()
-	proc->start("cmd");
-	//非阻塞, 不等QProcess 子进程结束, main 主进程和QProcess 子进程互相独立
-	//proc->startDetached("cmd");
-#elif defined(Q_OS_LINUX)
-	proc->start("bash");
-	//proc->startDetached("bash");
-#else
-	assert(false);
-#endif
+	proc->start();										//阻塞启动 [阻塞, 直至QProcess 子进程结束, main 主进程100% 替换到子进程[包括stdout/stdin/stderr], 相当于替换式exec()]
+	//proc->startDetached(&pid);			//分离启动 [非阻塞, 不等QProcess 子进程结束, main 主进程和QProcess 子进程互相独立] -- 找不到设备, 不能用
 }
 
 TerminalWidget::~TerminalWidget(){
@@ -69,11 +67,11 @@ void TerminalWidget::keyPressEvent(QKeyEvent *e)
 		str = editCursor.selectedText();
 		editCursor.clearSelection();
 #ifdef defined(Q_OS_WIN)
-	lastInput = str.toLocal8Bit() + '\r' + '\n';
+		lastInput = str.toLocal8Bit() + '\r' + '\n';
 #elif defined(Q_OS_LINUX)
-	lastInput = str.toLocal8Bit() + '\n';
+		lastInput = str.toLocal8Bit() + '\n';
 #else
-	assert(false);
+		assert(false);
 #endif
 		proc->write(lastInput);
 		return;
@@ -88,11 +86,10 @@ void TerminalWidget::keyPressEvent(QKeyEvent *e)
 
 void TerminalWidget::myReadStdoutSlot()
 {
-	QByteArray ba = proc->readAllStandardOutput();
-	QTextCodec * textCodec = QTextCodec::codecForName("System");
-	//assert(textCodec != nullptr);
-	QString output = textCodec->toUnicode(ba);
-
+	QByteArray ba = proc->readAllStandardError();
+	QTextCodec *ptmp = QTextCodec::codecForName("System");
+	//assert(ptmp != nullptr);
+	QString output = ptmp->toUnicode(ba);
 	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
 	{
 		setTextColor(Qt::white);
@@ -105,10 +102,9 @@ void TerminalWidget::myReadStdoutSlot()
 void TerminalWidget::myReadStderrSlot()
 {
 	QByteArray ba = proc->readAllStandardError();
-	QTextCodec* textCodec = QTextCodec::codecForName("System");
-	//assert(textCodec != nullptr);
-	QString output = textCodec->toUnicode(ba);
-
+	QTextCodec *ptmp = QTextCodec::codecForName("System");
+	//assert(ptmp != nullptr);
+	QString output = ptmp->toUnicode(ba);
 	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
 	{
 		setTextColor(Qt::red);
@@ -122,6 +118,8 @@ void TerminalWidget::myReadStderrSlot()
 
 TerminalWidgetEx::TerminalWidgetEx(int x, int y)
 {
+	QStringList strList;
+	long long pid;
 	QTextCursor editCursor = textCursor();
 	QTextBlockFormat textBlockFormat;
 
@@ -144,18 +142,18 @@ TerminalWidgetEx::TerminalWidgetEx(int x, int y)
 	setWindowTitle("qt terminal[QTextBrowser], display only");
 
 	proc = new QProcess();
-	connect(proc,SIGNAL(readyReadStandardOutput()),this,SLOT(myReadStdoutSlot()));
-	connect(proc,SIGNAL(readyReadStandardError()),this,SLOT(myReadStderrSlot()));
-
 #ifdef defined(Q_OS_WIN)
-	proc->start("cmd");
-	//proc->startDetached("cmd");
+	proc->setProgram("cmd");
 #elif defined(Q_OS_LINUX)
-	proc->start("bash");
-	//proc->startDetached("bash");
+	proc->setProgram("/usr/bin/bash");
 #else
 	assert(false);
 #endif
+	proc->setArguments(strList);
+	connect(proc,SIGNAL(readyReadStandardOutput()),this,SLOT(myReadStdoutSlot()));
+	connect(proc,SIGNAL(readyReadStandardError()),this,SLOT(myReadStderrSlot()));
+	//proc->start();
+	proc->startDetached(&pid);
 }
 
 TerminalWidgetEx::~TerminalWidgetEx(){
@@ -167,11 +165,10 @@ TerminalWidgetEx::~TerminalWidgetEx(){
 
 void TerminalWidgetEx::myReadStdoutSlot()
 {
-	QByteArray ba = proc->readAllStandardOutput();
-	QTextCodec * textCodec = QTextCodec::codecForName("System");
-	//assert(textCodec != nullptr);
-	QString output = textCodec->toUnicode(ba);
-
+	QByteArray ba = proc->readAllStandardError();
+	QTextCodec *ptmp = QTextCodec::codecForName("System");
+	//assert(ptmp != nullptr);
+	QString output = ptmp->toUnicode(ba);
 	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
 	{
 		setTextColor(color_stdout);
@@ -184,10 +181,9 @@ void TerminalWidgetEx::myReadStdoutSlot()
 void TerminalWidgetEx::myReadStderrSlot()
 {
 	QByteArray ba = proc->readAllStandardError();
-	QTextCodec* textCodec = QTextCodec::codecForName("System");
-	//assert(textCodec != nullptr);
-	QString output = textCodec->toUnicode(ba);
-
+	QTextCodec *ptmp = QTextCodec::codecForName("System");
+	//assert(ptmp != nullptr);
+	QString output = ptmp->toUnicode(ba);
 	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
 	{
 		setTextColor(color_stderr);

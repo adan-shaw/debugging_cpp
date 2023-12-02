@@ -3,6 +3,9 @@
 #include <QVBoxLayout>
 #include <QTextCodec>
 #include <QComboBox>
+#include <QTextBlock>
+#include <QTextCodec>
+#include <QTextCursor>
 #include <QDebug>
 
 //qt 控件变量new/delete 内存管理声明:
@@ -54,6 +57,10 @@ qlistUI::qlistUI(QList<item_t> *p, QWidget *parent) :
 	textBrowser->append("    stderr also print to here [default]");
 	textBrowser->append("author: ");									//添加text to QTextBrowser控件[换行]
 	textBrowser->insertPlainText("adan_shaw@qq.com");	//添加text to QTextBrowser控件[不换行]
+	textBrowser->setStyleSheet("background-color:rgb(0,0,0); color:rgb(255,255,255); border:20px;");
+	font.setFamily(font_style);
+	font.setPixelSize(font_size);
+	textBrowser->setFont(font);
 
 	//绑定信号槽
 	connect(addRowButton, SIGNAL(clicked()), this, SLOT(addRow()));
@@ -203,6 +210,9 @@ void qlistUI::lockRow(){
 	QByteArray tmp;
 	item_t *p;
 	QTableWidgetItem *item;
+	QComboBox *pComboBox;
+	QWidget *widget;
+	QStringList strList;
 
 	//tableWidget->setEnabled(false);
 	addRowButton->setEnabled(false);
@@ -218,27 +228,39 @@ void qlistUI::lockRow(){
 
 	//items_info->size() == row_cur == 0
 	for(row=0; row < row_cur; row++){
-		str = tableWidget->item(row,0)->text();										//第一行为空, 则报错!!
+		str = tableWidget->item(row,0)->text();										//第一行为空, 则报错!!(崩溃点)
 		if(!str.isEmpty()){
 			p = new item_t();																				//创建新节点item_t 容器
 			tmp = str.toLocal8Bit();
 			strncpy(p->exe_path, tmp.data(), EXE_PATH_MAX);					//拷贝字符串
 			//p->hide = tableWidget->item(row,1)->text().toBool();	//QString 没有toBool() 方法?
-			p->hide = tableWidget->item(row,1)->text().toInt();
+			//p->hide = tableWidget->item(row,1)->text().toInt();
+			widget = tableWidget->cellWidget(row,1);
+			pComboBox = dynamic_cast<QComboBox*>(widget);
+			p->hide = pComboBox->currentText().toInt();
 			if(p->hide != 0) p->hide = 1;														//一切非0 的unsigned int, 统一都视为true[空也视为0]
-			p->logging = tableWidget->item(row,2)->text().toInt();
+			widget = tableWidget->cellWidget(row,2);
+			pComboBox = dynamic_cast<QComboBox*>(widget);
+			p->logging = pComboBox->currentText().toInt();
 			if(p->logging != 0) p->logging = 1;
-			p->status = tableWidget->item(row,3)->text().toInt();
-			if(p->status != 0) p->status = 1;
+
+			p->status = 1;
+			tableWidget->item(row,3)->setText(QString::number(p->status,'g',17));//修改status 所在的item 单元的值
+
 			items_info->insert(row, *p);
 			row_cur+=1;
 
 			//开始all 程序(创建QProcess 进程, 将stderr 重定向到textBrowser, 如果启动了p->no_stdout, 则抛弃stdout; 否则根据p->logging 决定将stdout, stderr 打印到指定的地方)
 			*p = items_info->at(row);
 			p->proc = new QProcess();
-			p->proc->startDetached(p->exe_path);										//detached 式分离exe 启动
-			p->pid = p->proc->processId();
+			p->proc->setProgram(p->exe_path);												//设置启动的exe 的path
+			p->proc->setArguments(strList);													//设置启动的exe 的启动参数
+			//p->proc->start(p->exe_path, strList);									//阻塞启动exe
+			p->proc->startDetached(&p->pid);												//detached 式分离exe 启动, 并获取返回的pid
+			connect(p->proc,SIGNAL(readyReadStandardError()),this,SLOT(myReadStderrSlot()));//标准错误重定向
+			//p->pid = p->proc->processId();
 			tableWidget->item(row,col_pid)->setText(QString::number(p->pid,'g',17));//修改pid 所在的item 单元的值
+
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): %3, %4, %5 statue=1, pid=%6").arg(textBrowser_count++).arg(row).arg(p->exe_path).arg(p->hide).arg(p->logging).arg(p->pid));
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): QProcess started!!").arg(textBrowser_count++).arg(row));
 			row_running+=1;
@@ -282,5 +304,25 @@ void qlistUI::delCurItemKillProc(){
 	if(row_running > 0){
 		kill_item_process(row);
 		textBrowser->append(QString("*%1* - tableWidget->delCurItemKillProc(%2): QProcess killed!!").arg(textBrowser_count++).arg(row));
+	}
+}
+
+void qlistUI::myReadStderrSlot()
+{
+	QString output;
+	QTextCodec* textCodec;
+	QByteArray ba;
+	item_t *p;
+	textCodec = QTextCodec::codecForName("System");
+	for(int i=0; i < row_running; i++){
+		*p = items_info->at(i);
+		ba = p->proc->readAllStandardError();
+		output = textCodec->toUnicode(ba);
+		if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput)){
+		textBrowser->setTextColor(color_stderr);
+		textBrowser->append(output.trimmed());
+		textBrowser->moveCursor(QTextCursor::End);
+		lastPosition = textBrowser->textCursor().position();
+		}
 	}
 }
