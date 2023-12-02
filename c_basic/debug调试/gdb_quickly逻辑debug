@@ -31,6 +31,10 @@ Ctrl + C
 # 断点123 行(break)
 b 123
 
+# 根据函数名断点(break) [大型项目常用, 根据类名, 函数名进行断点]
+b main
+b qlistUI::lockRow
+
 # 查看所有断点 (info breakpoints)
 info b
 
