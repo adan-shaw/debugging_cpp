@@ -34,6 +34,7 @@ private:
 	const int font_size = 14;
 	const QColor color_stdout = Qt::white;
 	const QColor color_stderr = Qt::red;
+	bool sw_color;											// false = Qt::white, true = Qt::red
 	QProcess* proc;											// 命令行终端进程
 	long long lastPosition = 0;					// 光标位置
 	int window_x;												// 窗口长度
@@ -61,6 +62,7 @@ private:
 	const int font_size = 14;
 	const QColor color_stdout = Qt::white;
 	const QColor color_stderr = Qt::red;
+	bool sw_color;											// false = Qt::white, true = Qt::red
 	QProcess* proc;											// 命令行终端进程
 	long long lastPosition = 0;					// 光标位置
 	int window_x;												// 窗口长度

@@ -3,8 +3,8 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
-QMAKE_CFLAGS += "-w -O2 -g3"
-QMAKE_CXXFLAGS += "-w -O2 -g3"
+QMAKE_CFLAGS += "-w -O2 -g3 -DNDEBUG"
+QMAKE_CXXFLAGS += "-w -O2 -g3 -DNDEBUG"
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

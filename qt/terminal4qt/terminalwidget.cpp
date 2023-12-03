@@ -7,6 +7,8 @@ TerminalWidget::TerminalWidget(int x, int y)
 	QTextCursor editCursor = textCursor();
 	QTextBlockFormat textBlockFormat;
 
+	sw_color = false;
+
 	// 初始化窗口大小
 	window_x = x;
 	window_y = y;
@@ -86,15 +88,30 @@ void TerminalWidget::keyPressEvent(QKeyEvent *e)
 
 void TerminalWidget::myReadStdoutSlot()
 {
-	QByteArray ba = proc->readAllStandardError();
-	QTextCodec *ptmp = QTextCodec::codecForName("System");
-	//assert(ptmp != nullptr);
+	QByteArray ba = proc->readAllStandardOutput();
+#ifdef defined(Q_OS_WIN)
+	QTextCodec *ptmp = QTextCodec::codecForName("GBK");//System = GBK = windows
+#elif defined(Q_OS_LINUX)
+	QTextCodec *ptmp = QTextCodec::codecForName("UTF-8");//默认 = UTF-8 = linux
+#else
+	assert(false);
+#endif
+	assert(ptmp != nullptr);
 	QString output = ptmp->toUnicode(ba);
-	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
+	//if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
+	if (output.length() > 0)
 	{
-		setTextColor(Qt::white);
-		append(output.trimmed());
-		moveCursor(QTextCursor::End);
+		if(sw_color){
+			setTextColor(Qt::white);
+			sw_color = false;
+		}
+		append(output.trimmed());				//打印stdout 的内容
+		append("");											//打印完毕, 换行
+		//moveCursor(QTextCursor::End);	//拒绝pos 移动(直接换行更方便)
+		lastPosition = textCursor().position();
+	}
+	else{
+		append("");											//输入空数据, 打印空行
 		lastPosition = textCursor().position();
 	}
 }
@@ -102,14 +119,29 @@ void TerminalWidget::myReadStdoutSlot()
 void TerminalWidget::myReadStderrSlot()
 {
 	QByteArray ba = proc->readAllStandardError();
-	QTextCodec *ptmp = QTextCodec::codecForName("System");
-	//assert(ptmp != nullptr);
+#ifdef defined(Q_OS_WIN)
+	QTextCodec *ptmp = QTextCodec::codecForName("GBK");
+#elif defined(Q_OS_LINUX)
+	QTextCodec *ptmp = QTextCodec::codecForName("UTF-8");
+#else
+	assert(false);
+#endif
+	assert(ptmp != nullptr);
 	QString output = ptmp->toUnicode(ba);
-	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
+	//if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
+	if (output.length() > 0)
 	{
-		setTextColor(Qt::red);
+		if(!sw_color){
+			setTextColor(Qt::red);
+			sw_color = true;
+		}
 		append(output.trimmed());
-		moveCursor(QTextCursor::End);
+		append("");
+		//moveCursor(QTextCursor::End);
+		lastPosition = textCursor().position();
+	}
+	else{
+		append("");
 		lastPosition = textCursor().position();
 	}
 }
@@ -122,6 +154,8 @@ TerminalWidgetEx::TerminalWidgetEx(int x, int y)
 	long long pid;
 	QTextCursor editCursor = textCursor();
 	QTextBlockFormat textBlockFormat;
+
+	sw_color = false;
 
 	window_x = x;
 	window_y = y;
@@ -152,8 +186,8 @@ TerminalWidgetEx::TerminalWidgetEx(int x, int y)
 	proc->setArguments(strList);
 	connect(proc,SIGNAL(readyReadStandardOutput()),this,SLOT(myReadStdoutSlot()));
 	connect(proc,SIGNAL(readyReadStandardError()),this,SLOT(myReadStderrSlot()));
-	//proc->start();
-	proc->startDetached(&pid);
+	proc->start();
+	//proc->startDetached(&pid);
 }
 
 TerminalWidgetEx::~TerminalWidgetEx(){
@@ -165,30 +199,44 @@ TerminalWidgetEx::~TerminalWidgetEx(){
 
 void TerminalWidgetEx::myReadStdoutSlot()
 {
-	QByteArray ba = proc->readAllStandardError();
-	QTextCodec *ptmp = QTextCodec::codecForName("System");
-	//assert(ptmp != nullptr);
+	QByteArray ba = proc->readAllStandardOutput();
+#ifdef defined(Q_OS_WIN)
+	QTextCodec *ptmp = QTextCodec::codecForName("GBK");
+#elif defined(Q_OS_LINUX)
+	QTextCodec *ptmp = QTextCodec::codecForName("UTF-8");
+#else
+	assert(false);
+#endif
+	assert(ptmp != nullptr);
 	QString output = ptmp->toUnicode(ba);
-	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
-	{
-		setTextColor(color_stdout);
-		append(output.trimmed());
-		moveCursor(QTextCursor::End);
-		lastPosition = textCursor().position();
+	if(sw_color){
+		setTextColor(color_stderr);
+		sw_color = false;
 	}
+	append(output.trimmed());
+	append("");
+	//moveCursor(QTextCursor::End);
+	lastPosition = textCursor().position();
 }
 
 void TerminalWidgetEx::myReadStderrSlot()
 {
 	QByteArray ba = proc->readAllStandardError();
-	QTextCodec *ptmp = QTextCodec::codecForName("System");
-	//assert(ptmp != nullptr);
+#ifdef defined(Q_OS_WIN)
+	QTextCodec *ptmp = QTextCodec::codecForName("GBK");
+#elif defined(Q_OS_LINUX)
+	QTextCodec *ptmp = QTextCodec::codecForName("UTF-8");
+#else
+	assert(false);
+#endif
+	assert(ptmp != nullptr);
 	QString output = ptmp->toUnicode(ba);
-	if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput))
-	{
+	if(!sw_color){
 		setTextColor(color_stderr);
-		append(output.trimmed());
-		moveCursor(QTextCursor::End);
-		lastPosition = textCursor().position();
+		sw_color = true;
 	}
+	append(output.trimmed());
+	append("");
+	//moveCursor(QTextCursor::End);
+	lastPosition = textCursor().position();
 }
