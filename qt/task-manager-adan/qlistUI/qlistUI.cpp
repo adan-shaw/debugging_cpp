@@ -135,6 +135,8 @@ void qlistUI::kill_item_process(int row){
 	//textBrowser->append(QString("*%1* - kill_item_process(): %2 ").arg(textBrowser_count++).arg(str));//debug only
 	items_info->removeAt(row);
 	row_running-=1;
+	if(row_running<=0)
+		row_running = 0;
 }
 
 
@@ -215,6 +217,7 @@ void qlistUI::delRow(){
 }
 
 void qlistUI::lockRow(){
+	char str_sh[1024];
 	int row;
 	QString str;
 	QByteArray tmp;
@@ -259,7 +262,17 @@ void qlistUI::lockRow(){
 
 			//开始all 程序(创建QProcess 进程, 将stderr 重定向到textBrowser, 如果启动了p->no_stdout, 则抛弃stdout; 否则根据p->logging 决定将stdout, stderr 打印到指定的地方)
 			p->proc = new QProcess();
-			p->proc->setProgram(p->exe_path);												//设置启动的exe 的path
+#ifdef defined(Q_OS_WIN)
+			p->proc->setProgram("cmd");															//设置启动的exe 的path
+			snprintf(str, sizeof(str) - 1, "%s %ld", killStr, items_info->at(row).pid);
+#elif defined(Q_OS_LINUX)
+			p->proc->setProgram("/usr/bin/bash");
+			snprintf(str_sh, sizeof(str_sh) - 1, "exec \"./%s\"", p->exe_path);//(未完成, 暂缓了, 不再继续探索)
+#else
+			assert(false);
+#endif
+			strList.push_back(str_sh);
+			//strList.push_back(p->exe_path);
 			p->proc->setArguments(strList);													//设置启动的exe 的启动参数
 			//p->proc->start(p->exe_path, strList);									//阻塞启动exe
 			p->proc->startDetached(&p->pid);												//detached 式分离exe 启动, 并获取返回的pid
@@ -319,7 +332,6 @@ void qlistUI::myReadStderrSlot()
 {
 	QString output;
 	QByteArray ba;
-	item_t *p;
 #ifdef defined(Q_OS_WIN)
 	QTextCodec *textCodec = QTextCodec::codecForName("GBK");
 #elif defined(Q_OS_LINUX)
@@ -328,8 +340,7 @@ void qlistUI::myReadStderrSlot()
 	assert(false);
 #endif
 	for(int i=0; i < row_running; i++){
-		*p = items_info->at(i);
-		ba = p->proc->readAllStandardError();
+		ba = items_info->at(i).proc->readAllStandardError();
 		output = textCodec->toUnicode(ba);
 		if(output.length() > 0){
 			textBrowser->setTextColor(color_stderr);
