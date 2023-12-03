@@ -107,23 +107,33 @@ void qlistUI::update_main_pid(){
 	label->setText("[main() process pid: " + QString::number(mainPid,'g',17) + "], all stderr: ");
 }
 
+const char *killStr = "kill -s 9 ";
+
 void qlistUI::clean_items_info(void){
-	item_t *p;
+	char str[64];
 	for(int row=0; row < row_running; row++){
-		*p = items_info->at(0);
+		//items_info->first().proc->kill();						//startDetached() QProcess 进程, 直接kill() 不会有任何作用(用task-manager-adan 打开task-manager-adan 即可测试)
+		//items_info->first().proc->waitForFinished();//阻塞等待杀死完成
+		//使用pid 大法杀死程序:
+		snprintf(str, sizeof(str) - 1, "%s %ld", killStr, items_info->first().pid);
+		system(str);
+		//textBrowser->append(QString("*%1* - clean_items_info(): %2 ").arg(textBrowser_count++).arg(str));//debug only
 		items_info->removeFirst();
-		p->proc->kill();
-		delete p;
+		tableWidget->item(row,3)->setText("");				//status 显示复原
+		tableWidget->item(row,col_pid)->setText("");	//pid 显示复原
 	}
 	row_locked = 0;
+	row_running = 0;
 }
 
 void qlistUI::kill_item_process(int row){
-	item_t *p = NULL;
-	*p = items_info->at(row);
+	char str[64];
+	//items_info->at(row).proc->kill();
+	//items_info->at(row).proc->waitForFinished();
+	snprintf(str, sizeof(str) - 1, "%s %ld", killStr, items_info->at(row).pid);
+	system(str);
+	//textBrowser->append(QString("*%1* - kill_item_process(): %2 ").arg(textBrowser_count++).arg(str));//debug only
 	items_info->removeAt(row);
-	p->proc->kill();
-	delete p;
 	row_running-=1;
 }
 
@@ -245,13 +255,9 @@ void qlistUI::lockRow(){
 			if(p->logging != 0) p->logging = 1;
 
 			p->status = 1;
-			tableWidget->item(row,3)->setText(QString::number(p->status,'g',17));//修改status 所在的item 单元的值
-
-			items_info->insert(row, *p);
-			row_cur+=1;
+			tableWidget->item(row,3)->setText(QString::number(p->status,'g',17));						//修改status 所在的item 单元的值
 
 			//开始all 程序(创建QProcess 进程, 将stderr 重定向到textBrowser, 如果启动了p->no_stdout, 则抛弃stdout; 否则根据p->logging 决定将stdout, stderr 打印到指定的地方)
-			*p = items_info->at(row);
 			p->proc = new QProcess();
 			p->proc->setProgram(p->exe_path);												//设置启动的exe 的path
 			p->proc->setArguments(strList);													//设置启动的exe 的启动参数
@@ -259,10 +265,12 @@ void qlistUI::lockRow(){
 			p->proc->startDetached(&p->pid);												//detached 式分离exe 启动, 并获取返回的pid
 			connect(p->proc,SIGNAL(readyReadStandardError()),this,SLOT(myReadStderrSlot()));//标准错误重定向
 			//p->pid = p->proc->processId();
-			tableWidget->item(row,col_pid)->setText(QString::number(p->pid,'g',17));//修改pid 所在的item 单元的值
+			tableWidget->item(row,col_pid)->setText(QString::number(p->pid,'g',17));				//修改pid 所在的item 单元的值
 
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): %3, %4, %5 statue=1, pid=%6").arg(textBrowser_count++).arg(row).arg(p->exe_path).arg(p->hide).arg(p->logging).arg(p->pid));
 			textBrowser->append(QString("*%1* - tableWidget->lockRow(%2): QProcess started!!").arg(textBrowser_count++).arg(row));
+
+			items_info->insert(row, *p);
 			row_running+=1;
 		}
 		else{
@@ -310,19 +318,29 @@ void qlistUI::delCurItemKillProc(){
 void qlistUI::myReadStderrSlot()
 {
 	QString output;
-	QTextCodec* textCodec;
 	QByteArray ba;
 	item_t *p;
-	textCodec = QTextCodec::codecForName("System");
+#ifdef defined(Q_OS_WIN)
+	QTextCodec *textCodec = QTextCodec::codecForName("GBK");
+#elif defined(Q_OS_LINUX)
+	QTextCodec *textCodec = QTextCodec::codecForName("UTF-8");
+#else
+	assert(false);
+#endif
 	for(int i=0; i < row_running; i++){
 		*p = items_info->at(i);
 		ba = p->proc->readAllStandardError();
 		output = textCodec->toUnicode(ba);
-		if (output.length() > 0 && output != QString::fromLocal8Bit(lastInput)){
-		textBrowser->setTextColor(color_stderr);
-		textBrowser->append(output.trimmed());
-		textBrowser->moveCursor(QTextCursor::End);
-		lastPosition = textBrowser->textCursor().position();
+		if(output.length() > 0){
+			textBrowser->setTextColor(color_stderr);
+			textBrowser->append(output.trimmed());
+			textBrowser->append("");
+			lastPosition = textBrowser->textCursor().position();
+			textBrowser->setTextColor(color_stdout);
+		}
+		else {
+			textBrowser->append("");
+			lastPosition = textBrowser->textCursor().position();
 		}
 	}
 }
