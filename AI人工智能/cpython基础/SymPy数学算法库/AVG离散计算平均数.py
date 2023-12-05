@@ -50,8 +50,8 @@ def main():
 	# 计算方差
 	variance = variance_sum / test_count
 
-	# 计算标准差(等价公式: math.pow(variance，0.5) = math.sqrt(variance))
-	#math.pow(variance，0.5)
+	# 计算标准差(等价公式: math.pow(variance, 0.5) = math.sqrt(variance))
+	#math.pow(variance, 0.5)
 	std_deviation = math.sqrt(variance)
 
 	# 打印结果

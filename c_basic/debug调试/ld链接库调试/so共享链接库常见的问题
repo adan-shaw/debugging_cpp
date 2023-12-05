@@ -1,5 +1,5 @@
 0.linux 如何找到'共享链接库'?
-	查找'共享链接库'有3种方式：
+	查找'共享链接库'有3种方式: 
 	(1)把'动态链接库'拷贝到'共享链接库'默认搜索路径下:
 			./
 			/lib
@@ -7,7 +7,7 @@
 			/usr/local/lib
 
 
-	(2)在LD_LIBRARY_PATH环境变量中, 加上库所在路径, 例如(重启失效)：
+	(2)在LD_LIBRARY_PATH环境变量中, 加上库所在路径, 例如(重启失效): 
 		 # 新增ldconfig 搜索路径
 		 export LD_LIBRARY_PATH=LD_LIBRARY_PATH:/home/example/lib
 

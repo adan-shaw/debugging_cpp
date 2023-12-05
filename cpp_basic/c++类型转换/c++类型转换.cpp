@@ -237,7 +237,7 @@ void t7(void){
 		cout << "dynamic_cast :: not nullptr" << endl;
 
 	//static_cast的不安全性测试
-	pB = static_cast<B*>(pAA);		//结果为not nullptr, 向下转换成功;pAA指向的是A类型的对象, 竟然转换为B类型的指针！
+	pB = static_cast<B*>(pAA);		//结果为not nullptr, 向下转换成功;pAA指向的是A类型的对象, 竟然转换为B类型的指针!
 	if(nullptr == pB)
 		cout << "static_cast :: nullptr" << endl;
 	else{

@@ -39,7 +39,7 @@ void TestFun(){
 
 	//第二种情况: const修饰指针
 	A *pB = new A();
-	pA = pB;											//思考这个原因;为什么这样子可以呢？且再看下面的这种情况:
+	pA = pB;											//思考这个原因;为什么这样子可以呢?且再看下面的这种情况:
 	A* const pC = new A(1);
 	cout << pC->m_nNum << endl;		//1
 	A *pD = new A(2);
