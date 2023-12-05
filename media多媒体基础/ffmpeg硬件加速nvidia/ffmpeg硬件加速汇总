@@ -199,5 +199,5 @@ NVENC 用法示例:
 		sudo /usr/local/bin/ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i xxx.mp4 -vn -acodec copy audio.ac3
 
 		# ffmpeg-nvidia 硬件加速下载url
-		sudo /usr/local/bin/ffmpeg -v verbose -hwaccel vaapi -hwaccel_output_format vaapi -i https://p1.93xnxngif.net/20230919/7y2XV4fI/1000kb/hls/index.m3u8 xxxxx.mp4
+		sudo /usr/local/bin/ffmpeg -v verbose -hwaccel vaapi -hwaccel_output_format vaapi -i https://192.168.56.1/index.m3u8 xxxxx.mp4
 
