@@ -54,3 +54,6 @@ ffmpeg -i ./IN.mp4 -vf format=gray,geq=lum_expr='(p(X,Y)+(256-p(X-4,Y-4)))/2' ./
 ffmpeg -i ./IN.mp4 -vf noise=alls=20:allf=t+u ./OUT.mp4
 
 
+
+
+

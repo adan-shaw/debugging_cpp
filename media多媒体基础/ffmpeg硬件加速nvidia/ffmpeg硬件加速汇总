@@ -1,3 +1,5 @@
+r# ffmpeg 必须编译之后才有nvidia 硬件加速, 而且转码时, 还需要指定nvidia 硬解器, 否则没办法使用, 十分麻烦;
+
 #
 # 1.ffmpeg 硬件加速简介
 #
@@ -185,9 +187,17 @@ NVENC 用法示例:
 
 	my 测试命令:
 		# (转码)-preset slow 慢转码, 画质好
-		ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i input.mp4 -c:v h264_nvenc -preset slow output.mp4
+		sudo /usr/local/bin/ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i `pwd`/input.mp4 -c:v h264_nvenc -preset slow `pwd`/output.mp4
+
 		# (转码)直接减帧fps
-		ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i input.mp4 -c:v h264_nvenc -r 23 output.mp4
+		sudo /usr/local/bin/ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i `pwd`/input.mp4 -c:v h264_nvenc -r 10 `pwd`/output.mp4
 
+		# 快进一倍(0.5), 二倍是(0.25)
+		sudo /usr/local/bin/ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i `pwd`/old.mp4 -c:v h264_nvenc -vf "setpts=0.5*PTS" `pwd`/new.mp4
 
+		# ffmpeg 提取音频轨道
+		sudo /usr/local/bin/ffmpeg -hwaccel cuvid -c:v h264_cuvid -noautorotate -i xxx.mp4 -vn -acodec copy audio.ac3
+
+		# ffmpeg-nvidia 硬件加速下载url
+		sudo /usr/local/bin/ffmpeg -v verbose -hwaccel vaapi -hwaccel_output_format vaapi -i https://p1.93xnxngif.net/20230919/7y2XV4fI/1000kb/hls/index.m3u8 xxxxx.mp4
 

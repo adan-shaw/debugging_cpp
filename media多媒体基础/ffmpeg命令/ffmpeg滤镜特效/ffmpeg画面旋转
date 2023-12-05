@@ -15,3 +15,4 @@ ffmpeg -i xxx.mp4 -vf transpose=1 c.mp4
 
 画面-逆时针旋转90度:
 ffmpeg -i xxx.mp4 -vf transpose=2 d.mp4
+

@@ -7,6 +7,9 @@
 
 
 
+# 快进4倍
+ffmpeg -i old.mp4 -vf "setpts=0.25*PTS" new.mp4
+
 # 将视频处理成2倍速(剪切计算方式:时间轴/2):
 ffmpeg -i old.mp4 -vf "setpts=0.5*PTS" new.mp4
 

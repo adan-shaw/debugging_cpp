@@ -1,0 +1,30 @@
+其实推流拉流很简单的, 下面是一个简单的demo:
+
+
+
+# 把文件推流到rtsp-simple-server
+ffmpeg -i data.mp4 -preset:v ultrafast -tune:v zerolatency -f rtsp -g 5 -an rtsp://127.0.0.1:8554/mystream
+
+
+
+
+
+推流虚拟摄像头, 然后将摄像头通过网络, 推到服务器上面, 
+ffmpeg -i /dev/video0 -preset:v ultrafast -tune:v zerolatency -f rtsp -g 5 -an rtsp://127.0.0.1:8554/mystream
+
+rtsp://127.0.0.1:8554/mystream
+
+
+
+
+
+# 将摄像头, 推流到RSS-rtsp端口
+ffmpeg -r 15 -i /dev/video0 -preset:v ultrafast -tune:v zerolatency -an -f rtsp rtsp://127.0.0.1:8554/mystream
+
+# 以rtmp协议标准, 推流到RSS-rtmp端口(rtmps = 1936)
+ffmpeg -r 15 -i /dev/video0 -preset:v ultrafast -tune:v zerolatency -f flv rtmp://127.0.0.1:1935/mystream
+
+# 以hls协议标准, 推流到RSS-hls端口
+ffmpeg -r 15 -i /dev/video0 -preset:v ultrafast -tune:v zerolatency -an -f hls hls://127.0.0.1:8888/mystream
+
+
