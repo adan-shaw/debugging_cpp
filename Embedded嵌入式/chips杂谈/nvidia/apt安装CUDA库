@@ -1,0 +1,10 @@
+cuda 编程模块:
+	# ***安装cuda 套件***
+	apt-get install nvidia-cuda-toolkit
+
+
+	# opencl 解码-转码-压缩的nvidia 硬件加速
+	apt-get install nvidia-opencl-icd nvidia-opencl-common nvidia-libopencl1 nvidia-visual-profiler nvidia-profiler nvidia-opencl-dev 
+
+
+	ps: 以上安装不完全, nvidia 容易崩溃吃内存, 最好全部都安装.
