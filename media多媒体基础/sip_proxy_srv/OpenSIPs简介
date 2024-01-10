@@ -1,0 +1,39 @@
+kamailio的前身叫openser, 和opensips是兄弟软件, 两款都是出色的sip proxy, 常用在大并发量的sip 媒体服务器中, 做负载均衡;
+
+kamailio, opensips, freeSwitch, 都是proxy 代理服务器, 相当于httpd, nginx;
+
+一般下游都会是一个Asterisk, Asterisk 是一个单纯的sip server, 相当于tomcat, 并发能力不强, 业务能力强;
+
+
+
+总结:
+	kamailio, opensips, freeSwitch = proxy 代理服务器 = nginx(proxy 代理服务器);
+	Asterisk, miniSIPServer = sip 应用服务器 = tomcat(http 应用服务器)
+
+
+
+kamailio + Asterisk, 可以实现大规模的互联网服务器群集;
+
+
+
+
+
+OpenSIPS和Asterisk都是开源项目, 并且都是用来做VoIP的; 它们扮演的角色不同, 优缺点也各不相同; 
+
+简单地说, 本质上, OpenSIPS是一个SIP Proxy Server, 而Asterisk是一个Media Server;
+
+因为OpenSIPS仅仅是将呼叫控制命令中继到另外的服务器, 而不是语音呼叫的终端;
+
+Asterisk收到呼叫后会向目标另外建立新的呼叫, 通过连接两个呼叫的音频流而让整个过程看起来像一个呼叫一样;
+
+本质上是有两个呼叫在进行, 属于一种B2BUA模式, Asterisk在过程中充当了媒体服务器;
+
+其它的一下差异：
+	OpenSIPS没有内置的媒体处理能力, 没法录音, 没法播放语音, 也没法播放音乐;
+	Asterisk具有媒体处理能力, 所以可以支持语音互动应答功能, 所以也可以当作语音邮箱服务器;
+	Asterisk具有很多内置功能, 这些功能让Asterisk可以当作一个IP-PBX或者商务电话系统;
+	Asterisk可以当作会议服务器, OpenSIPS无法支持;
+	Asterisk可以当作不同电话技术(包括IDN)之间的网关, 而OpenSIPS仅仅就是一个SIP服务器;
+	Asterisk同时并发呼叫数量不是很大;
+	Asterisk不支持同一个账户多注册, 而OpenSIPS却能处理同一个账户多注册的问题;
+

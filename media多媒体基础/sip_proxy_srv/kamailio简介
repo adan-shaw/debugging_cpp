@@ -1,0 +1,15 @@
+kamailio的前身叫openser, 和opensips是兄弟软件, 两款都是出色的sip proxy, 常用在大并发量的sip 媒体服务器中, 做负载均衡;
+
+kamailio, opensips, freeSwitch, 都是proxy 代理服务器, 相当于httpd, nginx;
+
+一般下游都会是一个Asterisk, Asterisk 是一个单纯的sip server, 相当于tomcat, 并发能力不强, 业务能力强;
+
+
+
+总结:
+	kamailio, opensips, freeSwitch = proxy 代理服务器 = nginx(proxy 代理服务器);
+	Asterisk, miniSIPServer = sip 应用服务器 = tomcat(http 应用服务器)
+
+
+
+kamailio + Asterisk, 可以实现大规模的互联网服务器群集;
