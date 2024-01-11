@@ -1,0 +1,26 @@
+PJSIP 是一个开放源代码的 SIP 协议栈; 它支持多种 SIP 的扩展功能, 目前可说算是最流行的 sip 协议栈之一了; 
+
+下面列出其重要的几种优点:
+	* 代码层次非常清晰, 从低级到高级都提供了很方便的接口供开发;
+	* 提供相当多的测试用例和一个基于 pjsip 开发的命令行 UA 程序供开发人员参考;
+	* 高度的可移殖性, 只需简单的编译一次, 它能够在多种平台上运行(所有 Windows 系统列, Windows Mobile, Linux, 所有 Unix 系列, MacOS X, RTEMS, Symbian OS, 等等); 
+	* 极小的内存需求, 官方宣称编译后的库, 完全实现 SIP 的功能只需要 150K 的内存空间, 这使得 PJISPi 不仅仅是嵌入开发的理想平台, 并且实用于那些内存运行于极小内存平台的应用, 这也意味着极小的用户下载时间; 
+	* 高效的性能, 这意味着极小的 CPU 运算需求下能同时实现更多的通话; 
+	* 支持多种 SIP 功能及扩展功能, 多种 SIP 功能和扩展功能, 例如多人会话, 事件驱动框架, 会话控制(presence), 即时信息, 电话传输, 等等在库文件里得以实现; 
+	* 丰富的文档资料, 对于软件开发人员来说, 文档资料从来都是多多益善, 因此我们要求 PJSIP 开发人员提供了大量的极有价值的文档资料供大家使用; 
+
+
+
+其实说是 PJSIP 不是特别贴切, 这个库实际上是几个部分组成的:
+	1).PJSIP - Open Source SIP Stack [开源的 SIP 协议栈]
+	2).PJMEDIA - Open Source Media Stack [开源的媒体栈]
+	3).PJNATH - Open Source NAT Traversal Helper Library [开源的 NAT-T 辅助库]
+	4).PJLIB-UTIL - Auxiliary Library [辅助工具库]
+	5).PJLIB - Ultra Portable Base Framework Library [基础框架库]
+
+
+
+总结:
+	利用pjsip, 你可以轻松搭建一个跨平台sip 客户端;
+	虽然android 本身会自带sip 解析库, 但如果想开发跨平台sip 客户端应用, pjsip 也是一个不错的选择!!
+	而客户端正好需要非常强大的跨平台能力!!
