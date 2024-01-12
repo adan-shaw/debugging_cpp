@@ -1,11 +1,11 @@
 #include "3DES.h"
 
-static inline unsigned char Sbox(const size_t i, const unsigned char c);
-static inline void CompactPermuteXor(const unsigned char Key[8], const unsigned char L[4], unsigned char Output[4]);
-static inline void ExpandXor(const unsigned char Key[8], const unsigned char R[4], unsigned char Output[8]);
-static inline void LeftShift(const unsigned char Key[4], unsigned char Output[4]);
+static unsigned char Sbox(const size_t i, const unsigned char c);
+static void CompactPermuteXor(const unsigned char Key[8], const unsigned char L[4], unsigned char Output[4]);
+static void ExpandXor(const unsigned char Key[8], const unsigned char R[4], unsigned char Output[8]);
+static void LeftShift(const unsigned char Key[4], unsigned char Output[4]);
 
-static inline unsigned char Sbox(const size_t i, const unsigned char c){
+static unsigned char Sbox(const size_t i, const unsigned char c){
 
 	size_t line, column;
 
@@ -199,7 +199,7 @@ static void ExpandXor(const unsigned char Key[8], const unsigned char R[4], unsi
 	Output[7] ^= Key[7];
 }
 
-static inline void LeftShift(const unsigned char Key[4], unsigned char Output[4]){
+static void LeftShift(const unsigned char Key[4], unsigned char Output[4]){
 	Output[0] = Output[1] = Output[2] = Output[3] = 0;
 
 	if(Key[0] & 128) Output[3] |= 1;
@@ -213,7 +213,7 @@ static inline void LeftShift(const unsigned char Key[4], unsigned char Output[4]
 	Output[3] <<= 1;
 }
 
-inline void DES(const unsigned char Message[8], const char Key[8], unsigned char Output[8], int encipher){
+void DES(const unsigned char Message[8], const char Key[8], unsigned char Output[8], int encipher){
 	size_t i;
 
 	unsigned char C[16][8] = {
