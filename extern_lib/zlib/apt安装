@@ -1,0 +1,5 @@
+zlib1g - compression library - runtime
+zlib1g-dbg - compression library - development
+zlib1g-dev - compression library - development
+
+apt-get install zlib1g zlib1g-dbg zlib1g-dev
