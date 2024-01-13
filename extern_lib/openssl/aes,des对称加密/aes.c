@@ -270,7 +270,7 @@ void aes_cbc(void){
 
 
 //***
-//EVP 虽然方便, 但是版本不对, 改动太大. 新版本貌似不兼容EVP_CIPHER_CTX ctx; 结构
+//EVP 虽然方便, 但版本不对, 改动太大. 新版本貌似不兼容EVP_CIPHER_CTX ctx; 结构
 //***
 /*
 	EVP框架是对openssl提供的所有算法进行了封装, 

@@ -81,7 +81,7 @@ int main(void){
 	memset(md5_result,0,16);
 	//使用md5()之前,必须保证'字符串长度的准确性'(即使出错, 也要在strnlen()中出错, md5()不再为你'计算字符串长度')
 	str_len = strnlen(data,64);
-	MD5((unsigned char*)data,str_len,md5_result);					//测试1
+	MD5((unsigned char*)data,str_len,md5_result);					//执行MD5测试1
 	printf("1.请求md5的数据:%s\n计算出来的md5校验码:",data);		//打印结果
 	for(i=0;i<16;i++)
 		printf("%02x",md5_result[i]);
@@ -90,7 +90,7 @@ int main(void){
 
 	memset(md5_result,0,16);
 	str_len = strnlen(data2,64);
-	MD5((unsigned char*)data2,str_len,md5_result);				//测试2
+	MD5((unsigned char*)data2,str_len,md5_result);				//执行MD5测试2
 	printf("2.请求md5的数据:%s\n计算出来的md5校验码:",data2);	//打印结果
 	for(i=0;i<16;i++)
 		printf("%02x",md5_result[i]);
@@ -99,7 +99,7 @@ int main(void){
 
 	memset(md5_result,0,16);
 	str_len = strnlen((const char*)data3,64);
-	MD5(data3,str_len,md5_result);												//测试3
+	MD5(data3,str_len,md5_result);												//执行MD5测试3
 	printf("3.请求md5的数据:%s\n计算出来的md5校验码:",data3);	//打印结果
 	for(i=0;i<16;i++)
 		printf("%02x",md5_result[i]);
@@ -107,7 +107,7 @@ int main(void){
 
 
 
-	test();//压力测试
+	test();//执行MD5压力测试
 
 	exit(0);
 }

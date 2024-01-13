@@ -74,7 +74,7 @@
 
 
 
-char *smart_point;
+char *smart_point;//仅限单线程使用
 
 
 
@@ -350,7 +350,7 @@ void des_ebc_encrypt_test(void){
 	print_text(des_ebc_data);									//结束打印
 	print_encrypted(des_ebc_ret);
 
-	smart_point = des_ebc_ret;								//传递给后续测试函数-解密
+	smart_point = des_ebc_ret;								//传递给后续测试函数-解密(仅限单线程使用)
 	return;
 }
 
@@ -390,7 +390,7 @@ void des_cbc_encrypt_test(void){
 	print_text(des_cbc_data);									//结束打印
 	print_encrypted(des_cbc_ret);
 
-	smart_point = des_cbc_ret;								//传递给后续测试函数-解密
+	smart_point = des_cbc_ret;								//传递给后续测试函数-解密(仅限单线程使用)
 	return;
 }
 
