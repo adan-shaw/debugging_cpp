@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"ssl.h": "c",
+		"in.h": "c"
+	}
+}
