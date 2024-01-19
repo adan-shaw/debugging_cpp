@@ -21,7 +21,7 @@ PF表示PROTOCOL FAMILY 协议族;
 
 	AF_ROUTE			路由域套接字socket, 只支持raw模式[需要root权限]
 
-	AF_PACKET			链路层socket(需要自己附上ARP 报文)
+	AF_PACKET			链路层socket(需要自己附上ARP 报文)[需要root权限]
 
 	AF_PPPOX			电话线2跳线转RJ45 网线(model 光猫/电猫)的通信协议簇[很少用]
 
@@ -43,3 +43,6 @@ PF表示PROTOCOL FAMILY 协议族;
 		一级=芯片公司 + linux内核驱动/运行时库设计者, 驱动注重定制syscall 标准接口;
 		二级=设备商, linux内核驱动 + 设备行业的标准, 驱动注重使用syscall 接口;
 		三级=应用层软件, API + 应用算法;
+
+
+
