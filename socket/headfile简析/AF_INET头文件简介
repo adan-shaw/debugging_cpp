@@ -1,0 +1,56 @@
+tcp/ip 所有结构体头文件, 都定义在:
+	/usr/include/netinet		//底层ether, ip, udp, tcp, icmp, igmp
+	/usr/include/arpa				//高层telnet, ftp, tftp, inet, nameser(DNS)
+													//其中telnet, ftp, tftp 已经弃用,  inet, nameser(DNS) 还有用;
+
+
+
+
+
+编程时, 可以轻松包含公版的tcp/ip 结构体(不推荐自己定义结构体, 麻烦又容易出错):
+
+	//tcpip 地址信息结构体(注意:arpa/inet.h不能与linux/in.h or netinet/in.h共存,不然会有重复定义)
+	//#include <netinet/in.h>
+
+	//地址信息转换函数(自动包含in.h)
+	#include <arpa/inet.h>
+
+
+	//摆设, 主要用来声明n_short, n_long, n_time(衔接文件, passed)
+	//#include <netinet/in_systm.h>
+
+
+	//ip 协议结构体定义
+	#include <netinet/ip.h>
+	#include <netinet/ip6.h>
+
+	//tcp 协议结构体定义
+	#include <netinet/tcp.h>
+
+	//udp 协议结构体定义
+	#include <netinet/udp.h>
+
+	//icmp 协议结构体定义
+	#include <netinet/ip_icmp.h>
+	#include <netinet/icmp6.h>
+
+	//igmp 协议结构体定义
+	#include <netinet/igmp.h>
+
+	//DNS地址信息转换函数
+	#include <arpa/nameser.h>
+	#include <arpa/nameser_compat.h>
+
+
+
+	//struct ether_addr [48 bit Ethernet address] 地址转换函数
+	#include <netinet/ether.h>
+
+	//struct ether_arp 声明(包含ether.h, 则自动包含if_ether.h)
+	//#include <netinet/if_ether.h>
+
+	//ether层, 光纤分布式数据接口
+	if_fddi.h
+
+	//ether层的一些头文件定义
+  if_tr.h 
