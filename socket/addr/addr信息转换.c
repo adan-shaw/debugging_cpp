@@ -70,13 +70,22 @@ int main(void){
 
 	//安全的inet地址信息结构体填充方案:
 	full_sockaddr_inEx(addr_in, host_ip, port);
+
+	//旧式的inet地址信息结构体填充方案:
 	/*
 		addr_in.sin_family = AF_INET;
 		if(!inet_pton(AF_INET, "192.168.1.101", &addr_in.sin_addr))
 			perror("inet_pton()");
 		addr_in.sin_port = htons(666);
 	*/
+
 	return 0;
 }
+
+
+
+
+
+
 
 
