@@ -1,11 +1,10 @@
 //编译:
-//		gcc -g3 ./net网络字节序转换.c -o x 
+//		gcc -g3 ./uint网络字节序转换.c -o x 
+
 
 
 #include <arpa/inet.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 
 
 
@@ -18,6 +17,7 @@
 
 	struct sockaddr_in 中的sin_port 为uint16_t 整形;
 */
+
 
 
 //2.为什么需要'网络字节序'转换函数:
@@ -39,6 +39,7 @@
 */
 
 
+
 //3.如何发送安全数据:
 /*
 	如果你直接发送'unsigned int数据'到一个异构系统里面, 会出现数据错乱的;
@@ -52,32 +53,30 @@
 
 
 int main(void){
-	uint32_t u32 = 1234;				//转换前的数据
+	uint32_t u32 = 1234;										//转换前的数据
 	uint16_t u16 = 1234;
-	uint32_t u32_ret = 0;				//转换后的数据(可能会出现异常数据, 但这种异常是可逆的就行了)
+	uint32_t u32_ret = 0;										//转换后的数据(可能会出现异常数据, 但这种异常是可逆的就行了)
 	uint16_t u16_ret = 0;
 
 
 
-	//1.'主机序'转"网络字节序"
-	u32_ret = htonl(u32);
+	u32_ret = htonl(u32);										//1.'主机序'转"网络字节序"
 	u16_ret = htons(u16);
 	printf("\n1.'主机序'转\"网络字节序\"[转换]:\n\tu32=%d, u16=%d\n\n", u32_ret, u16_ret);
 
 
-	//2."网络字节序"转'主机序'
-	u32_ret = ntohl(u32_ret);
+	u32_ret = ntohl(u32_ret);								//2."网络字节序"转'主机序'
 	u16_ret = ntohs(u16_ret);
 	printf("2.\"网络字节序\"转'主机序'[还原]\n\tu32=%d, u16=%d\n\n\n", u32_ret, u16_ret);
 
 
-	//3.检验能不能还原为'主机序'的初始化值
-	if(u32_ret != u32 || u16_ret != u16)
+	if(u32_ret != u32 || u16_ret != u16)		//3.检验能不能还原为'主机序'的初始化值
 		printf("互转还原失败 !!\n");
 	else
 		printf("互转还原成功 !!\n");
 	return 0;
 }
+
 
 
 
