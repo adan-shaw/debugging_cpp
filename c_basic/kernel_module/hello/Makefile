@@ -29,3 +29,4 @@ default:
 
 clean:
 	make -C $(KERN_DIR) M=$(shell pwd) clean
+

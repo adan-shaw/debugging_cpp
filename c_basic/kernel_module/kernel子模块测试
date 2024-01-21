@@ -1,3 +1,8 @@
+# 只安装本机的内核头文件for test, 具体使用哪个linux 内核版本, 请自己根据目标project 而定, 这里制作快速演示
+apt-get install linux-headers-amd64
+
+
+
 大部分操作, 需要root 权限!!
 
 
