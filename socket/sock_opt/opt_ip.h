@@ -30,7 +30,7 @@
 	因为accept() 实际上是拷贝listen sfd, 
 	则自然会拷贝SO_BINDTODEVICE 属性
 */
-#define __set_sockopt_binddevice(sfd,pifreq) {setsockopt(sfd, SOL_SOCKET, SO_BINDTODEVICE, pifreq,sizeof(struct ifreq));}
+#define __set_sockopt_binddevice(sfd,pifreq) {setsockopt(sfd, SOL_SOCKET, SO_BINDTODEVICE, pifreq, sizeof(struct ifreq));}
 /*
 	//标准使用demo:
 	int __set_sockopt_binddevice(int sfd, const char* dev){
@@ -84,7 +84,7 @@
 	那么外发的包会通过在ipi_ifindex中指定的接口发送出去,
 	同时把ipi_spec_dst设置为目的地址．
 */
-#define __set_sockopt_options(sfd,pin_pktinfo) {setsockopt(sfd, IPPROTO_IP, IP_OPTIONS, pin_pktinfo,sizeof(struct in_pktinfo));}
+#define __set_sockopt_options(sfd,pin_pktinfo) {setsockopt(sfd, IPPROTO_IP, IP_OPTIONS, pin_pktinfo, sizeof(struct in_pktinfo));}
 
 
 
@@ -119,6 +119,7 @@ inline int get_sockopt_opts_ip(int sfd, const int sock_opt){
 	IP_DONTFRAGMENT
 */
 #define __get_sockopt_opts_ip_bool(sfd,sock_opt) (get_sockopt_opts_ip(sfd, sock_opt))
+
 
 
 

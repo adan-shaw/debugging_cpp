@@ -59,16 +59,16 @@
 //****************
 
 //s1.SO_RCVBUF 设置接收缓冲区(默认上限8kb) [内存不足的情况下, 可能会因为申请缓冲区而出错]
-#define __set_sockopt_revbuf(sfd,rbuf_max) {setsockopt(sfd, SOL_SOCKET, SO_RCVBUF, &rbuf_max,sizeof(int));}
+#define __set_sockopt_revbuf(sfd,rbuf_max) {setsockopt(sfd, SOL_SOCKET, SO_RCVBUF, &rbuf_max, sizeof(int));}
 
 //s2.SO_SNDBUF 设置发送缓冲区(默认上限8kb)
-#define __set_sockopt_sndbuf(sfd,sbuf_max) {setsockopt(sfd, SOL_SOCKET, SO_SNDBUF, &sbuf_max,sizeof(int));}
+#define __set_sockopt_sndbuf(sfd,sbuf_max) {setsockopt(sfd, SOL_SOCKET, SO_SNDBUF, &sbuf_max, sizeof(int));}
 
 //s3.SO_RCVLOWAT 设置'触发io接收事件的下限'(默认下限1 bit) [数据触发io事件下限, 低于这个数据量不认为有socket recv操作]
-#define __set_sockopt_revlowat(sfd,data_min) {setsockopt(sfd, SOL_SOCKET, SO_RCVLOWAT, &data_min,sizeof(int));}
+#define __set_sockopt_revlowat(sfd,data_min) {setsockopt(sfd, SOL_SOCKET, SO_RCVLOWAT, &data_min, sizeof(int));}
 
 //s4.SO_SNDLOWAT 设置'触发io发送事件的下限'(默认下限1 bit) [数据触发io事件下限, 低于这个数据量不认为有socket send操作]
-#define __set_sockopt_sndlowat(sfd,data_min) {setsockopt(sfd, SOL_SOCKET, SO_SNDLOWAT, &data_min,sizeof(int));}
+#define __set_sockopt_sndlowat(sfd,data_min) {setsockopt(sfd, SOL_SOCKET, SO_SNDLOWAT, &data_min, sizeof(int));}
 
 //s5.SO_RCVTIMEO 设置接收超时(linux默认最高是70s)
 #define __set_sockopt_revtimeout(sfd,ptimeval) {setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, ptimeval,sizeof(struct timeval));}
@@ -108,7 +108,7 @@ inline int get_sockopt_opts(int sfd, const int sock_opt){
 		perror("getsockopt");
 		return -1;
 	}
-	return opt_val;//返回: 开启返回'1/整形数', 未开启返回0 [统一标准的, 不用担心]
+	return opt_val;					//返回: 开启返回'1/整形数', 未开启返回0 [统一标准的, 不用担心]
 }
 
 
@@ -154,5 +154,6 @@ inline int get_sockopt_opts(int sfd, const int sock_opt){
 
 //g3.SO_ERROR 快速函数
 #define __set_sockopt_err(sfd,opt_val) {opt_val=1; if(opt_val=__get_sockopt_opts_bool(sfd, SOL_SOCKET, SO_ERROR, &opt_val, sizeof(int))) printf("%s\n",strerror(opt_val));}
+
 
 

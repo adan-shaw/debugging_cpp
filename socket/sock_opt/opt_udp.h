@@ -22,7 +22,7 @@
 			2.网络传输中丢失机会会更高, 也没有应答机制, 收到数据没有应答回复;
 			3.丢包重发机制要自己建;
 			4.数据接收, 同样需要重排, 而且可能会有rbuf接收缓冲区溢出的问题;
-			5.( 以后再补充, 差不多了 )
+			5.(以后再补充, 差不多了)
 
 
 	多播[或者叫组播](类似internet dns 解析服务):
@@ -226,6 +226,7 @@ inline int get_sockopt_opts_udp(int sfd, const int sock_opt){
 	IP_MULTICAST_LOOP
 */
 #define __get_sockopt_opts_udp_bool(sfd,sock_opt) (get_sockopt_opts_udp(sfd, sock_opt))
+
 
 
 

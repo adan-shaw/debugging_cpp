@@ -89,7 +89,7 @@
 		如果超时之时,数据仍然未能成功发送及被确认,
 		则用上述'l_onoff != 0; l_linger = 0;'方式来关闭此连接, 且close()返回EWOULDBLOCK
 */
-#define __set_sockopt_linger(sfd,plinger) {setsockopt(sfd, SOL_SOCKET, SO_LINGER, ptimeval,sizeof(struct linger));}
+#define __set_sockopt_linger(sfd,plinger) {setsockopt(sfd, SOL_SOCKET, SO_LINGER, ptimeval, sizeof(struct linger));}
 
 //s4.SO_DONTLINGER 禁用SO_LINGER
 #define __set_sockopt_nonlinger(sfd,opt_val) {opt_val=1; setsockopt(sfd, SOL_SOCKET, SO_DONTLINGER, &opt_val, sizeof(int));}
@@ -103,7 +103,7 @@
 //s1.TCP_NODELAY 设置使用Nagle算法
 /*
 	默认情况下, 发送数据采用Negale 算法.
-	这样虽然提高了网络吞吐量, 但实时性却降低了, 在一些交互性很强的应用程序来说是不允许的, 
+	这样虽然提高了网络吞吐量, 但是实时性却降低了, 在一些交互性很强的应用程序来说是不允许的, 
 	因此, 有实时性要求的场景, 可以使用TCP_NODELAY禁止Negale算法;
 
 	禁用Nagle算法后, 应用程序向内核递交的每个数据包都会立即发送出去.
@@ -142,7 +142,7 @@
 //s3.TCP_QUICKACK 设置使用QUICKACK算法
 /*
 	用户层可通过setsockopt系统调用的选项TCP_QUICKACK开启QUICKACK模式, 
-	但这不是永久生效的, 内核根据之后的报文处理, 可能退出此模式;
+	但是这不是永久生效的, 内核根据之后的报文处理, 可能退出此模式;
 	QUICKACK模式开启之后, 
 	如果套接口存在需要调度的ACK, 调用tcp_cleanup_rbuf函数进一步检查ACK是否需要发送;
 	详情查看: ./web网文/TCP之QUICKACK.html
@@ -181,6 +181,5 @@ inline int get_sockopt_opts_tcpinfo(int sfd, struct tcp_info* ptcp_info){
 		perror("getsockopt");
 		return 0;
 	}
-	//调用成功返回1, 失败返回0
-	return 1;
+	return 1;//调用成功返回1, 失败返回0
 }

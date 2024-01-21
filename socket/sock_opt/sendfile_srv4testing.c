@@ -1,5 +1,8 @@
 //编译:
-//		gcc -g3 ./sendfile_srv.c -o x 
+//		gcc -g3 ./sendfile_srv4testing.c -o x 
+
+//for test:
+//		curl 127.0.0.1:9999
 
 
 
@@ -21,14 +24,14 @@
 
 #define ip "127.0.0.1"
 #define port (9999)
-#define file_name "sendfile.c"
+#define file_name "sendfile_srv4testing.c"
 
 
 
 int main(void){
 	struct sockaddr_in addr,addr_cli;
 	struct stat stat_buf;
-	int fd, sfd, sfd_cli, tmp;
+	int fd, sfd, sfd_cli;
 	socklen_t addr_cli_len = sizeof(struct sockaddr_in);
 
 	fd = open(file_name,O_RDONLY);
@@ -39,7 +42,7 @@ int main(void){
 
 	fstat(fd,&stat_buf);
 
-	bzero(&addr,sizeof(addr));
+	//bzero(&addr,sizeof(addr));
 	addr.sin_family = AF_INET;
 	inet_pton(AF_INET,ip,&addr.sin_addr);
 	addr.sin_port = htons(port);
@@ -51,9 +54,9 @@ int main(void){
 		return -1;
 	}
 
-	tmp = bind(sfd,(struct sockaddr*)&addr,sizeof(struct sockaddr_in));
-	if(tmp == -1){
+	if(bind(sfd,(struct sockaddr*)&addr,sizeof(struct sockaddr_in)) == -1){
 		perror("bind");
+		close(sfd);
 		close(fd);
 		return -1;
 	}
@@ -61,15 +64,22 @@ int main(void){
 	listen(sfd,5);
 
 
+
 	sfd_cli = accept(sfd,(struct sockaddr*)&addr_cli,&addr_cli_len);
-	if(sfd_cli == -1)
+	if(sfd_cli == -1){
 		perror("accept");
+		close(sfd);
+		close(fd);
+		return -1;
+	}
 	else{
 		sendfile(sfd_cli,fd,NULL,stat_buf.st_size);
 		shutdown(sfd_cli,2);
 		close(sfd_cli);
 	}
+
 	shutdown(sfd,2);
 	close(sfd);
+	close(fd);
 	return 0;
 }
