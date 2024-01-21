@@ -2,6 +2,7 @@
 //		gcc -g3 ./gethostbyname.c -o x 
 
 
+
 //注意1:
 //	主要用来解析dns 域名, host主机名下的ip地址.
 
@@ -13,10 +14,9 @@
 	extern int h_errno;
 	struct hostent* gethostbyname(const char *name);
 	struct hostent* gethostbyaddr(const void *addr,socklen_t len,int type);
-	struct hostent* gethostent(void); //返回下一个文件
+	struct hostent* gethostent(void);	//返回下一个文件
 	void sethostent(int stayopen);		//打开文件
 	void endhostent(void);						//关闭文件
-
 
 	//2.返回的<dns host>信息载体
 	struct hostent{
@@ -144,6 +144,10 @@ int main(void){
 	gethostbyhost_test();
 	return 0;
 }
+
+
+
+
 
 
 

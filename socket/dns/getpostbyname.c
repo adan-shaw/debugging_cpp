@@ -2,6 +2,7 @@
 //		gcc -g3 ./getpostbyname.c -o x 
 
 
+
 //注意1:
 //	主要用来读取<当前主机>目前已经记录<服务名>和<对应的端口号>
 
@@ -16,7 +17,6 @@
 	struct servent* getservent(void);	//读取并后移, 通常遍历的时候用
 	void setservent(int stayopen);		//打开/etc/services, 遍历需要挟持
 	void endservent(void);						//关闭/etc/services
-
 
 	//2.协议存放结构体
 	struct servent{
@@ -117,4 +117,6 @@ int main(void){
 	getservbyport_test();
 	return 0;
 }
+
+
 

@@ -56,10 +56,11 @@ int main(void){
 		printf("%d byte msg from client(%d):\n",tmp,usfd_conn);
 
 	//5.结束回收资源
-	shutdown(usfd_conn,2);
+	//shutdown(usfd_conn,2);
 	close(usfd_conn);
 	return 0;
 }
+
 
 
 

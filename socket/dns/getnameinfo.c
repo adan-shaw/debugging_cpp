@@ -1,19 +1,22 @@
 //编译
 //		gcc -g3 ./getnameinfo.c -o x 
 
+
 #include <stdio.h>
 #include <netdb.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 
+const char* ip = "127.0.0.1";
+#define PORT (6666)
+
 void getnameinfo_test(void){
 	int tmp;
 	struct sockaddr_in addr_in;
 	char host_buf[16], port_buf[16];
-	const char* ip = "127.0.0.1";
 
 	addr_in.sin_family = AF_INET;
-	addr_in.sin_port = htons(6666);
+	addr_in.sin_port = htons(PORT);
 	inet_pton(AF_INET, ip, &addr_in.sin_addr);
 
 	//执行getnameinfo(), 获取srv 信息, 并打印
@@ -21,14 +24,14 @@ void getnameinfo_test(void){
 			host_buf,sizeof(host_buf),\
 			port_buf,sizeof(port_buf),NI_NAMEREQD);
 	if(tmp != 0){
-		printf("getnameinfo(%s:%d) error:%s\n", ip, 6666, gai_strerror(tmp));
+		printf("getnameinfo(%s:%d) error:%s\n", ip, PORT, gai_strerror(tmp));
 		return;
 	}
 	else{
-		printf("host name: %s\n",host_buf);
-		printf("service port: %s\n",port_buf);
+		printf("host name: %s\n", host_buf);
+		printf("service port: %s\n", port_buf);
+		return;
 	}
-	return;
 }
 
 int main(void){

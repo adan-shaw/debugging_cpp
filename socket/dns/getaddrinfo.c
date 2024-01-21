@@ -1,7 +1,12 @@
 //编译:
 //		gcc -g3 ./getaddrinfo.c -o x 
 
-//getaddrinfo() 可以知道某个服务器的公开服务类型, 如www.baidu.com 提供: tcp/udp/raw 服务, 还有两台网关server
+
+//getaddrinfo() 可以知道某个服务器的公开服务类型, 如:
+/*
+	通过getaddrinfo() 可以查询到www.baidu.com 提供: tcp/udp/raw 服务
+	另外www.baidu.com 还有两台网关server;
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,21 +123,17 @@ int main(void){
 //1.posix dns 查询的简述:
 	getaddrinfo(), getnameinfo()两个函数都是posix dns查询函数;
 
-	getaddrinfo()根据'URL字符串', 或者'(ip+端口)字符串'
-		获取‘addrinfo{}结构体’里面的描述的信息.
+	getaddrinfo()根据'URL字符串', 或者'(ip+端口)字符串', 获取'addrinfo{}结构体'里面的描述的信息.
 
-	getnameinfo()根据'struct sockaddr*通用socket地址信息描述体',
-		获取'(ip+端口)字符串'.
-
+	getnameinfo()根据'struct sockaddr*通用socket地址信息描述体', 获取'(ip+端口)字符串'.
 
 	'addrinfo{}结构体'是一个链表结构,
 	每个'addrinfo{}结构体'都有一个'struct sockaddr*通用地址信息描述体'
 	也就是:
 		只要有URL字符串, 就可以获取到'目标URL的addrinfo{}结构体'.
 
-		只要知道对方的'struct sockaddr*通用地址信息描述体',
-			也可以先获取'(ip+端口)字符串';
-			再根据'(ip+端口)字符串'+getaddrinfo()得到=>'addrinfo{}结构体'
+		只要知道对方的'struct sockaddr*通用地址信息描述体', 也可以先获取'(ip+端口)字符串';
+		再根据'(ip+端口)字符串'+getaddrinfo()得到=>'addrinfo{}结构体'
 
 		只要socket已经连通, 可以通过getsockname(),
 		或者getpeername()得到'struct sockaddr*',
@@ -143,14 +144,12 @@ int main(void){
 
 
 //2.getaddrinfo()函数API
-	POSIX.1中, 定义的函数getaddrinfo(),
-	用来代替过时的gethostbyname()和gethostbyaddr().
+	POSIX.1中, 定义的函数getaddrinfo(), 用来代替过时的gethostbyname()和gethostbyaddr().
 
 	2.1:
 	getaddrinfo()根据'host主机名字符串/URL'(ip),[如: www.baidu.com];
-		和'service高层协议服务名'(port),[如: http = 80];
-		引用返回一个addrinfo{}结构体链表.
-		[可以是:(ip地址 + 端口的模式),也可以是:(URL + 端口/高层协议名)]
+	和'service高层协议服务名'(port),[如: http = 80];
+	引用返回一个addrinfo{}结构体链表[可以是:(ip地址 + 端口的模式),也可以是:(URL + 端口/高层协议名)]
 
 	getaddrinfo()直向返回值, 成功则返回0, 出错返回一个'非0的错误码'.
 	int getaddrinfo(\
@@ -164,8 +163,7 @@ int main(void){
 	void freeaddrinfo(sruct addrinfo* ai);//释放
 
 	2.3:
-	如果getaddrinfo()失败了,
-	必须调用gai_strerror()将返回的'非0的错误码'转换成错误消息:
+	如果getaddrinfo()失败了, 必须调用gai_strerror()将返回的'非0的错误码'转换成错误消息:
 	const char* gai_strerror(int error);
 
 
@@ -182,3 +180,4 @@ int main(void){
 		struct addrinfo *ai_next;		// Pointer to next in list.
 	};
 */
+

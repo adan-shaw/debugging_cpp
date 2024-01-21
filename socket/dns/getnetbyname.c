@@ -2,6 +2,7 @@
 //		gcc -g3 ./getnetbyname.c -o x 
 
 
+
 //注意1:
 //	主要用来获取网络配置, 网卡信息
 
@@ -16,13 +17,12 @@
 	void setnetent(int stayopen);		//打开记录文件, 遍历需要挟持
 	void endnetent(void);						//关闭记录文件
 
-
 	//2.返回<网络名字>和<网络编号>的信息载体
 	struct netent{
-		char* n_name;			 // network name
-		char** n_aliases;	 // alternate network name array pointer
-		int n_addrtype;		 // net address type
-		uint32_t n_net;		 // network number
+		char* n_name;									// network name
+		char** n_aliases;							// alternate network name array pointer
+		int n_addrtype;								// net address type
+		uint32_t n_net;								// network number
 	};
 */
 
@@ -53,17 +53,17 @@ void getnetent_test(void){
 	struct netent* net;
 
 	printf("遍历'本地记录文件'里面所有的网络信息\n");
-	setnetent(1);			//打开<记录文件> 并挟持
+	setnetent(1);										//打开<记录文件> 并挟持
 
 	while(1){
 		net = getnetent();
 		if(net == NULL)
-			break;				//读取结束or 遇到意外终止.
+			break;											//读取结束or 遇到意外终止.
 		else
-			printnet(net);//打印单个struct netent 节点
+			printnet(net);							//打印单个struct netent 节点
 	}
 
-	endnetent();			//关闭<记录文件> 并释放
+	endnetent();										//关闭<记录文件> 并释放
 	return;
 }
 
