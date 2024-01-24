@@ -5,15 +5,12 @@
 	结论:
 		try{}catch(...){} 还是不能处理空指针, 废物!!(不能解决致命错误的)
 
-
 		try{}catch(...){} 异常机制, 一般都是用来:
 			1.解决大型c++ 类程序中, 打印类错误的方法.
 			2.也可以用来打印struct 结构体中的错误.
-			3.unknow 未知错误, 你可以使用(...) 最后的模式, 打印这段代码有错误的警告.
-				告诉编码员, 这段代码有问题.
+			3.unknow 未知错误, 你可以使用(...) 最后的模式, 打印这段代码有错误的警告, 告诉编码员, 这段代码有问题.
 				不过还是不如c/c++ 直接定位xxx.cpp->第n行, 这种定位方式更实际.
-				除非是大型程序需要调试class, struct 中的值,
-				try{}catch(...){} 或者很有用.
+				除非是大型程序需要调试class, struct 中的值, try{}catch(...){} 或者很有用.
 */
 
 
@@ -69,10 +66,10 @@ int main(void){
 		//throw excep_class;
 
 		//终止执行, 抛出字符串常量异常
-		strncpy(excep_str,"love you",64);
+		strncpy(excep_str,"fuck you",64);
 		throw excep_str;
-		//只能抛出变量实体本身, 不能直接抛出字符串常量"love you"
-		//throw "love you";//错误写法!!
+		//只能抛出变量实体本身, 不能直接抛出字符串常量"fuck you"
+		//throw "fuck you";//错误写法!!
 	}
 
 

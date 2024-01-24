@@ -1,5 +1,5 @@
 //编译:
-//		g++ -o x ./strncmp.cpp -g3 -lreadline
+//		g++ -o x ./strncmp字符串比较.cpp -g3 -lreadline
 
 
 //strncmp() 函数的正确使用:
@@ -29,7 +29,7 @@ int main(void){
 	//ps: (可以不执行这个shell命令)
 	while(true){
 		p = readline("myshell:");
-		if(strncmp(p,"quit",4) == 0)//前4个字符是"quit"则退出
+		if(strncmp(p,"quit",4) == 0)//字符串截断式比较: 前4个字符是"quit"则退出
 			break;
 		else{
 			add_history(p);						//否则加入历史列表, 并执行!!

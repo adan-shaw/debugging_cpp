@@ -1,15 +1,15 @@
 struct _struct{
-	int a;//4
-	int b;//4
-};//8
+	int a;			//4
+	int b;			//4
+};						//8
 struct _struct struct_tmp;
 
 //共用同一块内存区域, 取最大的来算, 更改一个全部都更改;
 union _union{
-	int a;//4
-	int b;//4
-	char c[8];//8
-};//8
+	int a;			//4
+	int b;			//4
+	char c[8];	//8
+};						//8
 union _union union_tmp;
 
 //只能搞枚举体里面的值, 而且值的大小会固定+1, 默认从0开始;

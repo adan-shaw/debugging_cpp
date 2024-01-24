@@ -40,7 +40,7 @@ void wchar_test(){
 	//11*3 + 2 = 35 = sizeof(); '-' 和'\0' = 2 个字节
 	//strlen() = 34; 就是这么来的.
 	const char c1[] = "窄字符-中文占多少个字节";
-	const char c2[] = "abcdefg";//窄字符-英文占多少个字节
+	const char c2[] = "abcdefg";		//窄字符-英文占多少个字节
 
 	//宽字符中, '-' 也算一个字符;
 	//12*8 + '\0' = 52 = sizeof() 宽字符;
@@ -66,9 +66,7 @@ void wchar_test(){
 
 
 
-//测试主函数
 int main(void){
-	//宽字符测试
 	wchar_test();
 	printf("宽字符测试 finish\n");
 }
