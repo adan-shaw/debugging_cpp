@@ -1,0 +1,37 @@
+nmap扫描, nc链接, msf破解&木马, 渗透三板斧, 但实际用起来, 不简单, 有很多细节技巧;
+
+
+
+Posix 版本的netcat 主要有GNU 版本和OpenBSD 两种, 
+都可以在 debian/ubuntu 系统下面安装, 但 Windows 系统下则只有 GNU 版本的. 
+
+nc 可以做的功能:(杂)
+	端口测试
+	连接测试
+	测试 UDP
+	文件传输(还可以建立简单聊天对话框: 传输text文本)
+	克隆设备
+	HTTP 服务器(当然还可以作为一个简单的http server)
+	HTTP 客户端
+	作为入侵工具来使用
+
+
+
+
+
+# 安装:(实际上, 可以不用安装, 安装也是补全link 而已, 并没有什么实际作用)
+	apt-get install netcat
+
+
+
+# 查询nc 版本:
+	readlink -f $(which nc)
+
+	大致可以得到以下两种结果:
+		/bin/nc.traditional  默认 GNU 基础版本, 一般系统自带
+		/bin/nc.openbsd      OpenBSD 版本, 强大很多
+
+
+
+nc 的好处是:
+	不管port 是否开启, 都可以connect, 至少可以询问一下, 看看端口是否开启;

@@ -1,0 +1,91 @@
+1.traceroute 安装:
+	apt-get install traceroute
+
+
+
+2.traceroute 应用场景(原理):
+	当你的ping 一个ip地址/DNS 的时候, 
+	如果你可以ping 通, 那当然好啦, 那你根本就不需要用到traceroute.
+	ping 工具可以显示, 你用了多少跳TTL? 延时值多少? 等等.
+
+	但如果你ping 不通该ip地址/DNS 的时候, ping 工具就会半废, 等于没用!!
+	但这时候你需要分析网络为什么中断了, 这时候你可以用traceroute.
+
+	traceroute 就是每跳一个路由, 给你返回一个info, 告诉你我跳到哪里了.
+	这样逐步回报情况, 你就可以知道在哪一节路由, 出现网络不通的情况.
+
+
+	traceroute 不能测试网络性能, 网络通了之后可以直接用Ping 更直接, 
+	traceroute 只应对网络不通的情况.
+
+
+
+3.traceroute 命令的使用:
+	最简单常用的方法:
+		# 查看为什么link 不上google 官网
+		traceroute www.google.com
+		结果(报文分析):
+			请看: traceroute结果(报文分析).png
+
+	复杂用法:
+		# 表示向每个网关发送4个数据包
+		traceroute -q 4 www.58.com
+
+		# 向每个网关发送1个数据包, 一个包一个0.644 ms 响应时间
+		traceroute -q 1 www.58.com 
+
+		(部分选项需要开启root 权限才能使用; 如果不指定下面参数, 按照默认参数运行)
+		traceroute -4 -i enp3s0 -p 80 -w 2 -t 16 -q 1 www.baidu.com
+		traceroute -4 -i enp3s0 -p 80 -w 2 -t 16 -q 1 www.google.com
+
+		traceroute -4 -i enp3s0 -p 80 -w 2 -t 16 -q 1 -g 192.168.0.1 -g 10.102.0.1 www.baidu.com
+
+		traceroute -4 -i enp3s0 -p 80 -w 2 -t 16 -q 1 -g 192.168.0.1 -g 10.102.0.1 www.google.com
+
+
+
+
+
+#
+#traceroute命令选项:
+#
+-V 详细显示指令
+-4 使用IPv4
+-6 使用IPv6
+-q 指定向每个网关发送多少个数据包
+
+-i 指定网卡设备(如: enp3s0)
+-s 设置本地主机送出数据包的IP地址(类似于指定'发出数据的网卡设备')
+
+-p 指定目标端口(TCP 默认=80, UDP 默认=53)
+
+-n 只显示IP地址, 不显示主机名称
+
+-f ttl 允许停下来的最小值 
+-m ttl 最大值
+
+-w 设置等待远端主机回报的时间
+
+-x 开启或关闭数据包的正确性检验
+
+-d 使用Socket层级的排错功能
+
+-g [宽松]设置来源路由网关(最多可设置9 个)--固定路由路径(ip 选项)
+-G [严格]设置来源路由网关
+
+-r 忽略普通的Routing Table, 直接将数据包送到远端主机上
+
+-t 设置检测数据包的TOS数值
+-t 16 表示'延时位'置1
+-t 8 表示'吞吐量位'置1
+-t 4 表示'可靠性位'置1
+-t 2 表示'费用位'置1
+-t 1 是保留位, 不用
+(叠加就是数值相加)
+
+-I 使用ICMP回应取代UDP资料信息
+-F 设置勿离断位
+
+
+
+
