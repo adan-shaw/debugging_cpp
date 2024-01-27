@@ -1,0 +1,23 @@
+nslookup 简介:
+	nslookup 的功能很简单, 直接就是讲url 解析出ip 地址, 就一个功能;
+	nslookup 一般是dnsutils 工具集中的一个client 工具, dnsutils 工具集还有Bind 工具, 就是配置dns server 的那个玩儿;
+
+
+
+nslookup 安装:
+	apt-get install dnsutils
+	yum install -y bind-utils
+
+
+
+nslookup 使用(简单使用, 会显示dns server + 目标url 解析出来的ip 地址):
+	nslookup localhost
+	nslookup www.baidu.com
+
+	# 不能是ip 地址, 是ip 地址的话, 就不需要解析了!!
+	#nslookup 127.0.0.1
+
+
+
+	# 指定dns server(不知道为什么强制指定dns server 会失败, 一直卡死, 弃用!!)
+	nslookup server 114.114.114.114 www.baidu.com
