@@ -1,0 +1,14 @@
+安装(没有speedtest 服务器可以安装, 这个工具必须得丢弃):
+	apt-get install speedtest-cli
+
+
+
+客户端运行(直接运行即可):
+	speedtest
+
+
+
+ps:
+	这种测试软件, 需要借助第三方测试srv 作为参照中心(废物!! 一旦第三方网站speedtest.net 关闭, 你啥也玩不了, 没用的东西)
+	speedtest 一般可以用来测试一下家庭网速, 也可以用来测试一下服务器通往外网的网速.
+

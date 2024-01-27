@@ -54,12 +54,12 @@ void printhost(struct hostent* h){
 
 	if(h->h_addrtype == AF_INET){
 		printf("打印解析结果-URL主机别名链表(alias name):'\n");
-		p = h->h_aliases;
+		p = h->h_aliases;//指向URL'主机别名'字符串链表
 		while(*p != NULL)
 			printf("	URL主机别名(alias name): %s;\n", *p++);
 
 		printf("打印解析结果-URL主机ip链表:'\n");
-		p = h->h_addr_list;
+		p = h->h_addr_list;//指向URL'主机ip'字符串链表
 		while(*p != NULL)
 			printf("	URL网关主机ip: %s;\n",inet_ntoa(*((struct in_addr*)*p++)));
 	}
