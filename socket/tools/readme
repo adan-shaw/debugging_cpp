@@ -8,3 +8,8 @@
 # 		not just fooling around, playing ont thing like i am so big deal, actually i was a young kid too, focus guys;
 # 		this is important
 # 2024/01/27, adan shaw in shanghai
+#
+# 补充: 
+# 由于网络命令比较多, 配置类命令和网络空间命令比较复杂, 
+# 因此, 这里只谈了跟编程相关的网络命令, 一般是网络状态查询, 网络数据包分析, 网络性能测试, 网络联通测试等;
+# 网络设备配置命令, 网络虚拟空间管理命令, 这里避而不谈;

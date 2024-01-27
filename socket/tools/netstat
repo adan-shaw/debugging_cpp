@@ -1,0 +1,53 @@
+netstat 不是默认自带网络工具, 安装需要使用:
+	apt-get install net-tools
+
+
+
+
+
+常用的命令组合:
+	# 查看linux 系统开放的所有tcp/udp端口, 绑定的ip, 哪个程序在占用, 等等info(t=tcp/u=udp)
+	netstat -atunlp
+
+	# 查看linux 系统开放的所有tcp 端口, 绑定的ip, 哪个程序在占用, 等等info
+	netstat -atnlp
+
+	# 查看linux 系统开放的所有udp端口, 绑定的ip, 哪个程序在占用, 等等info
+	netstat -aunlp
+
+
+	1.查看路由列表
+	netstat -r
+
+
+	2.显示网络状态信息(查看网络历史io 数据量, 丢包, ICMP 包等数据)
+	netstat -s
+
+
+	3.查看dns server 信息
+	cat /etc/resolv.conf
+
+
+
+
+
+#
+# netstat 其它命令选项:
+#
+<1>  查看所有连接: netstat -a
+
+<2>  -t = 只显示tcp 连接
+     -u = 只显示udp 连接
+<3>  -n 禁用域名解析功能(默认情况下, netstat 会通过反向域名解析技术查询每个ip 地址对应的主机名, 
+                      这会降低查找速度, 如果你不需要知道对方的域名, 你可以去掉这个功能)
+<4>  -l 只列出正在监听的连接, 注意: -l 和-a 是不能联用的, 只能存在一个!
+<5>  -p 列出进程名(常用)
+<6>  -e 列出用户名
+<7>  -s 列出统计信息
+<8>  -r 打印出路由信息
+<9>  -i 打印网络接口信息(网卡信息--用处不大)
+<10> -c 重复执行本条命令, 知道中断(netstat 可以自己循环自己)
+<11> -g 打印多播组的信息
+
+
+

@@ -1,0 +1,109 @@
+#
+# curl 是一个http 测试工具, 主要用作提交http 报文, 简单的使用如下:
+#
+
+1.简单使用:
+1.0 使用指定网卡进行curl, 方便局域网系统测试.
+		curl --interface enp3s0 http://www.baidu.com/
+
+1.1 默认http web 端口访问--默认端口 = 80
+		curl http://www.baidu.com/
+1.2 指定http web 端口访问
+		curl http://www.baidu.com:8001/
+
+1.3 获取ftp 服务器指定的file
+		curl ftp://192.168.1.1/aaa.cpp
+1.4 列出ftp 站点adan 目录中的文件列表
+		curl ftp://192.168.1.1/adan
+
+1.5 ftp 指定用户名和密码, 然后再下载文件
+		curl ftp://<user_name>:<password>@192.168.1.1:9213/aaa.cpp
+		curl -u <user_name>:<password> ftp://192.168.1.1:9213/aaa.cpp
+
+		//ftps 实际就是ftp 的ssl 版本
+		curl ftps://<user_name>:<password>@192.168.1.1:9213/aaa.cpp
+		curl -u <user_name>:<password> ftps://192.168.1.1:9213/aaa.cpp
+
+		//http 同样可以指定用户密码
+		curl http://<user_name>:<password>@192.168.1.1:9213/index.html
+		curl -u <user_name>:<password> http://192.168.1.1:9213/index.html
+
+
+
+
+
+2.指定代理服务器访问:
+	curl -x <www.baidu.com:888> -u <user_name>:<password> http://192.168.1.1:9213/index.html
+
+
+
+
+
+3.截断指定长度的数据
+3.1 截断前100 bit 的数据, 返回前100 bit 的数据
+		curl -r 0-99 http://www.baidu.com/ 
+3.2 截断最后500 bit 的数据, 返回最后500 bit 的数据
+		curl -r -500 http://www.baidu.com/
+
+
+
+
+
+4.返回更多信息for debug
+4.1 返回完成的运行信息
+		curl -v http://www.baidu.com/
+
+4.2 返回更多信息, 并指定信息写入的目录
+		curl --trace ret_log.txt http://www.baidu.com/
+
+		//输出到控制台: /dev/stdout
+		curl http://www.example.com --trace-ascii /dev/stdout
+
+
+
+
+
+5.查看http/ftp 协议响应头
+	curl -i http://www.baidu.com/
+
+
+
+
+
+6.指定请求方式
+6.1 指定get
+		curl -X GET http://www.baidu.com/
+6.2 指定post
+		curl -X POST http://www.baidu.com/
+6.3 指定post 数据上传
+		curl -X POST http://www.baidu.com/ -d {'json'}
+		curl 10.10.100.169:9680/abcde -d '{"a"：0}'
+
+
+
+
+
+7.请求下载网页/file
+7.1 请求下载方法1
+		curl -o index.html http://www.baidu.com/
+7.2 请求下载方法2
+		curl -O http://www.baidu.com/adan.jpg
+
+
+
+
+
+8.访问https 网站
+curl -k --insecure "https://www.baidu.com"
+
+
+
+
+
+ps:
+	-u, -x, -r, --trace 参数选项, 都是可叠加的, 自己自由组合.
+	ftp, sftp, http, https等等网络协议, 都是可以用的, 自己自由组合.
+
+
+
+

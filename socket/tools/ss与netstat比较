@@ -1,0 +1,23 @@
+ss命令主要用于显示socket状态(开发的时候才会常用)
+他可以显示PACKET sockets, TCP sockets, UDP sockets, DCCP sockets, RAW sockets, Unix domain sockets等等统计. 
+它比其他工具展示等多tcp和state信息. 
+它是一个非常实用、快速、有效的跟踪IP连接和sockets的新工具.
+
+
+SS命令可以提供如下信息: 
+	所有的TCP sockets
+	所有的UDP sockets
+	所有ssh/ftp/ttp/https持久连接
+	所有连接到Xserver的本地进程
+	使用state(例如: connected, synchronized, SYN-RECV, SYN-SENT,TIME-WAIT)、地址、端口过滤
+	所有的state FIN-WAIT-1 tcpsocket连接以及更多
+
+
+
+ss 命令demo:
+
+# 1.显示当前监听
+ss -l
+
+# 2.显示当前监听的进程
+ss -p
