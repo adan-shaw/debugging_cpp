@@ -1,0 +1,46 @@
+wireshark 的使用方法:
+	直接收入对应的过滤语法, 收集自己想要的数据包, 然后就直接看报文内容细节即可;
+	Wireshark报文内容分析, 看你的经验了;
+
+
+
+
+
+#
+# 1.根据Protocol 协议来筛选: 只看对应报文的数据包
+#
+arp
+tcp
+udp
+icmp
+DNS
+MDNS
+igmp
+http
+sip
+
+
+
+
+
+#
+# 2.复杂过滤
+#
+# 根据port 端口进行过滤(端口必须指定协议, tcp/udp)
+tcp.port == 80 || udp.port == 80
+!(udp.port == 53 || tcp.port == 53)
+
+# 根据ip 地址进行过滤
+ip.addr == 127.0.0.1
+ipv6.addr == 2001:db8::1
+
+# 根据MAC 地址进行过滤
+eth.addr == ff:ff:ff:ff:ff:ff
+eth.addr == 00:00:5e:00:53:00
+
+# 仅保留ip=127.0.0.1, 并且是tcp 端口不是80/25
+ip.addr == 127.0.0.1 and not tcp.port in {80 25}
+
+# 去掉arp, 且udp.port!=53 的包
+not arp and !(udp.port == 53)
+
