@@ -1,0 +1,63 @@
+#
+# 1.直接apt-get 安装更便捷(有时间可以自己tarball)
+#
+libcurl4 - easy-to-use client-side URL transfer library (OpenSSL flavour)
+libcurl4-doc - documentation for libcurl
+libcurl4-gnutls-dev - development files and documentation for libcurl (GnuTLS flavour)
+libcurl4-nss-dev - development files and documentation for libcurl (NSS flavour)
+libcurl4-openssl-dev - development files and documentation for libcurl (OpenSSL flavour)
+
+# 快捷安装
+apt-get install libcurl4 libcurl4-gnutls-dev 
+
+# 容易有冲突, 不宜安装
+apt-get install libcurl4-nss-dev libcurl4-openssl-dev 
+
+
+
+# lua 的curl 支持(可能会用到)
+lua-curl - libcURL bindings for the Lua language
+lua-curl-dev - libcURL development files for the Lua language
+
+# python
+python-pycurl - Python bindings to libcurl
+python-pycurl-dbg - Python bindings to libcurl (debug extension)
+python-pycurl-doc - Python bindings to libcurl (documentation)
+python3-pycurl - Python bindings to libcurl (Python 3)
+python3-pycurl-dbg - Python bindings to libcurl (debug extension, Python 3)
+
+
+
+
+#
+# 2.libcurl 的用途
+#
+由于目前http proxy server, web app server, web browser client, 都非常成熟, libcurl 可以用到的的场合, 真的不多;
+
+可能自己打造一款流媒体app, 需要稍微做一点http 解析工作, 可能会用到(简单解析一些http 对接业务, 毕竟在一款app 中集成一个web browser is not a good idea);
+(腾讯, 字节, 快手, 小红书 ??)
+
+但一般android app, 都是用java 版本的libcurl, 汽车的座舱娱乐系统?
+
+就连做http proxy 防火墙, 现在也大部分直接用openresty 来做, 直接写lua, 好维护;
+
+鉴于目前http 互联网市场比较成熟, libcurl 大规模应用的场景不多, 偶尔可能需要用来做一些解释, 深度使用, 没有什么意义, 还不如用现成的, 一大堆开源软件;
+
+
+
+
+
+http proxy server:
+	nginx
+	apache httpd
+	...
+
+web app server:
+	tomcat(java)
+	php 框架
+	python 框架
+	...
+
+web browser client:
+	google 浏览器
+	firefox 浏览器
