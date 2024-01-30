@@ -1,0 +1,103 @@
+#
+# posix 通用tcp/ip 网络协议栈的头文件
+#
+[一般地, net 表示链路层协议], 例如: #include <net/if.h> // for ifreq 解构
+[一般地, netinet 表示网络层/传输层的协议], 例如: ip互联 + tcp 传输控制等协议, #include <netinet/in.h> // for in_addr
+[一般地, arpa 表示应用层协议], 例如:  ftp,telnet 之类
+
+
+
+由于设备更新变动太快, 通用tcp/ip 协议栈, 链路层以下的支撑, 越来越不可能通用化!!
+因此, 链路层以下的, 基本都是直接在<linux/***.h> 中包含, 通用的tcp/ip 协议栈头文件, 基本上都废弃了;
+
+通用层的tcp/ip 头文件, 仅仅保留了对app 应用层的协议支持, 基本上是网络层/传输层以上的应用;
+但高层ftp/http/sip 等协议解析, 通用tcp/ip 协议又基本扔掉了, 互联网同样也是因为更新太快, 不可能保留的,
+
+因此, 操作系统仅仅保留了tcp/ip 网络层/传输层的协议定义, 链路层及一下的协议, 全部由linux 取代;
+高层的应用协议解析, http/ftp/sip 等, 由网关proxy server 取代;
+
+因此, 目前还在用的[网络相关头文件], 只有3个文件夹是常用的, 其他基本上可以忽略了:
+	<netinet/*.h>
+	<arpa/*.h>
+	<net/*.h>
+
+其他做网络开发, 基本都在<linux/*.h>, 相当于直接写linux 内核程序, 或者直接引用linux 的定义;
+一般来说, linux 内核层的tcp/ip 定义, 也不是linux 内核专属, 应用层也可以使用底层tcp/ip 协议栈的东西, 但需要root 权限;
+(android 系统则限制比较大, 很多功能不能用, 因为android 系统内核没有移植而已, 实际还是可以移植后使用的)
+
+tcp/ip 的底层调用, 可以是syscall API, 也可以是posix API, 但都需要自己重新封包, 拆包!!
+只是操作API 不一样而已syscall API or posix API;
+
+
+
+
+
+[网络相关头文件]
+#
+# 1.netinet(AF_INET 协议簇):
+#
+<netinet/in.h>        # AF_INET 协议簇的基础头文件
+
+<netinet/ether.h>     # 通用的以太网首部及标志位的结构体[自动包含<netinet/if_ether.h>]
+<netinet/if_ether.h>  # 电口以太网首部及标志位的结构体
+<netinet/if_fddi.h>   # 光纤以太网首部及标志位的结构体
+<netinet/if_tr.h>     # 环令牌以太网首部及标志位的结构体(IEEE 802.5)
+
+<netinet/in_systm.h>  # tcp/ip 网络修订版本差异(说白了就是tcp/ip 在各个系统中的差异)
+<netinet/igmp.h>      # igmp 协议(含有结构体, 宏定义等)
+<netinet/ip6.h>       # ipv6 协议(含有结构体, 宏定义等)
+<netinet/ip.h>        # ipv4 协议(含有结构体, 宏定义等)
+<netinet/tcp.h>       # tcp 协议(含有结构体, 宏定义等)
+<netinet/udp.h>       # udp 协议(含有结构体, 宏定义等)
+# <netinet/icmp.h>    # linux 没有这个文件, freebsd / unix 可能有
+<netinet/ip_icmp.h>   # icmpv4 协议(含有结构体, 宏定义等)
+<netinet/icmp6.h>     # icmpv6 协议(含有结构体, 宏定义等)
+
+
+
+#
+# 2.arpa(AF_INET 协议簇的应用层协议):
+#
+<arpa/ftp.h>              # ftp 协议(含有结构体, 宏定义等)
+<arpa/inet.h>             # AF_INET 地址信息转换函数[自动包含<netinet/in.h>](含有结构体, 宏定义等)
+<arpa/nameser_compat.h>   # dns 协议[compat兼容相关的内容](含有结构体, 宏定义等)
+<arpa/nameser.h>          # dns 协议(含有结构体, 宏定义等)
+<arpa/telnet.h>           # telnet 协议(含有结构体, 宏定义等)
+<arpa/tftp.h>             # fftp 协议(含有结构体, 宏定义等)
+
+
+
+#
+# 3.net(以太网链路层协议):
+#
+<net/ethernet.h>    # 通用的以太网首部及标志位的结构体[自动包含<linux/if_ether.h>]
+<net/if_arp.h>      # ARP协议
+<net/if.h>          # 用于访问interface 网卡硬件接口config(含有结构体, 宏定义等)
+<net/if_packet.h>   # linux 2.0 之前使用的SOCK_PACKET地址结构(已废弃), 你应该用AF_PACKET 协议簇取代这个头文件
+<net/if_ppp.h>      # 点对点协议[自动包含<net/ppp_defs.h>]
+<net/ppp_defs.h>    # 点对点协议的宏定义
+<net/ppp-comp.h>    # 只有一句话[自动包含<net/ppp-comp.h>](等价于直接使用<linux/ppp-comp.h>)
+<net/if_shaper.h>   # 以太网线路速度控制, 波特率等, 但一般现在都不能修改了, 除非是电话线转电口(已太旧)
+<net/if_slip.h>     # 串行线协议
+<net/route.h>       # 路由协议
+
+
+
+网络协议栈头文件list(可快速建立link, 方便版本浏览):
+	ln -s /usr/include/arpa				# 高层协议
+	ln -s /usr/include/netatalk		# atalk 协议簇
+	ln -s /usr/include/netipx			# ipx 协议簇
+	ln -s /usr/include/netrose		# rose 协议簇
+	ln -s /usr/include/netax25		# ax25 协议簇
+	ln -s /usr/include/netiucv		# iucv 协议簇
+	ln -s /usr/include/net				# 协议簇'通用部分'
+	ln -s /usr/include/neteconet	# econet 协议簇
+	ln -s /usr/include/netpacket	# packet 协议簇
+	ln -s /usr/include/netash			# ash 协议簇
+	ln -s /usr/include/netinet		# inet 协议簇
+	ln -s /usr/include/netrom			# rom 协议簇
+
+
+
+
+

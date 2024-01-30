@@ -1,0 +1,15 @@
+glibc网络协议栈头文件的本质:
+	引用linux内核网络协议栈的实现
+
+
+
+每个操作系统的tcp/ip 协议栈, 本质上都是流通的, 通用的;
+
+但由于每个操作系统的tcp/ip 协议栈实现不一样, 
+
+因此: 
+	具体tcp/ip 协议栈的实现, 还是会保留接口, 引用kernel 的tcp/ip 的具体实现, 
+	这个, 每个操作系统的实现都不一样; linux/unix/freebsd/windows/adnroid/MacOS...
+
+
+

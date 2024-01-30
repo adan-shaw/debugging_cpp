@@ -1,7 +1,13 @@
+ssldump - SSLv3/TLS network protocol analyzer
+tcpdump - command-line network traffic analyzer
+
+libpcap-dev - development library for libpcap (transitional package)
+
 #
 # 直接安装就行
 #
 sudo apt-get install libpcap-dev
+sudo apt-get install ssldump tcpdump
 
 
 
