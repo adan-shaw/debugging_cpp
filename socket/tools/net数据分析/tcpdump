@@ -1,0 +1,88 @@
+tcpdump 的命令, 应该和wireshark 对接, 对标;
+这样比较容易匹配好, 实现命令行抓包, 可视化抓包, 双轨同步;
+
+
+
+查看本机所有的监听端口:
+	netstat -atunlp
+
+
+
+# 常用组合选项:
+	# 抓取经过127.0.0.1:6666 的tcp 数据包
+	tcpdump tcp port 6666 and host 127.0.0.1
+
+	# 抓取经过127.0.0.1:8888 的udp 数据包
+	tcpdump udp port 8888 and host 127.0.0.1
+
+
+
+
+
+1.tcpdump 默认启动:
+	# 默认情况下, 直接启动tcpdump将监视'第一个网络接口'上, 所有流过的数据包.
+	tcpdump
+	tcpdump -vv                          # 显示抓到的数据包的内容
+	tcpdump --number                     # 显示数据条目的行数(方便观察)
+	tcpdump -w ./saves.txt               # 保存截获的数据到saves.txt 文件中
+	tcpdump -c 96                        # 只抓取96 个数据包
+	tcpdump -s 0                         # 抓取数据包时默认抓取长度为68字节(刚好等于:arp-8/802.2-20/ip-20/tcp-20 头)
+	tcpdump -S 0                         # 抓到完整的数据包(不删减)
+
+
+
+2.tcpdump 协议过滤:
+	tcpdump -i eth1 arp                  # 抓取所有经过eth1,使用arp 协议的网络数据
+	tcpdump -i eth1 rarp
+	tcpdump -i eth1 ip
+	tcpdump -i eth1 icmp
+	tcpdump -i eth1 igmp
+	tcpdump -i eth1 tcp
+	tcpdump -i eth1 udp
+
+
+
+3.tcpdump 过滤主机ip:
+	tcpdump -i eth1 host 192.168.1.1     # 抓取所有经过eth1,'目的/源'地址是192.168.1.1的数据
+	tcpdump -i eth1 src host 192.168.1.1 # 抓取所有经过eth1,源地址是192.168.1.1的数据
+	tcpdump -i eth1 dst host 192.168.1.1 # 抓取所有经过eth1,目的地址是192.168.1.1的数据
+
+
+
+4.tcpdump 过滤端口:
+	tcpdump -i eth1 port 25              # 抓取所有经过eth1, 目的/源'端口'是25的网络数据
+	tcpdump -i eth1 src port 25          # 指定源端口
+	tcpdump -i eth1 dst port 25          # 指定目的端口
+
+
+
+5.tcpdump 网络过滤:
+	tcpdump -i eth1 net 192.168          # 抓取所有经过eth1,目的/源'网络地址'是'192.168'的网络数据
+	tcpdump -i eth1 src net 192.168
+	tcpdump -i eth1 dst net 192.168
+
+
+
+6.tcpdump 常用表达式:
+	非 : !  or "not" (去掉双引号) 
+	且 : && or "and" 
+	或 : || or "or"
+
+
+	# 抓取所有经过eth1,目的地址是192.168.1.254或192.168.1.200端口是80的TCP数
+	tcpdump -i eth1 '((tcp) and (port 80) and ((dst host 192.168.1.254) or (dst host 192.168.1.200)))'
+
+	# 抓取所有经过eth1,目标MAC地址是00:01:02:03:04:05的ICMP数据
+	tcpdump -i eth1 '((icmp) and ((ether dst host 00:01:02:03:04:05)))'
+
+	# 抓取所有经过eth1,目的网络是192.168, 但目的主机不是192.168.1.200的TCP数据
+	tcpdump -i eth1 '((tcp) and ((dst net 192.168) and (not dst host 192.168.1.200)))'
+
+	tcpdump 'and' 关键字生效:
+		tcpdump tcp port 6666 and host 127.0.0.1
+		tcpdump tcp port 6666 and host 192.168.0.1
+
+
+
+
+
