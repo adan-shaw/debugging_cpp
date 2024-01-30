@@ -1,0 +1,29 @@
+#
+# 直接安装就行
+#
+sudo apt-get install libpcap-dev
+
+
+
+
+
+#
+# libpcap & tcpdump 简介
+#
+libpcap & tcpdump 其实是同一个project, 
+
+wireshark 底层实际也是用了tcpdump && libpcap, 
+
+根本不可能抛弃这个巨型project, 只是套了一个GUI 外壳, 做更快捷,方便,直观的解析而已;
+
+
+
+libpcap 支持unix 所有tcp/ip 的拆包封包	SDK;
+tcpdump 支持unix 所有操作系统命令行tcp/ip 抓包, 拆包;(模拟发送tcp/ip 包的功能, 可能没有)
+wireshark 支持unix 所有操作系统命令行tcp/ip 抓包, 拆包可视化;(模拟发送tcp/ip 包的功能, 可能没有)
+
+
+
+ps:
+	尽量不用libnet, libpcap 几乎是行业标准的tcp/ip 解包封包库, 这种情况下, libnet 没有啥优势, 用一个就行了;
+
