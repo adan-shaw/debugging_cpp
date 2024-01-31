@@ -4,7 +4,9 @@
 TCP/IP 的 checksum()函数通常是由操作系统或网络库提供的, 而不是由应用程序开发者自己实现的; 
 不同的操作系统和网络库可能有不同的实现方式(主要是cpu 架构和效率问题);
 
-unsigned short csum(const unsigned short *ptr, int nbytes);
+//unsigned short csum(const unsigned short *ptr, int nbytes);//不知道为什么这个函数已被删除了
+extern __wsum ip_fast_csum(const void *iph, unsigned int ihl);//这个函数可以代替csum
+
 该函数接受一个指向数据缓冲区的指针和数据长度, 并返回计算得到checksum 值(unsigned short); 
 这个函数是在 <netinet/in.h> 头文件中定义的;
 
@@ -13,12 +15,22 @@ checksum()函数[16 位校验和计算]:
 	IP/ICMP/IGMP/TCP/UDP等协议的校验和算法都是相同的, 
 	采用的都是将数据流视为16位整数流进行重复叠加计算; 
 
-	为了计算检验和, 首先把检验和字段置为0; 
-	然后, 对有效数据范围内中每个16位进行二进制反码求和, 结果存在检验和字段中, 如果数据长度为奇数则补一字节0; 
-	当收到数据后, 同样对有效数据范围中每个16位数进行二进制反码的求和; 
-	由于接收方在计算过程中包含了发送方存在首部中的检验和, 因此:
-		如果首部在传输过程中没有发生任何差错, 那么接收方计算的结果应该为全0或全1(具体看实现了,本质一样); 
-		如果结果不是全0或全1, 那么表示数据错误; 
+	* 为了计算检验和, (必须)首先把检验和字段置为0;(因为计算字段, 也是数据的一部分, 所以必须先置0)
+	* IP/ICMP/IGMP/TCP/UDP等协议, 都有一个unsigned short 数据位, 所以, 都需要算一次检验和;
+
+	checksum 简单计算方法:
+		ip checksum = csum(ip头) + csum(ip负载)
+		icmp checksum = csum(icmp头) -- icmp 一般没有报body, 所以只算报头
+		igmp checksum = csum(igmp头) -- igmp 一般没有报body, 所以只算报头
+		tcp checksum = csum(tcp头) + csum(tcp负载)
+		udp checksum = csum(udp头) + csum(udp负载)
+
+	checksum 详细结算方法:
+		然后, 对有效数据范围内中每个16位进行二进制反码求和, 结果存在检验和字段中, 如果数据长度为奇数则补一字节0; 
+		当收到数据后, 同样对有效数据范围中每个16位数进行二进制反码的求和; 
+		由于接收方在计算过程中包含了发送方存在首部中的检验和, 因此:
+			如果首部在传输过程中没有发生任何差错, 那么接收方计算的结果应该为全0或全1(具体看实现了,本质一样); 
+			如果结果不是全0或全1, 那么表示数据错误; 
 
 
 
