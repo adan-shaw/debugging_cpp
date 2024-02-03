@@ -50,13 +50,14 @@ struct sockaddr_un {
 // 解析struct addrinfo{} 新型addr 结构体
 void print_addrinfo(struct addrinfo *p){
 	printf("ai_family: ");//打印协议簇
-	switch(addr->ai_socktype){
-		case AF_LOCAL:			printf("AF_LOCAL, tcp/udp\n"); break;
+	switch(p->ai_socktype){
+		//case AF_LOCAL:			printf("AF_LOCAL, tcp/udp\n"); break;//数值等价于AF_UNIX
 		case AF_UNIX:				printf("AF_LOCAL, tcp/udp\n"); break;
 		case AF_INET:				printf("AF_INET, tcp/udp/icmp/igmp/ip/eth\n"); break;
 		case AF_INET6:			printf("AF_INET6, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case AF_UNSPEC:			printf("AF_UNSPEC, tcp/udp/icmp/igmp/ip/eth\n"); break;
 		case AF_ROUTE:			printf("AF_ROUTE, tcp/udp/icmp/igmp/ip/eth\n"); break;
-		case AF_NETLINK:		printf("AF_NETLINK, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		//case AF_NETLINK:		printf("AF_NETLINK, tcp/udp/icmp/igmp/ip/eth\n"); break;//数值等价于AF_PACKET
 		case AF_PACKET:			printf("AF_PACKET, tcp/udp/icmp/igmp/ip/eth\n"); break;
 		case AF_PPPOX:			printf("AF_PPPOX\n"); break;
 		case AF_CAN:				printf("AF_CAN\n"); break;
@@ -65,7 +66,7 @@ void print_addrinfo(struct addrinfo *p){
 	}
 
 	printf("ai_socktype: ");//打印socket 类型
-	switch(addr->ai_socktype){
+	switch(p->ai_socktype){
 		case SOCK_STREAM:			printf("SOCK_STREAM, tcp only\n"); break;
 		case SOCK_DGRAM:			printf("SOCK_DGRAM, tcp/udp\n"); break;
 		case SOCK_RAW:				printf("SOCK_RAW, tcp/udp/icmp/igmp\n"); break;
@@ -75,7 +76,7 @@ void print_addrinfo(struct addrinfo *p){
 	}
 
 	printf("ai_protocol: ");//打印'传输协议'类型
-	switch(addr->ai_protocol){
+	switch(p->ai_protocol){
 		case IPPROTO_IP:		printf("ip\n"); break;
 		case IPPROTO_TCP:		printf("tcp\n"); break;
 		case IPPROTO_UDP:		printf("udp\n"); break;
@@ -99,6 +100,7 @@ AF表示ADDRESS FAMILY 地址族, PF表示PROTOCOL FAMILY 协议族;
 	AF_UNIX				等同于AF_LOCAL
 	AF_INET				互联网 v4
 	AF_INET6			互联网 v6
+	AF_UNSPEC			互联网 v4 v6 自适应
 	AF_NETLINK		很强大的内核太socket, 常用于组播, 只支持udp/raw模式, 不支持tcp模式[Linux特有,需要root权限]
 	AF_ROUTE			路由域套接字socket, 只支持raw模式[需要root权限]
 	AF_PACKET			链路层socket, 只支持udp/raw模式(需要自己附上ARP 报文)[需要root权限]
