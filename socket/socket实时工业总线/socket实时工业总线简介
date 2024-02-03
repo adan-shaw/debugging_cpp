@@ -1,6 +1,6 @@
 目前的工业总线, 主要是:
 	I^2c
-	UART标准下的串行总线: 		rs232, rs485, ttl...
+	UART标准下的串行总线: rs232, rs485, ttl 等等
 	SPI实时存储总线
 	PCIE实时串行总线(intel 是老大, 但现在arm 也有PCIE 设备SSD 固态硬盘设备)
 	老式的CAN(CANFD, LIN, ...)
