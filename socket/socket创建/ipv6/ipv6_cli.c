@@ -28,18 +28,18 @@ int main(void){
 
 
 
+	//填充服务器地址(in6addr_loopback = IPv6回环地址)
+	//bzero(&server_addr, sizeof(server_addr));
+	server_addr.sin6_family = AF_INET6;
+	server_addr.sin6_port = htons(MYPORT);
+	server_addr.sin6_addr = in6addr_loopback;
+
 	//建立IPv6套接字
 	sfd = socket(AF_INET6, SOCK_STREAM, 0);
 	if(sfd == -1){
 		perror("socket()");
 		return(-1);
 	}
-
-	//填充服务器地址(in6addr_loopback = IPv6回环地址)
-	//bzero(&server_addr, sizeof(server_addr));
-	server_addr.sin6_family = AF_INET6;
-	server_addr.sin6_port = htons(MYPORT);
-	server_addr.sin6_addr = in6addr_loopback;
 
 	//连接服务器
 	if(connect(sfd,(struct sockaddr*)&server_addr,sizeof(server_addr)) == -1){

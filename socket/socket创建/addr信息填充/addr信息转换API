@@ -1,0 +1,89 @@
+//1.网络地址'转换函数'list
+/*
+	需要你自己保证"输入字符串"的可靠性, 
+	所有网络地址'转换函数'都不保证返回值的可靠性(错误ip字符串, 会返回错误的转换值):
+	int						inet_aton(const char *cp, struct in_addr *inp);
+	in_addr_t			inet_addr(const char *cp);
+	in_addr_t			inet_network(const char *cp);
+
+	char*					inet_ntoa(struct in_addr in);
+
+	struct in_addr inet_makeaddr(in_addr_t net, in_addr_t host);
+	in_addr_t			inet_lnaof(struct in_addr in);
+	in_addr_t			inet_netof(struct in_addr in);
+
+	//新型转换函数
+	const char *	inet_ntop(int af, const void *src, char *dst, socklen_t size);
+	int						inet_pton(int af, const char *src, void *dst);
+*/
+
+
+
+//2.网络地址'结构体'&'数据类型':
+/*
+	in_addr_t = uint32_t;			//uint32_t 定义在<stdint.h>
+	socklen_t = uint32;				//uint32   定义在<stdint.h>
+	in_port_t = uint16_t			//uint16_t 定义在<stdint.h>
+
+	struct sockaddr_un;				//unix socket 特有(略)
+	struct sockaddr_in;				//inet4 socket 特有
+	struct in_addr;						//inet4 socket 结构体的成员之一
+	struct sockaddr;					//通用socket 地址描述结构体
+
+	struct sockaddr{
+		unsigned char sa_len;		//total length
+		sa_family_t sa_family;	//address family
+		char sa_data[14];				//variable-length address
+	};
+
+	struct sockaddr_in{
+		sa_family_t sin_family;	//address_family
+		in_port_t sin_port;			//port number
+		struct in_addr sin_addr;//IPv4 address
+	};
+
+	struct in_addr{
+		in_addr_t s_addr;				//IPv4 address
+	};
+
+	由于'网络地址格式'与'特定的通信域'相关,
+	为了使得'不同格式的地址'都能够传入'套接字'相关的函数,
+	所有的地址必须先被强制转换为一个'通用的地址结构'struct sockaddr;
+
+	注意:
+		struct in_addr 虽然是ulong, 但不得直接'='号赋值,
+		struct in_addr 不是广义上的unsigned long int,
+		而是4 个uchar 描述0.0.0.0 的地址信息.
+
+		struct in_addr 也是一个结构体, 如果你非要赋值, 只有一种是有效的:
+			addr_in.sin_addr.s_addr = 0;//表示0.0.0.0
+		否则只能用内存'cp拷贝'赋值.
+		这种意图也不明确的'cp拷贝'赋值,尽量不要用:
+			uint32_t uip;
+			memcpy(&addr_in.sin_addr.s_addr, &uip, sizeof(uint32_t));
+
+
+	inet4地址结构体, 拷贝到'通用sockaddr地址描述结构体', 可以直接拷贝:
+		struct sockaddr_in addr_in;
+		struct sockaddr addr;
+		memcpy(&addr,&addr_in,sizeof(struct sockaddr));
+*/
+
+
+
+//3.杂谈
+/*
+	网络地址信息载体struct sockaddr_in, struct sockaddr等结构体,
+	跟socket fd没有半毛钱关系!!
+	这些结构体只是为了描述网络地址信息和端口,
+	而socket fd则是文件系统属性的融合, 是一个int 文件描述符;
+
+	当然socket fd 继承了部分文件描述符属性,
+	具体继承了多少, 看网卡驱动的实现情况,
+	具体会有一个网卡通用标准, 来规范socket fd的文件描述符属性的部分;
+
+	socket fd 并不能反向获取<网络地址信息载体>,
+	因为socket创建的时候,只是一个sfd文件描述符,并不具备socket传输属性,
+	当<链接建立>之后,你能够通过getsocketopt()来获取对方的一些地址信息,
+	实在找不到, 你还能通过getsocketopt() 获取ip 头, 肯定可以解决的;
+*/

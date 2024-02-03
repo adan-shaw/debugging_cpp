@@ -32,18 +32,18 @@ int main(void){
 
 
 
+	//填充服务器地址(in6addr_any = IPv6任意地址)
+	//bzero(&addr6_srv, sizeof(addr6_srv));
+	addr6_srv.sin6_family = AF_INET6;
+	addr6_srv.sin6_port = htons(MYPORT);
+	addr6_srv.sin6_addr = in6addr_any;
+
 	//建立IPv6套接字
 	sfd_li = socket(AF_INET6, SOCK_STREAM, 0);
 	if(sfd_li == -1){
 		perror("socket()");
 		return(-1);
 	}
-
-	//填充服务器地址(in6addr_any = IPv6任意地址)
-	//bzero(&addr6_srv, sizeof(addr6_srv));
-	addr6_srv.sin6_family = AF_INET6;
-	addr6_srv.sin6_port = htons(MYPORT);
-	addr6_srv.sin6_addr = in6addr_any;
 
 	//绑定
 	if(bind(sfd_li,(struct sockaddr*)&addr6_srv, sizeof(struct sockaddr_in6)) == -1){

@@ -1,0 +1,292 @@
+///////////////////
+// 1.<netinet/in.h>
+///////////////////
+//
+// IPv4
+//
+struct sockaddr_in {
+	short           sin_family;   // 2 bytes e.g. AF_INET, AF_INET6
+	unsigned short  sin_port;     // 2 bytes e.g. htons(3490)
+	struct in_addr  sin_addr;     // 4 bytes see struct in_addr, below
+	char            sin_zero[8];  // 8 bytes zero this if you want to
+};
+
+struct in_addr {
+	unsigned long s_addr;         // 4 bytes load with inet_pton()
+};
+
+struct sockaddr {
+	sa_family_t sa_family;        // address family, AF_xxx
+	char        sa_data[14];      // 14 bytes of protocol address
+};
+
+//
+// IPv6
+//
+struct sockaddr_in6 { 
+	sa_family_t     sin6_family;  // AF_INET6
+	in_port_t       sin6_port;    // port number
+	uint32_t        sin6_flowinfo;// IPv6 flow information
+	struct in6_addr sin6_addr;    // IPv6 address
+	uint32_t        sin6_scope_id;// Scope ID (new in 2.4)
+};
+
+struct in6_addr { 
+	unsigned char   s6_addr[16];  // IPv6 address  
+};
+
+//
+// unix socket
+//
+#define UNIX_PATH_MAX (108)
+
+struct sockaddr_un { 
+	sa_family_t sun_family;              // AF_UNIX
+	char        sun_path[UNIX_PATH_MAX]; // pathname
+};
+
+
+
+// 解析struct addrinfo{} 新型addr 结构体
+void print_addrinfo(struct addrinfo *p){
+	printf("ai_family: ");//打印协议簇
+	switch(addr->ai_socktype){
+		case AF_LOCAL:			printf("AF_LOCAL, tcp/udp\n"); break;
+		case AF_UNIX:				printf("AF_LOCAL, tcp/udp\n"); break;
+		case AF_INET:				printf("AF_INET, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case AF_INET6:			printf("AF_INET6, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case AF_ROUTE:			printf("AF_ROUTE, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case AF_NETLINK:		printf("AF_NETLINK, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case AF_PACKET:			printf("AF_PACKET, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case AF_PPPOX:			printf("AF_PPPOX\n"); break;
+		case AF_CAN:				printf("AF_CAN\n"); break;
+		case AF_BLUETOOTH:	printf("AF_BLUETOOTH\n"); break;
+		default:						printf("default: another ai_family\n"); break;
+	}
+
+	printf("ai_socktype: ");//打印socket 类型
+	switch(addr->ai_socktype){
+		case SOCK_STREAM:			printf("SOCK_STREAM, tcp only\n"); break;
+		case SOCK_DGRAM:			printf("SOCK_DGRAM, tcp/udp\n"); break;
+		case SOCK_RAW:				printf("SOCK_RAW, tcp/udp/icmp/igmp\n"); break;
+		case SOCK_PACKET:			printf("SOCK_PACKET, tcp/udp/icmp/igmp/ip/eth\n"); break;
+		case SOCK_SEQPACKET:	printf("SOCK_SEQPACKET(SEQ PACKET), tcp/udp/icmp/igmp/ip/eth(linux not supported)\n"); break;
+		default:							printf("default: another ai_socktype\n"); break;
+	}
+
+	printf("ai_protocol: ");//打印'传输协议'类型
+	switch(addr->ai_protocol){
+		case IPPROTO_IP:		printf("ip\n"); break;
+		case IPPROTO_TCP:		printf("tcp\n"); break;
+		case IPPROTO_UDP:		printf("udp\n"); break;
+		case IPPROTO_RAW:		printf("raw\n"); break;
+		case IPPROTO_SCTP:	printf("sctp\n"); break;
+		case IPPROTO_ICMP:	printf("icmp\n"); break;
+		case IPPROTO_IGMP:	printf("igmp\n"); break;
+		default:						printf("default: another ai_protocol\n"); break;
+	}
+	return;
+}
+
+
+
+//socket() 参数1: 协议簇简介
+/*
+AF表示ADDRESS FAMILY 地址族, PF表示PROTOCOL FAMILY 协议族;
+在Windows中AF_INET/PF_INET完全一样;
+在Unix/Linux系统中, 在不同的版本中这两者有微小差别: BSD, 一般用AF; POSIX, 一般用PF(类似sysv vs posix API)
+	AF_LOCAL			等同于AF_UNIX
+	AF_UNIX				等同于AF_LOCAL
+	AF_INET				互联网 v4
+	AF_INET6			互联网 v6
+	AF_NETLINK		很强大的内核太socket, 常用于组播, 只支持udp/raw模式, 不支持tcp模式[Linux特有,需要root权限]
+	AF_ROUTE			路由域套接字socket, 只支持raw模式[需要root权限]
+	AF_PACKET			链路层socket, 只支持udp/raw模式(需要自己附上ARP 报文)[需要root权限]
+	AF_PPPOX			电话线2跳线转RJ45 网线(model 光猫/电猫)的通信协议簇[很少用]
+	AF_CAN				can 实时总线
+	AF_BLUETOOTH	蓝牙(无线电)
+*/
+
+//socket() 参数2: socket 类型简介[linux 2.6.27 开始支持原子操作]
+/*
+	int socket(int domain, int type, int protocol);
+	type 可以进行原子操作:
+		主:
+			SOCK_STREAM:    流式
+			SOCK_DGRAM:     报式
+			SOCK_RAW:       原始套接字
+			SOCK_PACKET:    链路层套接字
+			SOCK_SEQPACKET: SEQ链路层套接字 IPPROTO_SCTP(ttcp)
+		从(原子操作):
+			SOCK_CLOEXEC    从父进程中拷贝sfd, 拷贝后自动关闭父进程中的sfd, 让子进程独占sfd;
+			SOCK_NONBLOCK   非阻塞sfd
+
+	原子操作使用方式:
+		# ok = 一主多从
+		SOCK_STREAM|SOCK_CLOEXEC
+		# err = 多主多从
+		SOCK_STREAM|SOCK_DGRAM # 两个主选项混搭, 会出错
+*/
+
+//socket() 参数3: protocol 协议类型简介
+/*
+	属性         流式     报式
+	可靠传输      是       否
+	消息边界保留   否       是
+	面向连接      是       否
+*/
+// Standard well-defined IP protocols. ( protocol 协议list )
+enum{
+	IPPROTO_IP = 0,				// Dummy protocol for TCP.
+	IPPROTO_ICMP = 1,			// Internet Control Message Protocol.
+	IPPROTO_IGMP = 2,			// Internet Group Management Protocol.
+	IPPROTO_IPIP = 4,			// IPIP tunnels (older KA9Q tunnels use 94).
+	IPPROTO_TCP = 6,			// Transmission Control Protocol.
+	IPPROTO_EGP = 8,			// Exterior Gateway Protocol.
+	IPPROTO_PUP = 12,			// PUP protocol.
+	IPPROTO_UDP = 17,			// User Datagram Protocol.
+	IPPROTO_IDP = 22,			// XNS IDP protocol.
+	IPPROTO_TP = 29,			// SO Transport Protocol Class 4.
+	IPPROTO_DCCP = 33,		// Datagram Congestion Control Protocol.
+	IPPROTO_IPV6 = 41,		// IPv6 header.
+	IPPROTO_RSVP = 46,		// Reservation Protocol.
+	IPPROTO_GRE = 47,			// General Routing Encapsulation.
+	IPPROTO_ESP = 50,			// encapsulating security payload.
+	IPPROTO_AH = 51,			// authentication header.
+	IPPROTO_MTP = 92,			// Multicast Transport Protocol.
+	IPPROTO_BEETPH = 94,	// IP option pseudo header for BEET.
+	IPPROTO_ENCAP = 98,		// Encapsulation Header.
+	IPPROTO_PIM = 103,		// Protocol Independent Multicast.
+	IPPROTO_COMP = 108,		// Compression Header Protocol.
+	IPPROTO_SCTP = 132,		// Stream Control Transmission Protocol.
+	IPPROTO_UDPLITE = 136,// UDP-Lite protocol.
+	IPPROTO_MPLS = 137,		// MPLS in IP.
+	IPPROTO_RAW = 255,		// Raw IP packets.
+	IPPROTO_MAX
+};
+
+// Standard well-known ports. (常见的serv 端口list)
+enum{
+	IPPORT_ECHO = 7,					// Echo service.
+	IPPORT_DISCARD = 9,				// Discard transmissions service.
+	IPPORT_SYSTAT = 11,				// System status service.
+	IPPORT_DAYTIME = 13,			// Time of day service.
+	IPPORT_NETSTAT = 15,			// Network status service.
+	IPPORT_FTP = 21,					// File Transfer Protocol.
+	IPPORT_TELNET = 23,				// Telnet protocol.
+	IPPORT_SMTP = 25,					// Simple Mail Transfer Protocol.
+	IPPORT_TIMESERVER = 37,		// Timeserver service.
+	IPPORT_NAMESERVER = 42,		// Domain Name Service.
+	IPPORT_WHOIS = 43,				// Internet Whois service.
+	IPPORT_MTP = 57,
+	IPPORT_TFTP = 69,					// Trivial File Transfer Protocol.
+	IPPORT_RJE = 77,
+	IPPORT_FINGER = 79,				// Finger service.
+	IPPORT_TTYLINK = 87,
+	IPPORT_SUPDUP = 95,				// SUPDUP protocol.
+	IPPORT_EXECSERVER = 512,	// execd service.
+	IPPORT_LOGINSERVER = 513,	// rlogind service.
+	IPPORT_CMDSERVER = 514,
+	IPPORT_EFSSERVER = 520,
+	IPPORT_BIFFUDP = 512,			// UDP ports.
+	IPPORT_WHOSERVER = 513,
+	IPPORT_ROUTESERVER = 520,
+	IPPORT_RESERVED = 1024,		// Ports less than this value are reserved for privileged processes.
+	IPPORT_USERRESERVED = 5000// Ports greater this value are reserved for (non-privileged) servers.
+};
+
+
+
+//填充链路层以上的报文(包括mac 地址报文)
+//int sfd = socket (PF_INET, SOCK_PACKET, IPPROTO_TCP);
+
+//填写ip 层以上的报文(包括ip 报文, 但不用填写mac 地址报文)
+//int sfd = socket (PF_PACKET, SOCK_RAW, IPPROTO_TCP);
+
+//填写tcp 层以上的报文(包括tcp 报文, 但不用填写mac 地址报文, ip 报文)
+//int sfd = socket (PF_PACKET, SOCK_DGRAM, IPPROTO_TCP);
+
+
+
+
+#define INADDR_ANY ((in_addr_t) 0x00000000)       // Address to accept any incoming messages.
+#define INADDR_BROADCAST ((in_addr_t) 0xffffffff) // Address to send to all hosts.
+#define INADDR_NONE  ((in_addr_t) 0xffffffff)     // Address indicating an error return.
+
+#define IN_LOOPBACKNET (127)                      // Network number for local host loopback.
+#ifndef INADDR_LOOPBACK                           // Address to loopback in software to local host.
+# define INADDR_LOOPBACK ((in_addr_t) 0x7f000001) // Inet 127.0.0.1.
+#endif
+
+// Defines for Multicast INADDR.
+#define INADDR_UNSPEC_GROUP ((in_addr_t) 0xe0000000)     // 224.0.0.0
+#define INADDR_ALLHOSTS_GROUP ((in_addr_t) 0xe0000001)   // 224.0.0.1
+#define INADDR_ALLRTRS_GROUP    ((in_addr_t) 0xe0000002) // 224.0.0.2
+#define INADDR_MAX_LOCAL_GROUP  ((in_addr_t) 0xe00000ff) // 224.0.0.255
+
+extern const struct in6_addr in6addr_any;         // ::
+extern const struct in6_addr in6addr_loopback;    // ::1
+
+#define IN6ADDR_ANY_INIT { { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } } }
+#define IN6ADDR_LOOPBACK_INIT { { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 } } }
+
+#define INET_ADDRSTRLEN (16)
+#define INET6_ADDRSTRLEN (46)
+
+
+
+
+
+///////////////////
+// 2.<netdb.h>
+///////////////////
+
+// 解析struct addrinfo{} 新型addr 结构体(在上面, 往上翻)
+void print_addrinfo(struct addrinfo *p);
+
+//新型addr 地址信息存放结构体
+struct addrinfo {
+	int ai_flags;                // AI_PASSIVE, AI_CANONNAME; [标志]
+	int ai_family;               // AF_xxx; [协议族]
+	int ai_socktype;             // SOCK_xxx; [socket类型]
+	int ai_protocol;             // 0 or IPPROTO_xxx for IPv4 and IPv6; [协议类型]
+	socklen_t ai_addrlen;        // length of ai_addr; [ai_addr地址的长度]
+	char *ai_canonname;          // ptr to canonical name for host; [主机对应的标准名称]
+	struct sockaddr *ai_addr;    // ptr to socket address structure; [结构体对应的一个网络地址]
+	struct addrinfo *ai_next;    // ptr to next structure in linked list; [指向下一个addrinfo结构体的指针]
+};
+
+
+//旧式dns host addr 信息载体
+struct hostent{
+	char *h_name;									//主机名
+	char **h_aliases;							//可选的别名列表
+	int h_addrtype;								//地址类型, 一般为AF_INET
+	int h_length;									//地址长度
+	char **h_addr_list;						//网络地址列表
+	#define h_addr h_addr_list[0];//第一个网络地址
+};
+
+//旧式'网络别名'和'网络编号'的信息载体
+struct netent{
+	char* n_name;									// network name
+	char** n_aliases;							// alternate network name array pointer
+	int n_addrtype;								// net address type
+	uint32_t n_net;								// network number
+};
+
+//旧式port 端口信息载体
+struct servent{
+	char *s_name;									// Official service name.
+	char **s_aliases;							// Alias list.
+	int s_port;										// Port number.
+	char *s_proto;								// Protocol to use.
+};
+
+//旧式proto 信息载体
+struct protoent{
+	char *p_name;									//Official protocol name.
+	char **p_aliases;							//Alias list.
+	int p_proto;									//Protocol number.
+};
+

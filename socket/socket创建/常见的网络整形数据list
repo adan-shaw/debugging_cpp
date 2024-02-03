@@ -1,0 +1,15 @@
+typedef unsigned long size_t
+typedef unsigned long int ssize_t
+
+
+typedef int socklen_t
+
+
+uint32_t htonl(uint32_t);		//host字节序->net字节序  unsigned long int
+uint16_t htons(uint16_t);		//host字节序->net字节序  unsigned short
+
+uint32_t ntohl(uint32_t);		//net字节序 ->host字节序 unsigned long int
+uint16_t ntohs(uint16_t);		//net字节序 ->host字节序 unsigned short
+
+
+

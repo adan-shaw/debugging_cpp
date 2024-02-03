@@ -19,19 +19,21 @@
 	addr_in.sin_addr.s_addr = inet_addr(ip); addr_in.sin_port = htons(port); }
 
 //快速填充struct sockaddr_in (安全的)
-#define full_sockaddr_inEx(addr_in, ip, port) { addr_in.sin_family = AF_INET; \
-	if(!inet_pton(AF_INET, "192.168.1.101", &addr_in.sin_addr)) perror("inet_pton()"); addr_in.sin_port = htons(port); }
+#define full_sockaddr_inEx(addr_in, ip, port) { \
+	addr_in.sin_family = AF_INET; addr_in.sin_port = htons(port); if(!inet_pton(AF_INET, ip, &addr_in.sin_addr)) perror("inet_pton()"); }
 
+
+
+const char* host_ip = "192.168.123.111";
+const char* net_ip = "192.168.0.0";
 
 int main(void){
 	struct sockaddr addr;
 	struct sockaddr_in addr_in;
-	const char* host_ip = "192.168.123.111";
-	const char* net_ip = "192.168.0.0";
 	unsigned short port = 9999;
 	char* ptmp = NULL;
 	unsigned int uip = 0;
-	char ip_str[16];
+	char ip_str[INET_ADDRSTRLEN];
 
 
 
@@ -63,7 +65,7 @@ int main(void){
 		perror("inet_pton()");
 
 	//addr转换ulong -> string
-	inet_ntop(AF_INET, &addr_in.sin_addr, ip_str, 16);	//带字符串截断
+	inet_ntop(AF_INET, &addr_in.sin_addr, ip_str, INET_ADDRSTRLEN);//带字符串截断
 	printf("inet_ntop() = %s\n",ip_str);
 
 

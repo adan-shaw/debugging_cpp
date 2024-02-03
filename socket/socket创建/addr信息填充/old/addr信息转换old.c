@@ -95,7 +95,7 @@ void inet_aton_demo(void){
 void inet_ntoa_demo(void){
 	struct sockaddr_in addr_in,addr_in2;
 	ulong uip;
-	char ip_tmp[16];
+	char ip_tmp[INET_ADDRSTRLEN];
 	char* ret;
 
 
@@ -107,7 +107,7 @@ void inet_ntoa_demo(void){
 	addr_in.sin_port = htons(666);
 
 	//正确使用demo:
-	strncpy(ip_tmp,inet_ntoa(addr_in.sin_addr),16);
+	strncpy(ip_tmp,inet_ntoa(addr_in.sin_addr),INET_ADDRSTRLEN);
 	printf("  inet_ntoa(%d)=%s\n",addr_in.sin_addr,ip_tmp);
 
 	//struct sockaddr_in 同类拷贝赋值
@@ -147,7 +147,7 @@ void inet_pton_demo(void){
 void inet_ntop_demo(void){
 	struct sockaddr_in addr_in,addr_in2;
 	ulong uip;
-	char ip_tmp[16],ip_tmp2[16];
+	char ip_tmp[INET_ADDRSTRLEN],ip_tmp2[INET_ADDRSTRLEN];
 	char* ret;
 
 
@@ -159,10 +159,10 @@ void inet_ntop_demo(void){
 	addr_in.sin_port = htons(666);
 
 	//正确使用demo:
-	memset(ip_tmp,'\0',16);
-	//strncpy(ip_tmp,inet_ntop(AF_INET,&addr_in,ip_tmp,16),16);
-	inet_ntop(AF_INET,&addr_in.sin_addr,ip_tmp,16);
-	printf("inet_ntop(AF_INET,%d,ip_tmp,16)=%s\n",&addr_in.sin_addr,ip_tmp);
+	memset(ip_tmp,'\0',INET_ADDRSTRLEN);
+	//strncpy(ip_tmp,inet_ntop(AF_INET,&addr_in,ip_tmp,INET_ADDRSTRLEN),INET_ADDRSTRLEN);
+	inet_ntop(AF_INET,&addr_in.sin_addr,ip_tmp,INET_ADDRSTRLEN);
+	printf("inet_ntop(AF_INET,%d,ip_tmp,INET_ADDRSTRLEN)=%s\n",&addr_in.sin_addr,ip_tmp);
 
 	//struct sockaddr_in 同类拷贝赋值
 	memcpy(&addr_in2,&addr_in,sizeof(struct sockaddr_in));
