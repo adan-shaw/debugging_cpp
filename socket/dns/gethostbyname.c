@@ -52,14 +52,16 @@ void printhost(struct hostent* h){
 	printf("协议簇类型AF_INET(addr type): %d.\n", h->h_addrtype);
 	printf("ip地址长度(addr len): %d.\n", h->h_length);
 
+	//ipv4 only
+	//if(h->h_addrtype == AF_INET || h->h_addrtype == AF_INET6){
 	if(h->h_addrtype == AF_INET){
 		printf("打印解析结果-URL主机别名链表(alias name):'\n");
-		p = h->h_aliases;//指向URL'主机别名'字符串链表
+		p = h->h_aliases;
 		while(*p != NULL)
 			printf("	URL主机别名(alias name): %s;\n", *p++);
 
 		printf("打印解析结果-URL主机ip链表:'\n");
-		p = h->h_addr_list;//指向URL'主机ip'字符串链表
+		p = h->h_addr_list;
 		while(*p != NULL)
 			printf("	URL网关主机ip: %s;\n",inet_ntoa(*((struct in_addr*)*p++)));
 	}

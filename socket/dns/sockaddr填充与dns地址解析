@@ -1,36 +1,87 @@
-//sockaddr地址填充与dns地址解析的区别:
+//posix_dns vs sysv_dns 的区别:
 /*
-	* sockaddr 填充ip 地址信息
+	sysv_dns 处理ipv4 问题不大, 处理ipv6 压力较大;
+	posix_dns 处理ipv6 比较适合(没有历史包袱);
 
-	* dns 地址解析, 需要dns server 对url 网站域名进行解析, 得到字符串ip 地址;
-		(互联网的server, 端口一般是80/443, 这些网络服务器的端口, 是固定模式的);
-		然后根据字符串ip 地址, 再一次填充sockaddr, 就可以使用c/c++ 链接互联网服务器了;
+	dns c 编码API简介:
+		posix dns:(posix dns用来替代gethostbyname的新一代dns查询工具)
+			getpeername+getsockname
+			getaddrinfo() 根据输入字符串找到主机
+			getnameinfo() 根据struct sockaddr * or socket fd 找到主机
+			getpeername() 获取对端socket 的地址信息, 输入指针引用返回: 一个struct sockaddr *addr
+			getsockname() 获取自身socket 的地址信息, 输入指针引用返回: 一个struct sockaddr *addr
+
+		old dns(旧式dns 解析API):
+			getnetbyname() 主要用来获取网络配置, 网卡信息
+			getpostbyname() 主要用来读取<当前主机>目前已经记录<服务名>和<对应的端口号>
+			getprotobyname() 主要用来读取主机支持的网络协议: ipv4,ipv6,路由协议, 等
 */
 
 
 
-//sockaddr地址填充与dns地址解析汇总
+//struct sockaddr 地址填充与dns 地址解析的区别:
+/*
+	* struct sockaddr 地址信息(ip 地址以uint32 的形式存放)
+
+	* dns 地址解析:
+		需要链接dns server, 对url 网站域名进行解析, 得到字符串ip 地址;
+		(也可以修改/etc/hosts, 实现自定义dns 信息, 方便添加自定义url ip host 信息;)
+		 也可以修改/etc/services, 实现自定义dns 信息, 方便添加自定义url ip host 的port 信息);
+		然后你就可以解析出dns 信息:
+			- ip 地址char bug[]
+			- unsigned short port;
+		然后你就可以再一次填充sockaddr, 这样就能顺利使用c/c++建立tcp 链接到互联网server 了;
+		ps:
+			如果是链接https, 你还得会使用使用openssl, 建立SSL 通信, 然后再建立tcp 链接到互联网server 了(稍微复杂很多);
+*/
+
+
+
+//struct sockaddr 地址填充与struct addrinfo 地址填充的区别:
+/*
+	* struct sockaddr 地址信息(ip 地址以uint32 的形式存放, 旧式, 携带信息量少, 做深入解析, 需要借用其他sysv API)
+
+	* struct addrinfo 地址信息(ip 地址以uint32 的形式存放, 新式, 携带信息量多, 做深入解析, 不需要借用其他sysv API, 这是posix API)
+*/
+
+
+
+//struct sockaddr 地址填充与struct sockaddr_un 地址填充的区别:
+/*
+	* struct sockaddr 地址信息(ip 地址以uint32 的形式存放, 旧式, 携带信息量少, 做深入解析, 需要借用其他sysv API)
+
+	* struct sockaddr_un 地址信息(unix socket bind 绑定路径, 以'UNIX_PATH_MAX=128字节'的形式存放, 旧式, 携带信息量少, 做深入解析, 需要借用其他sysv API)
+*/
+
+
+
+//addr 解析汇总
 /*
 	1.概述:
 		本文讲述的就是socket 地址解析, socket 地址解析分为:
 		*1.'unix地址'解析:
-			依赖struct sockaddr_in通用地址描述体(unix socket 无需端口), 自己填充struct sockaddr_in
+			unix 一切皆文件, unix 内核实现, 是创建一个内存文件, 路径为'UNIX_PATH_MAX=128字节', 用作unix socket 通信的实现(数据交换和读写);
+			需要自己填充struct sockaddr_un, 完成unix socket 地址bind(), 才能进行udp/tcp 通信;
+			[bind() 之后, 才能connect(), listen(), accept(), or sendto(), recvfrom()]
 
 		*2.'inet地址+端口'解析
-			依赖struct sockaddr_in通用地址描述体, 自己填充struct sockaddr_in
+			依赖struct sockaddr_in, struct sockaddr_in6 通用地址描述体;
+			也可以使用新式的struct addrinfo posix 地址描述体, 进行socket 地址信息填充, 然后才能bind(), 然后才能进行udp/tcp 通信;
+			[bind() 之后, 才能connect(), listen(), accept(), or sendto(), recvfrom()]
 
-		*3.'服务端口'解析
-			依赖'本地文件/etc/services'解析
+		*3.local 本地'服务端口'解析(依赖'本地文件/etc/hosts, /etc/services')
+			
+			可以自定义dns 解析, 方便
 			为了安全, '服务器名和端口号'由<客户端>主机自己持有并解析, 防止端口欺骗?
 			况且一般<服务名-端口号-协议类型>是固定的,
 			如果找不到<服务名-端口号-协议类型>关闭, 则向上级dns 服务器询问'dns server地址信息'
 
 		*4.'dns server地址'解析
-			依赖dns 服务器, 由服务器返回server[ip + port]
+			依赖dns server, 由server 返回url 指向的目标server的[ip + port]
 
 
 
-	2.unix 地址解析(太简单了, passed)
+	2.unix 地址解析:
 		因为unix socket 本身只在本机通信,
 		所以unix socket 通信地址, 只是一个'共享的文件路径', 一切皆文件, 
 		这个'共享的文件路径'会绑定一个ftok()[key_t], 内核通过找到这个key_t, 让unix socket 之间进行通信.
@@ -43,24 +94,18 @@
 
 
 
-	3.'服务端口'解析文件--> /etc/services 修改shell demo:
-		格式:   服务名 端口 协议  # 说明文字
-		echo   "adan  9213/tcp # adan service with tcp" >> /etc/services
+	3.'服务端口'解析文件/etc/services 修改demo:
+		格式:   服务名  端口/协议  # 说明文字
+		echo   "adan  9213/tcp  # adan service with tcp" >> /etc/services
 
 
 
-	4.dns c 编码API简介:
-		posix dns:(posix dns用来替代gethostbyname的新一代dns查询工具)
-			getpeername+getsockname
-			getaddrinfo() 根据输入字符串找到主机
-			getnameinfo() 根据struct sockaddr * or socket fd 找到主机
-			getpeername() 获取对端socket 的地址信息, 输入指针引用返回: 一个struct sockaddr *addr
-			getsockname() 获取自身socket 的地址信息, 输入指针引用返回: 一个struct sockaddr *addr
-
-		old dns(旧式dns 解析API):
-			getnetbyname() 主要用来获取网络配置, 网卡信息
-			getpostbyname() 主要用来读取<当前主机>目前已经记录<服务名>和<对应的端口号>
-			getprotobyname() 主要用来读取主机支持的网络协议: ipv4,ipv6,路由协议, 等
+	4.'host主机ip 地址'解析文件/etc/hosts 修改demo:
+		127.0.0.1 localhost
+		127.0.1.1 eva
+		127.0.2.1 www.one-man-team.com
+		127.0.3.1 www.baidu.com
+		127.0.3.1 www.github.com
 */
 
 

@@ -48,6 +48,7 @@ int main(void){
 
 
 
+	//* 兼容ipv4 *
 	//addr转换string -> ulong: 带格式检查, 保证值是否有效[成功返回1, 失败返回0] -- 非线程安全, AF_INET only
 	//assert(inet_aton("999.0.0.0",&addr_in.sin_addr));	//转换出错一定返回0
 	if(!inet_aton(host_ip,&addr_in.sin_addr))
@@ -60,6 +61,7 @@ int main(void){
 
 
 
+	//* 兼容ipv4 + ipv6 *
 	//addr转换string -> ulong: 带格式检查, 保证值是否有效[成功返回1, 失败返回0] -- 线程安全, 其他socket协议簇也可以用
 	if(!inet_pton(AF_INET, host_ip, &addr_in.sin_addr))
 		perror("inet_pton()");

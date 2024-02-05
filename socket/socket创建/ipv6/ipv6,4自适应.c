@@ -42,7 +42,7 @@
 // 解析struct addrinfo{} 新型addr 结构体
 void print_addrinfo(struct addrinfo *p){
 	printf("ai_family: ");//打印协议簇
-	switch(p->ai_socktype){
+	switch(p->ai_family){
 		//case AF_LOCAL:			printf("AF_LOCAL, tcp/udp\n"); break;//数值等价于AF_UNIX
 		case AF_UNIX:				printf("AF_LOCAL, tcp/udp\n"); break;
 		case AF_INET:				printf("AF_INET, tcp/udp/icmp/igmp/ip/eth\n"); break;
@@ -132,7 +132,7 @@ int srv (void){
 
 	//memset (&hints, 0, sizeof (hints));
 	//hints.ai_family = AF_INET;
-	hints.ai_family = AF_UNSPEC
+	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_flags = AI_PASSIVE;
 	tmp = getaddrinfo (NULL, srv_port, &hints, &res);

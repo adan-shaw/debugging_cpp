@@ -74,8 +74,7 @@ void getservent_test(void){
 
 void getservbyname_test(void){
 	struct servent* serv;
-	//const char* service_name = "service_adan";
-	const char* service_name = "http";
+	const char* service_name = "service_adan";
 	const char* service_type = "tcp";
 
 	printf("根据服务名和协议类型, 获取端口号\n");
@@ -95,8 +94,8 @@ void getservbyname_test(void){
 
 void getservbyport_test(void){
 	struct servent* serv;
-	const int service_port = 9213;
 	const char* service_type = "tcp";
+	const int service_port = 9213;
 
 	printf("根据端口号和协议名, 获取服务名(这个可能需要注册才能查得到)\n");
 	serv = getservbyport(service_port,service_type);

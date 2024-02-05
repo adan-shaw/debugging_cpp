@@ -13,7 +13,7 @@ const char* ip = "127.0.0.1";
 void getnameinfo_test(void){
 	int tmp;
 	struct sockaddr_in addr_in;
-	char host_buf[16], port_buf[16];
+	char host_buf[INET6_ADDRSTRLEN], port_buf[INET6_ADDRSTRLEN];
 
 	addr_in.sin_family = AF_INET;
 	addr_in.sin_port = htons(PORT);
@@ -51,17 +51,17 @@ int main(void){
 		char* restrict service,\
 		socklen_t servlen,\
 		int flags);
-		//具体的flags参数如下:[getnameinfo()主要靠flags 参数工作]
-		标志							描述
-		NI_DGRAM				服务基于数据报而非基于流
-		NI_NAMEREQD			如果找不到主机名, 将其作为一个错误对待
-		NI_NOFQDN				对于本地主机, 仅返回全限定域名的节点名部分
-		NI_NUMERICHOST	返回主机地址的数字形式, 而非主机名
-		NI_NUMERICSCOPE	对于IPv6, 返回数字形式
-		NI_NUMERICSERV	返回服务地址的数字形式(即端口号)
 
-	freeaddrinfo(),gai_strerror(),addrinfo{}结构体等信息和用法,
-	可以参考姐妹file: getaddrinfo.cpp; 这里不再详细叙述.
+	flags参数如下:[getnameinfo()主要靠flags 参数工作]
+			标志							描述
+			NI_DGRAM				服务基于数据报而非基于流
+			NI_NAMEREQD			如果找不到主机名, 将其作为一个错误对待
+			NI_NOFQDN				对于本地主机, 仅返回全限定域名的节点名部分
+			NI_NUMERICHOST	返回主机地址的数字形式, 而非主机名
+			NI_NUMERICSCOPE	对于IPv6, 返回数字形式
+			NI_NUMERICSERV	返回服务地址的数字形式(即端口号)
+
+	freeaddrinfo(),gai_strerror(),addrinfo{}结构体等信息和用法, 可以参考姐妹file: getaddrinfo.cpp; 这里不再详细叙述.
 */
 
 
@@ -77,6 +77,6 @@ int main(void){
 	int getsockname();
 	int getpeername();
 
-	前提:	需要对方已经完成connect(), 即完成握手操作.
-				详情可以查看: ./socket_addr/getpeername.cpp
+	前提:
+		需要对方已经完成connect(), 即完成握手操作. 详情可以查看: ./socket_addr/getpeername.cpp
 */
