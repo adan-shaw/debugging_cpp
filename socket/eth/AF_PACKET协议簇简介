@@ -1,0 +1,32 @@
+'PF_PACKET协议簇'简介:
+	* 'PF_PACKET协议簇'是一种对tcp/ip 最底层的协议解析socket 套接字簇, 支持以太网层报文解析(MAC 地址校验比对), TCP/UDP/ICMP/IGMP 协议解析;
+
+	* 'PF_PACKET协议簇'支持用户态编码, 也支持内核态编码;
+		在能使用posix 用户态编码的情况下, 绝对不使用内核态编码;
+		因为posix 用户态编码, 有功能较全的posix API 可用, 有比较强大的gcc/g++/glibc 库可用, 也可以比较容易实现知识产权保密;
+		内核态编码, 则只能写成.ko模块[而且syscall API 功能比较简陋, gcc 功能比较简陋, 调试时会比较艰巨(可能需要经常装载, 卸载.ko 模块, 甚至重启系统)];
+
+	详情, 请看: net网络协议分级补充;
+
+
+
+tcp/ip 抓包工具分析:
+	tcp/ip 抓包代表软件有tcpdump, wireshark 等抓包软件(应用层也可以拆包, 也就支持'PF_PACKET协议簇')
+	tcpdump && libpacp, 是一套配套软件, 
+	tcpdump 只是一个command cli, libpacp 是开发tcpdump 的c/c++ SDK(开发wireshark 也是用libpacp, 只是多了一个GUI);
+	ps:
+		wireshark 的优势是: 更直观地显示报文内容, 更快捷地输入过滤规则, 更方便的使用, 加快开发速度;
+		tcpdump  的优势是: 性能更好, 可以在生产系统中使用, 不需要GUI, 命令行即可工作;
+
+
+
+'PF_PACKET协议簇'支持的编码:
+	* 以太网层报文解析(MAC 地址校验比对), 如: ARP 报文解析
+	* ICMP 报文解析
+	* IGMP 报文解析
+	* IP 报文解析
+	* UDP 报文解析
+	* TCP 报文解析
+
+因此, 实际上你也可以使用'PF_PACKET协议簇', 写一些应用软件, 如: ping, ddos 攻击工具 等;
+主要是练练手, 看看怎样'PF_PACKET协议簇'拆包封包;

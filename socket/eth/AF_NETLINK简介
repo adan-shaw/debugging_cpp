@@ -1,0 +1,6 @@
+AF_NETLINK 实际上是等价于AF_PACKET 的, 两者的宏定义int 数值数值是一样的, 也就是: 这两个协议簇实际上是一样的!!
+AF_LOCAL 和 AF_UNIX 同理, 两者的宏定义int 数值数值是一样的;
+
+
+
+因此, 这里不再对AF_NETLINK 协议簇进行多余的解释, 只对AF_PACKET 进行解释;
