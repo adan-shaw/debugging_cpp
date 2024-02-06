@@ -1,0 +1,48 @@
+#
+# 1.安装IPPROTO_SCTP 协议簇
+#
+并不是所有的操作系统都支持IPPROTO_SCTP 协议簇的, linux 默认并没有安装IPPROTO_SCTP 协议簇, 需要通过安装实现sctp 支持:
+debian/ubuntu:
+	apt-get install libsctp-dev
+	apt-get install lksctp-tools
+
+有兴趣的可以把'IPPROTO_SCTP 协议簇'代码下载看一下(源码就是在AF_PACKAET 层实现对SCTP 协议进行SDK 封装, 非常精妙):
+	apt-get source lksctp-tools
+
+
+
+
+#
+# 2.IPPROTO_SCTP 协议簇常用的API
+#
+posix api list:
+	1.setsockopt(设置socket状态)
+	2.socket(AF_INET,SOCK_STREAM,IPPROTO_SCTP);
+	3.close();
+	4.shutdown();
+	5.fcntl();
+
+
+sctp 专用api(安装之后, 也可以通过man 3 手册找到这些api):
+#include <netinet/sctp.h>
+
+	1.sctp_bindx()
+	2.sctp_opt_info()
+	3.sctp_recvmsg()
+	4.sctp_sendmsg()
+	5.sctp_send()
+	6.sctp_peeloff()
+
+	7.sctp_getpaddrs()
+	8.sctp_freepaddrs()
+	9.sctp_getladdrs()
+	10.sctp_freeladdrs()
+
+
+
+
+
+
+
+
+
