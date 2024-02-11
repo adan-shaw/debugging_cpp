@@ -1,0 +1,16 @@
+# 开启socket重用和快速回收:
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_max_tw_buckets = 5000
+net.ipv4.tcp_max_syn_backlog = 8192
+
+# 削减keepalive 时间为120秒, 还有其它微调:
+net.ipv4.tcp_keepalive_time = 120
+net.ipv4.tcp_keepalive_intvl = 2
+net.ipv4.tcp_keepalive_probes = 1
+
+# 增大tcp 端口号范围:
+net.ipv4.ip_local_port_range = 1024 65000
+
+

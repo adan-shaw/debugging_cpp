@@ -1,0 +1,56 @@
+http server 其实可以适当增大发送buf, 以增强网络性能!!
+因为http server 基本上都是只发不收的, 接收的数据基本都是json, 数据量很小, 但下发的数据量则很大;
+这种局面下, 增加http server 的发送buf, 可以一定程度上提高http server 的性能!!
+普通http server 都是资源下发机器, 发送buf 适当增大2-4 倍, 性能最好!!
+
+接收缓冲区, 倒是可以设置为默认, 甚至更小(默认即可);
+
+
+普通应用app server, 如game server, 是不需要调整的, 默认即可;
+工业应用app server, 是不需要调整的, 默认即可;
+这个策略, 仅适用于http/ftp server;
+
+不推荐使用socketopt() 去修改socket 发送/接收缓冲区的大小, 除非你自己手写一个重数据流-流媒体server, 
+一般情况下, 重数据流-流媒体server 都会增大接收缓冲区, 发送缓冲区倒是不会改变;
+因为客户端会推流到重数据流-流媒体server 上面, 所以接收buf 压力很大, 修改大的接收buf 则可以提高socket 效率;
+
+
+
+
+
+sysctl.conf 修改策略:
+
+# 最大的待发送TCP数据缓冲区空间(默认值:4096, 最大值65536)
+net.inet.tcp.sendspace=65536
+
+# 最大的接受TCP缓冲区空间(一般不修改, 默认即可, 否则每个socket 的缓冲区占用加大, 内存消耗量加大)
+#net.inet.tcp.recvspace=65536
+
+# 最大的接受UDP缓冲区大小
+net.inet.udp.sendspace=65535
+
+# 最大的发送UDP数据缓冲区大小
+net.inet.udp.maxdgram=65535
+
+# unix socket接收和发送空间
+net.local.stream.recvspace=65536
+net.local.dgram.maxdgram=16384
+net.local.dgram.recvspace=65536
+
+# raw socket接收和发送空间
+net.inet.raw.maxdgram=65536
+net.inet.raw.recvspace=65536
+
+
+
+# 最大的套接字缓冲区(没必要)
+#kern.ipc.maxsockbuf=2097152
+
+
+
+
+
+
+
+
+

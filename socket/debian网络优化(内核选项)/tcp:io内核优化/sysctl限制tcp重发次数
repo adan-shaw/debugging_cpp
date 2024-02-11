@@ -1,0 +1,15 @@
+# 优化意图, 请详细阅读: TCP超时重传次数.html
+
+
+
+# sysctl优化策略
+net.ipv4.tcp_orphan_retries = 0
+net.ipv4.tcp_retries1 = 3
+net.ipv4.tcp_retries2 = 15
+net.ipv4.tcp_syn_retries = 6
+net.ipv4.tcp_synack_retries = 5
+net.ipv4.idgen_retries = 3
+
+
+
+# 查看tcp重发次数: 略, 有空可以实现一下, getsockopt() API, 通过tcp_info.tcpi_total_retrans得到该socket 的重传次数info
