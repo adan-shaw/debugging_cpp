@@ -11,6 +11,80 @@
 
 
 
+//新增struct pcap {} 关键结构体的详细描述
+/*
+  struct pcap {}结构体在libpcap源码的pcap-int.h定义(windows only, linux 不知道在哪定义), 
+  之所以没有定义仍能编译, 通过是因为并没有真正使用pcap类型, 而是使用了其指针类型;
+  (你可以看到所有用到pcap_t的地方都是指针, 而如果你使用了非指针的pcat_t定义则会发现编译不过)
+  编译器无需知道pcap的确切定义(用这种方式可以隐藏struct pcap {}结构体的内部定义)
+*/
+//struct pcap {} 结构体:
+struct pcap{
+#ifdef WIN32
+  ADAPTER *adapter;
+  LPPACKET Packet;
+  int timeout;
+  int nonblock;
+#else
+  int fd;
+  int selectable_fd;
+  int send_fd;
+#endif
+
+  int snapshot;
+  int linktype;
+  int tzoff;                    // timezone offset
+  int offset;                    // offset for proper alignment
+
+  int break_loop;                // flag set to force break from packet-reading loop
+
+#ifdef PCAP_FDDIPAD
+  int fddipad;
+#endif
+
+#ifdef MSDOS
+  int inter_packet_wait;        // offline: wait between packets
+  void (*wait_proc) (void);      // call proc while waiting
+#endif
+
+  struct pcap_sf sf;
+  struct pcap_md md;
+
+  // Read buffer
+  int bufsize;
+  u_char *buffer;
+  u_char *bp;
+  int cc;
+
+  // Place holder for pcap_next()
+  u_char *pkt;
+
+  // We 're accepting only packets in this direction/these directions.
+  pcap_direction_t direction;
+
+  // Methods
+  int (*read_op) (pcap_t *, int cnt, pcap_handler, u_char *);
+  int (*inject_op) (pcap_t *, const void *, size_t);
+  int (*setfilter_op) (pcap_t *, struct bpf_program *);
+  int (*setdirection_op) (pcap_t *, pcap_direction_t);
+  int (*set_datalink_op) (pcap_t *, int);
+  int (*getnonblock_op) (pcap_t *, char *);
+  int (*setnonblock_op) (pcap_t *, int, char *);
+  int (*stats_op) (pcap_t *, struct pcap_stat *);
+  void (*close_op) (pcap_t *);
+
+  // Placeholder for filter code if bpf not in kernel.
+  struct bpf_program fcode;
+
+  char errbuf[PCAP_ERRBUF_SIZE + 1];
+  int dlt_count;
+  u_int *dlt_list;
+
+  struct pcap_pkthdr pcap_header;// This is needed for the pcap_next_ex() to work
+};
+
+
+
 #include <pcap/export-defs.h>
 
 
