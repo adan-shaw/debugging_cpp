@@ -126,7 +126,7 @@ struct pcap_pkthdr {
 	bpf_u_int32 len;   //length this packet (off wire, 收到的data 包总长度)
 };
 
-# 5.1: 捕获一个网络数据包(调用一次只接收一个报文)
+# 5.1: 捕获一个网络数据包(调用一次只接收一个报文, 单次抓包libpcap 抓包, 没有回调函数, 直接取出数据buf 进行处理)
 const u_cahr *pcap_next(pacp_t *p, struct pcap_pkthdr *h);
 	参数:
 		p:       Libpcap句柄

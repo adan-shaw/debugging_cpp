@@ -1,18 +1,54 @@
 #
-# checksum()函数简介:
+# 1.checksum()函数简介:
 #
-TCP/IP 的 checksum()函数通常是由操作系统或网络库提供的, 而不是由应用程序开发者自己实现的; 
-不同的操作系统和网络库可能有不同的实现方式(主要是cpu 架构和效率问题);
+在C语言中, 'csum()校验和'函数并不是标准库的一部分, 
+因此没有特定的头文件包含'csum()校验和', 这个函数通常是由程序员根据需要自行实现或通过使用第三方库来实现的; 
+要实现一个'csum()校验和'函数, 你需要根据自己的需求和数据格式编写相应的代码;
 
-//unsigned short csum(const unsigned short *ptr, int nbytes);//不知道为什么这个函数已被删除了
-extern __wsum ip_fast_csum(const void *iph, unsigned int ihl);//这个函数可以代替csum
+TCP/IP 的checksum()函数通常是由操作系统或网络库提供的, 而不是由应用程序开发者自己实现的(自己实现, 主要是cpu 架构和效率问题, 还是用公版的比较好); 
+不同的操作系统和网络库可能有不同的实现方式;
 
-该函数接受一个指向数据缓冲区的指针和数据长度, 并返回计算得到checksum 值(unsigned short); 
-这个函数是在 <netinet/in.h> 头文件中定义的;
+但如果实在没办法, 你只能自己实现校验和的API 了;
 
 
-checksum()函数[16 位校验和计算]:
-	IP/ICMP/IGMP/TCP/UDP等协议的校验和算法都是相同的, 
+
+常见的TCP/IP 的checksum()函数:
+	* ip_fast_csum():
+			Linux 内核网络栈中用于计算IP'csum()校验和'的一个快速函数;
+		头文件:
+			<linux/skbuff.h>
+		注意:
+			ip_fast_csum() 是内核态的, 用户空间的应用程序是不可见的;
+			这个函数是在内核态下用于处理网络数据包等底层任务的; 
+
+	* inet_cksum():
+			用于计算 IP、TCP、UDP 等协议的'csum()校验和'; 这个函数是 BSD 系统中的一部分, 并且在许多 Unix-like 系统中都可用;
+		头文件(debian linux 找不到这个函数):
+			<netinet/in.h>
+			<netinet/ip_icmp.h>
+		注意:
+			inet_cksum() 是用户空间的'csum()校验和'函数, 内核态程序不可用;
+
+	* csum_tcpudp_magic() / csum_ipv6_magic():
+			用于计算 IP、TCP、UDP 等协议的'csum()校验和';
+		头文件(debian linux 找不到这个函数):
+			<linux/in.h>
+		注意:
+			csum_tcpudp_magic() / csum_ipv6_magic() 是内核态API, 用户态不可用;
+
+	ps:
+		libpcap 是一个用于网络流量捕获的库, 它本身并不直接提供TCP/IP 'csum()校验和';
+
+		//unsigned short csum(const unsigned short *ptr, int nbytes);//不知道为什么这个函数已被删除了, 这个函数也是内核态的?
+		extern __wsum ip_fast_csum(const void *iph, unsigned int ihl);
+
+
+
+'csum()校验和'函数的用法:
+	这类函数的统一用法: 接受一个指向数据缓冲区的指针和数据长度, 并返回计算得到checksum 值(unsigned short); 
+
+checksum()函数[16 位'csum()校验和'计算]:
+	IP/ICMP/IGMP/TCP/UDP等协议的'csum()校验和'算法都是相同的, 
 	采用的都是将数据流视为16位整数流进行重复叠加计算; 
 
 	* 为了计算检验和, (必须)首先把检验和字段置为0;(因为计算字段, 也是数据的一部分, 所以必须先置0)
@@ -34,83 +70,37 @@ checksum()函数[16 位校验和计算]:
 
 
 
+
+
 #
-# checksum()函数的效率需求:
+# 2.checksum()函数的效率需求:
 #
-由于每一帧网络数据, 都会算校验和, 
-因此校验和算法效率, 服用率非常高, 是比较重要的, 
+由于每一帧网络数据, 都会算'csum()校验和', 
+因此'csum()校验和'算法效率, 服用率非常高, 是比较重要的, 
 cpu 可能会对齐进行硬件加速优化, 因此普通c 语言算checksum()函数, 可能都不适用了, 得用汇编硬件加速;
 
-当然, 如果用汇编语言实现计算速度会快得多, 对于不同的CPU体系, 需要各自对应编写不同的汇编, 在Linux内核源代码中有各种CPU体系的IP校验和计算源代码; 
+当然, 如果用汇编语言实现计算速度会快得多, 对于不同的CPU体系, 需要各自对应编写不同的汇编, 在Linux内核源代码中有各种CPU体系的IP'csum()校验和'计算源代码; 
 
 
 
 
 
 #
-# 这部分可能是无效的, 没用的[主要还是看<netinet/in.h> 里面的csum()]
+# 3.其他
 #
-在Linux内核中进行网络编程时, 可以使用checksum函数来计算校验和; 该函数位于include/linux/net.h头文件中的__wsum类型定义下面; 
 
-#define __force_memcpy(dst, src) \
-    do { memmove((void *) dst, (const void *) src, sizeof(*src)); } while (0)
+发送校验 (这些宏的定义, 待定)
+#define CHECKSUM_NONE 0               // 需要由传输层自己计算'csum()校验和'
+#define CHECKSUM_HW 1                 // 由硬件计算报头和首部的'csum()校验和'
+#define CHECKSUM_UNNECESSARY 2        // 表示不需要校验, 或者已经成功校验了
+#define CHECKSUM_PARTIAL CHECKSUM_HW
+#define CHECKSUM_COMPLETE CHECKSUM_HW
 
-static inline unsigned short csum_fold(unsigned int sum);
+接收校验
+// 检查'csum()校验和'
+if (skb->ip_summed != CHECKSUM_UNNECESSARY && tcp_v4_checksum_init(skb))
+	goto bad_packet;
 
-/* Compute the checksum of a memory block at buff with length len */
-extern __wsum ip_fast_csum(const void *iph, unsigned int ihl);
 
-/* Compute the checksum of a packet header and data buffer */
-extern __wsum tcp_v4_check(struct tcphdr *th, struct sk_buff *skb,
-                           const struct net_protocol *prot,
-                           unsigned char *rawpkt, int rawlen);
 
-/* Compute the checksum of an IP datagram fragment */
-extern __wsum frag_check(int hlen, u32 saddr, u32 daddr, u8 protocol,
-                         struct sk_buff *frags[], int nfrags, int offset);
 
-/* Compute the checksum of a TCP segment */
-extern __wsum tcp_segmentation_point(u16 mss, u32 seq, u32 endseq,
-                                      u32 win, u32 tsval, u32 tsecr,
-                                      bool is_syn, bool is_fin, bool is_urg,
-                                      bool is_ecn, bool is_ack, bool is_psh,
-                                      bool is_reset, bool is_strict,
-                                      bool is_dummy, bool is_retransmit,
-                                      bool is_partial, bool is_last,
-                                      bool is_first, bool is_data,
-                                      bool is_tcpdump, bool is_ipv6,
-                                      bool is_icmp, bool is_udp,
-                                      bool is_igmp, bool is_esp,
-                                      bool is_ah, bool is_gre,
-                                      bool is_pppoes, bool is_l2tp,
-                                      bool is_vrrp, bool is_hsr,
-                                      bool is_mpls, bool is_geneve,
-                                      bool is_stp, bool is_cfcp,
-                                      bool is_llc, bool is_sctp,
-                                      bool is_arp, bool is_rarp,
-                                      bool is_ether, bool is_loopback,
-                                      bool is_fragmented, bool is_multicast,
-                                      bool is_broadcast, bool is_unicast,
-                                      bool is_local, bool is_forwarding,
-                                      bool is_inbound, bool is_outbound,
-                                      bool is_routable, bool is_unroutable,
-                                      bool is_nonroutable, bool is_discard,
-                                      bool is_error, bool is_drop,
-                                      bool is_duplicate, bool is_reserved,
-                                      bool is_invalid, bool is_unknown,
-                                      bool is_ignored, bool is_notrack,
-                                      bool is_noexpire, bool is_deprecated,
-                                      bool is_obsolete, bool is_expired,
-                                      bool is_special, bool is_private,
-                                      bool is_shared, bool is_linklocal,
-                                      bool is_site, bool is_global,
-                                      bool is_wellknown, bool is_benchmark,
-                                      bool is_example, bool is_test,
-                                      bool is_reserved_by_rfc,
-                                      bool is_reserved_for_system,
-                                      bool is_reserved_for_user,
-                                      bool is_reserved_for_internal,
-                                      bool is_reserved_for_futureuse,
-                                      bool is_reserved_for_assignment,
-                                      bool is_reserved_for_testing,
-                                      bool is_res);
