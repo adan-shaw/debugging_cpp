@@ -94,7 +94,7 @@ unsigned int G_arr[5]={1,2,3,4,5};
 
 
 
-int main(int argc, char* argv[]){
+int main(void){
 	printf("%s\n\n", _H1("suck a cock adan"));
 
 	printf("%s: %d%d%d%d%d\n\n",\
