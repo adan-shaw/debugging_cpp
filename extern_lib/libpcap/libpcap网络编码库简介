@@ -33,3 +33,140 @@ wireshark 支持unix 所有操作系统命令行tcp/ip 抓包, 拆包可视化;(
 ps:
 	尽量不用libnet, libpcap 几乎是行业标准的tcp/ip 解包封包库, 这种情况下, libnet 没有啥优势, 用一个就行了;
 
+
+
+
+
+#
+# 3.libpcap库的开发细节
+#
+使用libpcap库的步骤:
+	1.打开网络设备
+	2.设备过滤规则(可选)
+	3.捕获数据
+	4.关闭网络设备
+
+头文件:
+	#include <pcap.h>
+
+编译选项:
+	-lpcap
+
+
+
+
+
+#
+# 4.libpcap库常用的API
+#
+
+# 1.查看设备名称
+char *pcap_lookupdev(char *errbuf)
+	参数:
+		errbuf: 存放相关的错误信息
+	返回值:
+		成功返回可用的网络设备名指针, 失败返回NULL
+
+
+
+# 2.打开捕获数据接口, 获取句柄
+pcap_t *pcap_open_live(const char *device, int snaplen, int promisc, int to_ms, char *ebuf);
+	参数:
+		device:  网络接口的名字
+		snaplen: 捕获数据包的长度
+		promise: 1代表混杂模式, 其他代表非混杂模式
+		to_ms:   等待时间
+		ebuf:    存储错误信息
+	返回值:
+		成功返回一个Libpcap句柄, 失败返回NULL
+
+
+
+# 3.获取设备IP(获得指定网络设备的网络号和掩码)
+int pcap_lookupnet(char *device, buf_u_int32 *netp, bpf_u_int32 *maskp, char *errbuf);
+	参数:
+		device:  网络设备名
+		netp:    存放网络号的指针
+		maskp:   存放掩码的指针
+		errbuf:  存放出错信息
+	返回值:
+		成功返回0, 失败返回-1
+
+
+
+# 4.设置过滤规则(以下两个函数配合使用):
+
+# 4.1: 编译BPF过滤规则
+int pcap_compile(pcap_t *p, struct bpf_program *program, char *buf, int optimize, bpf_u_int32 mask);
+	参数:
+		p:       Libpcap句柄
+		program: bpf过滤规则（pcap识别的规则）
+		buf:     过滤规则字符串（用户识别的规则）
+		optimize:优化
+		mask:    掩码
+	返回值:
+		成功返回0, 失败返回-1
+
+# 4.2: 设置BPF过滤规则(请参考tcpdump 的过滤规则, 一样的, 相通的)
+int pcap_setfilter(pcap *p, struct bpf_program *fp);
+	参数:
+		p:       Libpcap句柄
+		fp:      BPF过滤规则
+	返回值:
+		成功返回0, 失败返回-1
+
+
+
+# 5.接收网络数据包
+
+//struct pcap_pkthdr 结构体头信息: 发送data时的时间记录, 
+struct pcap_pkthdr {
+	struct timeval ts; //ts = 发送data时的时间记录, 可计算接收时差(time stamp)
+	bpf_u_int32 caplen;//length of portion present(剩余的data 包长度, 一般网络都是自动进行包切片的, 所以基本上都是单帧数据, 与len 保持一致, 不一致, 丢弃即可)
+	bpf_u_int32 len;   //length this packet (off wire, 收到的data 包总长度)
+};
+
+# 5.1: 捕获一个网络数据包(调用一次只接收一个报文)
+const u_cahr *pcap_next(pacp_t *p, struct pcap_pkthdr *h);
+	参数:
+		p:       Libpcap句柄
+		h:       数据包头
+	返回值:
+		捕获的数据包的地址
+
+# 5.2: 循环接收报文, 直到本轮本次数据收发结束
+(循环捕获网络数据包,直到遇到错误或者满足退出条件; 
+ 每捕获一个数据包就会调用callback指示的回调函数(自定义回调函数有格式要求);
+ 所以,可以再回调函数中进行数据包的处理操作;)
+int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);
+	参数:
+		p:       Libpcap句柄
+		cnt:     指定捕获数据包的个数，如果是-1，就会永无休止的捕获。
+		callbcak:回调函数
+		user:    向回调函数中传递的参数
+	返回值:
+		成功返回0, 失败返回'负数'
+
+//自定义回调函数的格式要求:
+void callback(unsigned char *argument, const struct pcap_pkthdr *packet_header, const unsigned char *packet_content);
+	参数:
+		argument:       存放pcap_loop传递过来的user用户数据
+		packet_header:  存放接收到的报文的时间以及长度
+		packet_content: 接收到的网络帧数据
+	返回值:
+		无
+
+
+
+# 6.关闭接口句柄(会自动释放相应的资源)
+void pcap_close(pcap_t *p);
+	参数:
+		p:       需要关闭的Libpcap句柄
+	返回值:
+		无
+
+
+
+
+
+
