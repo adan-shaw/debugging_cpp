@@ -9,6 +9,14 @@
 
 #define LIBPCAP_PACKET_MAX (576)
 
+#if defined(__x86_64__)
+#include "crc32c_x86.c"
+#define crc32c crc32c_x86
+#warning "Using crc32c with x86 accelerations"
+#endif
+
+
+
 int main (void)
 {
 	char *dev, errbuf[PCAP_ERRBUF_SIZE];
@@ -46,10 +54,10 @@ int main (void)
 	gettimeofday (&ts, NULL);					// 获取当前时间戳
 	packet_len = sizeof (struct icmp);// 填充后的数据包长度(不包括校验和)
 	memcpy (&icmp->icmp_cksum, &ts, sizeof (struct timeval));	// 将时间戳填充到校验和字段中(可选)
-	icmp->icmp_cksum = csum(packet, packet_len);			// 计算ICMP数据包的校验和(可选)
+	crc32c(icmp->icmp_cksum, packet, packet_len);							// 计算ICMP数据包的校验和(可选)
 	memset ((char *) packet + sizeof (struct icmp), 0, LIBPCAP_PACKET_MAX - sizeof (struct icmp));// 剩余部分数据, 填充为0(可选, 不填充也行)
 
-	// 循环发送ICMP回显请求数据包, 会自动调用pcap_sendpacket 回调函数, 进行icmp 数据发送
+	// 循环发送ICMP回显请求数据包, 会自动调用pcap_sendpacket 回调函数, 进行icmp 数据发送[崩溃, pcap_sendpacket() 回调函数调用崩溃??]
 	if (pcap_loop (handle, 1, pcap_sendpacket, NULL) < 0)
 	{
 		fprintf (stderr, "pcap_loop() failed: [%s]-%s\n", dev, pcap_geterr (handle));
