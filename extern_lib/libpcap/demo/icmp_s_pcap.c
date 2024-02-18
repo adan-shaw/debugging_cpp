@@ -36,6 +36,8 @@
 		循环'发送/接收'的优点是: 效率高, 但逻辑需要熟练libpcap 库的使用;
 */
 
+#define TTL_MAX (32)
+
 
 
 int main (void)
@@ -43,8 +45,8 @@ int main (void)
 	char *dev_default, errbuf[PCAP_ERRBUF_SIZE];
 	const char dev_name[] = "lo";
 	pcap_t *handle;
-	struct in_addr target_addr;
 	struct icmp *icmp;
+	struct ip *ip;
 	struct timeval ts;
 	unsigned char packet[LIBPCAP_PACKET_MAX];
 	int packet_len;
@@ -80,13 +82,22 @@ int main (void)
 	packet[11] = 0x00;
 
 	//ip 报文(没ip 报文, 何来icmp 报文? ip 报文必须跟上)
-	
-
-	// 设置目标IP地址(ping 需要ip 地址, 但不需要指定端口)
-	target_addr.s_addr = inet_addr ("127.0.0.1");
+	packet_len = sizeof(struct ip) + sizeof(struct icmp);//在ICMP 的报文中没有Data字段, 所以整个IP报文的长度
+	ip = (struct ip *) (packet + 12);
+	//开始填充IP首部
+	ip->ip_v = IPVERSION;
+	ip->ip_hl = sizeof(struct ip)>>2;
+	ip->ip_tos = 0;
+	ip->ip_len = htons(packet_len);
+	ip->ip_id = 0;
+	ip->ip_off = 0;
+	ip->ip_ttl = TTL_MAX;
+	ip->ip_p = IPPROTO_ICMP;
+	ip->ip_sum = 0;
+	ip->ip_dst.s_addr = inet_addr ("127.0.0.1");// 设置目标IP地址(ping 需要ip 地址, 但不需要指定端口)
 
 	// 填充icmp 数据包( 发送数据组装不正确, 发出去的数据包, 会被当成垃圾丢弃, 常见的查看方法: tcpdump 过滤法则方案: !tcp and !udp )
-	icmp = (struct icmp *) (packet + 12);
+	icmp = (struct icmp *) (packet + 12 + 20);
 	icmp->icmp_type = ICMP_ECHO;			// 回显请求类型
 	icmp->icmp_id = getpid ();				// 当前进程ID作为标识符
 	icmp->icmp_seq = 1;								// 序列号(可选)
