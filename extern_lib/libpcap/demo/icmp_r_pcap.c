@@ -7,6 +7,32 @@
 
 
 
+//libpcap 的AF_PACKET 发送/接收方式:
+/*
+	* 单次发送pcap_sendpacket(), 单次抓包(接收)pcap_next();
+		[实际上, 可以使用逻辑循环, 其实简单比较好, 深度使用libpcap 库, 可以试试自带的循环'发送/接收']
+
+	* 循环发送:
+		- pcap_sendqueue_queue()    - 数据读入发送队列
+		- pcap_sendqueue_transmit() - 一次性执行批量发送(性能高)
+		- pcap_sendqueue_destroy()  - 发送队列资源销毁
+		- pcap_next_ex()            - 发送数据'读出/读入'时, 会用到的辅助功能
+
+		循环抓包(接收):
+		- pcap_loop()               - 循环抓包(接收)函数, 第三参数是回调函数指针, 抓包之后, 调用回调函数, 自动进行拆包处理;
+		- pcap_next_ex()            - 发送数据'读出/读入'时, 会用到的辅助功能
+
+	总结:
+		循环'发送/接收'的优点是: 效率高, 但逻辑需要熟练libpcap 库的使用;
+*/
+
+
+
+//测试接收端: icmp_r_pcap.c, 直接使用ping 127.0.0.1 测试, 更方便;
+//结论:      icmp_r_pcap 接收段没问题, icmp_s_pcap 发送端有问题;
+
+
+
 void print_icmp_packet (const u_char * packet, const struct pcap_pkthdr *header)
 {
 	struct ip *ip_hdr = (struct ip *) (packet + sizeof (struct ether_header));
