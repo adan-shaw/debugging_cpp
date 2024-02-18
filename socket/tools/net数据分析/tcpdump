@@ -15,7 +15,11 @@ tcpdump 的命令, 应该和wireshark 对接, 对标;
 	# 抓取经过127.0.0.1:8888 的udp 数据包
 	tcpdump udp port 8888 and host 127.0.0.1
 
+	# 非tcp 和udp(进行eth 底层封装编码常用, 去掉大部分业务代码, 否则有可能, 你发出的数据, 会是错误的)
+	!tcp and !udp
 
+	# icmp 且ip 地址等于127.0.0.1
+	icmp and ip.addr == 127.0.0.1
 
 
 

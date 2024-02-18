@@ -19,7 +19,8 @@
 
 int main (void)
 {
-	char *dev, errbuf[PCAP_ERRBUF_SIZE];
+	char *dev_default, errbuf[PCAP_ERRBUF_SIZE];
+	const char dev_name[] = "lo";
 	pcap_t *handle;
 	struct in_addr target_addr;
 	struct icmp *icmp;
@@ -27,25 +28,26 @@ int main (void)
 	unsigned char packet[LIBPCAP_PACKET_MAX];
 	int packet_len;
 
-	// 获取可用的网络设备
-	if ((dev = pcap_lookupdev (errbuf)) == NULL)
+	// 获取可用的网络设备(不能用默认可用设备, 大概率会自动选择wlp3s0, 而不是lo, 所以你才看不到数据, 必须强制指定网卡名为: "lo")
+	if ((dev_default = pcap_lookupdev (errbuf)) == NULL)
 	{
 		fprintf (stderr, "Device not found: %s\n", errbuf);
 		return -1;
 	}
+	fprintf (stdout, "pcap_lookupdev() return: [%s]\n", dev_default);
 
 	// 以混杂模式, 打开网络设备"lo"(回环网络) [第三参数=1, 表示混杂模式], 返回pcap_t 通用sfd info容器(libpcap 专用)
-	handle = pcap_open_live (dev, LIBPCAP_PACKET_MAX, 1, 1000, errbuf);
+	handle = pcap_open_live (dev_name, LIBPCAP_PACKET_MAX, 1, 1000, errbuf);
 	if (handle == NULL)
 	{
-		fprintf (stderr, "Error opening device %s: %s\n", dev, errbuf);
+		fprintf (stderr, "Error opening device %s: %s\n", dev_name, errbuf);
 		return -1;
 	}
 
 	// 设置目标IP地址(ping 需要ip 地址, 但不需要指定端口)
 	target_addr.s_addr = inet_addr ("127.0.0.1");
 
-	// 填充icmp 数据包
+	// 填充icmp 数据包( 发送数据组装不正确, 发出去的数据包, 会被当成垃圾丢弃, 常见的查看方法: tcpdump 过滤法则方案: !tcp and !udp )
 	icmp = (struct icmp *) packet;
 	icmp->icmp_type = ICMP_ECHO;			// 回显请求类型
 	icmp->icmp_id = getpid ();				// 当前进程ID作为标识符
@@ -57,12 +59,15 @@ int main (void)
 	crc32c(icmp->icmp_cksum, packet, packet_len);							// 计算ICMP数据包的校验和(可选)
 	memset ((char *) packet + sizeof (struct icmp), 0, LIBPCAP_PACKET_MAX - sizeof (struct icmp));// 剩余部分数据, 填充为0(可选, 不填充也行)
 
-	// 循环发送ICMP回显请求数据包, 会自动调用pcap_sendpacket 回调函数, 进行icmp 数据发送[崩溃, pcap_sendpacket() 回调函数调用崩溃??]
-	if (pcap_loop (handle, 1, pcap_sendpacket, NULL) < 0)
+	// 循环发送ICMP回显请求数据包(pcap_sendpacket() 正确返回值, 只有0)
+	if (pcap_sendpacket(handle, packet, LIBPCAP_PACKET_MAX) != 0)
 	{
-		fprintf (stderr, "pcap_loop() failed: [%s]-%s\n", dev, pcap_geterr (handle));
+		fprintf (stderr, "pcap_sendpacket() failed: [%s]-%s\n", dev_name, pcap_geterr (handle));
 		return -1;
 	}
+	else
+		// 获取发送了多长的数据, 还需要再调用: pcap_inject();
+		fprintf (stdout, "pcap_sendpacket() return: [%s]-%d\n", dev_name, pcap_inject(handle, packet, LIBPCAP_PACKET_MAX));
 
 	pcap_close (handle);
 	return 0;
