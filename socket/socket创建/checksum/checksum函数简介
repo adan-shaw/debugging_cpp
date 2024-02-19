@@ -10,6 +10,14 @@ TCP/IP 的checksum()函数通常是由操作系统或网络库提供的, 而不�
 
 但如果实在没办法, 你只能自己实现校验和的API 了;
 
+ps:
+	由于tcp/ip 协议栈填充时, checksum 一般需要先初始化为0, 再进行checksum() 计算,
+	因此, tcp/ip 协议栈填充时, 一般都应该将checksum 放在最后进行填充;
+	(这是一个技巧, 填充时, 需要看看wireshark 是否报错, 
+	 如果wireshark 报错说checksum 校验错误, 也是有问题的报文, 需要一一校正的; 其实校验报文的工作, 比较麻烦复杂, 需要耐性)
+
+
+
 
 
 常见的TCP/IP 的checksum()函数:

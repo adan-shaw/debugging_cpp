@@ -8,6 +8,20 @@
 
 
 
+//前置声明:
+/*
+	网络字节序, 仅对2 byte 以上的int 整形有效, 对于8 bit = 1 byte 的int 无效;
+	char      = 8 bit  = 1 byte = 0-255 整形(不受网络字节序限制)
+	short     = 16 bit = 2 byte = [0-65536]
+	int       = 32 bit = 4 byte = [略, 值域不谈]
+	long long = 64 bit = 8 byte = [略, 值域不谈]
+
+	因此, 填充tcp/ip 时, 看到8 bit, 1 byte 的整形数据, 是不需要使用'网络字节序'转换函数的;
+	任何大于1 byte 的整形数据, 都需要使用'网络字节序'转换函数, 这是一个界限;
+*/
+
+
+
 //1.'网络字节序'转换函数list(只有unsigned int 数据需要转序,char/int不需要):
 /*
 	uint32_t htonl(uint32_t);		//host字节序->net字节序  unsigned long int
