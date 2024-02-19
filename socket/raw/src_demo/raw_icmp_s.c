@@ -59,12 +59,12 @@ int main (void)
 	icmp_hdr.icmp_seq = htons (1);									// 序列号
 	icmp_hdr.icmp_cksum = 0;												// 稍后将计算
 
+	// 计算并设置ICMP校验和
+	icmp_hdr.icmp_cksum = checksum (packet + sizeof (ip_hdr), sizeof (icmp_hdr));
+
 	// 将报头复制到数据包中
 	memcpy (packet, &ip_hdr, sizeof (ip_hdr));
 	memcpy (packet + sizeof (ip_hdr), &icmp_hdr, sizeof (icmp_hdr));
-
-	// 计算并设置ICMP校验和
-	icmp_hdr.icmp_cksum = checksum (packet + sizeof (ip_hdr), sizeof (icmp_hdr));
 
 	// 发送数据包
 	if (sendto (sfd, packet, sizeof (packet), 0, (struct sockaddr *) &dest, sizeof (dest)) < 0)

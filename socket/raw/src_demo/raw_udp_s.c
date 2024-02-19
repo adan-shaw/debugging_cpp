@@ -51,9 +51,9 @@ int main (void)
 	ip_hdr.ip_off = 0;
 	ip_hdr.ip_ttl = 64;
 	ip_hdr.ip_p = IPPROTO_UDP;
-	ip_hdr.ip_sum = 0;
 	ip_hdr.ip_src = src.sin_addr;
 	ip_hdr.ip_dst = dest.sin_addr;
+	ip_hdr.ip_sum = 0;
 
 	// 计算并设置IP报头校验和
 	ip_hdr.ip_sum = checksum ((unsigned short *) &ip_hdr, sizeof (ip_hdr));

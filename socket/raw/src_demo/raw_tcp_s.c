@@ -66,15 +66,15 @@ int main (void)
 	tcp_hdr.th_off = sizeof (struct tcphdr) / 4;		// TCP头大小
 	tcp_hdr.th_flags = TH_SYN;											// SYN标志位
 	tcp_hdr.th_win = htons (65535);									// 窗口大小
-	tcp_hdr.th_sum = 0;															// 校验和初始化为0
 	tcp_hdr.th_urp = 0;															// 紧急指针
+	tcp_hdr.th_sum = 0;															// 校验和初始化为0
+
+	// 计算并设置TCP校验和
+	tcp_hdr.th_sum = checksum ((unsigned short *) (packet + sizeof (struct ip)), sizeof (struct tcphdr));
 
 	// 复制IP和TCP报头到数据包中
 	memcpy (packet, &ip_hdr, sizeof (ip_hdr));
 	memcpy (packet + sizeof (ip_hdr), &tcp_hdr, sizeof (tcp_hdr));
-
-	// 计算并设置TCP校验和
-	tcp_hdr.th_sum = checksum ((unsigned short *) (packet + sizeof (struct ip)), sizeof (struct tcphdr));
 
 	// 发送数据包
 	if (sendto (sfd, packet, sizeof (packet), 0, (struct sockaddr *) &dest, sizeof (dest)) < 0)
