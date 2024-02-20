@@ -5,8 +5,8 @@
 // 计算 IGMP 消息的校验和
 uint16_t checksum_igmp (const void *igmp_message, size_t message_length)
 {
-	uint16_t n_csum, *data = (uint16_t *) igmp_message;
 	uint32_t i, sum;
+	uint16_t n_csum, *data = (uint16_t *) igmp_message;
 
 	if (message_length % 2 != 0)
 	{

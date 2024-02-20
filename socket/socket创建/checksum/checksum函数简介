@@ -97,3 +97,51 @@ ps:
 	因此checksum 的计算效率, 也蛮重要的, 对于网络程序来说;
 
 
+
+
+
+#
+# 3.checksum 计算方法总结
+#
+TCP/IP 协议族中的 TCP、UDP、ICMP、IGMP 和 IP 协议, 都使用了 checksum(校验和), 来检测数据包在传输过程中是否发生了错误;
+Checksum 的计算是基于数据包中的每个字节, 并使用一种特定的算法来生成一个 16 位的值;
+
+接收方会重新计算 checksum, 并与发送方提供的值进行比较, 以确定数据包是否在传输过程中被损坏;
+(因此checksum 算法的使用量比较巨大, 每一帧数据都要算一次, 一般来说, 都有cpu 硬件加速来计算checksum)
+
+
+
+以下是 TCP/IP 协议族中几个主要协议的 checksum 计算方法:
+
+	IP Checksum:
+		IP 头部包含一个 16 位的 checksum 字段;
+		Checksum 是通过对 IP 头部中的每个 16 位字的二进制反码求和(不包括 checksum 字段本身)来计算的;
+		如果求和的结果是一个奇数, 则将其转换为 16 位的二进制反码;
+		最终得到的 16 位值就是 IP头部的 checksum;
+
+	TCP Checksum:
+		TCP checksum 的计算与 IP checksum 类似, 但范围包括 TCP 头部和数据部分;
+		TCP checksum 也是通过对每个 16 位字的二进制反码求和来计算的, 但求和过程中包括 TCP 头部和数据部分;
+		和 IP checksum 一样, 如果求和结果是一个奇数, 则将其转换为 16 位的二进制反码;
+
+	UDP Checksum:
+		UDP checksum 的计算与 TCP 和 IP checksum 类似, 但范围仅限于 UDP 头部和数据部分;
+		UDP checksum 也是通过对每个 16 位字的二进制反码求和来计算的, 但求和过程中只包括 UDP 头部和数据部分;
+		和 TCP/IP checksum 一样, 如果求和结果是一个奇数, 则将其转换为 16 位的二进制反码;
+
+	ICMP Checksum:
+		ICMP checksum 的计算与 IP checksum 类似, 但范围包括 ICMP 头部和数据部分;
+		ICMP checksum 也是通过对每个 16 位字的二进制反码求和来计算的, 但求和过程中包括 ICMP 头部和数据部分;
+		和 IP/TCP/UDP checksum 一样, 如果求和结果是一个奇数, 则将其转换为 16 位的二进制反码;
+
+	IGMP Checksum:
+		IGMP checksum 的计算与 ICMP checksum 类似, 因为 IGMP 是 ICMP 的一个子集;
+		IGMP checksum 的计算方法同样是通过对每个 16 位字的二进制反码求和来完成的, 但范围包括 IGMP 头部和数据部分;
+
+
+
+如果求和结果是一个奇数, 则将其转换为 16 位的二进制反码;
+请注意, 这些 checksum 算法都是基于二进制反码的, 这意味着在计算过程中需要对每个 16 位字进行二进制反码操作, 并在最终求和结果为奇数时进行额外的二进制反码转换;
+这种算法可以有效地检测出数据包在传输过程中发生的单个比特错误, 但可能无法检测到某些类型的错误, 如两个或更多比特同时发生错误的情况;
+
+

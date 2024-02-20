@@ -6,14 +6,7 @@
 #include <netinet/ip_icmp.h>
 #include <linux/in.h>
 
-
-#define LIBPCAP_PACKET_MAX (576)
-
-#if defined(__x86_64__)
-#include "crc32c_x86.c"
-#define crc32c crc32c_x86
-#warning "Using crc32c with x86 accelerations"
-#endif
+#include "csum_all.h"
 
 
 
@@ -36,9 +29,13 @@
 		循环'发送/接收'的优点是: 效率高, 但逻辑需要熟练libpcap 库的使用;
 */
 
-#define TTL_MAX (32)
 
 
+//测试接收端: icmp_r_pcap.c, 直接使用ping 127.0.0.1 测试, 更方便;
+//结论:      icmp_r_pcap 接收段没问题, icmp_s_pcap 发送端有问题
+//ps:       你可以拿ping 命令的报文, 和自己发送的icmp_s_pcap 进行对比, 看看有多大差异, 就知道对错了;
+
+#define LIBPCAP_PACKET_MAX (576)
 
 int main (void)
 {
@@ -46,10 +43,12 @@ int main (void)
 	const char dev_name[] = "lo";
 	pcap_t *handle;
 	struct icmp *icmp;
-	struct ip *ip;
 	struct timeval ts;
 	unsigned char packet[LIBPCAP_PACKET_MAX];
 	int packet_len;
+	struct sockaddr_in dest;
+	struct ip ip_hdr;
+	struct icmp icmp_hdr;
 
 	// 获取可用的网络设备(不能用默认可用设备, 大概率会自动选择wlp3s0, 而不是lo, 所以你才看不到数据, 必须强制指定网卡名为: "lo")
 	if ((dev_default = pcap_lookupdev (errbuf)) == NULL)
@@ -68,45 +67,59 @@ int main (void)
 	}
 
 	//设置MAC 地址("lo" 网口的MAC 地址, 都是0.0.0.0.0.0, 目的地址, 发送地址, 都是这个, 但你不能不填, 否则出错!!)
-	packet[0] = 0x00;//目的MAC [ip a 可以看到lo 网口的MAC 地址， 0.0.0.0.0.0]
+	packet[0] = 0x00;	//目的MAC [ip a 可以看到lo 网口的MAC 地址， 0.0.0.0.0.0]
 	packet[1] = 0x00;
 	packet[2] = 0x00;
 	packet[3] = 0x00;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
-	packet[6] = 0x00;//源MAC
+	packet[6] = 0x00;	//源MAC
 	packet[7] = 0x00;
 	packet[8] = 0x00;
 	packet[9] = 0x00;
 	packet[10] = 0x00;
 	packet[11] = 0x00;
+	packet[12] = 0x08;//协议类型: 0x0800 = 普通ip 协议内容
+	packet[13] = 0x00;
 
-	//ip 报文(没ip 报文, 何来icmp 报文? ip 报文必须跟上)
-	packet_len = sizeof(struct ip) + sizeof(struct icmp);//在ICMP 的报文中没有Data字段, 所以整个IP报文的长度
-	ip = (struct ip *) (packet + 12);
-	//开始填充IP首部
-	ip->ip_v = IPVERSION;
-	ip->ip_hl = sizeof(struct ip)>>2;
-	ip->ip_tos = 0;
-	ip->ip_len = htons(packet_len);
-	ip->ip_id = 0;
-	ip->ip_off = 0;
-	ip->ip_ttl = TTL_MAX;
-	ip->ip_p = IPPROTO_ICMP;
-	ip->ip_sum = 0;
-	ip->ip_dst.s_addr = inet_addr ("127.0.0.1");// 设置目标IP地址(ping 需要ip 地址, 但不需要指定端口)
+	// 填充目的地址的sockaddr_in (后面sendto 需要用)
+	dest.sin_family = AF_INET;
+	dest.sin_port = 0;
+	dest.sin_addr.s_addr = inet_addr ("127.0.0.1");
 
-	// 填充icmp 数据包( 发送数据组装不正确, 发出去的数据包, 会被当成垃圾丢弃, 常见的查看方法: tcpdump 过滤法则方案: !tcp and !udp )
-	icmp = (struct icmp *) (packet + 12 + 20);
-	icmp->icmp_type = ICMP_ECHO;			// 回显请求类型
-	icmp->icmp_id = getpid ();				// 当前进程ID作为标识符
-	icmp->icmp_seq = 1;								// 序列号(可选)
+	// 填充IP报头
+	//memset (&ip_hdr, 0, sizeof (ip_hdr));
+	ip_hdr.ip_v = 4;
+	ip_hdr.ip_hl = 5;																										// 5 x 4 bytes = 最短ip 报文头
+	ip_hdr.ip_tos = 0;
+	ip_hdr.ip_len = htons (sizeof (struct ip) + sizeof (struct icmp));
+	ip_hdr.ip_id = htons (getpid());																		// 示例ID
+	ip_hdr.ip_off = 0;
+	ip_hdr.ip_ttl = 64;																									// 示例TTL
+	ip_hdr.ip_p = IPPROTO_ICMP;
+	ip_hdr.ip_src.s_addr = inet_addr ("127.0.0.1");											// 示例: 源IP
+	ip_hdr.ip_dst.s_addr = dest.sin_addr.s_addr;
+	ip_hdr.ip_sum = 0;																									// ip checksum 值初始化
+	ip_hdr.ip_sum = checksum_ip (&ip_hdr, sizeof (ip_hdr));							// ip checksum 值计算
+																																			// (wireshark 显示仍然没有计算正确? 答: 以libpcap 为准, 绝对不会错的软件, 出错了就再检查)
 
-	gettimeofday (&ts, NULL);					// 获取当前时间戳
-	packet_len = sizeof (struct icmp);// 填充后的数据包长度(不包括校验和)
-	memcpy (&icmp->icmp_cksum, &ts, sizeof (struct timeval));	// 将时间戳填充到校验和字段中(可选)
-	crc32c(icmp->icmp_cksum, packet, packet_len);							// 计算ICMP数据包的校验和(可选)
-	memset ((char *) packet + 12 + sizeof (struct icmp), 0, LIBPCAP_PACKET_MAX - sizeof (struct icmp));// 剩余部分数据, 填充为0(可选, 不填充也行)
+	// 拷贝IP 报头到数据包中
+	memcpy (packet + 14, &ip_hdr, sizeof (ip_hdr));
+
+	// 填充ICMP报头
+	//memset (&icmp_hdr, 0, sizeof (icmp_hdr));
+	icmp_hdr.icmp_type = ICMP_ECHO;
+	icmp_hdr.icmp_code = 0;
+	icmp_hdr.icmp_id = htons (getpid());																// 与IP报头匹配
+	icmp_hdr.icmp_seq = htons (1);																			// 序列号
+	icmp_hdr.icmp_cksum = 0;																						// icmp checksum 值初始化
+	icmp_hdr.icmp_cksum = checksum_icmp (&icmp_hdr, sizeof (icmp_hdr));	// 设置ICMP 报头校验和
+
+	// 拷贝ICMP 报头到数据包中
+	memcpy (packet + 14 + sizeof (ip_hdr), &icmp_hdr, sizeof (icmp_hdr));
+
+	// 剩余部分数据, 填充为0(可选, 不填充也行)
+	memset (packet + 14 + sizeof (ip_hdr) + sizeof (struct icmp), 0, LIBPCAP_PACKET_MAX - sizeof (struct icmp));
 
 	// 循环发送ICMP回显请求数据包(pcap_sendpacket() 正确返回值, 只有0)
 	if (pcap_sendpacket(handle, packet, LIBPCAP_PACKET_MAX) != 0)

@@ -5,9 +5,8 @@
 // 计算 UDP 校验和
 uint16_t checksum_udp (const void *data, size_t length)
 {
-	const uint16_t *words = (const uint16_t *) data;
+	uint16_t n_csum, *words = (uint16_t *) data;
 	uint32_t i, sum = 0;
-	uint16_t n_csum;
 
 	for (i = 0; i < length / sizeof (uint16_t); i++)
 	{

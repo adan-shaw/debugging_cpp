@@ -29,7 +29,8 @@
 
 
 //测试接收端: icmp_r_pcap.c, 直接使用ping 127.0.0.1 测试, 更方便;
-//结论:      icmp_r_pcap 接收段没问题, icmp_s_pcap 发送端有问题;
+//结论:      icmp_r_pcap 接收段没问题, icmp_s_pcap 发送端有问题
+//ps:       你可以拿ping 命令的报文, 和自己发送的icmp_s_pcap 进行对比, 看看有多大差异, 就知道对错了;
 
 
 

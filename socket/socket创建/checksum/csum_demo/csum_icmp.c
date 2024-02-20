@@ -5,8 +5,8 @@
 // 计算 ICMP 消息的校验和
 uint16_t checksum_icmp (const void *icmp_message, size_t message_length)
 {
-	uint16_t n_csum, *data = (uint16_t *) icmp_message;
 	uint32_t i, sum;
+	uint16_t n_csum, *data = (uint16_t *) icmp_message;
 
 	if (message_length % 2 != 0)
 	{
