@@ -89,26 +89,11 @@ cpu 可能会对齐进行硬件加速优化, 因此普通c 语言算checksum()�
 
 当然, 如果用汇编语言实现计算速度会快得多, 对于不同的CPU体系, 需要各自对应编写不同的汇编, 在Linux内核源代码中有各种CPU体系的IP'csum()校验和'计算源代码; 
 
-
-
-
-
-#
-# 3.其他
-#
-
-发送校验 (这些宏的定义, 待定)
-#define CHECKSUM_NONE 0               // 需要由传输层自己计算'csum()校验和'
-#define CHECKSUM_HW 1                 // 由硬件计算报头和首部的'csum()校验和'
-#define CHECKSUM_UNNECESSARY 2        // 表示不需要校验, 或者已经成功校验了
-#define CHECKSUM_PARTIAL CHECKSUM_HW
-#define CHECKSUM_COMPLETE CHECKSUM_HW
-
-接收校验
-// 检查'csum()校验和'
-if (skb->ip_summed != CHECKSUM_UNNECESSARY && tcp_v4_checksum_init(skb))
-	goto bad_packet;
-
-
+ps:
+	计算checksum 是一个比较繁琐的工作: 
+		发送端, 需要计算checksum, 来保证数据的完整性, 安全性;
+		接收端, 需要重新计算checksum, 以防止数据被篡改/数据不完整/数据损坏;
+	因此, 每一帧数据的收发双方, 都要至少算一次checksum, 或者更多: ip 算一次, tcp 算一次, 哈哈;
+	因此checksum 的计算效率, 也蛮重要的, 对于网络程序来说;
 
 
