@@ -10,8 +10,8 @@
 :<<!
 ICMP Checksum: 0xF9F3
 IGMP Checksum: 0xD7EA
-IP Header Checksum: 0x0006
-TCP Checksum: 0x7B9A
-UDP Checksum: 0x3797
-SCTP Checksum: 0x8FC4
+IP Header Checksum: 0x5D59
+TCP Checksum: 0x3867
+UDP Checksum: 0xCCB3
+SCTP Checksum: 0xBFC7
 !
