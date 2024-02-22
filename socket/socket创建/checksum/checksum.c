@@ -1,3 +1,7 @@
+#include <string.h>
+
+
+
 //tcp/ip 通用的checksum() 计算函数(用户态), 内核态有自己的checksum() 计算函数
 
 
@@ -43,7 +47,7 @@
 
 
 //checksum_old() 计算原理版, 对ip/icmp/gimp/udp/tcp/sctp 都有效, 只是传入参数时, 需要校验的数据部位不同而已
-inline unsigned short checksum_old(unsigned short *data, int count){
+unsigned short checksum_old(unsigned short *data, int count){
 	unsigned int sum = 0;
 	unsigned char left_over[2] = {0};
 	unsigned short n_csum;
