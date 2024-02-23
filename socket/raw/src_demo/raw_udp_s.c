@@ -1,87 +1,57 @@
 //编译:
-//		gcc -g3 ./raw_udp_s.c -o x
+//		gcc -g3 ./cksum.c ./raw_udp_s.c -o x
 
-//以下是一个使用C语言编写的简单示例, 它展示了如何使用raw socket发送UDP报文: 
+//wireshark 过滤条件: ip.addr == 127.1.1.1
+//wireshark: checksum unverified(未核实): 好像问题不大, 默认udp 数据报也是这样的, 同样也是checksum unverified
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/ip.h>
-#include <netinet/udp.h>
 #include <arpa/inet.h>
+#include <netinet/udp.h>
+#include "cksum.h"
 
-extern unsigned short checksum (void *buf, int len);
+#define BUF_MAX (128)
 
-int main (void)
-{
-	int sfd;
-	struct sockaddr_in dest, src;
-	struct ip ip_hdr;
-	struct udphdr udp_hdr;
-	const char data[] = "Hello, UDP!";
-	char packet[sizeof (struct ip) + sizeof (struct udphdr) + sizeof (data)];
+int main(void){
+	unsigned char buf_snd[BUF_MAX];
+	struct sockaddr_in src, dest;
+	int sfd = 0;
+	struct udphdr *pUDP = (struct udphdr *)&buf_snd;
+	const char data[] = "Hello, UDP!!";
 
-	sfd = socket (AF_INET, SOCK_RAW, IPPROTO_UDP);
-	if (sfd < 0)
-	{
-		perror ("socket()");
+	sfd = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
+	if(sfd < 0){
+		perror("socket()");
 		return -1;
 	}
 
-	// 填充目的地址的sockaddr_in (后面sendto 需要用)
-	//memset (&src, 0, sizeof (src));
 	src.sin_family = AF_INET;
-	src.sin_addr.s_addr = inet_addr ("127.0.0.1");	// 示例源IP
-	src.sin_port = htons (12345);										// 示例源端口
+	src.sin_addr.s_addr = inet_addr ("127.0.0.1");
+	src.sin_port = htons (12345);
 
-	//memset (&dest, 0, sizeof (dest));
 	dest.sin_family = AF_INET;
-	dest.sin_addr.s_addr = inet_addr ("127.0.0.1");	// 示例目标IP
-	dest.sin_port = htons (53);											// 示例目标端口(例如: DNS端口)
+	dest.sin_port = 80;
+	dest.sin_addr.s_addr = inet_addr("127.1.1.1");
 
-	// 填充IP报头
-	//memset (&ip_hdr, 0, sizeof (ip_hdr));
-	ip_hdr.ip_v = 4;
-	ip_hdr.ip_hl = 5;																// 5 * 4 = 20 bytes
-	ip_hdr.ip_tos = 0;
-	ip_hdr.ip_len = htons (sizeof (struct ip) + sizeof (struct udphdr) + sizeof (data));
-	ip_hdr.ip_id = htons (getpid());
-	ip_hdr.ip_off = 0;
-	ip_hdr.ip_ttl = 64;
-	ip_hdr.ip_p = IPPROTO_UDP;
-	ip_hdr.ip_src = src.sin_addr;
-	ip_hdr.ip_dst = dest.sin_addr;
-	ip_hdr.ip_sum = 0;
+	//填充 UDP 报头
+	pUDP->uh_sport = src.sin_port;																	//源端口16bit 不需要htons()
+	pUDP->uh_dport = htons (dest.sin_port);													//目的端口16bit 需要htons() -- 非常诡异
+	pUDP->uh_ulen = htons (sizeof (struct udphdr) + sizeof (data));	//udp head + body 总长
+	pUDP->uh_sum = 0;																								//checksum 初始化
 
-	// 计算并设置IP报头校验和
-	ip_hdr.ip_sum = checksum ((unsigned short *) &ip_hdr, sizeof (ip_hdr));
+	memcpy (buf_snd + sizeof (struct udphdr), data, sizeof (data));	//复制数据到 UDP 报文中
 
-	// 填充UDP报头
-	memset (&udp_hdr, 0, sizeof (udp_hdr));
-	udp_hdr.uh_sport = src.sin_port;
-	udp_hdr.uh_dport = dest.sin_port;
-	udp_hdr.uh_ulen = htons (sizeof (struct udphdr) + sizeof (data));
-	udp_hdr.uh_sum = 0;
+	pUDP->uh_sum = cksumEx (buf_snd, sizeof (struct udphdr) + sizeof (data), &src, &dest, 0);//计算 & 设置UDP 校验和 [wireshark: checksum unverified(未核实)]
 
-	// 复制数据到报文中
-	memcpy (packet, &ip_hdr, sizeof (ip_hdr));
-	memcpy (packet + sizeof (ip_hdr), &udp_hdr, sizeof (udp_hdr));
-	memcpy (packet + sizeof (ip_hdr) + sizeof (udp_hdr), data, sizeof (data));
-
-	// 计算并设置UDP校验和
-	udp_hdr.uh_sum = checksum (packet + sizeof (ip_hdr), sizeof (udp_hdr) + sizeof (data));
-
-	// 发送数据包
-	if (sendto (sfd, packet, sizeof (packet), 0, (struct sockaddr *) &dest, sizeof (dest)) < 0)
-	{
-		perror ("sendto()");
+	if(sendto (sfd, buf_snd,  sizeof (struct udphdr) + sizeof (data), 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
+		perror("sendto()");
+		close(sfd);
 		return -1;
 	}
 
-	printf ("UDP packet sent successfully!\n");
-
-	close (sfd);
+	close(sfd);
 	return 0;
 }
+
+

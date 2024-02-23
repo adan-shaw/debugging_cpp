@@ -1,90 +1,68 @@
 //编译:
-//		gcc -g3 ./raw_tcp_s.c -o x
+//		gcc -g3 ./cksum.c ./raw_tcp_s.c -o x
 
-//此示例将展示如何设置TCP报头并发送一个简单的SYN报文
+//wireshark 过滤条件: ip.addr == 127.1.1.1
 
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <netinet/ip.h>
-#include <netinet/tcp.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
+#include <netinet/tcp.h>
+#include "cksum.h"
 
-extern unsigned short checksum (void *buf, int len);
+#define BUF_MAX (72)
 
-int main (void)
-{
-	int sfd;
-	struct sockaddr_in dest, src;
-	struct ip ip_hdr;
-	struct tcphdr tcp_hdr;
-	char packet[sizeof (struct ip) + sizeof (struct tcphdr)];
+unsigned long randomEx(unsigned int begin, unsigned int end){
+	unsigned int uiTmp;
+	uiTmp = (unsigned int)( clock() % 2000 ) * ( clock() % 2000 ) * ( clock() % 1000 );
+	return(unsigned long)rand_r(&uiTmp) % end;
+}
 
-	sfd = socket (AF_INET, SOCK_RAW, IPPROTO_TCP);
-	if (sfd < 0)
-	{
-		perror ("socket()");
+int main(void){
+	unsigned char buf_snd[BUF_MAX];
+	struct sockaddr_in src, dest;
+	int sfd = 0;
+	struct tcphdr *pTCP = (struct tcphdr *)&buf_snd;
+	const char data[] = "Hello, TCP!!";
+
+	sfd = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+	if(sfd < 0){
+		perror("socket()");
 		return -1;
 	}
 
-	// 填充目的地址的sockaddr_in (后面sendto 需要用)
-	//memset (&src, 0, sizeof (src));
 	src.sin_family = AF_INET;
-	src.sin_addr.s_addr = inet_addr ("127.0.0.1");	// 示例源IP
-	src.sin_port = htons (12345);										// 示例源端口
+	src.sin_addr.s_addr = inet_addr ("127.0.0.1");
+	src.sin_port = htons (12345);
 
-	//memset (&dest, 0, sizeof (dest));
 	dest.sin_family = AF_INET;
-	dest.sin_addr.s_addr = inet_addr ("127.0.0.1");	// 示例目标IP
-	dest.sin_port = htons (80);											// 示例目标端口(例如: HTTP端口)
+	dest.sin_port = 80;
+	dest.sin_addr.s_addr = inet_addr("127.1.1.1");
 
-	// 填充IP报头
-	//memset (&ip_hdr, 0, sizeof (ip_hdr));
-	ip_hdr.ip_v = 4;
-	ip_hdr.ip_hl = 5;																// 5 * 4 = 20 bytes
-	ip_hdr.ip_tos = 0;
-	ip_hdr.ip_len = htons (sizeof (struct ip) + sizeof (struct tcphdr));
-	ip_hdr.ip_id = htons (getpid());
-	ip_hdr.ip_off = 0;
-	ip_hdr.ip_ttl = 64;
-	ip_hdr.ip_p = IPPROTO_TCP;
-	ip_hdr.ip_sum = 0;
-	ip_hdr.ip_src = src.sin_addr;
-	ip_hdr.ip_dst = dest.sin_addr;
+	//制作tcp 紧急syn 请求链接, 可骚扰hacking
+	pTCP->source = src.sin_port;								//源端口16bit 不需要htons()
+	pTCP->dest = htons (dest.sin_port);					//目的端口16bit 需要htons() -- 非常诡异
+	pTCP->seq = htonl(randomEx(0, 65535));			//序列号
+	pTCP->ack_seq = htonl(randomEx(0, 65535));	//确认序列号
+	pTCP->syn = 1;															//请求连接标志
+	pTCP->urg = 1;															//紧急指针标志
+	//pTCP->window = htons(randomEx(0, 65535));		//滑动窗口大小(可以为0)
+	//pTCP->urg_ptr = htons(randomEx(0, 65535));	//紧急字段指针(可以为0)
+	pTCP->window = 0;
+	pTCP->urg_ptr = 0;
+	pTCP->check = 0;
+	pTCP->check = cksumEx (buf_snd, sizeof (struct tcphdr) + sizeof (data), &src, &dest, 1);
 
-	// 计算并设置IP报头校验和
-	ip_hdr.ip_sum = checksum ((unsigned short *) &ip_hdr, sizeof (ip_hdr));
-
-	// 填充TCP报头
-	memset (&tcp_hdr, 0, sizeof (tcp_hdr));
-	tcp_hdr.th_sport = src.sin_port;
-	tcp_hdr.th_dport = dest.sin_port;
-	tcp_hdr.th_seq = htonl (getpid() + 123456789);	// 初始序列号
-	tcp_hdr.th_ack = 0;															// 无确认号
-	tcp_hdr.th_off = sizeof (struct tcphdr) / 4;		// TCP头大小
-	tcp_hdr.th_flags = TH_SYN;											// SYN标志位
-	tcp_hdr.th_win = htons (65535);									// 窗口大小
-	tcp_hdr.th_urp = 0;															// 紧急指针
-	tcp_hdr.th_sum = 0;															// 校验和初始化为0
-
-	// 计算并设置TCP校验和
-	tcp_hdr.th_sum = checksum ((unsigned short *) (packet + sizeof (struct ip)), sizeof (struct tcphdr));
-
-	// 复制IP和TCP报头到数据包中
-	memcpy (packet, &ip_hdr, sizeof (ip_hdr));
-	memcpy (packet + sizeof (ip_hdr), &tcp_hdr, sizeof (tcp_hdr));
-
-	// 发送数据包
-	if (sendto (sfd, packet, sizeof (packet), 0, (struct sockaddr *) &dest, sizeof (dest)) < 0)
-	{
-		perror ("sendto()");
+	if(sendto (sfd, buf_snd, sizeof(struct tcphdr) + sizeof (data), 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
+		perror("sendto()");
+		close(sfd);
 		return -1;
 	}
 
-	printf ("TCP SYN packet sent successfully!\n");
-
-	close (sfd);
+	close(sfd);
 	return 0;
 }
+
+
