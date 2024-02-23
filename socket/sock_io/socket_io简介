@@ -1,0 +1,223 @@
+socket io 前言:
+	PF_INET + SOCK_RAW 的情况, ip 报文是可以自动填写的;
+	需要手动填写ip 报文的情况:
+		PF_INET + SOCK_PACKET 
+		PF_PACKET + SOCK_RAW 
+		PF_PACKET + SOCK_DGRAM 
+	另外:
+		无论是PF_INET/PF_PACKET, 
+		无论是什么类型的套接字(raw/udp报式/tcp流式), 
+		无论ip 报文是否填写, 
+		无论4层协议是(tcp/udp/icmp/igmp/sctp), 
+		io 函数统一都是:
+			sendto()/send()
+			recv()/recvfrom()
+		修改socket 选项, 统一是:
+			getsockopt()/setsockopt();
+
+
+
+
+
+*1.socket io api 总览:
+
+	read() / write
+	readv() / writev
+
+	send() / recv
+	sendto() / recvfrom
+	sendmsg() / recvmsg
+
+	辅助api 总览: 
+		bind(), listen(), accept(), connect(), shutdown(), close()
+
+flags 参数有如下的选择:
+	MSG_DONTROUTE 勿将数据路由出本地网络
+	MSG_DONTWAIT  允许非阻塞操作(等价于使用O_NONBLOCK)
+	MSG_EOR       如果协议支持, 此为记录结束
+	MSG_OOB       如果协议支持, 发送带外数据
+	MSG_NOSIGNAL  禁止向系统发送异常信息
+
+返回值:
+	成功则返回实际传送出去的字符数, 失败返回-1, 错误原因存于errno中
+
+错误代码:
+	EBADF         参数s非法的socket处理代码
+	EFAULT        参数中有一指针指向无法存取的内存空间
+	WNOTSOCK      参数s为一文件描述词, 非socket
+	EINTR         被信号所中断
+	EAGAIN        此动作会令进程阻断, 但参数s的socket为不可阻断的
+	ENOBUFS       系统的缓冲内存不足
+	EINVAL        传给系统调用的参数不正确
+
+
+
+//EAGAIN && EWOULDBLOCK的区别:
+/*
+	在VxWorks和Windows上, EAGAIN的也叫做EWOULDBLOCK;
+	EAGAIN来自System V, ewouldblock来自BSD;
+
+	io 操作返回EWOULDBLOCK, 跟close() 返回EWOULDBLOCK 是两回事:
+	io 操作返回EWOULDBLOCK = EAGAIN, 是叫你稍后再试,
+	close() 操作不可能稍后再试, 意思就是: 
+		链接未能及时关闭, 但仍然关闭了, 只是sbuf 里面的数据被丢弃了, 属于强制关闭;
+*/
+
+
+
+//shutdown()参数:
+/*
+	SHUT_RD = 0   关闭收通道
+	SHUT_WR = 1   关闭发通道
+	SHUT_RDWR = 2 关闭收发通道
+*/
+
+
+
+socket发送量控制&tcp接收截断&udp接收安全保障:
+	tcp socket 接收数据, 按照帧大小限定发送/接收缓冲区, 截断式接收, 还要进行重新排列;
+
+	udp socket 接收数据, 需要保证每次发送数据时, 当前socket 缓冲区能容纳本次数据发送的总数据量,
+											否则, 接收数据时, 旧数据包可能被冲刷掉, 比较直接的优化方式是: 
+											修改socket 接收缓冲区的大小,
+											其次是, 每次接收完毕之后, 都进行md5 重新校验, 查看数据的完整性,
+											最后是, 通过套接字opt 选项, 获取udp socket 的buf 情况, 进而做下一步接受处理操作
+
+
+
+
+
+*2.从小到大, 进行详解:
+
+<io 类函数解析>：
+read/write 是通用io:
+	绑定缓冲区的数量(只有一个), 无地址信息. 
+	ps: 地址信息指struct sockaddr *src_addr; 主要是:协议类型 + ip + 端口
+
+readv/writev 是通用io:
+	可一次发送多个数据缓冲区, 或者接收多次数据到多个缓冲区(并非<一次接收>, 然后分缓冲区存放).
+
+send/recv TCP socket 专用的io:
+	可以修改io 函数的工作状态(flags=io 标志);
+	绑定缓冲区的数量(只有一个), 无地址信息. 
+	io 操作之后, 接受者[recv]要发送<确认报文>给发送者[send].
+
+sendto/recvfrom socket 通用io:
+	绑定缓冲区的数量(只有一个), 需要填入地址信息.
+	tcp/udp/raw 都可以用, 但是不能进行tcp/ip 报头解包.
+	可以修改io 函数的工作状态(flags=io 标志).
+	[接受者[recv] 不 需要发送<确认报文>给发送者[send]]
+
+sendmsg/recvmsg socket 通用io:
+	可发送多个数据缓冲区, 可接收多次数据到多个缓冲区中.
+	需要填入地址信息, 可以修改io 函数的工作状态(flags=io 标志).
+	可以进行tcp/ip 报头解包.
+	[接受者[recv] 不 需要发送<确认报文>给发送者[send]]
+
+
+
+<辅助类函数解析>：
+bind():
+	bind 就是一个启动[端口->socket]接收数据的api, (由于网络安全问题, 端口默认是关闭的.)
+	bind 仅仅是启动端口, 关联端口->socket, 并开始接收数据的象征. 
+	bind 并不管发过来的是什么数据, 只要有数据到来, 就有io 事件, 这些都是通用io 固定默认的.
+	至于io 事件类型, 也是有标记标识, 内核自动识别, 这个你不用管.
+
+	也许你会问: 以太网是'带冲突检测 的载波帧听 多路接入', 为什么bind 绑定端口之后, 
+	既能收数据, 也能发数据?? 这就涉及一个概念, 什么叫全双工rj45.
+	(电话线并不是全双工的, 所以网速一直上不去)
+	且看rj45 的网口设计:
+	1 TX+ [数据发送正端]
+	2 TX- [数据发送负端]
+	3 RX+ [数据接收正端]
+	4 未用
+	5 未用
+	6 RX- [数据接收负端]
+	7 未用
+	8 未用
+
+	这样rj45 网线就有: 
+		一条发送的TX 可以用, 也有一条接收的RX 可以用, 
+		虽然是'带冲突检测 的载波帧听 多路接入', 但是也是读写分立.
+
+	所以bind 之后, socket+端口关联, 这个socket 也可读可写.
+	但socket 最多只有65536 个同时在线, 这也是端口数量的极限(端口可以重用, 实现网络侦听(监听))
+
+	最后: 
+		并不是所有的socket 都是全双工网络的, 有些socket 可能只有两条线.
+		这时候就是半双工的了, 比如<电话线 + 光猫> 的网络[但是电话线也有4条呀, tcp/ip 一般都是全双工的吧]
+
+
+listen()(TCP 专属):
+	监听socket 的工作, 仅仅就是为了建立[一个io 事件监听socket + 端口关联],
+	然后创建一个事件等待列表(维持先后顺序), 管理io 事件队列, 仅此而已.
+
+
+accept()(TCP 专属):
+	accept 首先处理握手过程的, 双方互交'同步序列号', 然后确认.
+	(如果client connect() 服务器, 而服务器未accept(), 客户端都不会链接成功.
+	 也不会有任何响应,必须由accept() 来回应握手,这样设计也是为了防止服务器收到'数据冲击')
+
+	还有就是自动分配[端口+socket]的组合, 给前来'链接互交'的client.
+	相当于创建一个与client 相同的tcp socket, 
+	然后bind 绑定地址信息为: client 的地址信息,
+	最后返回该[新建的socket]文件句柄.
+
+	所以其实acceptEx() 有点鸡肋, 没啥用, accept() 操作或者注定是缓慢的, 有大量的操作.
+	异步accept() 性能很好, 但是可能是没有必要的.
+
+
+connect()(TCP 专属):
+	connect 首先处理握手过程的, 双方互交'同步序列号', 然后确认.[主要是等待服务器回应]
+
+	还有就是自动分配[端口+socket]的组合, 给前来'链接互交'的server.
+	相当于创建一个与server 相同的tcp socket, 
+	然后bind 绑定地址信息为: server 的地址信息,
+	最后返回该[新建的socket]文件句柄.
+
+
+shutdown():
+	(TCP/UDP 都可以用,只要是socket都可以--这么说,shutdown 其实可以少点用.)
+	close() 也会自动调用shutdown().
+	shutdown() 主要是处理4 次握手断开的操作的, 也可以控制io 读写切换.
+
+	[其实不用吧, shutdown() 也可以明确表明socket 已经关闭了, 防止多线程编程时,
+	 出现未知socket fd 死活占住端口不用, 导致系统端口资源耗尽, 多点用是好的.]
+
+
+close(): 
+	直接将'文件描述符'关闭, 归还一切资源给内核. 
+	然而, TCP close() 关闭前, 将尝试发送'已排队等待的数据'到对端, 
+	发送完毕后, 调用shutdown(), 发生的是正常的TCP连接终止序列. 
+
+	close 与shutdown 的区别:
+		1)shutdown() 只能用于套接字文件, close()可以用于所有文件类型
+		2)shutdown() 只是关闭连接, 并没有释放文件描述符, close()可以
+		3)shutdown() 不能用于TCP_CLOSE状态的套接字, 否则会返回ENOTCONN错误
+		4)shutdown() 可以选择关闭读通道或写通道, close()不能
+		5)shutdown() 直接执行断开握手的过程. or 选择读/写模式. 如果是多进程共享'fd',shutdown 之后, 所有进程都不能用这个socket 了.
+
+
+
+
+
+*3.socket 缓冲区设置多大的问题:
+
+	TCP 没有缓冲区长度问题, 因为一次IP 报最多传输<2^16=65 536=64KB 数据>,
+	IP 报头总长度就是16 位. 而socket 默认缓冲区是8KB, 
+	数据大于1500 会被切片(这已经是'以太网'标准的最大值了),
+	单次发送数据进行重组, 理论上就算你对TCP 进行数据重组重排, 
+	那么缓冲区MAX=64KB 就已经可以解决问题.
+	(不过socket 最好发一次清一次缓冲区.)
+
+	64KB 的接收缓冲区, 足够让socket 重组完毕, 然后再进行下一次操作.
+	64KB 的发送缓冲区, 同样足够让socket 发送任何大小的数据.
+	(大于64KB 只能分步发送)
+
+	UDP 会在缓冲区满之后, 从头开始写缓冲区, 可能出现覆盖问题.
+	默认8KB 的socket 接收缓冲区, 一般分成8 份, 每次每个报缓冲区=1KB.
+	UDP 同样需要处理<重组重排>问题, 因为数据长度定义在IP 头,
+	但是TCP 已经有集成的功能了, 直接控制位操作即可完成功能, UDP 需要自己实现.
+
+
+

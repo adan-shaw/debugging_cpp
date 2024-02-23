@@ -1,36 +1,77 @@
-raw 原始套接字, 可以处理的协议:
+raw '原始套接字', 可以处理的协议:
 	ip
 	icmp
 	igmp
 	tcp
 	udp
-	sctp(待定, linux kernel 可能不支持)
+	sctp(需要安装:	apt-get install libsctp-dev lksctp-tools)
 
 ps:
-	除了'以太网报文(MAC 地址)'处理不了的情况, raw 原始套接字都可以处理, 是'防火墙/多媒体'设备常用的套接字?
+	除了'以太网报文(MAC 地址)'处理不了的情况, raw '原始套接字'都可以处理, 
+	是'防火墙/多媒体'设备常用的套接字?
 	因为从业务层面来看, 只有物理交换机, 才会处理'以太网报文(MAC 地址)';
 	一般'防火墙/多媒体'设备, 只关注ip 层以上的报文内容;
 
+真正能够实现操作链路层数据的只有三种方式:
+	int sfd = socket (PF_INET, SOCK_PACKET, IPPROTO_TCP);
+	int sfd = socket (PF_PACKET, SOCK_RAW, IPPROTO_TCP);
+	int sfd = socket (PF_PACKET, SOCK_DGRAM, IPPROTO_TCP);
+
+
+* 需要填写所有报文的情况:
+	当'原始套接字'是在PF_PACKET 协议簇下创建时, 等同于SOCK_PACKET, 需要填写所有报文, 包括'以太网报文(MAC 地址)';
+	当'UDP 套接字'是在PF_PACKET 协议簇下创建时, 等同于SOCK_PACKET, 需要填写所有报文, 包括'以太网报文(MAC 地址)';
+	当PF_INET 协议簇创建了SOCK_PACKET 套接字时,  需要填写所有报文, 包括'以太网报文(MAC 地址)';
+
+	这三种情况, 都是需要使用sendto() / send() 进行数据发送的, 但必须把所有报文, 包括'以太网报文(MAC 地址)', 都给填上, 否则会出错的;
+
+
+* 不需要填写ip 报文(自动填写ip 报文的情况):
+	int sfd = socket (PF_INET, SOCK_RAW, IPPROTO_TCP);
+	当在PF_INET 协议簇创建了SOCK_RAW 套接字时, 是可以不填写ip 报文的, 
+	直接使用sendto() 函数时, 会自动根据sockaddr 里面的信息, 自动填写ip 报文, 
+	你只需要直接填写4 层协议即可, icmp/igmp/tcp/udp/sctp;
+
+	或者, 如果是PF_INET + SOCK_RAW + IPPROTO_TCP, 则connect() 之后, 也能直接send(), 填写sockaddr 信息都可以省略;
+
+
+总结:
+	PF_INET + SOCK_RAW 的情况, ip 报文是可以自动填写的;
+	需要手动填写ip 报文的情况:
+		PF_INET + SOCK_PACKET 
+		PF_PACKET + SOCK_RAW 
+		PF_PACKET + SOCK_DGRAM 
+	另外:
+		无论是PF_INET/PF_PACKET, 
+		无论是什么类型的套接字(raw/udp报式/tcp流式), 
+		无论ip 报文是否填写, 
+		无论4层协议是(tcp/udp/icmp/igmp/sctp), 
+		io 函数统一都是:
+			sendto()/send()
+			recv()/recvfrom()
+		修改socket 选项, 统一是:
+			getsockopt()/setsockopt();
+
 
 
 
 
 #
-# 原始套接字(SOCK_RAW) 简介:
+# '原始套接字'(SOCK_RAW) 简介:
 #
-原始套接字(SOCK_RAW)是一种不同于SOCK_STREAM、SOCK_DGRAM的套接字, 它实现于系统核心;
-然而, 原始套接字能做什么呢?
+'原始套接字'(SOCK_RAW)是一种不同于SOCK_STREAM、SOCK_DGRAM的套接字, 它实现于系统核心;
+然而, '原始套接字'能做什么呢?
 
 首先来说, 普通的套接字无法处理ICMP、IGMP等网络报文, 而SOCK_RAW可以;
 其次, SOCK_RAW也可以处理特殊的IPv4报文;
-此外, 利用原始套接字, 可以通过IP_HDRINCL套接字选项由用户构造IP头;
+此外, 利用'原始套接字', 可以通过IP_HDRINCL套接字选项由用户构造IP头;
 
 总体来说, SOCK_RAW可以处理普通的网络报文之外, 还可以处理一些特殊协议报文以及操作IP层及其以上的数据;
 既然SOCK_RAW有以上特性, 所以在某些处理流程上它区别于普通套接字;
 
 
 
-原始套接字(SOCK_RAW) 可以做的事情如下:
+'原始套接字'(SOCK_RAW) 可以做的事情如下:
 	* 若设置IP_HDRINCL选项, SOCK_RAW可以操作IP头数据(也就是用户需用填充IP头及其以上的payload);
 		否则SOCK_RAW无法操作IP头数据;
 
@@ -51,7 +92,7 @@ ps:
 		- 如果使用bind函数绑定了源IP, 则报文目的IP必须和绑定的IP匹配, 否则不传递给该SOCK_RAW
 		- 如果使用connect函数绑定了目的IP, 则报文源IP必须和指定的IP匹配, 否则不传递给该SOCK_RAW
 
-综上所述, 原始套接字处理的只是IP层及其以上的数据, 比如实现SYN FLOOD攻击、处理PING报文等;
+综上所述, '原始套接字'处理的只是IP层及其以上的数据, 比如实现SYN FLOOD攻击、处理PING报文等;
 当需要操作更底层的数据的时候, 就需要采用其他的方式;
 
 综上所述, 真正能够实现操作链路层数据的只有三种方式:
