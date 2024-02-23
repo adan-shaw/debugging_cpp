@@ -27,7 +27,7 @@ int main(void){
 	}
 
 	dest.sin_family = AF_INET;
-	dest.sin_port = 80;
+	dest.sin_port = htons (80);
 	dest.sin_addr.s_addr = inet_addr("127.1.1.1");
 
 	pICMP->icmp_type = ICMP_ECHO;		//ICMP回显请求

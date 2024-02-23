@@ -31,12 +31,12 @@ int main(void){
 	src.sin_port = htons (12345);
 
 	dest.sin_family = AF_INET;
-	dest.sin_port = 80;
+	dest.sin_port = htons (80);
 	dest.sin_addr.s_addr = inet_addr("127.1.1.1");
 
 	//填充 UDP 报头
-	pUDP->uh_sport = src.sin_port;																	//源端口16bit 不需要htons()
-	pUDP->uh_dport = htons (dest.sin_port);													//目的端口16bit 需要htons() -- 非常诡异
+	pUDP->uh_sport = src.sin_port;																	//源端口16bit
+	pUDP->uh_dport = dest.sin_port;																	//目的端口16bit
 	pUDP->uh_ulen = htons (sizeof (struct udphdr) + sizeof (data));	//udp head + body 总长
 	pUDP->uh_sum = 0;																								//checksum 初始化
 

@@ -38,12 +38,12 @@ int main(void){
 	src.sin_port = htons (12345);
 
 	dest.sin_family = AF_INET;
-	dest.sin_port = 80;
+	dest.sin_port = htons (80);
 	dest.sin_addr.s_addr = inet_addr("127.1.1.1");
 
 	//制作tcp 紧急syn 请求链接, 可骚扰hacking
-	pTCP->source = src.sin_port;								//源端口16bit 不需要htons()
-	pTCP->dest = htons (dest.sin_port);					//目的端口16bit 需要htons() -- 非常诡异
+	pTCP->source = src.sin_port;								//源端口16bit
+	pTCP->dest = dest.sin_port;									//目的端口16bit
 	pTCP->seq = htonl(randomEx(0, 65535));			//序列号
 	pTCP->ack_seq = htonl(randomEx(0, 65535));	//确认序列号
 	pTCP->syn = 1;															//请求连接标志
