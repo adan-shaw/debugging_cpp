@@ -1,3 +1,8 @@
+AF_PACKET 协议簇的本质:
+	设置成AF_PACKET 选项后, 从网卡接收的数据包可以直接传送到应用程序而不经过内核处理;
+
+
+
 'PF_PACKET协议簇'简介:
 	* 'PF_PACKET协议簇'是一种对tcp/ip 最底层的协议解析socket 套接字簇, 支持以太网层报文解析(MAC 地址校验比对), TCP/UDP/ICMP/IGMP 协议解析;
 
