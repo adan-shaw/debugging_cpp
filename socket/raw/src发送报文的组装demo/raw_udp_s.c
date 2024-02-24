@@ -42,7 +42,7 @@ int main(void){
 
 	memcpy (buf_snd + sizeof (struct udphdr), data, sizeof (data));	//复制数据到 UDP 报文中
 
-	pUDP->uh_sum = cksumEx (buf_snd, sizeof (struct udphdr) + sizeof (data), &src, &dest, 0);//计算 & 设置UDP 校验和 [wireshark: checksum unverified(未核实)]
+	pUDP->uh_sum = cksumEx (pUDP, sizeof (struct udphdr) + sizeof (data), &src, &dest, 0);//计算 & 设置UDP 校验和 [wireshark: checksum unverified(未核实)]
 
 	if(sendto (sfd, buf_snd,  sizeof (struct udphdr) + sizeof (data), 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
 		perror("sendto()");

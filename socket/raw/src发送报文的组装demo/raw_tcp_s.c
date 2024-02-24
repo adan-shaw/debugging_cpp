@@ -53,7 +53,7 @@ int main(void){
 	pTCP->window = 0;
 	pTCP->urg_ptr = 0;
 	pTCP->check = 0;
-	pTCP->check = cksumEx (buf_snd, sizeof (struct tcphdr) + sizeof (data), &src, &dest, 1);
+	pTCP->check = cksumEx (pTCP, sizeof (struct tcphdr) + sizeof (data), &src, &dest, 1);
 
 	if(sendto (sfd, buf_snd, sizeof(struct tcphdr) + sizeof (data), 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
 		perror("sendto()");

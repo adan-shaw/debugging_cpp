@@ -6,7 +6,7 @@
 #include <netinet/ip_icmp.h>
 #include <linux/in.h>
 
-#include "csum_all.h"
+#include "cksum.h"
 
 
 
@@ -42,13 +42,11 @@ int main (void)
 	char *dev_default, errbuf[PCAP_ERRBUF_SIZE];
 	const char dev_name[] = "lo";
 	pcap_t *handle;
-	struct icmp *icmp;
-	struct timeval ts;
 	unsigned char packet[LIBPCAP_PACKET_MAX];
-	int packet_len;
-	struct sockaddr_in dest;
-	struct ip ip_hdr;
-	struct icmp icmp_hdr;
+	struct sockaddr_in src, dest;
+	int len_all, tmp;
+	struct ip *pIP = (struct ip *)&packet[14];
+	struct icmp *pICMP = (struct icmp *)&packet[14 + sizeof(struct ip)];
 
 	// 获取可用的网络设备(不能用默认可用设备, 大概率会自动选择wlp3s0, 而不是lo, 所以你才看不到数据, 必须强制指定网卡名为: "lo")
 	if ((dev_default = pcap_lookupdev (errbuf)) == NULL)
@@ -82,44 +80,43 @@ int main (void)
 	packet[12] = 0x08;//协议类型: 0x0800 = 普通ip 协议内容
 	packet[13] = 0x00;
 
+	src.sin_family = AF_INET;
+	src.sin_port = htons(12345);
+	src.sin_addr.s_addr = inet_addr ("127.0.0.1");
+
 	// 填充目的地址的sockaddr_in (后面sendto 需要用)
 	dest.sin_family = AF_INET;
-	dest.sin_port = 0;
+	dest.sin_port = htons(80);
 	dest.sin_addr.s_addr = inet_addr ("127.0.0.1");
 
-	// 填充IP报头
-	//memset (&ip_hdr, 0, sizeof (ip_hdr));
-	ip_hdr.ip_v = 4;
-	ip_hdr.ip_hl = 5;																										// 5 x 4 bytes = 最短ip 报文头
-	ip_hdr.ip_tos = 0;
-	ip_hdr.ip_len = htons (sizeof (struct ip) + sizeof (struct icmp));
-	ip_hdr.ip_id = htons (getpid());																		// 示例ID
-	ip_hdr.ip_off = 0;
-	ip_hdr.ip_ttl = 64;																									// 示例TTL
-	ip_hdr.ip_p = IPPROTO_ICMP;
-	ip_hdr.ip_src.s_addr = inet_addr ("127.0.0.1");											// 示例: 源IP
-	ip_hdr.ip_dst.s_addr = dest.sin_addr.s_addr;
-	ip_hdr.ip_sum = 0;																									// ip checksum 值初始化
-	ip_hdr.ip_sum = checksum_ip (&ip_hdr, sizeof (ip_hdr));							// ip checksum 值计算
-																																			// (wireshark 显示仍然没有计算正确? 答: 以libpcap 为准, 绝对不会错的软件, 出错了就再检查)
+	//计算报文总长
+	len_all = sizeof(struct ip) + sizeof(struct icmp);
 
-	// 拷贝IP 报头到数据包中
-	memcpy (packet + 14, &ip_hdr, sizeof (ip_hdr));
+	//填充ip 报文
+	pIP->ip_v = IPVERSION;							//4
+	pIP->ip_hl = sizeof(struct ip) >> 2;//5 * 4 = 20bit (ip 报头长度, 这样描述可以应对ip 拓展报头) [这个数据是32bit 的, 不需要用htonl()?]
+	pIP->ip_tos = 0;
+	pIP->ip_len = htons (len_all);			//ip 报文总长度 = ip + (udp head + body 总长)
+	pIP->ip_id = htons (getpid());
+	pIP->ip_off = 0;										//htons(0), 全0 可以不用htons()
+	pIP->ip_ttl = 64;
+	pIP->ip_p = IPPROTO_ICMP;
+	pIP->ip_src.s_addr = src.sin_addr.s_addr;
+	pIP->ip_dst.s_addr = dest.sin_addr.s_addr;
+	pIP->ip_sum = 0;
+	pIP->ip_sum = cksum (pIP, sizeof (struct ip));									// 计算 && 设置IP 报头校验和
 
-	// 填充ICMP报头
-	//memset (&icmp_hdr, 0, sizeof (icmp_hdr));
-	icmp_hdr.icmp_type = ICMP_ECHO;
-	icmp_hdr.icmp_code = 0;
-	icmp_hdr.icmp_id = htons (getpid());																// 与IP报头匹配
-	icmp_hdr.icmp_seq = htons (1);																			// 序列号
-	icmp_hdr.icmp_cksum = 0;																						// icmp checksum 值初始化
-	icmp_hdr.icmp_cksum = checksum_icmp (&icmp_hdr, sizeof (icmp_hdr));	// 设置ICMP 报头校验和
+	//填充icmp 报文
+	pICMP->icmp_type = ICMP_ECHO;				//ICMP回显请求
+	pICMP->icmp_code = 0;								//code值为0
+	pICMP->icmp_cksum = 0;							//初始化cksum
+	pICMP->icmp_seq = 0;								//本报的序列号(一般是从0 开始累加的uint, 单发一次icmp, 可以为0)
+	pICMP->icmp_id = getpid() & 0xffff;	//填写PID
 
-	// 拷贝ICMP 报头到数据包中
-	memcpy (packet + 14 + sizeof (ip_hdr), &icmp_hdr, sizeof (icmp_hdr));
+	for(tmp = 0; tmp < sizeof(struct icmp); tmp++)
+		pICMP->icmp_data[tmp] = tmp;			//填写icmp 数据(随机乱填)
 
-	// 剩余部分数据, 填充为0(可选, 不填充也行)
-	memset (packet + 14 + sizeof (ip_hdr) + sizeof (struct icmp), 0, LIBPCAP_PACKET_MAX - sizeof (struct icmp));
+	pICMP->icmp_cksum = cksum (pICMP, sizeof(struct icmp));//计算&填写cksum
 
 	// 循环发送ICMP回显请求数据包(pcap_sendpacket() 正确返回值, 只有0)
 	if (pcap_sendpacket(handle, packet, LIBPCAP_PACKET_MAX) != 0)
