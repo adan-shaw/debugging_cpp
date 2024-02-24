@@ -85,7 +85,7 @@ int main(void){
 	//print_buf(buf_snd, len_all);//for test only (这样打印的意义不大, 不如在wireshark 中查看)
 	//*** gdb 中直接打印buf_snd 缓冲区, 也很有效, 可以看到整个buf_snd 缓冲区的数据, 但缓冲区里面的杂乱数据, 也打印出来了 ***
 	//**********************************************debug*****************************************************
-	if(sendto (sfd, buf_snd, len_all , 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
+	if(sendto (sfd, buf_snd, len_all, 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
 		perror("sendto()");
 		close(sfd);
 		return -1;
