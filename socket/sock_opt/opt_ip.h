@@ -27,8 +27,7 @@
 	SO_BINDTODEVICE 只是为套接字绑定了一个网络接口, 非常适合listen();
 	如果tcp listen 使用SO_BINDTODEVICE 绑定了固定的网卡, 
 	那么所有的客户端socket, 都只跟这个网卡口通信,
-	因为accept() 实际上是拷贝listen sfd, 
-	则自然会拷贝SO_BINDTODEVICE 属性
+	因为accept() 实际上是拷贝listen sfd, 自然会拷贝SO_BINDTODEVICE 属性
 */
 #define __set_sockopt_binddevice(sfd,pifreq) {setsockopt(sfd, SOL_SOCKET, SO_BINDTODEVICE, pifreq, sizeof(struct ifreq));}
 /*
@@ -52,8 +51,7 @@
 
 //s1.IP_HDRINCL 如果是TRUE, IP头就会随'即将发送的数据'一起提交, 并从'读取的数据'中返回;
 /*
-	并不会多copy 一份ip 头, 
-	只是会在读取数据的时候, 将ip 头也一并写入rbuf 读取缓冲区, 
+	并不会多copy 一份ip 头, 只是会在读取数据的时候, 将ip 头也一并写入rbuf 读取缓冲区, 
 	需要SOCKET_RAW, 需要root 权限, 一般原始套接字才用;
 */
 #define __set_sockopt_hdrincl(sfd,opt_val) {opt_val=1; setsockopt(sfd, IPPROTO_IP, IP_HDRINCL, &opt_val, sizeof(int));}
@@ -61,28 +59,21 @@
 //s2.IP_TTL 设置ttl(数据包在路由过程中的'转发存活时间')
 #define __set_sockopt_ttl(sfd,ttl) {setsockopt(sfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));}
 
-//s3.IP_TOS 设置IP服务类型
-//	 在IP头中,有一个Type-of-Service字段,该字段描述了IP包的优先级和QoS选项,IP_TOS可以来设定该字段的值;
+//s3.IP_TOS 设置IP服务类型; 在IP头中,有一个Type-of-Service字段,该字段描述了IP包的优先级和QoS选项,IP_TOS可以来设定该字段的值;
 #define __set_sockopt_tos(sfd,tos) {setsockopt(sfd, IPPROTO_IP, IP_TOS, &tos, sizeof(int));}
 
-//s4.IP_DONTFRAGMENT 设置不准对ip数据报进行分片
-//	 设置后,如果IP数据报大于MTU,就会被丢弃,并返回ICMP错误)
+//s4.IP_DONTFRAGMENT 设置不准对ip数据报进行分片; 设置后,如果IP数据报大于MTU,就会被丢弃,并返回ICMP错误)
 #define __set_sockopt_dontfragment(sfd,opt_val) {opt_val=1; setsockopt(sfd, IPPROTO_IP, IP_DONTFRAGMENT, &opt_val, sizeof(int));}
 
 //s5.IP_OPTIONS 手工设置ip 头
 /*
 	struct in_pktinfo{
-		unsigned int ipi_ifindex;			//接口索引
-		struct in_addr ipi_spec_dst;	//路由目的地址
-		struct in_addr ipi_addr;			//头标识目的地址
+		unsigned int ipi_ifindex;			//接口索引, 指的是接收包的接口的唯一索引
+		struct in_addr ipi_spec_dst;	//路由目的地址, 指的是路由表记录中的目的地址
+		struct in_addr ipi_addr;			//头标识目的地址, 指的是包头中的目的地址
 	};
-	ipi_ifindex		指的是接收包的接口的唯一索引
-	ipi_spec_dst	指的是路由表记录中的目的地址
-	ipi_addr			指的是包头中的目的地址
-
 	如果给sendmsg(2)传递了IP_PKTINFO,
-	那么外发的包会通过在ipi_ifindex中指定的接口发送出去,
-	同时把ipi_spec_dst设置为目的地址．
+	那么外发的包会通过在ipi_ifindex中指定的接口发送出去, 同时把ipi_spec_dst设置为目的地址．
 */
 #define __set_sockopt_options(sfd,pin_pktinfo) {setsockopt(sfd, IPPROTO_IP, IP_OPTIONS, pin_pktinfo, sizeof(struct in_pktinfo));}
 

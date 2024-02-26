@@ -50,10 +50,8 @@
 
 	广播:
 		每个socket 都是独立体, 仅在局域网内广播;
-		谁打开了broadcast socketopt mode,
-		谁就可以接收<局域网>广播数据.
-		只要局域网内'任何一个成员'发广播数据,
-		局域网内'全体打开broadcast socketopt mode的sfd'都会收到数据.
+		谁打开了broadcast socketopt mode, 谁就可以接收<局域网>广播数据.
+		只要局域网内'任何一个成员'发广播数据, 局域网内'全体打开broadcast socketopt mode的sfd'都会收到数据.
 
 		现在的网络设备都会阻止广播包, 防止广播风波的问题, 但不会拒绝多播报文.
 		也可以调节路由器, 接收广播报文;
