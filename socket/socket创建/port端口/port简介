@@ -38,3 +38,29 @@ udp 端口概述:
 	一个网卡网口, 可以开启混杂模式, 但一个网卡网口, 只能开启一次混杂模式;
 	而混杂模式, 也只能对具体某个网卡网口实施, 不能跨两个or 两个以上的网卡网口实现,
 	也就是混杂模式与网卡网口, 是一对一的关系;
+
+
+
+
+
+socket addr 重用的意义:
+	sfd close(), 一般不会立即关闭, 而是需要经历TIME_WAIT的过程后, 才会关闭socket;
+
+	sfd shutdown(), 可以蔑视TIME_WAIT的过程, 直接通知client 不用等了, 直接关闭socket;
+	但shutdown() 使用起来非常麻烦, 不可能每个失败操作, 都可以shutdown(), shutdown() 是主动的, 不应该常用;
+
+
+	因此, 想要忽视TIME_WAIT的过程的办法, 有三个:
+		* 重用该addr, 即便占用, 也不影响;
+			addr 重用可以让两个socket 能同时占用一个addr, 防止TIME_WAIT的过程导致addr 占用的问题;
+
+		* 当然也可以shutdown(), 但只能单次操作, 没法一一应对意外关闭的情况;
+
+		* 或者直接设置socket 属性为SO_DONTLINGER, 不允许Linger, 这样也可以快速关闭socket 而忽视TIME_WAIT的过程;
+
+
+
+socket port 重用的意义:
+	混杂模式, 手动混杂模式, 一个端口两个app server;
+
+
