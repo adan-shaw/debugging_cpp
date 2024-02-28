@@ -18,7 +18,7 @@
 	[此时还不需要考虑ARP 报头]
 	#ARP 报头, 固定28 字节(6字节 48bit的MAC 地址)
 
-	ip+tcp报头, 最大容量是: 60+60=120字节,加上ARP 是120+28=148 字节;
+	ip+tcp报头, 最大容量是: 60+60=120字节, 加上ARP 是120+28=148 字节;
 	ip+tcp报头, 最小容量是: 20+20=40字节, 加上ARP 是40+28=68 字节;
 	ip+udp报头, 最大容量是: 60+8=68字节, 加上ARP 是68+28=96 字节;
 	ip+udp报头, 最小容量是: 20+8=28字节, 加上ARP 是28+28=56 字节;
@@ -30,12 +30,17 @@
 	所以, 在互联网写应用, udp 真的很节省!!
 */
 
-//ARP 报头是加插的, 在局域网中需要考虑, 互联网中不需要考虑;
+
+
+//TCP/UDP 报文长度min, max
 #define mtu_udp_min (28)
 #define mtu_udp_max (68)
 #define mtu_tcp_min (40)
 #define mtu_tcp_max (120)
 
+
+
+//inet 互联网MTU(ARP 报头是加插的, 在以太局域网中需要考虑, inet互联网中不需要考虑)
 #define mtu_inet_udp_min (576-mtu_udp_min)
 #define mtu_inet_udp_max (576-mtu_udp_max)
 #define mtu_inet_tcp_min (576-mtu_tcp_min)
@@ -52,8 +57,8 @@
 	以太网802.3 最小单帧: 46字节;
 	internet MTU:       576字节;
 
-	(internet MTU 不用考虑ARP 报文的大小, 
-	 因为internet MTU肯定小于以太网MTU, 所以肯定不会被切片, 不用担心)
+	(internet MTU 不用考虑ARP 报文的大小, 因为internet MTU肯定小于以太网MTU, 所以肯定不会被切片, 不用担心;
+	 但MTU 包括了ip 报头, 所以会不会被切片为MTU 的粒度, 计算时, 还得把ip 报头也计算在内)
 */
 
 //以太网802.2 MTU
@@ -81,92 +86,6 @@
 
 //有多少个帧, 最大接收/发送的数据长度=MTU*frame_size_max;
 #define frame_size_max (1024)
-
-
-
-typedef struct{
-	char* frame_pool[frame_size_max];
-	int cur_pos;	//前n 个都是已使用frame			[每次使用前, 初始化为0]
-	int len_max;	//数据总长(方便取出数据时使用)	[每次使用前, 初始化为0]
-}frame_stack_t;	//不支持多线程使用, 每个线程都应在pth私有数据中, 存放一个frame_stack;
-
-
-
-typedef struct{
-	int num;			//帧编号(唯一, 必须为前置第一个元素, 重排时会用到)
-	int len;			//本帧的数据长度
-	char* data[mtu_inet_udp_min];
-}frame_inet_udp_min_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_inet_udp_max];
-}frame_inet_udp_max_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_inet_tcp_min];
-}frame_inet_tcp_min_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_inet_tcp_max];
-}frame_inet_tcp_max_t;
-
-
-
-typedef struct{
-	int num;			//帧编号(唯一, 必须为前置第一个元素, 重排时会用到)
-	int len;			//本帧的数据长度
-	char* data[mtu_8022_udp_min];
-}frame_8022_udp_min_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_8022_udp_max];
-}frame_8022_udp_max_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_8022_tcp_min];
-}frame_8022_tcp_min_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_8022_tcp_max];
-}frame_8022_tcp_max_t;
-
-
-
-typedef struct{
-	int num;			//帧编号(唯一, 必须为前置第一个元素, 重排时会用到)
-	int len;			//本帧的数据长度
-	char* data[mtu_8023_udp_min];
-}frame_8023_udp_min_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_8023_udp_max];
-}frame_8023_udp_max_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_8023_tcp_min];
-}frame_8023_tcp_min_t;
-
-typedef struct{
-	int num;
-	int len;
-	char* data[mtu_8023_tcp_max];
-}frame_8023_tcp_max_t;
 
 
 
