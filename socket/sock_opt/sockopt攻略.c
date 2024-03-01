@@ -23,11 +23,11 @@
 
 
 //1.设置地址重用
-int tmp=TRUE;
+int tmp=true;
 setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, (const char*)&tmp, sizeof(int));
 
 //2.如果要已经处于连接状态的soket在调用close()后强制关闭, 不经历TIME_WAIT的过程: 
-int tmp = FALSE;
+int tmp = false;
 setsockopt(sfd, SOL_SOCKET, SO_DONTLINGER, (const char*)&tmp, sizeof(int));
 
 //3.如果在发送数据的过程中(send()没有完成, 还有数据没发送)而调用了close(),
@@ -37,18 +37,19 @@ struct linger {
 	u_short l_onoff;
 	u_short l_linger;
 };
-linger m_sLinger;
 
-m_sLinger.l_onoff=1;	//在close()调用,但还有数据没发送完毕的时候容许逗留; 如果m_sLinger.l_onoff=0; 则等同SO_DONTLINGER, 会直接粗暴关闭socket
-m_sLinger.l_linger=3;	//(容许逗留的时间为3秒)
-setsockopt(sfd, SOL_SOCKET, SO_LINGER, (const char*)&m_sLinger, sizeof(linger));
+struct linger m_linger;
+
+m_linger.l_onoff=1;	//在close()调用,但还有数据没发送完毕的时候容许逗留; 如果m_sLinger.l_onoff=0; 则等同SO_DONTLINGER, 会直接粗暴关闭socket
+m_linger.l_linger=3;	//(容许逗留的时间为3秒)
+setsockopt(sfd, SOL_SOCKET, SO_LINGER, (const char*)&m_linger, sizeof(struct linger));
 
 
 
 //4.在send(),recv()过程中, 有时由于网络状况等原因, 发收不能预期进行, 而设置收发时限: 
 int timeout=1000;//1秒
-setsockopt(socket, SOL_S0CKET, SO_SNDTIMEO, (char *)&timeout, sizeof(int));//发送时限
-setsockopt(socket, SOL_S0CKET, SO_RCVTIMEO, (char *)&timeout, sizeof(int));//接收时限
+setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(int));//发送时限
+setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(int));//接收时限
 
 
 
@@ -66,17 +67,20 @@ setsockopt(sfd, SOL_SOCKET, SO_SNDBUF, (const char*)&sbuf, sizeof(int));//发送
 //	send() 默认情况是: 将用户态缓冲区拷贝到socket缓冲区的内容;
 //	recv() 默认情况是: 将socket缓冲区的内容拷贝到用户态缓冲区;
 int tmp=0;
-setsockopt(socket, SOL_S0CKET, SO_SNDBUF, (char *)&tmp, sizeof(int));
-setsockopt(socket, SOL_S0CKET, SO_RCVBUF, (char *)&tmp, sizeof(int));
+setsockopt(sfd, SOL_SOCKET, SO_SNDBUF, (char *)&tmp, sizeof(int));
+setsockopt(sfd, SOL_SOCKET, SO_RCVBUF, (char *)&tmp, sizeof(int));
 
 
 
 //7.在client连接服务器过程中, 如果处于非阻塞模式下的socket在connect()的过程中可以设置connect()延时, 直到accpet()被呼叫;
 //	(本函数设置只有在非阻塞的过程中有显著的作用, 在阻塞的函数调用中作用不大)
-int tmp=TRUE;
-setsockopt(sfd, SOL_SOCKET, SO_CONDITIONAL_ACCEPT, (const char*)&tmp, sizeof(int));
+int tmp=true;
+setsockopt(sfd, SOL_SOCKET, SO_CONDITIONAL_ACCEPT, (const char*)&tmp, sizeof(int));//windows 特产? linux 没有SO_CONDITIONAL_ACCEPT 选项
 
 
+
+//8.开启异步
+#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
 
 
 

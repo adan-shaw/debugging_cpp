@@ -37,24 +37,32 @@ int main(void){
 
 
 
-	//快速填充inet地址信息结构体
+	//addr to addr_in 强制转换
+	memcpy(&addr,&addr_in,sizeof(struct sockaddr));
+
+	//addr_in to addr 强制转换
+	memcpy(&addr_in,&addr,sizeof(struct sockaddr_in));
+
+
+
+	//addr_in 快速填充inet地址信息结构体
 	full_sockaddr_in(addr_in, host_ip, port);
 
 
 
-	//addr转换string -> ulong: 无格式检查, 无法保证值是否有效
+	//addr_in 转换string -> ulong: 无格式检查, 无法保证值是否有效
 	uip = inet_network(net_ip);													//网络地址转换
 	uip = inet_addr(host_ip);														//主机地址转换
 
 
 
 	//* 兼容ipv4 *
-	//addr转换string -> ulong: 带格式检查, 保证值是否有效[成功返回1, 失败返回0] -- 非线程安全, AF_INET only
+	//addr_in 转换string -> ulong: 带格式检查, 保证值是否有效[成功返回1, 失败返回0] -- 非线程安全, AF_INET only
 	//assert(inet_aton("999.0.0.0",&addr_in.sin_addr));	//转换出错一定返回0
 	if(!inet_aton(host_ip,&addr_in.sin_addr))
 		perror("inet_aton()");
 
-	//addr转换ulong -> string
+	//addr_in 转换ulong -> string
 	ptmp = inet_ntoa(addr_in.sin_addr);
 	if(ptmp)
 		printf("inet_ntoa() = %s\n",ptmp);
@@ -62,17 +70,17 @@ int main(void){
 
 
 	//* 兼容ipv4 + ipv6 *
-	//addr转换string -> ulong: 带格式检查, 保证值是否有效[成功返回1, 失败返回0] -- 线程安全, 其他socket协议簇也可以用
+	//addr_in 转换string -> ulong: 带格式检查, 保证值是否有效[成功返回1, 失败返回0] -- 线程安全, 其他socket协议簇也可以用
 	if(!inet_pton(AF_INET, host_ip, &addr_in.sin_addr))
 		perror("inet_pton()");
 
-	//addr转换ulong -> string
+	//addr_in 转换ulong -> string
 	inet_ntop(AF_INET, &addr_in.sin_addr, ip_str, INET_ADDRSTRLEN);//带字符串截断
 	printf("inet_ntop() = %s\n",ip_str);
 
 
 
-	//安全的inet地址信息结构体填充方案:
+	//addr_in 安全的inet地址信息结构体填充方案:
 	full_sockaddr_inEx(addr_in, host_ip, port);
 
 	//旧式的inet地址信息结构体填充方案:
