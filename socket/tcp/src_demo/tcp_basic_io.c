@@ -38,95 +38,20 @@ int tcp_send(int sfd, const char* sbuf, unsigned int data_len){
 	return -1;
 }
 
-
-
-//sfd 开启异步
-#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
-
-
-
-//异步: 接收一次数据(永远不会挂起线程), 成功返回接收的数据size, 失败返回-1
-int tcp_recvEx(int sfd, char* rbuf, int buf_len){
-	int tmp, count = buf_len;
-	char* ptmp = rbuf;
-	while(1){
-		tmp = recv(sfd, ptmp, count, MSG_DONTWAIT);
-		if(tmp > 0){
-			count -= tmp;
-			ptmp += tmp;			//指针位移
-			if(count <= 0)
-				return tmp;			//全部数据接收完毕
-			else
-				continue;				//数据未接收完毕, 继续接收
-		}
-		if(tmp == 0){
-			//if(buf_len == tmp)//buf_len == tmp == 0 传入的数据长度为0 (虽然极度不推荐这样做, 但既然传入了, 逻辑上也要返回0)
-			if(buf_len == 0)
-				return tmp;
-			else
-				return -1;			//对端关闭, socket 什么数据都没有接收到
-		}
-		//if(tmp < 0)				//这句话可以省掉, 节省语句
-		if(errno == EINTR)	//操作被信号中断, 则继续
-			continue;
-		if(errno == EAGAIN)	//网卡正忙, 继续尝试
-			continue;
-		//尝试失败, 接收错误
-		perror("recv()");
-		return -1;
-	}
-}
-
-//异步: 发送一次数据(永远不会挂起线程), 成功返回发送的数据size, 失败返回-1
-int tcp_sendEx(int sfd, const char* sbuf, int data_len){
-	int tmp, count = data_len;
-	const char* ptmp = sbuf;
-	while(1){
-		tmp = send(sfd, ptmp, count, MSG_DONTWAIT);
-		if(tmp > 0){
-			count -= tmp;
-			ptmp += tmp;			//指针位移
-			if(count <= 0)
-				return tmp;			//全部数据发生完毕
-			else
-				continue;				//数据未发生完毕, 继续发生
-		}
-		if(tmp == 0){
-			//if(data_len == tmp)//data_len == tmp == 0 传入的数据长度为0 (虽然极度不推荐这样做, 但既然传入了, 逻辑上也要返回0)
-			if(data_len == 0)
-				return tmp;
-			else
-				return -1;			//对端关闭, socket 什么数据都没有接收到
-		}
-		//if(tmp < 0)				//这句话可以省掉, 节省语句
-		if(errno == EINTR)	//操作被信号中断, 则继续
-			continue;
-		if(errno == EAGAIN)	//网卡正忙, 继续尝试
-			continue;
-		//尝试失败, 接收错误
-		perror("send()");
-		return -1;
-	}
-}
-
-
-
-
-
 //1.io 操作错误时, 返回的errno 值的意思
 /*
-	case EAGAIN:				//套接字已标记为非阻塞, 网卡正忙, 稍后再试
+	case EAGAIN:					//套接字已标记为非阻塞, 网卡正忙, 稍后再试
 
-	case ECONNREFUSE:		//远程主机阻绝网络连接
-	case ENOTCONN:			//与对端套接字尚未被连接上
+	case ECONNREFUSE:			//远程主机阻绝网络连接
+	case ENOTCONN:				//与对端套接字尚未被连接上
 
-	case EFAULT:				//内存空间访问出错
-	case ENOMEM:				//内存不足
-	case EINTR:					//操作被信号中断
-	case EINVAL:				//参数无效
+	case EFAULT:					//内存空间访问出错
+	case ENOMEM:					//内存不足
+	case EINTR:						//操作被信号中断
+	case EINVAL:					//参数无效
 
-	case EBADF:					//sfd不是有效的描述符
-	case ENOTSOCK:			//sfd不是套接字(当返回值是0时, 为正常关闭连接)
+	case EBADF:						//sfd不是有效的描述符
+	case ENOTSOCK:				//sfd不是套接字(当返回值是0时, 为正常关闭连接)
 */
 
 

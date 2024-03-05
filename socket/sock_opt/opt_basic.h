@@ -50,7 +50,8 @@
 
 
 //s0.设置sfd nonblocking
-#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
+//#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
+#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK) == -1) perror("fcntl()");}
 
 
 
@@ -140,7 +141,7 @@ inline int get_sockopt_opts(int sfd, const int sock_opt){
 	SO_ERROR								查询socket 错误的原因, 返回一个errno 值
 	SO_UPDATE_ACCEPT_CONTEXT更新SOCKET状态
 
-	SO_DONTROUTE						opt_ip.c: 设置禁止转发
+	SO_DONTROUTE						opt_ip.c:  设置禁止转发
 
 	SO_CONDITIONAL_ACCEPT		opt_tcp.c: 异步socket 阻塞connect()
 	SO_KEEPALIVE						opt_tcp.c: 保活
