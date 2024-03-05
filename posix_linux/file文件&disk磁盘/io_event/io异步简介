@@ -1,0 +1,24 @@
+#
+# 1.
+#
+io 异步是一种, 不等待io执行结果返回, 直接返回-1(通常是返回-1, errno=设备正忙) 的posix io API操作;
+
+io 异步通常会与io 多路复用联用, 因为io 异步操作是不等待结果返回, 直接返回-1的, 执行结果, 需要靠io 多路复用API 来获取;
+
+优势:
+	io 异步在多线程编码中, 不会因为io 阻塞而导致线程挂起, 也不会导致性能吨卡, 性能较好, 就是用起来太复杂了;
+	不是万不得已, 别用io 异步, 代码量太大, 维护成本高;
+
+
+
+#
+# 2.io 异步设置宏
+#
+//设置fd nonblocking								[对fcntl()的F_GETFL返回值进行'| 或运算'=新增]
+#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
+//#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK) == -1) perror("fcntl()");}
+
+//设置fd blocking(取消nonblocking)	[对fcntl()的F_GETFL返回值进行'& 与运算'=削减]
+#define __set_blocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)&O_NONBLOCK);}
+//#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)&O_NONBLOCK) == -1) perror("fcntl()");}
+
