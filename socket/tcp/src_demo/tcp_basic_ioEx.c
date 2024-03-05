@@ -135,6 +135,8 @@ unsigned int tcp_recvEx_getlen(char* rbuf, unsigned int buf_len){
 #define tcp_recvEx_getdata(rbuf) (rbuf[4])
 //unsigned char* tcp_recvEx_getdata(char* rbuf){ return rbuf[4]; }
 
+
+
 void tcp_sendEx_pack(unsigned char* sbuf, const unsigned char* data, unsigned int data_len){
 	static unsigned char* sbuf = NULL;//非线程安全函数, 多线程操作时, 需要把这两个静态变量, 写入线程属性中, 做线程全局变量;
 	static unsigned int buf_len = 0;

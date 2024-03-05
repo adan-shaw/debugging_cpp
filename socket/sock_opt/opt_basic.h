@@ -49,9 +49,13 @@
 
 
 
-//s0.设置sfd nonblocking
-//#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
-#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK) == -1) perror("fcntl()");}
+//s0.设置fd nonblocking								[对fcntl()的F_GETFL返回值进行'| 或运算'=新增]
+#define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
+//#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK) == -1) perror("fcntl()");}
+
+//s0.设置fd blocking(取消nonblocking)	[对fcntl()的F_GETFL返回值进行'& 与运算'=削减]
+#define __set_blocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)&O_NONBLOCK);}
+//#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)&O_NONBLOCK) == -1) perror("fcntl()");}
 
 
 

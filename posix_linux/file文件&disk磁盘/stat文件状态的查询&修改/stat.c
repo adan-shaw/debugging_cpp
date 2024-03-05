@@ -121,7 +121,7 @@ void stat_check(const char* pfile_name){
 
 	ret = stat(pfile_name, &stat_buf);
 	if(ret == -1){						//如果stat() 出错, 分析出错原因
-		perror("Problem getting information, stat()");
+		perror("stat()");
 		switch(errno){
 			case ENOENT:
 				printf("File %s not found.\n", pfile_name);

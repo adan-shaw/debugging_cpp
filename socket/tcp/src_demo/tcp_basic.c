@@ -11,8 +11,7 @@
 int tcp_listener(const char* srv_ip, unsigned short srv_port, int sock_pending_que_max){
 	struct sockaddr_in addr;
 	struct linger m_linger = {0,0};
-	//m_linger.l_onoff=0;
-	//m_linger.l_linger=0;
+
 	int tmp = 0, sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if(sfd == -1){
 		perror("socket()");
@@ -25,6 +24,8 @@ int tcp_listener(const char* srv_ip, unsigned short srv_port, int sock_pending_q
 	tmp = 1;
 	setsockopt(sfd, SOL_SOCKET, SO_REUSEPORT, &tmp, sizeof(int));		//重用端口
 
+	//m_linger.l_onoff=0;
+	//m_linger.l_linger=0;
 	setsockopt(sfd, SOL_SOCKET, SO_LINGER, &m_linger, sizeof(int));	//close()后强制关闭, 不经历TIME_WAIT的过程
 
 	tmp = 2000;//2 秒超时
@@ -70,8 +71,7 @@ int tcp_accepter(int sfd_li, struct sockaddr *addr){
 int tcp_connecter(const char* srv_ip, unsigned short srv_port){
 	struct sockaddr_in addr;
 	struct linger m_linger = {0,0};
-	//m_linger.l_onoff=0;
-	//m_linger.l_linger=0;
+
 	int tmp, sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if(sfd == -1){
 		perror("socket()");
@@ -84,6 +84,8 @@ int tcp_connecter(const char* srv_ip, unsigned short srv_port){
 	tmp = 1;
 	setsockopt(sfd, SOL_SOCKET, SO_REUSEPORT, &tmp, sizeof(int));		//重用端口
 
+	//m_linger.l_onoff=0;
+	//m_linger.l_linger=0;
 	setsockopt(sfd, SOL_SOCKET, SO_LINGER, &m_linger, sizeof(int));	//close()后强制关闭, 不经历TIME_WAIT的过程
 
 	tmp = 2000;//2 秒超时
