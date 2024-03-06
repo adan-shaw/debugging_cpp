@@ -100,8 +100,8 @@ int pcap_lookupnet(char *device, buf_u_int32 *netp, bpf_u_int32 *maskp, char *er
 int pcap_compile(pcap_t *p, struct bpf_program *program, char *buf, int optimize, bpf_u_int32 mask);
 	参数:
 		p:       Libpcap句柄
-		program: bpf过滤规则（pcap识别的规则）
-		buf:     过滤规则字符串（用户识别的规则）
+		program: bpf过滤规则(pcap识别的规则)
+		buf:     过滤规则字符串(用户识别的规则)
 		optimize:优化
 		mask:    掩码
 	返回值:
@@ -141,7 +141,7 @@ const u_cahr *pcap_next(pacp_t *p, struct pcap_pkthdr *h);
 int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);
 	参数:
 		p:       Libpcap句柄
-		cnt:     指定捕获数据包的个数，如果是-1，就会永无休止的捕获。
+		cnt:     指定捕获数据包的个数, 如果是-1, 就会永无休止的捕获; 
 		callbcak:回调函数
 		user:    向回调函数中传递的参数
 	返回值:

@@ -77,7 +77,7 @@
 		curl -X POST http://www.baidu.com/
 6.3 指定post 数据上传
 		curl -X POST http://www.baidu.com/ -d {'json'}
-		curl 10.10.100.169:9680/abcde -d '{"a"：0}'
+		curl 10.10.100.169:9680/abcde -d '{"a": 0}'
 
 
 

@@ -100,7 +100,7 @@ tmp = None
 	声明:
 		python 中的字符串是一个不可变类型, 跟c/c++ 中的字符串很不一样;
 		python 中的字符串可根据下标访问字符串中的单个字符, 但不能修改(只准访问,不允许修改), 否则报错:
-			TypeError ‘str’ object does not support item assignment
+			TypeError 'str' object does not support item assignment
 
 		想要更改只能先释放字符串, 再重新装载新的字符串;
 		因此, python 中实际上有3 种不可更改的简单变量:

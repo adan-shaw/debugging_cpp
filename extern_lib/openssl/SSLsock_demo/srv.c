@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 	char *path_ca, *path_key;
 
 	if (argc != 6) {
-		printf("参数格式错误！正确用法如下：\n/t/t%s IP地址 端口 监听wait_sfd_max 证书path 私钥path\n/t比如:/t%s 127.0.0.1 9213 64 ca.pem priv.key\n", argv[0], argv[0]);
+		printf("参数格式错误!正确用法如下:\n/t/t%s IP地址 端口 监听wait_sfd_max 证书path 私钥path\n/t比如:/t%s 127.0.0.1 9213 64 ca.pem priv.key\n", argv[0], argv[0]);
 		return -1;
 	}
 	//ip不用预处理
@@ -177,11 +177,11 @@ int main(int argc, char **argv)
 		strcpy(buf, "11111111111111111111111111111111111111\n");
 		len = SSL_write(ssl, buf, strlen(buf));
 		if (len <= 0) {
-			printf("消息'%s'发送失败！错误代码是%d,错误信息是'%s'\n", buf, errno, strerror(errno));
+			printf("消息'%s'发送失败!错误代码是%d,错误信息是'%s'\n", buf, errno, strerror(errno));
 			kill_SSL(new_sfd,ssl);
 		}
 		else
-			printf("消息'%s'发送成功,共发送了%d个字节！\n",buf, len);
+			printf("消息'%s'发送成功,共发送了%d个字节!\n",buf, len);
 
 		//接收客户端的消息(阻塞)
 		bzero(buf, MAXBUF + 1);
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 		if (len > 0)
 			printf("接收消息成功:'%s',共%d个字节的数据\n",buf, len);
 		else{
-			printf("消息接收失败！错误代码是%d,错误信息是'%s'\n", errno, strerror(errno));
+			printf("消息接收失败!错误代码是%d,错误信息是'%s'\n", errno, strerror(errno));
 			kill_SSL(new_sfd,ssl);
 		}
 

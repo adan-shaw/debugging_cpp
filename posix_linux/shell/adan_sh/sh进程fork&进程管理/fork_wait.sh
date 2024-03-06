@@ -55,7 +55,7 @@ func_test() {
 #      shell 执行函数肯定是阻塞的, 如果弹到后台执行函数, 即新建一个子进程去执行该函数.
 echo -e "\n\nwait正确用法:(想要获取函数的结果, 只能阻塞等待了, 或者 > tmpfs.)"
 func_test "123"
-echo "func_test() return: $?(非‘&’后台运行函数, 前台阻塞执行函数, 不使用wait)"
+echo "func_test() return: $?(非'&'后台运行函数, 前台阻塞执行函数, 不使用wait)"
 
 
 

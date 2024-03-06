@@ -65,7 +65,7 @@ int main (void)
 	}
 
 	//设置MAC 地址("lo" 网口的MAC 地址, 都是0.0.0.0.0.0, 目的地址, 发送地址, 都是这个, 但你不能不填, 否则出错!!)
-	packet[0] = 0x00;	//目的MAC [ip a 可以看到lo 网口的MAC 地址， 0.0.0.0.0.0]
+	packet[0] = 0x00;	//目的MAC [ip a 可以看到lo 网口的MAC 地址,  0.0.0.0.0.0]
 	packet[1] = 0x00;
 	packet[2] = 0x00;
 	packet[3] = 0x00;

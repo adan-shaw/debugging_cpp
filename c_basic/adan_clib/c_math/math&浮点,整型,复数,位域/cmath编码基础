@@ -45,9 +45,9 @@
 	*3.
 		下面讲讲'整型存储数域'与'浮点存储数域':
 			signed int,long,short:
-				1 bit数符, 表示正负, 其余为‘指数域’.
+				1 bit数符, 表示正负, 其余为'指数域'.
 			unsigned int,long,short:
-				全部数位都是’指数域‘
+				全部数位都是'指数域'
 
 			signed float:
 				1 bit数符, 表示正负;

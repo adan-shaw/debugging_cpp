@@ -49,7 +49,7 @@ func_ret=$?
 # 不需要wait, 残废. 你用echo_ret截取exec调用结果, 会自动阻塞.
 #wait
 echo "$sh_name执行结果:$echo_ret"
-echo -e "echo_ret=‘exec $sh_name‘ status(执行状态):\n$func_ret"
+echo -e "echo_ret='exec $sh_name' status(执行状态):\n$func_ret"
 
 echo -e "\n\n"
 
@@ -85,7 +85,7 @@ exit 0
 echo_ret=$(exec ping "192.168.5.1" -c 4)
 func_ret=$?
 
-# 由于你使用‘echo_ret’变量, 截取执行结果, 这里会自动阻塞, 不需要wait
+# 由于你使用'echo_ret'变量, 截取执行结果, 这里会自动阻塞, 不需要wait
 #wait
 
 echo $echo_ret

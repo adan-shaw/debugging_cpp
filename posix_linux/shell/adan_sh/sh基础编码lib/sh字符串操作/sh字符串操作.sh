@@ -40,7 +40,7 @@ echo "***/data***/cache****" | grep -q "/data/cache" && echo "true" || echo "fal
 exit 0
 
 #
-#***1.定义‘字符串变量’
+#***1.定义'字符串变量'
 #
 # 只要有"双引号" or '单引号'创建的变量, 都是字符串变量!! 
 # 但'单引号'有些特殊!! 详情看2:单引号与双引号的区别
@@ -49,7 +49,7 @@ str1="love you"
 str2="8086"
 str3='!@#$%'
 
-# ‘字符串变量’的引用
+# '字符串变量'的引用
 echo $str1
 echo $str1 $str2 $str3
 echo "love you $str2 $str3"

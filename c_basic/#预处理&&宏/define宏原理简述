@@ -169,8 +169,8 @@
 
 
 *6.宏## 号的用法:(其实就是将前后字符串都拼接起来!! 这个用法很杂...)
-	“#”是将宏字符串化(String ification)
-	“##”是将##左右两边的标签拼接在一起\
+	"#"是将宏字符串化(String ification)
+	"##"是将##左右两边的标签拼接在一起\
 		(## is called token concatenation,\
 		 used to concatenate two tokens in a macro invocation)
 	[ 这个用法, 忽略什么运算优先级限制(但最好还是加个括号,反正不出问题),
@@ -189,7 +189,7 @@
 	例如:
 	用法1:(示范使用, 没有实用意义)
 	定义:
-		#define ADD_LABEL(n) (tmp_ ## n)//’单标签‘拼接法
+		#define ADD_LABEL(n) (tmp_ ## n)//'单标签'拼接法
 	调用:
 		int tmp_1=0;
 		int tmp_2=10;

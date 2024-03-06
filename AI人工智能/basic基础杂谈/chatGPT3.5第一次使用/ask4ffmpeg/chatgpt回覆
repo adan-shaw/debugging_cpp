@@ -2,7 +2,7 @@
 
 下面是一个使用FFmpeg进行转码的示例命令, 可以利用NVIDIA硬件加速将输入视频的帧率降低为每秒10帧: 
 
-ffmpeg -hwaccel cuvid -c:v h264_cuvid -i input.mp4 -vf “fps=10” -c:v h264_nvenc output.mp4
+ffmpeg -hwaccel cuvid -c:v h264_cuvid -i input.mp4 -vf "fps=10" -c:v h264_nvenc output.mp4
 
 解析: 
 - -hwaccel cuvid 使用CUDA加速

@@ -35,7 +35,7 @@ void ShowCerts(SSL * ssl)
 		X509_free(cert);																						//释放证书内容
 	}
 	else
-		printf("无证书信息！\n");
+		printf("无证书信息!\n");
 }
 
 
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 	SSL *ssl;
 
 	if (argc != 3) {
-		printf("参数格式错误！正确用法如下：\n/t/t%s IP地址 端口\n/t比如:/t%s 127.0.0.1 9213\n", argv[0], argv[0]);
+		printf("参数格式错误!正确用法如下:\n/t/t%s IP地址 端口\n/t比如:/t%s 127.0.0.1 9213\n", argv[0], argv[0]);
 		return -1;
 	}
 
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 		printf("接收消息成功:'%s',共%d个字节的数据\n",buffer, len);
 	else
 	{
-		printf("消息接收失败！错误代码是%d,错误信息是'%s'\n",errno, strerror(errno));
+		printf("消息接收失败!错误代码是%d,错误信息是'%s'\n",errno, strerror(errno));
 		kill_ALL(ctx,sfd,ssl);
 		return -1;
 	}
@@ -164,9 +164,9 @@ int main(int argc, char **argv)
 	strcpy(buffer, "hello server, i'am client -_-");
 	len = SSL_write(ssl, buffer, strlen(buffer));
 	if (len < 0)
-		printf("消息'%s'发送失败！错误代码是%d,错误信息是'%s'\n", buffer, errno, strerror(errno));
+		printf("消息'%s'发送失败!错误代码是%d,错误信息是'%s'\n", buffer, errno, strerror(errno));
 	else
-		printf("消息'%s'发送成功,共发送了%d个字节！\n", buffer, len);
+		printf("消息'%s'发送成功,共发送了%d个字节!\n", buffer, len);
 
 	kill_ALL(ctx,sfd,ssl);
 	return 0;

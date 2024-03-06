@@ -43,7 +43,7 @@ QTextBrowser *m_textBrowser;
 #endif // MAINWINDOW_H
 
 // mainwindow.cpp
-#include “mainwindow.h”
+#include "mainwindow.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -52,16 +52,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
 m_textBrowser = new QTextBrowser(this);
 
-QPushButton *startServerButton = new QPushButton(“Start Server”, this);
+QPushButton *startServerButton = new QPushButton("Start Server", this);
 connect(startServerButton, &QPushButton::clicked, this, &MainWindow::startServer);
 
-QPushButton *stopServerButton = new QPushButton(“Stop Server”, this);
+QPushButton *stopServerButton = new QPushButton("Stop Server", this);
 connect(stopServerButton, &QPushButton::clicked, this, &MainWindow::stopServer);
 
-QPushButton *startClientButton = new QPushButton(“Start Client”, this);
+QPushButton *startClientButton = new QPushButton("Start Client", this);
 connect(startClientButton, &QPushButton::clicked, this, &MainWindow::startClient);
 
-QPushButton *stopClientButton = new QPushButton(“Stop Client”, this);
+QPushButton *stopClientButton = new QPushButton("Stop Client", this);
 connect(stopClientButton, &QPushButton::clicked, this, &MainWindow::stopClient);
 
 QVBoxLayout *layout = new QVBoxLayout;
@@ -93,11 +93,11 @@ MainWindow::~MainWindow()
 void MainWindow::startServer()
 {
 if (!m_server->listen(QHostAddress::Any, 12345)) {
-printMessage(“Failed to start server.”);
+printMessage("Failed to start server.");
 return;
 }
 
-printMessage(“Server started.”);
+printMessage("Server started.");
 
 // Update button states
 startServerButton->setEnabled(false);
@@ -108,7 +108,7 @@ startClientButton->setEnabled(true);
 void MainWindow::stopServer()
 {
 m_server->close();
-printMessage(“Server stopped.”);
+printMessage("Server stopped.");
 
 // Update button states
 stopServerButton->setEnabled(false);
@@ -121,11 +121,11 @@ void MainWindow::startClient()
 m_client->connectToHost(QHostAddress::LocalHost, 12345);
 
 if (!m_client->waitForConnected()) {
-printMessage(“Failed to connect to server.”);
+printMessage("Failed to connect to server.");
 return;
 }
 
-printMessage(“Client connected.”);
+printMessage("Client connected.");
 
 // Update button states
 startClientButton->setEnabled(false);
@@ -135,7 +135,7 @@ stopClientButton->setEnabled(true);
 void MainWindow::stopClient()
 {
 m_client->disconnectFromHost();
-printMessage(“Client disconnected.”);
+printMessage("Client disconnected.");
 
 // Update button states
 stopClientButton->setEnabled(false);
@@ -158,7 +158,7 @@ m_textBrowser->append(message);
 
 
 // main.cpp
-#include “mainwindow.h”
+#include "mainwindow.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -173,9 +173,9 @@ return a.exec();
 
 QT += widgets network
 
-以上代码创建了一个具有启动按钮和停止按钮的Qt窗口, 以及一个文本浏览器控件; 单击“Start Server”按钮将启动服务器, 并开始监听TCP端口; 单击“Stop Server”按钮将关闭服务器; 单击“Start Client”按钮将连接到服务器, 并发送文本消息; 单击“Stop Client”按钮将断开与服务器的连接; 
+以上代码创建了一个具有启动按钮和停止按钮的Qt窗口, 以及一个文本浏览器控件; 单击"Start Server"按钮将启动服务器, 并开始监听TCP端口; 单击"Stop Server"按钮将关闭服务器; 单击"Start Client"按钮将连接到服务器, 并发送文本消息; 单击"Stop Client"按钮将断开与服务器的连接; 
 
-注意, 以上示例中的服务器和客户端都使用了同一台计算机上的“localhost”地址和端口号12345; 如果你想在不同的计算机上运行服务器和客户端, 需要修改代码中的地址和端口号; 
+注意, 以上示例中的服务器和客户端都使用了同一台计算机上的"localhost"地址和端口号12345; 如果你想在不同的计算机上运行服务器和客户端, 需要修改代码中的地址和端口号; 
 
 希望以上示例可以满足你的需求; 如果你有任何问题, 请随时提问; 
 
