@@ -21,12 +21,12 @@ socket io 前言:
 
 *1.socket io api 总览:
 
-	read() / write
-	readv() / writev
+	read() / write()
+	readv() / writev()
 
-	send() / recv
-	sendto() / recvfrom
-	sendmsg() / recvmsg
+	send() / recv()
+	sendto() / recvfrom()
+	sendmsg() / recvmsg()
 
 	辅助api 总览: 
 		bind(), listen(), accept(), connect(), shutdown(), close()
@@ -89,34 +89,36 @@ socket发送量控制&tcp接收截断&udp接收安全保障:
 
 *2.从小到大, 进行详解:
 
-<io 类函数解析>：
-read/write 是通用io:
+<io 类函数解析>: 
+read()/write() 是通用io:
 	绑定缓冲区的数量(只有一个), 无地址信息. 
 	ps: 地址信息指struct sockaddr *src_addr; 主要是:协议类型 + ip + 端口
 
-readv/writev 是通用io:
-	可一次发送多个数据缓冲区, 或者接收多次数据到多个缓冲区(并非<一次接收>, 然后分缓冲区存放).
+readv/writev() 是通用io:
+	可一次发送多个数据缓冲区, 或者接收多次数据到多个缓冲区(并非<一次接收>, 然后分缓冲区存放)
+	(readv/writev() 属于0零拷贝技术的一种, 可以直接重新指定io 缓冲区, 减少内存拷贝)
 
-send/recv TCP socket 专用的io:
+send()/recv() TCP socket 专用的io:
 	可以修改io 函数的工作状态(flags=io 标志);
 	绑定缓冲区的数量(只有一个), 无地址信息. 
 	io 操作之后, 接受者[recv]要发送<确认报文>给发送者[send].
 
-sendto/recvfrom socket 通用io:
+sendto()/recvfrom() socket 通用io:
 	绑定缓冲区的数量(只有一个), 需要填入地址信息.
 	tcp/udp/raw 都可以用, 但是不能进行tcp/ip 报头解包.
 	可以修改io 函数的工作状态(flags=io 标志).
 	[接受者[recv] 不 需要发送<确认报文>给发送者[send]]
 
-sendmsg/recvmsg socket 通用io:
+sendmsg()/recvmsg() socket 通用io:
 	可发送多个数据缓冲区, 可接收多次数据到多个缓冲区中.
 	需要填入地址信息, 可以修改io 函数的工作状态(flags=io 标志).
 	可以进行tcp/ip 报头解包.
 	[接受者[recv] 不 需要发送<确认报文>给发送者[send]]
+	(sendmsg()/recvmsg() 属于0零拷贝技术的一种, 可以直接重新指定io 缓冲区, 减少内存拷贝)
 
 
 
-<辅助类函数解析>：
+<辅助类函数解析>: 
 bind():
 	bind 就是一个启动[端口->socket]接收数据的api, (由于网络安全问题, 端口默认是关闭的.)
 	bind 仅仅是启动端口, 关联端口->socket, 并开始接收数据的象征. 
