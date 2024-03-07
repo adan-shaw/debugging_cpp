@@ -98,7 +98,7 @@ int server(void){
 
 //发送-广播数据
 int client(void){
-	const char msg_s[] = "hello udp-broadcast";
+	const char msg_s[] = "hello server [udp-broadcast]";
 	struct sockaddr_in addr;
 	struct linger m_linger = {0,0};
 	int len, tmp, sfd = socket(AF_INET, SOCK_DGRAM, 0);
