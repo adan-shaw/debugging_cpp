@@ -109,8 +109,8 @@
 inline int get_sockopt_opts(int sfd, const int sock_opt){
 	int opt_val = -1;
 	int opt_len = sizeof(int);
-	if(getsockopt(sfd,SOL_SOCKET,sock_opt,&opt_val,&opt_len)==-1){
-		perror("getsockopt");
+	if(getsockopt(sfd,SOL_SOCKET,sock_opt,&opt_val,&opt_len) == -1){
+		perror("getsockopt()");
 		return -1;
 	}
 	return opt_val;					//返回: 开启返回'1/整形数', 未开启返回0 [统一标准的, 不用担心]

@@ -10,11 +10,13 @@
 
 
 
-//tcp 广播
+//TCP 轮询单播的作用(互联网应用, 也很适合):
 /*
-	tcp 只能做逻辑组播, 不能像udp 这样使用'组播/广播'功能, 而且udp 协议性能很好;
-	一般互联网-异步服务器, 50ms-150ms延迟都是可以接受的, 200ms以上开始不行了;
+	由于多播始终是基于UDP 协议, 面对较为准确的数据传递是, 需要自己手动实现数据安全传输;
+	(多播数据传输, 实际安全性不高)
+	在数据量不大的情况下, 直接使用TCP 轮询单播, 也是一种不错的选择;
 
+	一般互联网-异步服务器, 50ms-150ms延迟都是可以接受的, 200ms以上开始不行了;
 	做工业偏实时服务器, 或者做多媒体重数据流服务器, 一般会用udp'组播/广播';
 */
 
@@ -165,8 +167,8 @@
 inline int get_sockopt_opts_tcp(int sfd, const int sock_opt){
 	int opt_val = -1;
 	int opt_len = sizeof(int);
-	if(getsockopt(sfd,IPPROTO_TCP,sock_opt,&opt_val,&opt_len)==-1){
-		perror("getsockopt");
+	if(getsockopt(sfd,IPPROTO_TCP,sock_opt,&opt_val,&opt_len) == -1){
+		perror("getsockopt()");
 		return -1;
 	}
 	return opt_val;
@@ -177,8 +179,8 @@ inline int get_sockopt_opts_tcp(int sfd, const int sock_opt){
 //详情, 查看: ./web网文/getsockopt.html
 inline int get_sockopt_opts_tcpinfo(int sfd, struct tcp_info* ptcp_info){
 	int len = sizeof(struct tcp_info);
-	if(getsockopt(sfd,IPPROTO_TCP,TCP_INFO,ptcp_info,&len)==-1){
-		perror("getsockopt");
+	if(getsockopt(sfd,IPPROTO_TCP,TCP_INFO,ptcp_info,&len) == -1){
+		perror("getsockopt()");
 		return 0;
 	}
 	return 1;//调用成功返回1, 失败返回0
