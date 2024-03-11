@@ -92,20 +92,20 @@
 
 
 int main(void){
-	printf("%d\n", mtu_inet_udp_min);
-	printf("%d\n", mtu_inet_udp_max);
-	printf("%d\n", mtu_inet_tcp_min);
-	printf("%d\n", mtu_inet_tcp_min);
+	printf("mtu_inet_udp_min=%d\n", mtu_inet_udp_min);
+	printf("mtu_inet_udp_max=%d\n", mtu_inet_udp_max);
+	printf("mtu_inet_tcp_min=%d\n", mtu_inet_tcp_min);
+	printf("mtu_inet_tcp_min=%d\n", mtu_inet_tcp_min);
 
-	printf("%d\n", mtu_8022_udp_min);
-	printf("%d\n", mtu_8022_udp_max);
-	printf("%d\n", mtu_8022_tcp_min);
-	printf("%d\n", mtu_8022_tcp_min);
+	printf("mtu_8022_udp_min=%d\n", mtu_8022_udp_min);
+	printf("mtu_8022_udp_max=%d\n", mtu_8022_udp_max);
+	printf("mtu_8022_tcp_min=%d\n", mtu_8022_tcp_min);
+	printf("mtu_8022_tcp_min=%d\n", mtu_8022_tcp_min);
 
-	printf("%d\n", mtu_8023_udp_min);
-	printf("%d\n", mtu_8023_udp_max);
-	printf("%d\n", mtu_8023_tcp_min);
-	printf("%d\n", mtu_8023_tcp_min);
+	printf("mtu_8023_udp_min=%d\n", mtu_8023_udp_min);
+	printf("mtu_8023_udp_max=%d\n", mtu_8023_udp_max);
+	printf("mtu_8023_tcp_min=%d\n", mtu_8023_tcp_min);
+	printf("mtu_8023_tcp_min=%d\n", mtu_8023_tcp_min);
 	return 0;
 }
 

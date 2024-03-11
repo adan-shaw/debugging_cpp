@@ -61,6 +61,7 @@ int server(void){
 
 	if(bind(sfd, (struct sockaddr*)&addr, sizeof(struct sockaddr_in)) == -1){
 		perror("bind()");
+		close(sfd);
 		return -1;
 	}
 
@@ -72,12 +73,14 @@ int server(void){
 	//检查多播地址是否填写错误(大可不必, 可以省略)
 	if(mreq.imr_multiaddr.s_addr == -1){
 		printf("%s not a legal multicast address\n", udp_multicast_ip);
+		close(sfd);
 		return -1;
 	}
 
 	//将sfd 拉入一个多播组
 	if(setsockopt(sfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(struct ip_mreq)) == -1){
 		perror("setsockopt()");
+		close(sfd);
 		return -1;
 	}
 
@@ -90,6 +93,7 @@ int server(void){
 		tmp = recvfrom(sfd, msg_r, max_buf_msg, 0, (struct sockaddr*)&addr, (socklen_t*)&len);
 		if(tmp == -1){
 			perror("recvfrom()");
+			close(sfd);
 			return -1;
 		}
 		else
@@ -101,6 +105,7 @@ int server(void){
 	//sfd 退出多播组
 	if(setsockopt(sfd, IPPROTO_IP, IP_DROP_MEMBERSHIP, &mreq, sizeof(struct ip_mreq)) == -1){
 		perror("setsockopt()");
+		close(sfd);
 		return -1;
 	}
 
@@ -137,6 +142,7 @@ int client(void){
 		tmp = sendto(sfd, &sbuf, sizeof(sbuf), 0, (struct sockaddr *)&addr, sizeof(struct sockaddr_in));
 		if(tmp == -1){
 			perror("sendto()");
+			close(sfd);
 			return -1;
 		}
 		else{

@@ -30,16 +30,16 @@ int main (void)
 	char buf[buf_max];
 	struct sctp_initmsg initmsg;
 	struct sockaddr_in serv_addr, addr_cli;
-	int sctp_sfd, sctp_cfd, tmp, nRead;
+	int sfd_sctp, sfd_sctp_cli, tmp, nRead;
 	socklen_t len;
-	struct sctp_status status;//获取客户端sctp_cfd 套接字属性
+	struct sctp_status status;//获取客户端sfd_sctp_cli 套接字属性
 	sctp_assoc_t associd = 0;
 	struct sctp_sndrcvinfo sinfo;
 
 
 
-	sctp_sfd = socket (AF_INET, SOCK_STREAM, IPPROTO_SCTP);
-	if (sctp_sfd < 0)
+	sfd_sctp = socket (AF_INET, SOCK_STREAM, IPPROTO_SCTP);
+	if (sfd_sctp < 0)
 	{
 		perror("socket()");
 		return -1;
@@ -51,11 +51,10 @@ int main (void)
 	initmsg.sinit_max_attempts = x_sinit_max_attempts;
 	initmsg.sinit_max_init_timeo = x_sinit_max_init_timeo;
 
-	tmp = setsockopt (sctp_sfd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof (initmsg));
-	if (tmp == -1)
+	if (setsockopt (sfd_sctp, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof (struct sctp_initmsg)) == -1)
 	{
 		perror("setsockopt()");
-		close(sctp_sfd);
+		close(sfd_sctp);
 		return -1;
 	}
 
@@ -64,20 +63,20 @@ int main (void)
 	serv_addr.sin_addr.s_addr = inet_addr (ip);
 	serv_addr.sin_port = htons (port);
 
-	tmp = 1;//只有一个addr, tmp = 1
-	tmp = sctp_bindx (sctp_sfd, (struct sockaddr *) &serv_addr, tmp, SCTP_BINDX_ADD_ADDR);
+	tmp = 1;//只有一个addr sctp_bindx(), tmp = 1
+	tmp = sctp_bindx (sfd_sctp, (struct sockaddr *) &serv_addr, tmp, SCTP_BINDX_ADD_ADDR);
 	if (tmp == -1)
 	{
 		perror("sctp_bindx()");
-		close(sctp_sfd);
+		close(sfd_sctp);
 		return -1;
 	}
 
 	//启动sctp 监听
-	if (listen (sctp_sfd, listen_queue_max) == -1)
+	if (listen (sfd_sctp, listen_queue_max) == -1)
 	{
 		perror("listen()");
-		close(sctp_sfd);
+		close(sfd_sctp);
 		return -1;
 	}
 
@@ -86,21 +85,21 @@ int main (void)
 	{
 		//接受客户端accept
 		len = sizeof (addr_cli);
-		sctp_cfd = accept (sctp_sfd, (struct sockaddr *) &addr_cli, &len);
-		if (sctp_cfd == -1)
+		sfd_sctp_cli = accept (sfd_sctp, (struct sockaddr *) &addr_cli, &len);
+		if (sfd_sctp_cli == -1)
 		{
 			perror("accept()");
-			close(sctp_sfd);
+			close(sfd_sctp);
 			return -1;
 		}
 
 		memset (&status, 0, sizeof (status));
 		status.sstat_assoc_id = associd;
 		len = sizeof (status);
-		if (getsockopt (sctp_cfd, IPPROTO_SCTP, SCTP_STATUS, &status, &len) == -1)
+		if (getsockopt (sfd_sctp_cli, IPPROTO_SCTP, SCTP_STATUS, &status, &len) == -1)
 		{
 			perror("getsockopt()");
-			close(sctp_sfd);
+			close(sfd_sctp);
 			return -1;
 		}
 		//打印套接字属性
@@ -110,12 +109,12 @@ int main (void)
 		for (;;)
 		{
 			len = sizeof (&sinfo, sizeof (sinfo));
-			nRead = sctp_recvmsg (sctp_cfd, buf, buf_max, (struct sockaddr *) &addr_cli, &len, &sinfo, &tmp);
+			nRead = sctp_recvmsg (sfd_sctp_cli, buf, buf_max, (struct sockaddr *) &addr_cli, &len, &sinfo, &tmp);
 			if (nRead <= 0)
 			{
 				perror("sctp_recvmsg()");
-				printf ("sctp_recvmsg(): sctp_cfd=%d read all the data already, QUIT!!\n", sctp_cfd);
-				close (sctp_cfd);
+				printf ("sctp_recvmsg(): sfd_sctp_cli=%d read all the data already, QUIT!!\n", sfd_sctp_cli);
+				close (sfd_sctp_cli);
 				break;
 			}
 			else

@@ -81,7 +81,7 @@ int main(void){
 
 	u32_ret = ntohl(u32_ret);								//2."网络字节序"转'主机序'
 	u16_ret = ntohs(u16_ret);
-	printf("2.\"网络字节序\"转'主机序'[还原]\n\tu32=%d, u16=%d\n\n\n", u32_ret, u16_ret);
+	printf("2.\"网络字节序\"转'主机序'[还原]:\n\tu32=%d, u16=%d\n\n\n", u32_ret, u16_ret);
 
 
 	if(u32_ret != u32 || u16_ret != u16)		//3.检验能不能还原为'主机序'的初始化值

@@ -37,8 +37,8 @@
 //socket 缓冲区大小应该设置为多大的问题:
 /*
 	并不是越大越好, 具体业务需求;
-	一个socket的rbuf+sbuf, 默认值:8kb*2, (实际数值: 8688字节(约为8.5K))
-	加上sfd 文件描述符的其他数据, 单个sfd 描述符的struct 结构体消耗, 并不是一个小数目
+	一个socket的rbuf+sbuf, 默认值: 8kb*2 [8688字节(约为8.5K)]
+	加上sfd 文件描述符的其他数据, 单个sfd 描述符的struct 结构体消耗, 并不是一个小数目;
 	加上tcp/ip 双向通道+反向代理原则:
 		一个通道就是2 个socket, 全双工同时读写;
 		反向代理两个通道就是4 个socket, 开销不小;
@@ -49,7 +49,7 @@
 
 
 
-//s0.设置fd nonblocking								[对fcntl()的F_GETFL返回值进行'| 或运算'=新增]
+//s0.设置fd nonblocking							[对fcntl()的F_GETFL返回值进行'| 或运算'=新增]
 #define __set_nonblocking(sfd) {fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK);}
 //#define __set_nonblocking(sfd) {if(fcntl(sfd, F_SETFL, fcntl(sfd,F_GETFL,0)|O_NONBLOCK) == -1) perror("fcntl()");}
 

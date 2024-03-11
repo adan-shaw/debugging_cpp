@@ -52,6 +52,7 @@ int server(void){
 	tmp = 1;
 	if(setsockopt(sfd, SOL_SOCKET, SO_BROADCAST, &tmp, sizeof(int)) == -1){
 		perror("setsockopt()");
+		close(sfd);
 		return -1;
 	}
 	tmp = 1;
@@ -71,6 +72,7 @@ int server(void){
 	//接收广播报文的recvfrom() socket, 必须先bind()
 	if(bind(sfd, (struct sockaddr*)&addr, sizeof(struct sockaddr)) == -1){
 		perror("bind()");
+		close(sfd);
 		return -1;
 	}
 
@@ -83,6 +85,7 @@ int server(void){
 		tmp = recvfrom(sfd, msg_r, max_buf_msg, 0, (struct sockaddr*)&addr, (socklen_t*)&len);
 		if(tmp == -1){
 			perror("recvfrom()");
+			close(sfd);
 			return -1;
 		}
 		else
@@ -111,6 +114,7 @@ int client(void){
 	tmp = 1;
 	if(setsockopt(sfd, SOL_SOCKET, SO_BROADCAST, &tmp, sizeof(int)) == -1){
 		perror("setsockopt()");
+		close(sfd);
 		return -1;
 	}
 	tmp = 1;
@@ -136,6 +140,7 @@ int client(void){
 		tmp = sendto(sfd, msg_s, strlen(msg_s), 0, (struct sockaddr*)&addr, len);
 		if(tmp == -1){
 			perror("sendto()");
+			close(sfd);
 			return -1;
 		}
 		else{

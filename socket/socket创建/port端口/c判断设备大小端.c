@@ -22,7 +22,7 @@ bool testBigEndin(void) {
 }
 
 int main(void) {
-	if (testBigEndin())
+	if(testBigEndin())
 		printf("big endin\n");
 	else
 		printf("small endin\n");

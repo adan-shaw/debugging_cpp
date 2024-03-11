@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
 #include <pcap.h>
 
+#include <arpa/inet.h>
 #include <netinet/ip_icmp.h>
 #include <linux/in.h>
 
@@ -39,10 +42,9 @@
 
 int main (void)
 {
-	char *dev_default, errbuf[PCAP_ERRBUF_SIZE];
-	const char dev_name[] = "lo";
+	unsigned char *dev_default, errbuf[PCAP_ERRBUF_SIZE], packet[LIBPCAP_PACKET_MAX];
+	const unsigned char dev_name[] = "lo";
 	pcap_t *handle;
-	unsigned char packet[LIBPCAP_PACKET_MAX];
 	struct sockaddr_in src, dest;
 	int len_all, tmp;
 	struct ip *pIP = (struct ip *)&packet[14];
@@ -104,7 +106,7 @@ int main (void)
 	pIP->ip_src.s_addr = src.sin_addr.s_addr;
 	pIP->ip_dst.s_addr = dest.sin_addr.s_addr;
 	pIP->ip_sum = 0;
-	pIP->ip_sum = cksum (pIP, sizeof (struct ip));									// 计算 && 设置IP 报头校验和
+	pIP->ip_sum = cksum ((unsigned char *)pIP, sizeof (struct ip));					// 计算 && 设置IP 报头校验和
 
 	//填充icmp 报文
 	pICMP->icmp_type = ICMP_ECHO;				//ICMP回显请求
@@ -116,7 +118,7 @@ int main (void)
 	for(tmp = 0; tmp < sizeof(struct icmp); tmp++)
 		pICMP->icmp_data[tmp] = tmp;			//填写icmp 数据(随机乱填)
 
-	pICMP->icmp_cksum = cksum (pICMP, sizeof(struct icmp));//计算&填写cksum
+	pICMP->icmp_cksum = cksum ((unsigned char *)pICMP, sizeof(struct icmp));//计算&填写cksum
 
 	// 循环发送ICMP回显请求数据包(pcap_sendpacket() 正确返回值, 只有0)
 	if (pcap_sendpacket(handle, packet, LIBPCAP_PACKET_MAX) != 0)

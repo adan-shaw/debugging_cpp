@@ -1,5 +1,9 @@
 #include <stdio.h>
+#include <unistd.h>
+
 #include <pcap.h>
+
+#include <arpa/inet.h>
 #include <netinet/ip.h>
 //#include <netinet/icmp6.h>
 #include <netinet/ip_icmp.h>
@@ -34,7 +38,7 @@
 
 
 
-void print_icmp_packet (const u_char * packet, const struct pcap_pkthdr *header)
+void print_icmp_packet (const unsigned char * packet, const struct pcap_pkthdr *header)
 {
 	struct ip *ip_hdr = (struct ip *) (packet + sizeof (struct ether_header));
 	struct icmp *icmp_hdr = (struct icmp *) (packet + sizeof (struct ether_header) + sizeof (struct ip));
@@ -48,8 +52,8 @@ void print_icmp_packet (const u_char * packet, const struct pcap_pkthdr *header)
 }
 
 int check_alive_eth_dev(void){
-	char errbuf[PCAP_ERRBUF_SIZE];
-	char *dev = pcap_lookupdev(errbuf);
+	unsigned char errbuf[PCAP_ERRBUF_SIZE];
+	unsigned char *dev = pcap_lookupdev(errbuf);
 	if (dev == NULL) {
 		fprintf(stderr, "Couldn't find default device: %s\n", errbuf);
 		return -1;
@@ -61,13 +65,13 @@ int check_alive_eth_dev(void){
 
 int main (void)
 {
-	char errbuf[PCAP_ERRBUF_SIZE];
-	struct bpf_program fp;//过滤规则info 容器
-	const char filter_exp[] = "icmp";
-	const char dev_name[] = "lo";
+	unsigned char errbuf[PCAP_ERRBUF_SIZE];
+	const unsigned char *packet;
+	const unsigned char filter_exp[] = "icmp", dev_name[] = "lo";
 	bpf_u_int32 mask;
 	struct pcap_pkthdr header;
-	const u_char *packet;
+	struct bpf_program fp;//过滤规则info 容器
+
 
 	// 以混杂模式, 打开网络设备"lo"(回环网络) [第三参数=1, 表示混杂模式], 返回pcap_t 通用sfd info容器(libpcap 专用)
 	pcap_t *handle = pcap_open_live (dev_name, LIBPCAP_PACKET_MAX, 1, 1000, errbuf);

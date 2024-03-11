@@ -92,7 +92,7 @@ int main(void){
 	pIP->ip_src.s_addr = inet_addr ("127.0.0.1");
 	pIP->ip_dst.s_addr = inet_addr("127.0.0.1");
 	pIP->ip_sum = 0;
-	pIP->ip_sum = cksum (pIP, sizeof (struct ip));									// 计算 && 设置IP 报头校验和
+	pIP->ip_sum = cksum ((unsigned char *)pIP, sizeof (struct ip));	// 计算 && 设置IP 报头校验和
 
 	//填充 UDP 报头(udp 报文头部算不正确, 不知道为什么)
 	pUDP->uh_sport = htons (12345);																	//源端口16bit
@@ -102,7 +102,8 @@ int main(void){
 
 	strncpy (pdata, data, sizeof (data));														//复制数据到 UDP 报文中
 
-	pUDP->uh_sum = cksumEx (pUDP, sizeof (struct udphdr) + sizeof (data), &src, &dest, 0);//计算 & 设置UDP 校验和 [wireshark: checksum unverified(未核实)]
+	//计算 & 设置UDP 校验和 [wireshark: checksum unverified(未核实)]
+	pUDP->uh_sum = cksumEx ((unsigned char *)pUDP, sizeof (struct udphdr) + sizeof (data), pIP->ip_src.s_addr, pIP->ip_dst.s_addr, 0);
 
 	if(sendto (sfd, buf_snd, len_all, 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_ll)) < 0){
 		perror("sendto()");

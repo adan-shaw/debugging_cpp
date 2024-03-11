@@ -39,7 +39,7 @@ int main(void){
 	for(tmp = 0; tmp < sizeof(struct icmp); tmp++)
 		pICMP->icmp_data[tmp] = tmp;	//填写icmp 数据(随机乱填)
 
-	pICMP->icmp_cksum = cksum(pICMP, sizeof(struct icmp));//计算&填写cksum
+	pICMP->icmp_cksum = cksum((unsigned char *)pICMP, sizeof(struct icmp));//计算&填写cksum
 
 	if(sendto (sfd, buf_snd, sizeof(struct icmp), 0, (struct sockaddr *)&dest, sizeof(struct sockaddr_in)) < 0){
 		perror("sendto()");

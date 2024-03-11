@@ -37,6 +37,11 @@ int main(void){
 	else{
 		//同步io 测试
 		sfd = tcp_accepter(sfd_li,&addr);
+		if(sfd == -1){
+			printf("tcp_accepter() failed !!\n");
+			close(sfd);
+			return -1;
+		}
 		memcpy(&addr,&addr_in,sizeof(struct sockaddr));
 		inet_ntop(AF_INET, &addr_in.sin_addr, ip_str, INET_ADDRSTRLEN);
 		printf("server: tcp_accepter(): %s\n", ip_str);

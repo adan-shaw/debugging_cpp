@@ -1,5 +1,5 @@
 //编译:
-//		gcc -g3 -o x_cli unix_sock_frame.h usock_udp_cli.c; gcc -g3 -o x_srv unix_sock_frame.h usock_udp_srv.c
+//		gcc -g3 unix_sock_frame.h usock_udp_cli.c -o x_cli ; gcc -g3 unix_sock_frame.h usock_udp_srv.c -o x_srv 
 
 
 
@@ -15,15 +15,20 @@
 
 //创建一个unix socket listener
 int unix_sock_udp_listener(void){
-	int usfd_li,tmp;
+	int sfd, tmp;
 	struct sockaddr_un addr_srv;
 
 	//1.创建unix socket(SOCK_DGRAM 流式)
-	usfd_li = socket(AF_UNIX,SOCK_DGRAM,0);
-	if(usfd_li == -1){
+	sfd = socket(AF_UNIX,SOCK_DGRAM,0);
+	if(sfd == -1){
 		perror("socket()");
-		return 0;
+		return -1;
 	}
+
+	tmp = 1;
+	setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &tmp, sizeof(int));		//重用地址(unix socket 中仍然有效, 可以防止UNIX_UDP_DOMAIN 路径被占用)
+	tmp = 1;
+	setsockopt(sfd, SOL_SOCKET, SO_REUSEPORT, &tmp, sizeof(int));		//重用端口
 
 	//2.set unix socket srv端的addr 信息
 	addr_srv.sun_family=AF_UNIX;
@@ -33,14 +38,14 @@ int unix_sock_udp_listener(void){
 	unlink(UNIX_UDP_DOMAIN);
 
 	//4.bind() 绑定unix socket 与unix 地址信息
-	if(bind(usfd_li,(struct sockaddr*)&addr_srv,sizeof(addr_srv)) == -1){
+	if(bind(sfd,(struct sockaddr*)&addr_srv,sizeof(addr_srv)) == -1){
 		perror("bind()");
-		close(usfd_li);
+		close(sfd);
 		unlink(UNIX_UDP_DOMAIN);
-		return 0;
+		return -1;
 	}
 
-	return usfd_li;
+	return sfd;
 }
 
 
@@ -54,6 +59,8 @@ int main(void){
 
 	//创建一个unix socket listener
 	usfd_li = unix_sock_udp_listener();
+	if(usfd_li == -1)
+		return -1;
 
 	//阻塞读取一帧数据
 	tmp = recvfrom(usfd_li,&frame,sizeof(uudp_frame_t),0,NULL,NULL);
@@ -75,7 +82,6 @@ int main(void){
 	}
 
 	//结束回收资源
-	shutdown(usfd_li,2);
 	close(usfd_li);
 	unlink(UNIX_UDP_DOMAIN);
 	return 0;

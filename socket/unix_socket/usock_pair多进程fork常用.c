@@ -89,8 +89,7 @@ void socketpair_test_tcp(void){
 	usock_frame_t mbuf;
 
 	//创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
-	tmp = socketpair(AF_UNIX,SOCK_STREAM,0,sv);
-	if(tmp == -1){
+	if(socketpair(AF_UNIX,SOCK_STREAM,0,sv) == -1){
 		perror("socketpair()");
 		return ;
 	}
@@ -166,8 +165,7 @@ void socketpair_test_udp(void){
 	usock_frame_t mbuf;
 
 	//创建socketpair() socket 对, sv[0],sv[1] socket 关联sfd组
-	tmp = socketpair(AF_UNIX,SOCK_DGRAM,0,sv);
-	if(tmp == -1){
+	if(socketpair(AF_UNIX,SOCK_DGRAM,0,sv) == -1){
 		perror("socketpair()");
 		return ;
 	}

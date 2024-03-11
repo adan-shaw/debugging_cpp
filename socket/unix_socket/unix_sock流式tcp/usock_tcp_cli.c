@@ -1,5 +1,5 @@
 //编译:
-//		gcc -g3 -o x_cli unix_sock_frame.h usock_tcp_cli.c; gcc -g3 -o x_srv unix_sock_frame.h usock_tcp_srv.c
+//		gcc -g3 -o x_srv unix_sock_frame.h usock_tcp_srv.c -o x_srv; gcc -g3 -o x_srv unix_sock_frame.h usock_tcp_cli.c -o x_cli 
 
 
 
@@ -15,32 +15,37 @@
 
 
 int main(void){
-	int tmp, usfd_conn;
+	int tmp, sfd;
 	struct sockaddr_un addr_srv;
 	utcp_frame_t frame;
 
 
 
-	//1.创建unix socket(SOCK_STREAM 流式)
-	usfd_conn = socket(AF_UNIX,SOCK_STREAM,0);
-	if(usfd_conn == -1){
+	//创建unix socket(SOCK_STREAM 流式)
+	sfd = socket(AF_UNIX,SOCK_STREAM,0);
+	if(sfd == -1){
 		perror("socket()");
 		return -1;
 	}
 
-	//2.填充unix socket srv 端地址信息
+	tmp = 1;
+	setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &tmp, sizeof(int));		//重用地址
+	tmp = 1;
+	setsockopt(sfd, SOL_SOCKET, SO_REUSEPORT, &tmp, sizeof(int));		//重用端口
+
+	//填充unix socket srv 端地址信息
 	addr_srv.sun_family = AF_UNIX;
 	strncpy(addr_srv.sun_path,UNIX_TCP_DOMAIN,sizeof(addr_srv.sun_path)-1);
 
-	//3.connect 链接到srv 端
-	tmp = connect(usfd_conn,(struct sockaddr*)&addr_srv,sizeof(addr_srv));
+	//connect 链接到srv 端
+	tmp = connect(sfd,(struct sockaddr*)&addr_srv,sizeof(addr_srv));
 	if(tmp == -1){
 		perror("connect()");
-		close(usfd_conn);
+		close(sfd);
 		return -1;
 	}
 
-	//4.阻塞发送一帧数据
+	//阻塞发送一帧数据
 	frame.type = 0;
 	frame.bak = 0;
 	frame.num = 0;
@@ -49,15 +54,14 @@ int main(void){
 	frame.num_arr2[3][3] = 3333;
 	strncpy(frame.str,"hello world", sizeof(frame.str));
 
-	tmp = write(usfd_conn,&frame,sizeof(utcp_frame_t));
+	tmp = write(sfd,&frame,sizeof(utcp_frame_t));
 	if(tmp == -1)
 		perror("write()");
 	else
-		printf("%d byte msg from client(%d):\n",tmp,usfd_conn);
+		printf("%d byte msg from client(%d):\n",tmp,sfd);
 
-	//5.结束回收资源
-	//shutdown(usfd_conn,2);
-	close(usfd_conn);
+	//结束回收资源
+	close(sfd);
 	return 0;
 }
 

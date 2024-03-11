@@ -75,8 +75,7 @@ int srv(const char *bind_ip, unsigned short port){
 		close(sfd_li);
 		return(-1);
 	}
-	printf("srv: accept() 提取的客户端addr info = %s:%d\n",
-		inet_ntoa(addr_bind.sin_addr),ntohs(addr_bind.sin_port));
+	printf("srv: accept() 提取的客户端addr info = %s:%d\n", inet_ntoa(addr_bind.sin_addr),ntohs(addr_bind.sin_port));
 
 
 	//getsockname() 获取本机sfd_li 的struct sockaddr_in 地址信息
@@ -146,8 +145,6 @@ int main(void){
 		if(cli(srv_ip, portEx) == -1)
 			printf("父进程启动cli() 失败\n");
 	}
-
-
 
 	return 0;
 }

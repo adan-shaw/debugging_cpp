@@ -30,14 +30,14 @@ int main (void)
 	struct sctp_initmsg initmsg;
 	struct sockaddr_in serv_addr;
 	socklen_t len;
-	struct sctp_status status;//获取客户端sctp_cfd 套接字属性
+	struct sctp_status status;//获取客户端sfd_sctp 套接字属性
 	sctp_assoc_t associd = 0;
 	struct sctp_sndrcvinfo sinfo;
 
 
 
-	int sctp_cfd = socket (AF_INET, SOCK_STREAM, IPPROTO_SCTP);
-	if (sctp_cfd < 0)
+	int sfd_sctp = socket (AF_INET, SOCK_STREAM, IPPROTO_SCTP);
+	if (sfd_sctp < 0)
 	{
 		perror("socket()");
 		return -1;
@@ -49,10 +49,10 @@ int main (void)
 	initmsg.sinit_max_attempts = x_sinit_max_attempts;
 	initmsg.sinit_max_init_timeo = x_sinit_max_init_timeo;
 
-	if (setsockopt (sctp_cfd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof (initmsg)) == -1)
+	if (setsockopt (sfd_sctp, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof (struct sctp_initmsg)) == -1)
 	{
 		perror("setsockopt()");
-		close(sctp_cfd);
+		close(sfd_sctp);
 		return -1;
 	}
 
@@ -61,20 +61,20 @@ int main (void)
 	serv_addr.sin_addr.s_addr = inet_addr (ip);
 	serv_addr.sin_port = htons (port);
 
-	if (sctp_connectx (sctp_cfd, (struct sockaddr *) &serv_addr, 1, &associd) < 0)
+	if (sctp_connectx (sfd_sctp, (struct sockaddr *) &serv_addr, 1, &associd) < 0)
 	{
 		perror("sctp_connectx()");
-		close(sctp_cfd);
+		close(sfd_sctp);
 		return -1;
 	}
 
-	//反向获取client sctp_cfd 属性
+	//反向获取client sfd_sctp 属性
 	status.sstat_assoc_id = associd;
 	len = sizeof (status);
-	if (getsockopt (sctp_cfd, IPPROTO_SCTP, SCTP_STATUS, &status, &len) == -1)
+	if (getsockopt (sfd_sctp, IPPROTO_SCTP, SCTP_STATUS, &status, &len) == -1)
 	{
 		perror("getsockopt()");
-		close(sctp_cfd);
+		close(sfd_sctp);
 		return -1;
 	}
 	//打印套接字属性
@@ -86,10 +86,10 @@ int main (void)
 	snprintf (buf, buf_max, "hi server!!");
 
 	//执行发送
-	sctp_send (sctp_cfd, buf, strlen (buf), &sinfo, 0);
+	sctp_send (sfd_sctp, buf, strlen (buf), &sinfo, 0);
 	sinfo.sinfo_flags = SCTP_EOF;
-	sctp_send (sctp_cfd, NULL, 0, &sinfo, 0);
+	sctp_send (sfd_sctp, NULL, 0, &sinfo, 0);
 
-	close (sctp_cfd);
+	close (sfd_sctp);
 	return 0;
 }
