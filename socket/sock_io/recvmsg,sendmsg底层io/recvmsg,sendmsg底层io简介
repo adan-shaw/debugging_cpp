@@ -18,6 +18,11 @@
 /*
 	bsd eth 链路层原始套接字, 发送/接收数据时, 如果需要指定发送/接收的设备interface 接口name, 就需要用到recvmsg()/sendmsg();
 	否则bsd eth 链路层原始套接字的io 操作, 都会因为找不到设备interface 接口name 而失败;
+	ps:
+		这么说, 发送/接收'链路层原始套接字'数据时, 真的使用libpcap 库会比较简单, 省事;
+		bsd raw 原始套接字, ip 层以上的, 其实都还算简单;
+		但bsd eth 链路层原始套接字, io 操作要使用recvmsg()/sendmsg(), 真的复杂得不要不要的, 呵呵;
+		能用libpcap 库处理'链路层原始套接字'io数据, 是一件幸福的事[部分设备太小, 可能容不下libpcap 库 ^_^ ]
 
 	struct in_pktinfo {
 		unsigned int ipi_ifindex;			//接口索引
