@@ -3,44 +3,6 @@
 
 
 
-//udp 使用bind() + connect() 链接的细节:
-/*
-	* udp 没有listen(), 没有三次握手, 四次挥手: 没有connect()/listen(), 不能使用send()/recv(), write()/read();
-		(udp socket 不支持listen() 函数, 报错: Operation not supported)
-
-	* udp 如果不想每次都使用sendto()/recvfrom()发送, 接收;
-		udp 如果不想每次io 都填写addr 信息;
-		那么可以通过connect(), 让udp 用得起write()/read();
-		connect()之后的每次udp, 就可以使用write()/read()通用IO函数了, 不需要再填写addr info, 简单便捷, 服务器/客户端, 都可以这样做;
-
-	* udp server 也可以利用recvfrom() 来获取客户端的addr 信息, 实现自己的accept() 函数;
-*/
-
-//udp 在实施过程中遇到的问题:
-/*
-	* udp client:
-			udp client 必须预先知道服务器service 提供的ip+port!!
-			然后, udp client第一次数据发送, 根据这个服务器service 提供的ip+port, 用sendto(), 进行服务器链接;
-			ps:
-				udp client 不应过早connect(), 因为你并不知道udp server 给你分配的sfd, 是占用哪个通信ip+port;
-			最后, udp client使用recvfrom(), 从预先知道的服务器service 提供的ip+port, 获取udp server 分配给自己的通信ip+port;
-
-	* udp server:
-			第一次数据接收, 应该用recvfrom(), 获取客户端的通信ip+port;
-			然后服务器进行socket() 创建, 直接connect() 客户端的通信ip+port;
-			然后通过getsockname() 获取该分配的sfd_tmp 的通信ip+port;
-			最后通过预先公开的服务器service ip+port, 给客户端回发通信ip+port;
-
-	最简单的方式:
-		client + server 都开启addr + port 重用, 然后: 使用固定的ip + port 进行通信;
-		这也不会有任何的流量吞吐问题, 
-		因为socket 数据包的传递, 本身就是一个流程的, 跟ip + port 无关, 只跟设备绑定的ip 数量, ip 下的网络虚拟空间吞吐量有关;
-		(当然, 设备绑定了多个ip 网络虚拟空间, 这些ip 的数据流量比较大, 自然会影响设备的io 吞吐量, 设备物理层是单线队列的, 总线结构)
-*/
-
-
-
-
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
