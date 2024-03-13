@@ -1,7 +1,13 @@
 //编译:
 //		gcc -g3 ./udp_connect_old.c -o x 
 
-
+//优秀的bug 示例demo:
+/*
+	这个demo 充分说明了:
+		再创建一个sfd, 再重新bind() + connect(), 
+		远不如直接dup() server bind() 的sfd 要好, 只要sfd 开启了addr 重用, port 重用即可;
+		直接dup(), 省事省麻烦, 还能拷贝server bind() sfd的setsocketopt() 属性, 一举两得, 类似于tcp;
+*/
 
 #include <stdio.h>
 #include <string.h>

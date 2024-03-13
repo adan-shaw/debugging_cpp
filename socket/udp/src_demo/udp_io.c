@@ -1,27 +1,36 @@
 //udp 异步太复杂, 暂时不搞(有需要的话, 请自己动手实现)
 /*
-	udp 异步需要实现:
+	udp 异步需要重写实现:
 		* 异步udp_accept()
-		* udp_send()
-		* udp_recv()
-		* udp_write()
-		* udp_read()
-	这些函数都需要进行异步改造, 比较麻烦复杂, 可以参考网易云风skynet, 更现成, 直接的代码, 参考价值更高;
+		* 异步udp_send()
+		* 异步udp_recv()
+		* 异步udp_write()
+		* 异步udp_read()
+
+	以上这些函数都需要进行异步改造, 比较麻烦复杂, 
+	可以参考网易云风skynet 的源码, 更现成, 直接的代码, 参考价值更高;
 	本教材只做原理演示, 属于教学性质;
 */
 
 
 
-//同步: 根据ip & port阻塞发送一次数据(一旦阻塞, 线程会被挂起), 成功返回发送的数据size, 失败返回-1
-int udp_send(int sfd, const char* ip, unsigned short port, const char* pbuf, int data_len){
+//同步: 根据ip & port阻塞发送一次数据(一旦阻塞, 线程会被挂起), 成功返回发送的数据size, 失败返回-1; [* 这样封装, 有点复杂, 实用意义不大, 只做模板参考 *]
+int udp_send(int sfd, struct sockaddr_in *addr_peer, const char* ip, unsigned short port, const char* pbuf, int data_len){
 	int tmp;
 	struct sockaddr_in addr;
-	//bzero(&addr, sizeof(struct sockaddr_in));
-	addr.sin_addr.s_addr = inet_addr(ip);
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(port);
 
-	tmp = sendto(sfd, pbuf, data_len, 0, (struct sockaddr*)&addr, sizeof(addr));
+	if(addr_peer == NULL){//不输入addr_peer, 则自动填充
+		//bzero(&addr, sizeof(struct sockaddr_in));
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(port);
+		if(ip == NULL)
+			addr.sin_addr.s_addr = INADDR_ANY;
+		else
+			addr.sin_addr.s_addr = inet_addr(ip);
+		addr_peer = addr;
+	}
+
+	tmp = sendto(sfd, pbuf, data_len, 0, (struct sockaddr*)addr_peer, sizeof(struct sockaddr_in));
 	if(tmp > 0)
 		return tmp;//发送成功(非发送成功, 就应该close(sfd))
 	if(tmp == 0){
@@ -36,16 +45,24 @@ int udp_send(int sfd, const char* ip, unsigned short port, const char* pbuf, int
 	return -1;
 }
 
-//同步: 根据ip & port阻塞接收一次数据(一旦阻塞, 线程会被挂起), 成功返回发送的数据size, 失败返回-1
-int udp_recv(int sfd, const char* ip, unsigned short port, const char* pbuf, int buf_len){
+//同步: 根据ip & port阻塞接收一次数据(一旦阻塞, 线程会被挂起), 成功返回发送的数据size, 失败返回-1; [* 这样封装, 有点复杂, 实用意义不大, 只做模板参考 *]
+int udp_recv(int sfd, struct sockaddr_in *addr_peer, const char* ip, unsigned short port, const char* pbuf, int buf_len){
 	int tmp;
+	socklen_t len = sizeof(struct sockaddr_in);
 	struct sockaddr_in addr;
-	//bzero(&addr, sizeof(struct sockaddr_in));
-	addr.sin_addr.s_addr = inet_addr(ip);
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(port);
 
-	tmp = recvfrom(sfd, *pbuf, buf_len, 0, (struct sockaddr*)&addr, sizeof(addr));
+	if(addr_peer == NULL){//不输入addr_peer, 则自动填充
+		//bzero(&addr, sizeof(struct sockaddr_in));
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(port);
+		if(ip == NULL)
+			addr.sin_addr.s_addr = INADDR_ANY;
+		else
+			addr.sin_addr.s_addr = inet_addr(ip);
+		addr_peer = addr;
+	}
+
+	tmp = recvfrom(sfd, *pbuf, buf_len, 0, (struct sockaddr*)addr_peer, &len);
 	if(tmp > 0)
 		return tmp;//接收成功(非接收成功, 就应该close(sfd))
 	if(tmp == 0){
@@ -62,7 +79,7 @@ int udp_recv(int sfd, const char* ip, unsigned short port, const char* pbuf, int
 
 
 
-//同步: 向一个已执行bind() + connect() 的udp sfd 进行write() 操作
+//同步: 向一个已执行bind() + connect() 的udp sfd 进行write() 操作; [* 这样封装, 有点复杂, 实用意义不大, 只做模板参考 *]
 int udp_write(int sfd, const char* pbuf, int data_len){
 	int tmp = write(sfd, pbuf, data_len);
 	if(tmp > 0)
@@ -79,13 +96,13 @@ int udp_write(int sfd, const char* pbuf, int data_len){
 	return -1;
 }
 
-//同步: 向一个已执行bind() + connect() 的udp sfd 进行read() 操作
+//同步: 向一个已执行bind() + connect() 的udp sfd 进行read() 操作; [* 这样封装, 有点复杂, 实用意义不大, 只做模板参考 *]
 int udp_read(int sfd, const char* pbuf, int buf_len){
 	int tmp = read(sfd, *pbuf, buf_len);
 	if(tmp > 0)
 		return tmp;//接收成功(非接收成功, 就应该close(sfd))
 	if(tmp == 0){
-		//if(buf_len == tmp)//buf_len == tmp == 0 传入的数据长度为0 (虽然极度不推荐这样做, 但既然传入了, 逻辑上也要返回0)
+		//if(buf_len == tmp)//buf_len == tmp == 0
 		if(buf_len == 0)
 			return tmp;
 		else
