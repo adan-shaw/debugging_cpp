@@ -1,0 +1,94 @@
+boost 编程时, 不同平台的差异如下:
+
+
+
+windows:
+	在windows 平台使用boost 库, 一般需要自己指定boost 库的dll 动态链接库文件路径, cmake 才能正确找到dll 动态链接库;
+	一般情况下, 使用boost 都是直接使用cmake 比较好, 使用nmake, makefile 编写较为复杂;
+
+
+
+unix:
+	一般情况下, unix系统的.so 动态链接库, 是存在于/usr/lib, /usr/local/lib 中的,
+	因此, 安装boost 之后, 可以直接通过对应的编译链接选项, 直接找到boost 对应的动态链接库.so 文件, 非常方便!!
+	ps:
+		-l boost_system
+		-l boost_thread
+		...
+		这些编译链接选项, 是unix 系统特有的功能!!
+		windows 系统是没有这种东西的, 也就Unix 系统会这么方便, gcc/clang 编译器, 都是比较先进的编译器!! 才有这么方便的功能!!
+		windows 系统, cl 编译器 + vs IDE, 商业捆绑太严重, 不会把编译器搞得太简单!!
+		只有使用vs IDE 时, 一切才会很简单易用, 离开vs IDE, cl 编译器就是一块屎坑石, 又臭又难用, 这是微软的小心思, 你要懂!!
+
+
+
+总结:
+	以上, 就是编程使用boost 库时, unix 平台和windows 平台的差异!!
+	这个差异是天然存在, 不能屏蔽的, 谨记;
+
+
+
+
+
+#
+# 附录
+#
+
+# 安装所有boost 编程依赖库
+apt-get install libboost-all-dev
+
+
+
+# debian 10 所有boost 编程依赖库(version: 1.67)
+./x86_64-linux-gnu/libboost_regex.so
+./x86_64-linux-gnu/libboost_log.so
+./x86_64-linux-gnu/libboost_program_options.so
+./x86_64-linux-gnu/libboost_stacktrace_basic.so
+./x86_64-linux-gnu/libboost_numpy.so
+./x86_64-linux-gnu/libboost_stacktrace_noop.so
+./x86_64-linux-gnu/libboost_type_erasure.so
+./x86_64-linux-gnu/libboost_numpy27.so
+./x86_64-linux-gnu/libboost_locale.so
+./x86_64-linux-gnu/libboost_math_tr1.so
+./x86_64-linux-gnu/libboost_math_c99l.so
+./x86_64-linux-gnu/libboost_atomic.so
+./x86_64-linux-gnu/libboost_log_setup.so
+./x86_64-linux-gnu/libboost_random.so
+./x86_64-linux-gnu/libboost_graph.so
+./x86_64-linux-gnu/libboost_serialization.so
+./x86_64-linux-gnu/libboost_prg_exec_monitor.so
+./x86_64-linux-gnu/libboost_python27.so
+./x86_64-linux-gnu/libboost_context.so
+./x86_64-linux-gnu/libboost_mpi.so
+./x86_64-linux-gnu/libboost_timer.so
+./x86_64-linux-gnu/libboost_wserialization.so
+./x86_64-linux-gnu/libboost_numpy3.so
+./x86_64-linux-gnu/libboost_signals.so
+./x86_64-linux-gnu/libboost_python3.so
+./x86_64-linux-gnu/libboost_mpi_python3-py37.so
+./x86_64-linux-gnu/libboost_fiber.so
+./x86_64-linux-gnu/libboost_date_time.so
+./x86_64-linux-gnu/libboost_unit_test_framework.so
+./x86_64-linux-gnu/libboost_chrono.so
+./x86_64-linux-gnu/libboost_stacktrace_addr2line.so
+./x86_64-linux-gnu/libboost_numpy37.so
+./x86_64-linux-gnu/libboost_mpi_python3.so
+./x86_64-linux-gnu/libboost_math_c99.so
+./x86_64-linux-gnu/libboost_stacktrace_backtrace.so
+./x86_64-linux-gnu/libboost_mpi_python27.so
+./x86_64-linux-gnu/libboost_container.so
+./x86_64-linux-gnu/libboost_python3-py37.so
+./x86_64-linux-gnu/libboost_wave.so
+./x86_64-linux-gnu/libboost_graph_parallel.so
+./x86_64-linux-gnu/libboost_thread.so
+./x86_64-linux-gnu/libboost_coroutine.so
+./x86_64-linux-gnu/libboost_system.so
+./x86_64-linux-gnu/libboost_math_tr1f.so
+./x86_64-linux-gnu/libboost_filesystem.so
+./x86_64-linux-gnu/libboost_mpi_python.so
+./x86_64-linux-gnu/libboost_math_tr1l.so
+./x86_64-linux-gnu/libboost_math_c99f.so
+./x86_64-linux-gnu/libboost_python37.so
+./x86_64-linux-gnu/libboost_iostreams.so
+./x86_64-linux-gnu/libboost_mpi_python37.so
+./x86_64-linux-gnu/libboost_python.so
