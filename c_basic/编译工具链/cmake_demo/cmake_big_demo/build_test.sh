@@ -23,7 +23,7 @@ cd $build_home
 
 # -Wdev: 默认选项, 有等于没有
 #cmake -G "NMake Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev
-cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev -D 
+cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev 
 
 # --debug-output: 普通日志输出
 #cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release --debug-output
@@ -49,9 +49,11 @@ cmake -G "Unix Makefiles" .. -D CMAKE_BUILD_TYPE=Release -Wdev -D
 
 
 
-# 运行编译成功后的文件
-cd ./build
+# 执行编译
 make
 
+echo "*******"
+echo "do test"
+echo "*******"
 home=$(pwd)
 /bin/sh -c "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$home $home/obj_out"
