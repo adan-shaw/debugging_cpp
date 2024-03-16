@@ -4,6 +4,6 @@
 
 
 
-echo (":: adan version for build ng-tsp 
+echo (":: adan version for build ng-tsp
 set QT_DIR= ^
-") > ./baby.bat
+") > ./windows_buildEx.bat
