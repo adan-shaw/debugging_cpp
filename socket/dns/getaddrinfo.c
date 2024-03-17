@@ -9,6 +9,7 @@
 	另外www.baidu.com 还有两台网关server;
 */
 
+#define _POSIX_C_SOURCE 200809L //支持c99
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

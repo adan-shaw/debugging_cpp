@@ -1,7 +1,7 @@
 //编译
 //		gcc -g3 ./getnameinfo.c -o x 
 
-
+#define _POSIX_C_SOURCE 200809L //支持c99
 #include <stdio.h>
 #include <netdb.h>
 #include <sys/types.h>
