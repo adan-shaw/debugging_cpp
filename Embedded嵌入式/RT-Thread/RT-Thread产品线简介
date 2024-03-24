@@ -1,0 +1,43 @@
+RT-Thread 版本:       RTT 全套开源代码
+RT-Thread Nano源代码:  一个精简版本, 主要适合资源有限的系统
+RT-Thread Smart:      一个智能的RTOS, 可以自动帮助开发者选择最适合的系统配置
+RT-Thread env 工具:    一个命令行工具, 用于设置和管理RT-Thread项目
+RT-Thread Studio:    RTT 快速开发IDE
+
+ps:
+	实际重点就两个:
+		* RT-Thread env(交叉编译工具链 + 镜像生成部署工具 + 烧写工具)
+		* RT-Thread 源码(system kernel + 应用编码SDK, 有3 个版本, 可供剪裁)
+
+	RT-Thread Studio 可以选择用, 可以选择不用(windows only)
+
+
+
+
+
+安装env工具: 
+	# 在命令行中输入以下命令安装RT-Thread env工具
+	pip install rt-thread-env
+
+初始化工程: 
+	使用RT-Thread env创建一个新的工程: 
+	rt-thread-env.exe init [project-name]
+
+配置工程: 
+	# 使用env工具配置工程
+	rt-thread-env.exe config
+
+生成工程: 
+	# 生成工程文件
+	rt-thread-env.exe generate
+
+打开工程: 
+	使用你的IDE(如Keil, IAR, VSCode等)打开生成的工程文件
+
+编译并下载(RT-Thread Studio): 
+	在你的IDE中编译工程, 然后将其下载到你的目标设备
+	如果您有更具体的问题, 例如配置工具链、添加组件、解决特定的编译错误等, 请提供详细信息以便得到更准确的帮助
+
+
+
+由于RT-Thread 涉及到的主板过多, 烧写方式不统一, 因此你也可以手动烧写img 镜像(用你最熟练的方式烧写img 镜像)
