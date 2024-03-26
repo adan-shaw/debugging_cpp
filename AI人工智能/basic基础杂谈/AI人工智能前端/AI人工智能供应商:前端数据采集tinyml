@@ -88,3 +88,11 @@ tinyml 人工智能前端的存在意义:
 	AI 前端的任务, 实际上可以做前端分析, 减轻服务器的压力, 打个比方: 
 		如果是文心一言, 前端可能已经复杂先把关键的语法分析, 给预处理了, 直接提交元数据到服务器上面, 再跑大数据分析, 
 		这样子, 服务器可以减少很多压力;
+
+tinyml4mobile移动互联网设备:
+	* Pytorch-Mobile
+	* TensorflowLite
+
+tinyml4IoT物联网设备:
+	* TensorflowLite Micro
+	* Micro NN
