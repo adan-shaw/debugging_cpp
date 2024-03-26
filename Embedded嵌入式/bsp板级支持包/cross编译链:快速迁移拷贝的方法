@@ -1,0 +1,30 @@
+1.重新制作交叉编译工具链, 是一个十分复杂的过程;
+	(从原始gcc 开始制作, 就是bsp 板级支持包重建了, 
+	 一般嵌入式应用开发, 不需要这么做, 只需要直接把工具链拷贝出来, 做快速开发即可)
+
+	如果工具链制作好了, 也可以做类似tarball 包一样的简单&快速恢复, 来达到嵌入式敏捷开发的目的;
+	只要重建PATH, LIBRARY 路径即可, 
+	然后通过修改makefile, cmake文件, 指定编译工具链的位置, 共享链接库的位置, 
+	就能快速实现交叉编译链的迁移复制, 省去很多麻烦事;
+
+
+
+
+
+2.交叉编译时, 重新指定关键编译选项, 就能更改编译链位置:
+	autoconf:
+		--sysroot=<dir>
+	cmake:
+		CMAKE_SYSROOT()
+
+	--sysroot 的默认位置是: '/' 根目录;
+	默认搜索目录:
+		/usr/include
+		/usr/lib
+		/usr/lib64
+		/usr/bin
+	修改后:
+		<dir>/usr/include
+		<dir>/usr/lib
+		<dir>/usr/lib64
+		<dir>/usr/bin
