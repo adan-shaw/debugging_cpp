@@ -1,0 +1,51 @@
+1.--build,--host,--target 三个都不指定, 
+	--host默认由config.guess 检测,
+	--build,--target 默认跟随--host
+
+
+
+2.指定--host, 其它不指定, 则--build,--target 默认跟随--host
+
+
+
+3.指定--host, 指定--build, --target不指定, 则--target默认跟随--host
+
+
+
+
+
+build、host、target的三种组合:
+	三者都相同则为本地编译:
+		指定: 
+			--build=X86, --host=X86, --target=X86
+		解析:
+			使用X86下构建X86的gcc编译器, 编译出能在X86下运行的程序
+
+
+
+	build & host与target 不同, 是交叉编译链(gcc + binutils):
+		指定: 
+			--build=X86, --host=X86, --target=MIPS
+		解析:
+			在X86下, 交叉编译出能跑在MIPS下运行的可执行程序
+
+
+
+	host & target与build 不同, 是运行时库(glibc / libstdc++):
+		指定: 
+			--build=X86, --host=MIPS, --target=MIPS
+		解析:
+			在X86下, 交叉编译出能跑在MIPS下运行的运行时库
+
+
+
+	基本很少用, 不太可能出现的情况:
+		指定: 
+			--build=X86, --host=MIPS, --target=ARM
+		解析:
+			在X86下构建gcc交叉编译器, 在MIPS上运行gcc交叉编译器, 编译出能在ARM上运行的可执行程序
+
+		指定: 
+			--build=X86, --host=ARM, --target=MIPS
+		解析:
+			在X86下构建gcc交叉编译器, 在ARM上运行gcc交叉编译器, 编译出能在MIPS运行的可执行程序

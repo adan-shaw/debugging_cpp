@@ -1,0 +1,59 @@
+bsp 实施策略:
+	* 搭建原始gcc
+	* 重新编译img 镜像(kernel + app = os)
+	* 特殊驱动补全
+	* 整个os 启动, 运行, 服务管理的优化(提升)
+
+
+
+一般来说, 如果你没有什么bsp 开发经验, 你是应付不了复杂, 大型的系统的bsp 的, 例如: linux / android, 这种大型系统的bsp 实施, 比较复杂;
+
+你可以从比较小型的RT-Thread / openwrt 开始玩bsp, 实际上也是很简单的;
+
+
+
+普通交叉编译链, 就是直接把编译好的环境, 工具, 直接拷贝出来, 安装到指定位置即可;
+
+但bsp 级别的交叉编译工具链, 实际上就是你之前做的lfs, 
+
+就是从gcc 中选择适合的arch, 编译出原始gcc, 然后编译glibc, 然后编译全功能的gcc(包括g++), 
+
+最后, 再将系统关键的引导 + kernel, 等全部img 镜像需要的程序, 编译一次, 
+
+最终制作成一个img 镜像, 然后烧写到disk 中, 重建bios 引导, 就是bsp;
+
+ps:
+	lfs 实际上是linux bsp, 基于什么样的系统, 你自己看着办, 在什么主板上, 用什么芯片, 就是linux xxx bsp!!
+
+
+
+鉴于目前的现实目标, 大型系统的bsp, 难度较大, 因此锁定实际用途比较广泛的RT-Thread / openwrt 作为target;
+
+
+
+
+
+RT-Thread bsp:
+	* 根据芯片arch 架构, 选择适合的arch, 编译出原始gcc;
+	* 根据原始gcc, 根据RT-Thread 编译出RT-Thread 的各种依赖库;
+		(RT-Thread 应该依赖库不多, 一般是c 语言运行时库, 系统核心支持库等, 应该难度不大, 而且自动化程度较高, 看看教程就行)
+	* 根据原始gcc + RT-Thread 的各种依赖库, 编译出全功能的gcc (RT-Thread 支持高版本的g++);
+	* 根据全功能gcc, 编译出整个RT-Thread img 镜像
+	* 利用烧写工具, 把RT-Thread img 镜像, 烧写到存储材料上面, 然后重建引导;
+	* 调试RT-Thread img 是否正常启动, 运行;
+
+
+
+openwrt bsp:
+	* 根据芯片arch 架构, 选择适合的arch, 编译出原始gcc;
+	* 根据原始gcc, 根据openwrt 编译出openwrt 的各种依赖库;
+		(openwrt 应该依赖库不多, 一般是c 语言运行时库, 系统核心支持库等, 应该难度不大, 而且自动化程度较高, 看看教程就行)
+	* 根据原始gcc + openwrt 的各种依赖库, 编译出全功能的gcc (openwrt 支持高版本的g++);
+	* 根据全功能gcc, 编译出整个openwrt img 镜像
+	* 利用烧写工具, 把openwrt img 镜像, 烧写到存储材料上面, 然后重建引导;
+	* 调试openwrt img 是否正常启动, 运行;
+
+
+
+
+
