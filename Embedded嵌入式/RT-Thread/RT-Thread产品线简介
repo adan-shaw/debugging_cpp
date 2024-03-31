@@ -1,8 +1,8 @@
 RT-Thread 版本:       RTT 全套开源代码
 RT-Thread Nano源代码:  一个精简版本, 主要适合资源有限的系统
 RT-Thread Smart:      一个智能的RTOS, 可以自动帮助开发者选择最适合的系统配置
-RT-Thread env 工具:    一个命令行工具, 用于设置和管理RT-Thread项目
-RT-Thread Studio:    RTT 快速开发IDE
+RT-Thread env 工具:    一个命令行工具, 用于设置和管理RT-Thread项目(windows only)
+RT-Thread Studio:    RTT 快速开发IDE(windows only)
 
 ps:
 	实际重点就两个:
@@ -10,6 +10,11 @@ ps:
 		* RT-Thread 源码(system kernel + 应用编码SDK, 有3 个版本, 可供剪裁)
 
 	RT-Thread Studio 可以选择用, 可以选择不用(windows only)
+
+最精简版本:
+	Nano版, 俗称就是最简版, 默认只包含最基本的线程, 信号量, 队列, 邮箱等基础功能, 
+	不包含其他工具包, 比如finsh控制台; 
+	因此移植Nano 版RRT 非常方便, 因为只需要设置系统时钟部分的接口即可;
 
 
 

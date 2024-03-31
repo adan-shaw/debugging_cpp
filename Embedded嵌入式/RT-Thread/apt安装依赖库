@@ -1,0 +1,8 @@
+# 安装QEMU, 使用命令: 
+sudo apt-get install qemu
+
+# 安装Scons, 使用命令: 
+sudo apt-get install scons
+
+# 安装ncurses 库, 使用命令: 
+sudo apt-get install libncurses5-dev

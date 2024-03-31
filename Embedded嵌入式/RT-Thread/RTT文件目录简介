@@ -1,0 +1,62 @@
+#
+# 1.2./rt-thread-5.0.2/* 主目录简介
+#
+1.bsp 文件夹:
+	./bsp 目录, 是板级接口文件, 也就是关键文件: board.c 和rtconfig.h 所在的目录(看名字翻译就知道,前者是板级接口,后者的rt系统配置,里面全是宏定义开关);
+	而其它文件夹都是一些常用单片机移植好的例子, 不需要参考就直接删除;
+
+2.components 文件夹:
+	./components 目录, 里面装着一些rtt系统的组件;
+	nano版中, 这里面就一个finsh控制台组件和一个device组件, 后者没用过, 好像是硬件接口, 略(主要看finsh控制台组件);
+	最后移植好rtt后再根据需要添加组件, 如果单片机SRAM抓急, 一般就放不下finsh;
+
+3.docs 文件夹:
+	说明文档, 就一个文本文件, 打开后是一堆教程链接, 略;
+
+4.include 文件夹:
+	rtt系统的相关*.h 头文件集合;
+
+5.libcpu 文件夹:
+	里面装着单片机内核平台文件, 根据单片机内核和ide平台选择;
+
+6.src 文件夹
+	rtt系统的相关*.c 脚本文件集合;
+
+7.最后
+	最后根据需要进行删减:
+		include 和src 不需要改动, 板级只保留两个代码文件, 组件只保留finsh文件夹, 内核只保留需要的;
+	最后得到的文件夹内容如下:
+		./bsp
+		./components/finsh
+		./include
+		./libcpu/arm/cortex-m0 (以cortex-m0 为例)
+		./src
+	然后得到一个目录, 就是bsp 的基本工程目录, 可以利用交叉编译工具链, 编译出整个RTT-OS img, 然后烧制;
+	ps:
+		RTT 这种小型系统, 一般OS+APP 应用都是一起运行的, 这点问题不大;
+
+
+
+
+
+#
+# 2./rt-thread-5.0.2/bsp/* 目录简介(以./rt-thread-5.0.2/bsp/stm32f40x 目录为例):
+#
+cd ./rt-thread-5.0.2/bsp/stm32f40x
+
+applications    目录下存放一些顶层应用程序
+drivers         目录下存放RT-Thread 设备驱动程序
+Libraries       目录下存放stm32 官方固件库代码
+rtconfig.h      为当前工程的头文件, 用于控制RT-Thread 组件裁剪
+Project.uvproj  为MDK 工程文件
+Template.uvproj 为生成MDK 工程文件模板文件, 由SCons 使用
+Stm32_rom.ld    为GCC 链接文件, 用于GCC 编译
+Stm32_rom.sct   为MDK 分散加载文件, 当使用SCons 调用 armcc 编译时需要使用
+rtconfig.py     为python 脚本, 主要用于配置SCons 的底层编译器
+SConscript      为python 脚本, 由SCons 使用
+SConsctruct     为python 脚本, 由SCons 使用
+
+
+
+
+
