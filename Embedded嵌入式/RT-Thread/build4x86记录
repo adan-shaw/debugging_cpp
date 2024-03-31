@@ -1,0 +1,94 @@
+声明:
+	本攻略, 适用于RT-Thread-5.0.2
+
+
+
+# 解压源码
+unzip ./rt-thread-5.0.2.zip
+
+
+# 进入到平台的关键目录
+cd ./rt-thread-5.0.2
+cd ./bsp/x86
+
+
+
+# 设置RTT 关键的编译信息(scons 是一个python 编译工具集, 通过*.py 脚本来控制编译行为的, 在RTT 中, 这个控制脚本是./rtconfig.py):
+vim rtconfig.py
+
+# 修正EXEC_PATH(默认是win 平台的RTT 路径, 注释掉)
+#EXEC_PATH   = os.getenv('RTT_EXEC_PATH') or 'E:/Program Files/CodeSourcery/Sourcery_CodeBench_Lite_for_IA32_ELF/bin'
+EXEC_PATH = os.getenv('RTT_EXEC_PATH') or '/usr/bin'
+
+# 修正PREFIX(默认是: i386-unknown-elf- 的交叉编译前缀, pc 安装的gcc 工具链是没有前缀的, 直接去掉)
+#PREFIX = 'i386-unknown-elf-'
+PREFIX = ''
+
+
+
+# RTT 不支持linux-64bit, 强制使用gcc 32bit 版本, 编译RTT:
+vim rtconfig.py
+
+# 把DEVICE 前缀注释掉, 把-m32 编译选项加上, 让gcc & ld 都使用-m32, 省事:
+#DEVICE = ' -mtune=generic'
+DEVICE = ' -m32 '
+
+
+
+# RT-Thread-5.0.2 版本错误: error: unknown type name 'suseconds_t'
+# 添加linux-64bit 专属的解决方案(__suseconds_t 类型是long int, 在Linux 64bit和GCC4.6.1环境下, long int是64 bit的):
+vim ./rt-thread-5.0.2/components/libc/compilers/common/include/sys/time.h
+#include <time.h>
+#define suseconds_t __suseconds_t
+
+# RT-Thread-5.0.2 版本错误: error: unknown type name 'useconds_t'
+vim ./rt-thread-5.0.2/components/libc/compilers/common/include/sys/unistd.h
+#include <time.h>
+#define useconds_t __useconds_t
+
+# RT-Thread-5.0.2 版本错误: cstdlib.c:62:19: error: 'NULL' undeclared (first use in this function)
+vim ./rt-thread-5.0.2/components/libc/compilers/common/cstdlib.c
+#include <stddef.h>
+
+
+
+# 直接生成menuconfig, 配置之后产生.config, 才能正确编译出RTT(默认配置即可, 详细建材后续再搞, 最主要是生成.config)
+cd ./rt-thread-5.0.2
+cd ./bsp/x86
+scons --menuconfig
+
+# 根据pc 平台, 编译出x86 的RRT
+scons platform=linux-gcc
+
+
+
+# 编译过程中的致命问题(rt_hw_context_switch_interrupt() 函数发生冲突, 重定义): 
+# 	rt-thread-5.0.2/libcpu/ia32/cpuport.c:31:6: error: conflicting types for 'rt_hw_context_switch_interrupt'
+# 	rt-thread-5.0.2/include/rthw.h:145:6: note: previous declaration of 'rt_hw_context_switch_interrupt' was here
+
+# 这是RT-Thread-5.0.2 版本的源码问题, 换一个版本试试, 没办法解决!!
+# 如果你修改源码, 跳过去, 后续也可能会出问题, 功能出现问题;
+
+# 强制跳过的方法(用):
+vim ./rt-thread-5.0.2/libcpu/ia32/cpuport.c
+# 修改第145 行, 让这两个函数参数对齐( 主要报错原因是: 这两个重名函数的参数不统一? 应该是作者没哟更新x86 版本导致的, 可以提醒一下)
+//void rt_hw_context_switch_interrupt(rt_ubase_t from, rt_ubase_t to)
+void rt_hw_context_switch_interrupt(rt_ubase_t from, rt_ubase_t to, rt_thread_t from_thread, rt_thread_t to_thread)
+
+
+
+# 查看编译后的rtthread.bin 文件
+file rtthread.bin
+
+
+
+# 使用qume 启动rtthread.bin(拷贝可用的, 直接用, 省得麻烦, rtthread.bin 文件, 名都不用改, 直接用就行)
+cp ../qemu-virt64-aarch64/qemu.sh .
+chmod 755 ./qemu.sh
+./qemu.sh
+
+# 注意, x86 版本, 用我改造好的./qemu.x86.sh 启动please !! (改造过程, 可以自己模仿: ../qemu-virt64-aarch64/qemu.sh)
+./qemu.x86.sh
+
+
+

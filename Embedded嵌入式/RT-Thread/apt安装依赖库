@@ -1,8 +1,56 @@
-# 安装QEMU, 使用命令: 
-sudo apt-get install qemu
+# 安装gcc 32bit 支持包, RTT 不支持64 bit 版本的gcc
+apt-get install gcc-multilib
 
-# 安装Scons, 使用命令: 
+
+
+# 安装全功能QEMU, 使用命令: 
+apt-get install qemu-efi # transitional dummy package
+apt-get install qemu-efi-aarch64 # UEFI firmware for 64-bit ARM virtual machines
+apt-get install qemu-efi-arm # UEFI firmware for 32-bit ARM virtual machines
+apt-get install qemu # fast processor emulator, dummy package
+apt-get install qemu-block-extra # extra block backend modules for qemu-system and qemu-utils
+apt-get install qemu-guest-agent # Guest-side qemu-system agent
+apt-get install qemu-kvm # QEMU Full virtualization on x86 hardware
+apt-get install qemu-system # QEMU full system emulation binaries
+apt-get install qemu-system-arm # QEMU full system emulation binaries (arm)
+apt-get install qemu-system-common # QEMU full system emulation binaries (common files)
+apt-get install qemu-system-data # QEMU full system emulation (data files)
+apt-get install qemu-system-gui # QEMU full system emulation binaries (user interface and audio support)
+apt-get install qemu-system-mips # QEMU full system emulation binaries (mips)
+apt-get install qemu-system-misc # QEMU full system emulation binaries (miscellaneous)
+apt-get install qemu-system-ppc # QEMU full system emulation binaries (ppc)
+#apt-get install qemu-system-sparc # QEMU full system emulation binaries (sparc)
+apt-get install qemu-system-x86 # QEMU full system emulation binaries (x86)
+apt-get install qemu-user # QEMU user mode emulation binaries
+apt-get install qemu-user-binfmt # QEMU user mode binfmt registration for qemu-user
+apt-get install qemu-user-static # QEMU user mode emulation binaries (static version)
+apt-get install qemu-utils # QEMU utilities
+apt-get install qemu-skiboot # OpenPower firmware component
+apt-get install qemu-slof # Slimline Open Firmware -- QEMU PowerPC version
+
+
+
+# 安装Scons, 使用命令(scons 编译, 类似于make 编译工具, 应该都是'同类型的编译链接工具'): 
+# scons - replacement for make
+# scons-doc - Documentation for SCons, a replacement for Make
 sudo apt-get install scons
+
+
 
 # 安装ncurses 库, 使用命令: 
 sudo apt-get install libncurses5-dev
+
+
+
+
+
+#
+# 手动安装scons 的方法(如果出现报错, 可以试试使用这个方法)
+#
+# 报错码: scons: *** No SConstruct file found. File "/usr/lib/scons/SCons/Script/Main.py", line 924, in _main 
+# [ps: 这个问题没办法解决, 只能卸载 apt-get purge scons ]
+unzip ./scons-master.zip
+cd scons-master
+tar xf ./scons-3.1.2.tar.gz
+cd scons-3.1.2
+sudo python2.7 setup.py install
