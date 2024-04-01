@@ -22,3 +22,46 @@ apt-get install qemu-user-static # QEMU user mode emulation binaries (static ver
 apt-get install qemu-utils # QEMU utilities
 apt-get install qemu-skiboot # OpenPower firmware component
 apt-get install qemu-slof # Slimline Open Firmware -- QEMU PowerPC version
+
+
+
+
+
+#
+# qemu 支持的芯片类型(debian10):
+#
+qemu-system-aarch64
+qemu-system-alpha
+qemu-system-arm
+qemu-system-cris
+qemu-system-hppa
+qemu-system-i386
+qemu-system-lm32
+qemu-system-m68k
+qemu-system-microblaze
+qemu-system-microblazeel
+qemu-system-mips
+qemu-system-mips64
+qemu-system-mips64el
+qemu-system-mipsel
+qemu-system-moxie
+qemu-system-nios2
+qemu-system-or1k
+qemu-system-ppc
+qemu-system-ppc64
+qemu-system-ppc64le
+qemu-system-riscv32
+qemu-system-riscv64
+qemu-system-s390x
+qemu-system-sh4
+qemu-system-sh4eb
+qemu-system-sparc
+qemu-system-sparc64
+qemu-system-tricore
+qemu-system-unicore32
+qemu-system-x86_64
+qemu-system-xtensa
+qemu-system-xtensaeb
+
+
+

@@ -1,0 +1,15 @@
+rtthread-nano-v3.1.5 支持的硬件:
+	gd32e230k-msh
+	gd32vf103-blink
+	lpc55s69-blink
+	lpc824_blink
+	stm32f103-blink
+	stm32f103-ll-blink
+	stm32f103-msh
+	stm32l0_blink
+
+
+
+这些基本上都是arm/risc-v 的小芯片, 连mips 都没有, 更没有x86;
+
+因此, nano 版基本上都是一些极限小芯片, 你自己看着办, 但可能这种小芯片, 应用场合也很多, 更广泛, 因为廉价;
