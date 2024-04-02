@@ -1,0 +1,40 @@
+# 对单个文件进行格式化
+indent -nce -ut -npro -nip -nlp -npsl -i2 -ts2 -sob -ss -l0 -bl -bli 0 ./main.cpp
+
+
+
+#!/bin/sh
+
+find . -name "*.cpp" -exec indent -nce -ut -npro -nip -nlp -npsl -i2 -ts2 -sob -ss -l0 -bl -bli 0 `pwd`/{} \;
+find . -name "*.c" -exec indent -nce -ut -npro -nip -nlp -npsl -i2 -ts2 -sob -ss -l0 -bl -bli 0 `pwd`/{} \;
+find . -name "*.h" -exec indent -nce -ut -npro -nip -nlp -npsl -i2 -ts2 -sob -ss -l0 -bl -bli 0 `pwd`/{} \;
+find . -name "*.hpp" -exec indent -nce -ut -npro -nip -nlp -npsl -i2 -ts2 -sob -ss -l0 -bl -bli 0 `pwd`/{} \;
+
+
+
+
+
+ps:
+	indent 同样只能格式化编译语言, 不能格式化py, lua, sh 等动态脚本!!
+	这些编码格式化工具, 其实也没有那么智能!!
+	只是indent 比clang-format 好用而已!!
+
+indent 不知道为何会把旧文件保留为: *~ 后缀, 可以通过find 命令进行删除!!
+find . -name "*~" -exec rm {} \;
+
+
+
+遇到比较凌乱的代码, 这种自动化格式化工具, 会出错的!!
+
+这种工具并不是万能的, 请小心使用;
+
+
+
+代码写得工整, 就容易格式化, 不工整的代码, 基本上会乱套的(写得太乱的代码, 就别浪费时间了, 格式化工具一样不能用);
+
+一个格式化之后, 编译通过的, 问题都不大!!
+
+所以:
+	格式化之前, 必须确保代码完美编译;
+	如果格式化之后, 代码编译错误, 说明: 格式化失效!!
+	(这至少是一个double check 的手段)

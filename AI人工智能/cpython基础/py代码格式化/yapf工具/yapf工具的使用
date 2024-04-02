@@ -1,0 +1,33 @@
+#
+# 1.安装yapf 格式化工具(支持python 2/3)
+#
+python-yapf - public modules for yapf (Python 2)
+python3-yapf - public modules for yapf (Python 3)
+yapf - Python code formatter for different styles (Python 2)
+yapf3 - Python code formatter for different styles (Python 3)
+
+# 安装
+apt-get install python-yapf python3-yapf yapf yapf3
+
+
+
+
+
+#
+# 2.简单使用
+#
+--style STYLE    指定需要格式化的编程风格, 如pep8或者google等, 也可以是自定义的设置文件(默认是pep8)
+-d, --diff       比较格式化后的文件和原文件的区别
+-i, --in-place   直接把格式化的文件更改在源文件上
+-r, --recursive  在目录中递归运行
+-l START-END, --lines START-END 指定格式化的行的范围
+
+
+
+# python2 [由于python2/3 后缀都是py, 所以格式化时, 必须自己区分是python2/3 的项目, 别用错了]
+yapf -i -r --style='{indent_width: 2, column_limit: 4096, continuation_indent_width:2}' .
+
+
+
+# python3 [由于python2/3 后缀都是py, 所以格式化时, 必须自己区分是python2/3 的项目, 别用错了]
+yapf3 -i -r --style='{indent_width: 2, column_limit: 4096, continuation_indent_width:2}' .

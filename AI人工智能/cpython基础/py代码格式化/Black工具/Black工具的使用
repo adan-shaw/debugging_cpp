@@ -1,0 +1,34 @@
+# 由于black 只支持python3, 因此废弃;
+black - uncompromising Python code formatter (Python 3)
+python-black-doc - uncompromising Python code formatter (common documentation)
+
+# 安装black
+apt-get install black python-black-doc
+
+
+
+#
+# black 简单使用
+#
+以下是 Black 的几种常见使用方法: 
+
+1.格式化单个文件: 
+black <filename>
+
+2.格式化多个文件: 
+black <filename1> <filename2> ...
+
+3.格式化整个目录: 
+black <directory>
+
+4.递归格式化目录及其子目录: 
+black --recursive <directory>
+
+5.对已经格式化过的文件进行检查(只会检查指定的文件是否符合Black 的代码风格规范, 而不会对文件做出实际修改): 
+black --check <filename>
+
+
+
+无论是单个文件还是目录, Black 都会直接修改原始文件; 
+
+为了避免不可逆的更改, 请确保在运行 Black 前备份代码; 
