@@ -1,0 +1,29 @@
+在使用openssl 加密时, 需要读取公钥, 私钥文件;
+但由于不同的语言调用openssl库生成的秘钥格式不同, 导致PEM公钥格式的文件有较大差异!!
+openssl c++ 接口为了屏蔽这种差异, 被迫搞了两个API 来应对:
+
+(1) RSA 公钥格式1:
+-----BEGIN PUBLIC KEY-----
+-----END PUBLIC KEY-----
+
+(2) RSA 公钥格式2:
+-----BEGIN RSA PUBLIC KEY----- 
+-----END RSA PUBLIC KEY----- 
+
+
+对应的c/c++ API 接口是:
+(1)PEM_read_RSA_PUBKEY()      针对第一种格式
+(2)PEM_read_RSAPublicKey()    针对第二种格式
+
+
+调用API 出错, 会导致RSA 校验出错!!
+报错码是:
+	Signature created successfully
+	140737348059648:error:0909006C:PEM routines:get_name:no start line:../crypto/pem/pem_lib.c:745:Expecting: RSA PUBLIC KEY
+	Error loading public key
+	(装载公钥失败!! 其实啥问题都没有, 只是你用错了API, 公钥格式不对, 装载不上, 所以没有公钥, 解析不了!!)
+
+
+
+ps:
+	(只有RSA 公钥是存在这个问题, RSA 私钥不存在这个问题, 很奇怪)
