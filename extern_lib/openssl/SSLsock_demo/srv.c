@@ -11,7 +11,7 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
-#define MAXBUF (1024)
+#define MAXBUF (4096)
 
 //SSL 库初始化(client/server 通用的固定顺序, 使用SSL 库前都必须先初始化, 只需要初始化一次)
 void init_ssl (void)
@@ -162,7 +162,7 @@ int main (int argc, char **argv)
 		}
 
 		//发消息给客户端
-		bzero (buf, MAXBUF + 1);
+		//bzero (buf, MAXBUF + 1);
 		strcpy (buf, "server->client: hello world");
 		len = SSL_write (ssl, buf, strlen (buf));
 		if (len <= 0)
@@ -171,7 +171,7 @@ int main (int argc, char **argv)
 			goto pos_finish;
 		}
 		else
-			printf ("srv: 消息'%s'发送成功, 共发送了%d个字节! \n", buf, len);
+			printf ("srv: 消息'%s'发送成功, 共发送了%d个字节!!\n", buf, len);
 
 		//接收客户端的消息
 		bzero (buf, MAXBUF + 1);

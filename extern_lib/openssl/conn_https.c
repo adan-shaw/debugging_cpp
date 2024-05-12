@@ -1,3 +1,8 @@
+//编译:
+//		gcc -g3 ./conn_https.c -lssl -lcrypto -o x
+
+
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -11,6 +16,7 @@
 #include <openssl/err.h>
 
 #define MAXBUF (4096)
+#define HTTP_REQUEST "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n"
 
 //打印CA证书信息(提取CA证书信息)
 void ShowCerts (SSL * ssl)
@@ -33,7 +39,7 @@ void ShowCerts (SSL * ssl)
 		X509_free (cert);
 	}
 	else
-		printf ("无证书信息!!\n");
+		printf ("无证书信息!\n");
 	return;
 }
 
@@ -90,7 +96,7 @@ int main (int argc, char **argv)
 
 	if (argc != 3)
 	{
-		printf ("参数格式错误!!正确用法如下: \n\t\t%s IP地址 端口\n\t比如:\t%s 127.0.0.1 443\n", argv[0], argv[0]);
+		printf ("参数格式错误!正确用法如下：\n\t\t%s IP地址 端口\n\t比如:\t%s 127.0.0.1 443\n", argv[0], argv[0]);
 		return -1;
 	}
 
@@ -135,28 +141,27 @@ int main (int argc, char **argv)
 		ShowCerts (ssl);
 	}
 
+	//发消息给服务器(需要填写http 请求, 链接https 是没问题的, 证书拿到了, 但不提交http 请求, 是没办法拿到数据的, http 协议走起)
+	strncpy (buffer, HTTP_REQUEST, strlen (HTTP_REQUEST));
+	len = SSL_write (ssl, buffer, strlen (buffer));
+	if (len < 0)
+	{
+		printf ("cli: 消息发送失败!! 错误代码是%d, 错误信息是%s\n\n\n", errno, strerror (errno));
+		goto pos_error;
+	}
+	else
+		printf ("cli: 消息发送成功, 共发送了%d个字节!! 数据如下:\n%s\n\n\n", len, buffer);
+
 	//接收对方发过来的消息, 最多接收 MAXBUF 个字节
 	bzero (buffer, MAXBUF + 1);
 	len = SSL_read (ssl, buffer, MAXBUF);
 	if (len > 0)
-		printf ("cli: 接收消息成功:'%s', 共%d个字节的数据\n", buffer, len);
+		printf ("cli: 接收消息成功, 共%d个字节的数据!! 数据如下:\n%s\n\n\n", len, buffer);
 	else
 	{
-		printf ("cli: 消息接收失败!!错误代码是%d, 错误信息是'%s'\n", errno, strerror (errno));
+		printf ("cli: 消息接收失败!! 错误代码是%d, 错误信息是%s\n\n\n", errno, strerror (errno));
 		goto pos_error;
 	}
-
-	//发消息给服务器
-	//bzero (buffer, MAXBUF + 1);
-	strcpy (buffer, "client->server: hello world");
-	len = SSL_write (ssl, buffer, strlen (buffer));
-	if (len < 0)
-	{
-		printf ("cli: 消息'%s'发送失败!!错误代码是%d, 错误信息是'%s'\n", buffer, errno, strerror (errno));
-		goto pos_error;
-	}
-	else
-		printf ("cli: 消息'%s'发送成功, 共发送了%d个字节!!\n", buffer, len);
 
 pos_error:
 	SSL_shutdown (ssl);						//关闭SSL 连接
