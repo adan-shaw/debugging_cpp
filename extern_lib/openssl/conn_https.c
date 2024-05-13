@@ -141,7 +141,7 @@ int main (int argc, char **argv)
 		ShowCerts (ssl);
 	}
 
-	//发消息给服务器(需要填写http 请求, 链接https 是没问题的, 证书拿到了, 但不提交http 请求, 是没办法拿到数据的, http 协议走起)
+	//发消息给服务器(需要填写http 请求命令, 详情请阅读http 协议)
 	strncpy (buffer, HTTP_REQUEST, strlen (HTTP_REQUEST));
 	len = SSL_write (ssl, buffer, strlen (buffer));
 	if (len < 0)

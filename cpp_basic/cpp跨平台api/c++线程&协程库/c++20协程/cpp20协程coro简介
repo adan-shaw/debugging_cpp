@@ -1,0 +1,17 @@
+cpp20协程coro简介:
+	'cpp20协程coro库'实在是太新了, 不好用!!
+	gcc 8.3.0 都不支持, gcc 9.x.x 之后才支持比较多c++ 20;
+
+	即便你使用clang-16 跳过编译的问题, 但posix API 都是应用层编码, 编译时必须使用glibc !!
+	glibc 版本过旧, 也会导致'cpp20协程coro库'编译失败!!
+
+	debian 10 默认的glibc 版本是glibc 2.28.x, 但'cpp20协程coro库'至少需要glibc 3.4.x, 或以后的版本才能支持;
+	因此, 'cpp20协程coro库'基本上在很新的linux 系统中, 才能使用, 实用性不高!!
+
+
+
+	ps:
+		'cpp20协程coro库'还是boost 中的产物, 还没正式移进gcc/clang 编译器!!
+		虽然c++20 标准说将'cpp20协程coro库'移进c++20, 但实际上gcc/clang, glibc/llvm, 需要支持'cpp20协程coro库'移进c++20, 还有很多工作需要做;
+		今天是2024, 估计2026 能完成'cpp20协程coro库'移进c++20, 已经是最快了, 
+		因此, 暂时就不需要理会'cpp20协程coro库'了;
