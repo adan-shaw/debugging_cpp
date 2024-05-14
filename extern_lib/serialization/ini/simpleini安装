@@ -1,0 +1,11 @@
+SimpleIni.h 不需要安装, 包含头文件SimpleIni.h 就可以直接用, 源文件都没有, 所有定义都写在SimpleIni.h 中.
+(ps: simpleini 是静态编译的, 编译时, 比较消耗c++ 编译器, 语法较为复杂, 所以编译时顿卡, 别大惊小怪, 正常现象)
+
+注意:
+	SimpleIni.h 依赖ConvertUTF.h, ConvertUTF.c 解决字符格式的问题,
+	如果想让ini 配置文件支持中文, 则需要ConvertUTF.h 解决字符格式的问题!!
+
+
+使用例子:
+	自己看simple_ini_test.h simple_ini_test.cpp
+

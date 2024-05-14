@@ -1,0 +1,67 @@
+#
+# 1.ini 配置文件的风格:
+#
+ini文件是一种常见的配置文件, 它以简单的文字与简单的结构组成;
+INI文件会以不同的扩展名, 如".ini.",".cfg",".conf"等;
+
+INI文件由3个重要的部分组成, 其格式如下：
+段: [sections]
+参数parameters: key=value
+注释comments: ; 注释
+
+[section]
+key=value
+;注释
+
+* 段名不可重复
+* 段内的参数对是有序的, 可重复的(key 可以重复)
+* 注释一般以分号';'开头, 但也有很多的配置文件的注释是以'#'开头的;
+* ini 不支持一键多值(这是个麻烦事!! 一键多值很常用好吗, 可能需要自己二次封装实现多值分隔符)
+
+
+
+
+
+#
+# 2.ini 配置文件用途:
+#
+ini 主要是做简易的软件config 配置输入;
+ini 主要的优势是:
+	* 轻便, 修改方便, 维护方便, 直接改文件时, 压力不大;
+	* 方便阅读, 更贴近人类输入习惯;
+	* ...
+
+如果需要输入复杂的ini, 还是用json/xml 会比较好, 像chatgpt 这种大型server, 配置参数太多, 太复杂, 还是需要大型的配置工具, 会比较适合;
+或者将配置参数存放到mysql db, 让每个server 统一从mysql db 中读出配置参数, 这样更方便!!
+
+
+
+
+
+#
+# 3.config 配置文件常见的参数list
+#
+[srv]
+* ip + port
+* 容纳client max
+* 内存使用量max
+
+[db]
+* ip + port
+* db_username
+* db_passwd
+* db_name
+
+[log]
+* log_path
+* log_level
+
+[files]
+* path图片
+* path文件
+* path音乐
+* path电影
+
+
+
+
