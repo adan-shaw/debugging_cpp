@@ -1,5 +1,5 @@
 //编译:
-//		g++ SimpleIni.h ini_config.h ini_config.cpp -g3 -o x 
+//		g++ ./simpleini/ConvertUTF.h ./simpleini/ConvertUTF.c ./simpleini/SimpleIni.h ini_config.h ini_config.cpp -g3 -o x 
 
 
 

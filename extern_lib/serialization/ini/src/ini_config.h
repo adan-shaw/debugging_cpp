@@ -1,4 +1,4 @@
-#include "SimpleIni.h"
+#include "simpleini/SimpleIni.h"
 #include <string>
 
 
@@ -154,21 +154,20 @@ void print_all(CSimpleIniA* pini){
 	CSimpleIniA::TNamesDepend::const_iterator v;
 	int sec_count = 0;
 	int key_count = 0;
-	int val_count = 0;
+	//int val_count = 0;//simpleini 不支持一键多值, 这个val_count 统计, 毫无意义
 
 	get_all_sections(pini,&sections);															//获取所有的sections
 	for(i = sections.begin(); i != sections.end(); ++i){					//遍历所有的sections
 		if(get_section_all_keys(pini,i->pItem,&keys)){							//无论该节点是否与上面的目标节点名匹配, 统一遍历打印'已经存在的节点'
 			for(k = keys.begin(); k != keys.end(); ++k){							//遍历所有的key
-				printf("* %d [ %s, ", key_count, k->pItem);							//打印key名
-				val_count = 0;
+				printf("* %d [ %s, (", key_count, k->pItem);							//打印key名
+				//val_count = 0;
 				if(get_key_all_val(pini,i->pItem,k->pItem,&values)){		//获取key下所有的value
-					printf("(");
 					for(v = values.begin(); v != values.end(); ++v){			//遍历所有的value
-						printf("%s ", v->pItem);														//打印value
-						val_count++;																				//统计value个数
+						printf("%s", v->pItem);														//打印value
+						//val_count++;																			//统计value个数
 					}
-					printf("), val_count=%d ]\n", val_count++);
+					printf(") ]\n");
 				}
 				key_count++;																						//统计key个数
 			}
@@ -178,7 +177,7 @@ void print_all(CSimpleIniA* pini){
 	}
 
 	//打印统计数据
-	printf("\n\nsec_count = %d,key_count = %d,val_count = %d.\n",sec_count, key_count, val_count);
+	printf("\n\nsec_count = %d,key_count = %d\n",sec_count, key_count);
 	return;
 }
 
