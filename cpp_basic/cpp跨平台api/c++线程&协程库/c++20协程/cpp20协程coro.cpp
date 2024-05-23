@@ -1,42 +1,12 @@
-//gcc编译(废弃!! debian10 默认的gcc 8.3.0 不支持c++20, 切换clang+llvm 16 编译c++20 的代码):
-//    gcc9 之前的写法: -std=c++2a (但gcc9 支持的版本, 对c++20 的支持不多, gcc8.3.0 竟然不支持coro 协程; 因此, 这种写法基本上等于没用!!)
-//    g++ -std=c++2a -g3 ./cpp20协程coro.cpp -o x
+//编译:
+//		(废弃, 除非你的gcc 版本是9.5.0 后面的gcc 版本)g++ -std=c++2a -g3 ./cpp20协程coro.cpp -o x
+//		(debian10 不太支持coroutine 协程, 使用boost 库跳过去!!)clang-14 -std=c++20 -g3 ./cpp20协程coro.cpp -o x
 
-//    gcc9 之后的写法(gcc9 支持c++20 比较完善, 功能比较多, 可以用)
-//    g++ -std=c++20 -g3 ./cpp20协程coro.cpp -o x
-
-//clang-16 编译:
-//    必须-std=c++20 -stdlib=libc++ 并用, 才能找到coroutine 协程库, 而且头文件在<experimental/coroutine> (协程库有多冷门? 被扔到角落了??)
-//    clang-16 -std=c++20 -stdlib=libc++ -lboost_coroutine -g3 ./cpp20协程coro.cpp -o x
-
-
-
-//clang-17 删除#include <experimental/coroutine>, 请直接使用: #include <coroutine>
-/*
-	./cpp20协程coro.cpp:28:9: warning: support for 'std::experimental::coroutine_traits' will be removed in Clang 17; 
-	use 'std::coroutine_traits' instead [-Wdeprecated-experimental-coroutine]
-*/
-
-
-
-//bug: -lboost_coroutine 编译选项, 需要glibc 3.4.x 以上!! debian10 的glibc 版本是: 2.28, 版本太旧, glibc 支持失败!!
-/*
-	/usr/bin/ld: /tmp/cpp20协程coro-65f763.o: undefined reference to symbol '_ZSt9terminatev@@GLIBCXX_3.4'
-	/usr/bin/ld: //lib/x86_64-linux-gnu/libstdc++.so.6: error adding symbols: DSO missing from command line
-	clang: error: linker command failed with exit code 1 (use -v to see invocation)
-*/
-//查看glibc 版本: /usr/lib/x86_64-linux-gnu/libc.so.6
-
-
-
-//编译选项(搞这么久, 实际上标准c++20 对coroutine 库的支持, 还是很嫩的, 还不如直接使用boost 进行对coroutine 库支持):
-//		-lboost_coroutine 
-
+//		clang-14 -std=c++20 -stdlib=libc++ -lboost_coroutine -g3 ./cpp20协程coro.cpp -o x
 
 
 #include <iostream>
 #include <coroutine>
-//clang-17 后面的版本, 会被删除experimental 名字空间, 所以不要再用了!!
 //#include <experimental/coroutine>
 //using namespace std::experimental;
 #include <stdexcept>

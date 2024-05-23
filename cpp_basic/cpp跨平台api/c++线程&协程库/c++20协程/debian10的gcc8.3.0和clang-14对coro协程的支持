@@ -1,0 +1,77 @@
+#
+# debian 10 对c++20 支持的局限性
+#
+根据操作系统的linux kernel 和glibc 的绑定关系得出:
+	debian 10 使用的是:
+		* linux kernel version: 4.19.0-18
+		* glibc version: 2.28-10
+
+	//查看glibc 版本: /usr/lib/x86_64-linux-gnu/libc.so.6
+	//查看kernel 版本: -uname -a
+
+	你想切换这两个破玩儿, 几乎等于更换整个操作系统, 因为即便你切换成功了, 你还要重新编译debian 10 的全部软件, 那还不如直接更换新版本的操作系统;
+	因此, 在linux 4.19.0-18, glibc 2.28-10 的前提内, 你可以选择适合的gcc/clang 来支持c++20;
+	ps:
+		clang 虽然使用的是llvm c language runtime library, 但llvm 是arm/risc-v 芯片的c lanuage runtime library,
+		所以, 一般情况下llvm 在intel 芯片平台上, 是直接调用glibc c language runtime library 的, 不信可以使用clang-16, clang-15 编译coro 协程试试, 马上就会翻车!!
+
+	clang-16, clang-15 编译coro 协程的报错码:
+		/*
+			/usr/bin/ld: /tmp/cpp20协程coro-65f763.o: undefined reference to symbol '_ZSt9terminatev@@GLIBCXX_3.4'
+			/usr/bin/ld: //lib/x86_64-linux-gnu/libstdc++.so.6: error adding symbols: DSO missing from command line
+			clang: error: linker command failed with exit code 1 (use -v to see invocation)
+		*/
+
+	经测试, debian 10 支持的gcc 版本, 最高是gcc9.5.0; 
+	debian 10 支持的clang 版本, 最高是clang-14;
+	这时候, 肯定选clang-14, 因为clang-14 对标gcc12, 那你还要gcc9 作甚?
+	同时clang-14 也是使用glibc 2.28-10 的, 完美;
+
+
+
+
+
+#
+# debian 10 的gcc 8.3.0 对coro 协程编译的其他麻烦事
+#
+gcc9 之前的写法(但gcc9 支持的版本, 对c++20 的支持不多, gcc8.3.0 竟然不支持coro 协程; 因此, 这种写法基本上等于没用!!): 
+	g++ -std=c++2a -g3 ./cpp20协程coro.cpp -o x
+
+gcc9 之后的写法(gcc9 支持c++20 比较完善, 功能比较多, 可以用):
+	g++ -std=c++20 -g3 ./cpp20协程coro.cpp -o x
+
+
+
+
+
+#
+# #include <coroutine> 头文件写法的标准性的确定:
+#
+//clang-17 后面的版本, 会被删除experimental 名字空间, 请直接使用: #include <coroutine>
+#include <experimental/coroutine>
+using namespace std::experimental;
+
+/*
+	./cpp20协程coro.cpp:28:9: warning: support for 'std::experimental::coroutine_traits' will be removed in Clang 17; 
+	use 'std::coroutine_traits' instead [-Wdeprecated-experimental-coroutine]
+*/
+
+可以看到, clang-17 之后, coroutine 不再属于experimental 的一部分了, 而是正式的c++20 标准库的一部分了, 请使用头文件: #include <coroutine>
+
+
+
+
+
+#
+# 如果你的编译器/操作系统(kernel+glibc组合)不支持#include <coroutine>, 怎么办? 使用Boost 库中的#include <coroutine>
+#
+//编译选项(直接使用boost 进行对coroutine 库支持):
+//		-lboost_coroutine 
+
+ps:
+	前提是你得先安装boost 库
+
+apt-get install libboost-all-dev
+
+
+
