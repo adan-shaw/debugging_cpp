@@ -75,3 +75,33 @@ apt-get install libboost-all-dev
 
 
 
+
+
+#
+# 惨剧: clang-13 不支持#include <coroutine>, 需要使用#include <experimental/coroutine>, 但即便如此, clang-13, 还是不支持coro 协程, 报错如下:
+#
+/*
+$ clang-13 -std=c++2a -stdlib=libc++ -lboost_coroutine -g3 ./cpp20协程coro.cpp -o x
+
+/usr/bin/ld: /tmp/cpp20协程coro-eb1af4.o: undefined reference to symbol '_ZSt9terminatev@@GLIBCXX_3.4'
+/usr/bin/ld: //lib/x86_64-linux-gnu/libstdc++.so.6: error adding symbols: DSO missing from command line
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+*/
+
+等于没戏!! 根本不关gcc/clang 编译器的问题, 主要是你的系统, 真的玩不动c++20, 就是玩不动c++20!!
+当然的, 由此确定, clang-13 或之前的版本, 根本没有玩的必要, clang-14 起步!!
+clang-14 应该是比较友好支持c++20 的一个版本!!
+同时, clang-14 对旧系统的支持, 也不错, 直接选择clang-14/clang-16;
+
+
+
+
+
+最终总结:
+	debian 10 还是玩不了c++20 的coro 协程, 除非你更新glibc 到3.4.x!! 不关编译器的事, 用boost 库跳开也是白搭, boost 库也是使用glibc 3.4.x!! 晕了!!
+	boost 库版本: 1.67.0
+
+
+
+
+
