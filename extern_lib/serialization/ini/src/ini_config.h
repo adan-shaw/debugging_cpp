@@ -3,30 +3,6 @@
 
 
 
-typedef struct global_val{
-	//[server_info]
-	std::string srv_ip;
-	int srv_port;
-	int test_count;
-	int test_err_max;
-	int pth_io_count;
-	std::string log_path;
-
-	//[redis_info]
-	std::string redis_ip;
-	int redis_port;
-	int redis_dbkey;
-
-	//[mysql_info]
-	std::string mysql_ip;
-	int mysql_port;
-	std::string mysql_user;
-	std::string mysql_pw;
-	std::string mysql_dbname;
-}G_val_t;
-
-
-
 //CSimpleIniA() 构造函数初始化说明:
 /*
 	根据文件路径装载一个ini file
@@ -62,8 +38,7 @@ typedef struct global_val{
 inline bool eopen_inifile(CSimpleIniA* pini, const char *file_path){
 	return pini->LoadFile(file_path)<0 ? false : true;
 }
-//从一串string中, 装载ini 数据[load from a string]
-//(ps: 文件中不能有'\0'字符串结束符号, 还要预先预读整个文件的内容到string中)
+//从一串string中, 装载ini 数据[load from a string](文件中不能有'\0'字符串结束符号, 还要预先预读整个文件的内容到string中)
 inline bool eopen_inistring(CSimpleIniA* pini, std::string *str_data){
 	return pini->LoadData(str_data->c_str(), str_data->size())<0 ? false : true;
 }
@@ -78,25 +53,26 @@ inline bool save_inidata2file(CSimpleIniA* pini, const char* file_path){
 
 
 //获取CSimpleIniA中'所有的节点'[get all sections]
-void get_all_sections(CSimpleIniA* pini, CSimpleIniA::TNamesDepend* psecs){
-	pini->GetAllSections(*psecs);
+inline void get_all_sections(CSimpleIniA* pini, CSimpleIniA::TNamesDepend* psections){
+	pini->GetAllSections(*psections);
 }
 //获取一个节点下'所有的键'[get all keys in a section]
-inline bool get_section_all_keys(CSimpleIniA* pini, const char* psec, CSimpleIniA::TNamesDepend* pkeys){
-	return pini->GetAllKeys(psec, *pkeys);
+inline bool get_section_all_keys(CSimpleIniA* pini, const char* psection, CSimpleIniA::TNamesDepend* pkeys){
+	return pini->GetAllKeys(psection, *pkeys);
 }
 //获取'一个键下面的一个值'[get the value of a key]
-inline bool get_a_key_val(CSimpleIniA* pini, const char* psec, const char* key, char* buf, int buf_len){
-	const char* tmp = pini->GetValue(psec, key, NULL);
+inline bool get_a_key_val(CSimpleIniA* pini, const char* psection, const char* key, char* buf, int buf_len){
+	const char* tmp = pini->GetValue(psection, key, NULL);
 	if(tmp == NULL)
 		return false;
-	strncpy(buf, tmp, buf_len);
-	return true;
+	else{
+		strncpy(buf, tmp, buf_len);
+		return true;
+	}
 }
-//获取节点下的一个key的所有value(n个值), 用CSimpleIniA::TNamesDepend* pvals值表返回数据
-//[get all values of a key with multiple values]
-inline bool get_key_all_val(CSimpleIniA* pini, const char* psec, const char* key, CSimpleIniA::TNamesDepend* pvals){
-	if(pini->GetAllValues(psec, key, *pvals)){
+//获取节点下的一个key的所有value(n个值), 用CSimpleIniA::TNamesDepend* pvals值表返回数据[get all values of a key with multiple values]
+inline bool get_key_all_val(CSimpleIniA* pini, const char* psection, const char* key, CSimpleIniA::TNamesDepend* pvals){
+	if(pini->GetAllValues(psection, key, *pvals)){
 		//sort the values into the original load order
 		#if defined(_MSC_VER) && _MSC_VER <= 1200
 			pvals->sort();//STL of VC6 doesn't allow me to specify my own comparator for list::sort()
@@ -111,34 +87,34 @@ inline bool get_key_all_val(CSimpleIniA* pini, const char* psec, const char* key
 
 
 //添加一个空节点到CSimpleIniA 类中, 没有指定'key键'和'value值', 少用.[adding a new section]
-inline bool add_section(CSimpleIniA* pini, const char* psec){
-	return pini->SetValue(psec, NULL, NULL)<0 ? false : true;
+inline bool add_section(CSimpleIniA* pini, const char* psection){
+	return pini->SetValue(psection, NULL, NULL)<0 ? false : true;
 }
 //添加一个新节点到CSimpleIniA 类中, 如果节点不存在, 则自动创建节点, 并填充输入的值[adding a new section]
 //(ps: 添加key, 每个key 必然带一个值, 尽量不要为空值)
-inline bool add_section_key_val(CSimpleIniA* pini, const char* psec, const char* pkey, const char* pval){
-	return pini->SetValue(psec, pkey, pval)<0 ? false : true;
+inline bool add_section_key_val(CSimpleIniA* pini, const char* psection, const char* pkey, const char* pval){
+	return pini->SetValue(psection, pkey, pval)<0 ? false : true;
 }
 
 
 //删除一个节点下面的一个key 数据, 的一个value 的数据!
-inline bool del_a_val(CSimpleIniA* pini, const char* psec, const char* pkey, const char* pval){
-	return pini->DeleteValue(psec, pkey, pval, true);//(第3参数: true=删除整个key, false=删除key的一个val)
+inline bool del_a_val(CSimpleIniA* pini, const char* psection, const char* pkey, const char* pval){
+	return pini->DeleteValue(psection, pkey, pval, true);//(第3参数: true=删除整个key, false=删除key的一个val)
 }
 //删除一个节点下面的一个key 数据
-inline bool del_a_key(CSimpleIniA* pini, const char* psec, const char* pkey){
-	return pini->Delete(psec, pkey, true);//(第3参数: true=删除整个sec, false=删除sec的一个key)
+inline bool del_a_key(CSimpleIniA* pini, const char* psection, const char* pkey){
+	return pini->Delete(psection, pkey, true);//(第3参数: true=删除整个sec, false=删除sec的一个key)
 }
 //[删除一个section]deleting an entire section and all keys in it.
-inline bool del_a_section(CSimpleIniA* pini, const char* psec){
-	return pini->Delete(psec, NULL);
+inline bool del_a_section(CSimpleIniA* pini, const char* psection){
+	return pini->Delete(psection, NULL);
 }
 //清除所有section
 inline void reset_all(CSimpleIniA* pini){
 	pini->Reset();
 }
 
-
+//检查
 inline bool check_empty(CSimpleIniA* pini){
 	return pini->IsEmpty();
 }
@@ -181,6 +157,5 @@ void print_all(CSimpleIniA* pini){
 	return;
 }
 
-//主逻辑函数
-bool ini_config_load_func(G_val_t* pg_val);
+
 

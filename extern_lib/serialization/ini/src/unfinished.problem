@@ -1,5 +1,0 @@
-* UTF-8 问题, 也没有统一, 没有做好兼容[done]
-
-* val_count没有算对(没意义, simpleini 不支持一键多值)[done]
-
-* 不兼容一键多值(可以自己实现, 参考: split字符串切割demo)

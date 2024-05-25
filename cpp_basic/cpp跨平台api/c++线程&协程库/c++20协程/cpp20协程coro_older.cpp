@@ -2,7 +2,7 @@
 //		(废弃, 除非你的gcc 版本是9.5.0 后面的gcc 版本)g++ -std=c++2a -g3 ./cpp20协程coro.cpp -o x
 //		(debian10 不太支持coroutine 协程, 使用boost 库跳过去!!)clang-14 -std=c++20 -g3 ./cpp20协程coro.cpp -o x
 
-//		clang-14 -std=c++20 -stdlib=libc++ -lboost_coroutine -g3 ./cpp20协程coro.cpp -o x
+//		clang-13 -std=c++20 -stdlib=libc++ -lboost_coroutine -g3 ./cpp20协程coro.cpp -o x
 
 
 
