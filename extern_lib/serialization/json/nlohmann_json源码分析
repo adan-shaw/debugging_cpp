@@ -1,0 +1,17 @@
+* nlohmann_json 源码包有一大半都是test文件, 只是做编译测试, 运行测试, 并不是nlohmann_json 库的实现文件, 很奇怪!!
+	但你没必要将其删掉, 因为nlohmann_json 是一个应用数据的'离线/传输打包'库, 
+	nlohmann_json 库的准确性校验, 是一个比较重的任务, nlohmann_json 需要这些库做可靠性支撑的!!
+
+
+
+* nlohmann_json 源码包, 还有一大堆reports png 图片, 压缩一下之后, 可以极大地压缩nlohmann_json 包的大小;
+	别担心nlohmann_json 的内容会很多, 装规模大而已, 实际也就那样!!
+	nlohmann_json 是一个小型编码库, 可以迅速拿下的;
+
+
+
+
+
+nlohmann_json 支持两种模式:
+	* single_include 单文件模式(后续的项目编译慢), 简单测试, 可以使用这个模式;
+	* 编译成.so 动态链接库模式(后续的项目编译快), 长期的大型项目编译, 可以使用这个节约编译时间;
