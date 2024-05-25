@@ -1,0 +1,13 @@
+json-develop 是一个纯c++ json 文件处理库, 支持单文件模式, 不需要安装, 直接包含头文件: ./single_include/json.hpp 即可编码
+
+也支持编译出.so 文件, 以.so 文件, 动态共享so->API, 进行动态库链接(以共享动态链接库的形式存在); 
+
+详情自己看源码库: ./json-develop.tar.bz2
+
+
+
+使用json-develop, 需要重新阅读json-develop 的SDK, 其实根本没有这个必要, 还不如直接用cjson, 规模更大, 更安全;
+
+所有东西都在源码包./json-develop.tar.bz2 中, 源码包的结构如下:
+	* ./single_include 单头文件目录
+	* ./*              cmake/gmake 编译目录(支持跨平台编译, 这种序列化库, 基本上有编译器就能编译成功, 没有什么障碍, 没有什么依赖关联)

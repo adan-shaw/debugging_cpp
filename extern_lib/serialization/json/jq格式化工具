@@ -1,0 +1,24 @@
+# 安装jq
+apt-get install jq
+
+
+
+# 将json 字符串格式化(展开标准式)
+echo '{"id":1,"name":"zhangsan","age":24,"desc":"无名侠客","company":["baidu","google","alibaba"]}' | jq
+
+
+
+# 将json 字符串压缩(去掉空格, 方便网络传输)
+echo '{"id":1,"name":"zhangsan","age":24,"desc":"无名侠客","company":["baidu","google","alibaba"]}' | jq -c
+
+
+
+# 对json 内的字符串元素, 根据key 键值进行排序(很无聊的操作)
+echo '{"id":1,"name":"zhangsan","age":24,"desc":"无名侠客","company":["baidu","google","alibaba"]}' | jq -S
+
+
+
+
+
+# 批量查找json 错误(标注输出到/dev/null, 报错才显示, 报错表明格式不正确, 可以想办法修复)
+find . -type f -name "*.sjon" -exec jq -c {} > /dev/null \;
