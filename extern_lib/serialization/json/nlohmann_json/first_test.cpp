@@ -7,9 +7,12 @@
 
 using json = nlohmann::json;
 
-int main(void)
-{
-  auto config_json = json::parse(R"({"happy": true, "pi": 3.141})");//构建json对象
-  std::cout << config_json << std::endl;//输出json对象值
-  return 0;
+int main(void){
+	//构建json对象
+	json config_json = json::parse(R"({"happy": true, "pi": 3.141})");
+	//nlohmann::json config_json = nlohmann::json::parse(R"({"happy": true, "pi": 3.141})");
+
+	//输出json对象值
+	std::cout << config_json << std::endl;
+	return 0;
 }
