@@ -1,6 +1,6 @@
-//编译:
-//		g++ -g3 -I /home/tarball/nlohmann_json/include ./test.cpp -o x 
-//		g++ -g3 -I . ./test.cpp -o x 
+//编译(使用最低c++ 标准编译, 提高兼容性):
+//		g++ -std=c++11 -g3 -I /home/tarball/nlohmann_json/include ./first_test.cpp -o x 
+//		g++ -std=c++11 -g3 -I . ./first_test.cpp -o x 
 
 #include <iostream>
 #include <nlohmann/json.hpp>
