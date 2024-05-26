@@ -48,11 +48,23 @@ int main(void){
 	hututu["GF"][1] = "Taylor";
 	hututu["GF"][2] = "Jan";
 
-	//值写入: 方式二(像stl 顺序容器一样操作, push, pop, 但不支持复杂内嵌的容器, 简单有规律的元素内嵌还是支持的, 详情请看: ./json对象-容器化操作元素.cpp)
-	eas.push_back("this is a smart guy");//添加元素
-	//eas.push_back({"toy","debian linux"});
-	eas.emplace_back("and his handsome");//C++11新方式添加元素, 减少申请内存
+	//值写入: 方式二(像stl 顺序容器一样操作, push_back(), 但不支持pop_back(), 只进不出;
+	//						 push_back() 复杂数据时, 需要注意入栈顺序, 要先易后难(一般先推简单数据, 再推复杂数据);
+	//						 不是不支持复杂数据, 但数据入栈顺序不对, 随时给你跳出报错: 
+	//						 terminate called after throwing an instance of 'nlohmann::json_abi_v3_11_3::detail::type_error' )
+	eas.push_back("this is a smart guy");				//添加元素
+	eas.push_back({"toy","debian linux"});
+	eas.emplace_back("and his handsome");				//C++11新方式添加元素, 减少申请内存
 	//eas.emplace_back({"friend","robot No.1"});
+	eas.push_back({"location",{"sh","bj","sz"}});
+	eas.push_back({"location",{"sh","bj","sz"}});
+	eas.push_back({"location",{"sh","bj","sz"}});
+
+	hututu.push_back({"toy","debian linux"});
+	//hututu.pop_back();												//没有pop_back() 函数? 源码明明有的, 晕了
+	//hututu.push_front("this is a smart guy");	//没有push_front() 函数, 只有push_back()
+
+	hututu.push_back("and his handsome");			//先推复杂数据, 再推简单数据, 导致报错(编译没问题, 运行就报错!!) demo
 
 
 

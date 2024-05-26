@@ -2,10 +2,9 @@
 //		g++ -std=c++11 -g3 -I /home/tarball/nlohmann_json/include ./json对象-容器化操作元素.cpp -o x 
 //		g++ -std=c++11 -g3 -I . ./json对象-容器化操作元素.cpp -o x 
 
-//nlohmann_json 容器化操作元素, 仅限简单json容器(存放单一, 简单的元素);
-
-//复杂json容器(内嵌, 混杂, 复杂的元素)不支持'容器化操作元素';
-//但有规律的元素内嵌, 也支持'容器化操作元素'
+//nlohmann_json 容器化操作元素, 支持简单json容器, 复杂内嵌json容器, 混杂内嵌json容器;
+//但对于复杂内嵌json容器, 混杂内嵌json容器, 则需要注意数据入栈顺序, 要先易后难, 否则, 你先把复杂数据推进去, 再推一个简单数据, 会报错, 说: 数据类型错误!!
+//详情自己看: ./json对象-值读写.cpp
 
 
 
@@ -40,7 +39,7 @@ void json_easy(void){
 
 
 
-//json 对象, 复杂顺序容器, 有规律的元素内嵌(但无混杂内嵌)
+//json 对象, 复杂顺序容器, 有内嵌, 复杂混合
 void json_complicated(void){
 	json arr_complicated = {{"kind","dog"},{"height",50}};
 	arr_complicated.push_back({"color","red"});
