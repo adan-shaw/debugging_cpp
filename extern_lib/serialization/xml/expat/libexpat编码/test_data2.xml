@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!--all students info-->
+	<students>
+		<student name="student_00" score="100" />
+		<student name="student_01" score="99" />
+		<student name="student_02" score="98" />
+		<student name="student_03" score="97" />
+		<student name="student_04" score="96" />
+		<student name="student_05" score="95" />
+		<student name="student_06" score="94" />
+		<student name="student_07" score="93" />
+		<student name="student_08" score="92" />
+		<student name="student_09" score="91" />
+	</students>
+	<!--all books info-->
+	<books>
+		<book book="book_00" price="50" />
+		<book book="book_01" price="49" />
+		<book book="book_02" price="48" />
+		<book book="book_03" price="47" />
+		<book book="book_04" price="46" />
+		<book book="book_05" price="45" />
+		<book book="book_06" price="44" />
+		<book book="book_07" price="43" />
+		<book book="book_08" price="42" />
+		<book book="book_09" price="41" />
+	</books>
+</root>

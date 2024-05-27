@@ -1,0 +1,54 @@
+#
+# 1.expat & libexpat 的区别:
+#
+(或者这两者的差异, 真的就是: 带不带测试数据的区别!!
+ 因为编译之后, 结果是一样的!! 很纳闷!! 尽量用expat, 不要用libexpat)
+
+
+expat 是一个命令式xml 解析工具, 可以被shell, python 等脚本轻松植入.
+
+libexpat 是c/c++ 编码库, 不是编译出可执行exe程序, 而是编译出lib共享链接库.
+(并且附带测试数据, libexpat 自带测试数据)
+
+
+xml 是ieee 的产物, 标签序列化的始祖, 文本序列化的始祖, 具有很强的跨平台能力.
+
+libexpat 是一个解析xml 的库, 也是一个跨平台编程库;
+libexpat 只具备解析能力, 不具备导出生成xml数据的能力, 没有对象生成函数.
+但libexpat 解析性能很优秀, xml 过大的情况下, 用expat 进行解析, 性能出色.
+
+lua,shell,python 也可以利用expat.exe 出色的xml 解析能力, 做文本序列化编程.
+
+
+
+
+
+#
+# 2.apt 安装expat & libexpat
+#
+1:apt-get 安装:
+	# 安装执行库.exe & .so 文件
+	apt-get install expat libexpat1
+	# 安装编程库.so 文件 & .h .cpp 文件
+	apt-get install libexpat1 libexpat1-dev
+
+2:安装后的细节
+	头文件: 
+		/usr/local/include/expat.h
+		/usr/local/include/expat_external.h
+		所以:
+		#include <expat.h>
+		#include <expat_external.h>
+
+
+	库文件:
+		/usr/local/lib/libexpat.so.1.6.7
+		/usr/local/lib/libexpat.so.1
+		/usr/local/lib/libexpat.so
+		expat 编译选项：
+			-lexpat
+
+		# 刷新一下'ld共享链接器'装载的'.a/.so 链接库'
+		sudo ldconfig
+
+
