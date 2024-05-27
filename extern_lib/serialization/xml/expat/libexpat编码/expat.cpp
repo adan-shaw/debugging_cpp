@@ -70,8 +70,8 @@ bool stat_check(char* pfile_name, int* filesize);
 
 
 
-//expat 每解析一个xml 元素的头, 就调用一次的回调函数(every element Parse and work-start)
-void startElement(void *userData, const char *name, const char **atts){
+//expat 每解析一个xml 元素的头, 就触发一次的回调函数(every element Parse and work-start)
+void XMLCALL startElement(void *userData, const char *name, const char **atts){
 	int i, *depthPtr = (int *)userData;
 
 	//计算当前name 的depth 树深
@@ -91,13 +91,22 @@ void startElement(void *userData, const char *name, const char **atts){
 	*depthPtr += 1;
 }
 
-
-
-//expat 每解析一个xml 元素的尾, 就调用一次的回调函数(every element Parse and work-end)
-void endElement(void *userData, const char *name){
+//expat 每解析一个xml 元素的尾, 就触发一次的回调函数(every element Parse and work-end)
+void XMLCALL endElement(void *userData, const char *name){
 	int *depthPtr = (int*)userData;
 	printf("</%s>", name);//打印name  尾
 	*depthPtr -= 1;
+}
+
+//expat 每解析一个xml 元素的内容, 就触发一次的回调函数
+void XMLCALL dataHandler(void *userData, const XML_Char *s, int len){
+	char buf[128];
+	memset(buf, '\0', sizeof(buf));//xml 经常性会重复打印数据, 这里必须先做buf 清空
+	strncpy(buf, s, len);					 //(内存操作消耗较大, 不先清空, copy 时会有很多乱码, 主要来自上一次的读取buf, 这是不允许的, 会脏读)
+	printf("%s", buf);
+
+	//printf("%s", s);						 //如果只是为了打印数据, 直接打印最好, 节省内存操作; 如果需要拷贝出内容, 进行其他判别, 则比较麻烦(需要考虑到效率的问题)
+	//														 //ps: 直接打印有乱码, shit !!
 }
 
 
@@ -153,19 +162,26 @@ int main(int argc, char *argv[]){
 	//************
 	//2.操作部分部分
 	//************
-	//2.1.创建一颗空树根root = null, root树深 = 0, 然后设置为expat 初始化数据树
+	//创建一颗空树根root = NULL
 	parser = XML_ParserCreate(NULL);
+
+	//设置expat 树的树深=0, 以此来初始化expat 树
 	depth = 0;
 	XML_SetUserData(parser, &depth);
 
-	//2.2.设置expat 关键的回调函数:
-	//		遇到<>  = startElement() 回调函数
-	//		遇到</> = endElement() 回调函数
-	//		(每解析出一个xml 数据, 都会本能地调用一次回调函数startElement() + endElement(), 处理数据;
-	//		你可以修改startElement() + endElement()回调函数的内容, 做一些其他操作)
+	//设置expat 关键的回调函数:
+	/*
+		遇到<>  = startElement() 回调函数
+		遇到</> = endElement() 回调函数
+		(每解析出一个xml 数据, 都会本能地触发一次回调函数startElement() + endElement(), 处理数据;
+		 你可以修改startElement() + endElement()回调函数的内容, 做一些其他操作)
+	*/
 	XML_SetElementHandler(parser, startElement, endElement);
 
-	//2.3.打开文件
+	//每次读取<*> </*> 中的数据时, 都会触发的回调函数
+	XML_SetCharacterDataHandler(parser, &dataHandler);
+
+	//打开xml 文件
 	if((fp = fopen(argv[1], "r")) == NULL){
 		perror("fopen()");
 		return -1;
@@ -173,7 +189,7 @@ int main(int argc, char *argv[]){
 	else
 		clearerr(fp);//先清空流错误
 
-	//2.4.分次读取, 一截截将xml 数据读取出来, 边读边解析
+	//分次读取, 一截截将xml 数据读取出来, 边读边解析
 	do{
 		tmp = fread(buf, 1, sizeof(buf), fp);//fread()函数会自动移动读游标,不用操心
 		if(done = ferror(fp))
@@ -186,7 +202,7 @@ int main(int argc, char *argv[]){
 		}
 	}while(!done);
 
-	//2.5.释放expat 数据树, expat解析过程占用过的内存, 都会被彻底释放.
+	//释放expat 数据树, expat解析过程占用过的内存, 都会被彻底释放.
 	XML_ParserFree(parser);
 	return 0;
 }
@@ -198,8 +214,6 @@ bool stat_check(char* pfile_name, int* filesize){
 	struct stat stat_buf;
 	int ret;
 	char ptimebuf[64];//打印修改时间的buf
-
-
 
 	ret = stat(pfile_name, &stat_buf);
 	if(ret == -1){
