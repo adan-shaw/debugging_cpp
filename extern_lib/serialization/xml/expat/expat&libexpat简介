@@ -1,15 +1,19 @@
 #
 # 1.expat & libexpat 的区别:
 #
-(或者这两者的差异, 真的就是: 带不带测试数据的区别!!
- 因为编译之后, 结果是一样的!! 很纳闷!! 尽量用expat, 不要用libexpat)
+理论上, libexpat 才是expat 的c/c++ 编码库, 但实际上, libexpat 和expat 并没有区别!!
+这两者的差异, 真的就是: 带不带测试数据的区别!!
+libexpat: 带大量测试数据, 防止平台差异导致expat 库出现解析错误;
+expat:    不携带测试数据, 便捷使用版;
+
+编译之后, exe/lib 的结果是一样的!!
+为了提高可靠性, 要以libexpat 为准;
+
 
 
 expat 是一个命令式xml 解析工具, 可以被shell, python 等脚本轻松植入.
 
-libexpat 是c/c++ 编码库, 不是编译出可执行exe程序, 而是编译出lib共享链接库.
-(并且附带测试数据, libexpat 自带测试数据)
-
+libexpat 是c/c++ 编码库, 不是编译出可执行exe程序, 而是编译出lib共享链接库(并且附带测试数据, libexpat 自带测试数据)
 
 xml 是ieee 的产物, 标签序列化的始祖, 文本序列化的始祖, 具有很强的跨平台能力.
 
@@ -29,8 +33,11 @@ lua,shell,python 也可以利用expat.exe 出色的xml 解析能力, 做文本�
 1:apt-get 安装:
 	# 安装执行库.exe & .so 文件
 	apt-get install expat libexpat1
+
 	# 安装编程库.so 文件 & .h .cpp 文件
 	apt-get install libexpat1 libexpat1-dev
+
+
 
 2:安装后的细节
 	头文件: 
@@ -50,5 +57,17 @@ lua,shell,python 也可以利用expat.exe 出色的xml 解析能力, 做文本�
 
 		# 刷新一下'ld共享链接器'装载的'.a/.so 链接库'
 		sudo ldconfig
+
+
+
+
+
+#
+# 3.expat 的优势
+#
+expat 性能好, 软件质量好, 但较为复杂, 使用比较麻烦一点, 对标cjson, 是一个c 实现的大型xml 解析库;
+
+
+
 
 
