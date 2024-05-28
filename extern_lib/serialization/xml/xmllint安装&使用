@@ -1,0 +1,36 @@
+xmllint 是libxml2-utils 中的一个小校验工具, 安装方法如下:
+	sudo apt-get install libxml2-utils
+
+
+
+
+
+#
+# 使用详解(ps: 不能用来校验html 文档, 只能用来校验传输要求很高的xml 传输协议)
+#
+# 1.格式化xml, 得到容易阅读的展开式xml
+xmllint --format ./person.xml
+
+
+# 2.压缩xml, 得到压缩的xml 字符串
+xmllint --noblanks ./person.xml
+
+
+# 3.校验xml 的有效性(需要*xsd 校验文本, 其实xml 校验用得比较少)
+# 	xml文件=person.xml         数据输入源
+# 	scheam文件=person.xsd      声明变量名和变量的类型, 还有整体展示了xml 的结构;
+xmllint --schema person.xsd person.xml
+
+
+
+# (失败, 格式化之后, 不能重定向到源文件, xmllint 也没有覆盖源文件的功能, 只能做格式检索)
+
+
+
+# 批量格式检索-阅读格式(标注输出到/dev/null, 报错才显示, 报错表明格式不正确, 可以想办法修复)
+find . -type f -name "*.xml" -exec xmllint --format {} > /dev/null \;
+find . -type f -name "*.html" -exec xmllint --html --format {} > /dev/null \;
+
+# 批量格式检索-压缩格式
+find . -type f -name "*.xml" -exec xmllint --noblanks {} > /dev/null \;
+find . -type f -name "*.html" -exec xmllint --html --noblanks {} > /dev/null \;
