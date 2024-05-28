@@ -1,7 +1,7 @@
 //编译:
 //		g++ -lpugixml ./pugixml自动生成xml数据.cpp -o x 
 
-
+//这段代码是大概2018年写的, 凑合着看, 目前是2024年了(暂时不想再精细挑剔了, 逻辑比较烦)
 
 #include <iostream>
 #include <string.h>
