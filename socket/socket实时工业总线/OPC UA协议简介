@@ -1,0 +1,16 @@
+OPC UA协议简介:
+	OPC UA协议是一种付费的工业自动化标准:
+		OPC 全称OLE for Process Control(用于过程控制的OLE(对象连接与嵌入,可以理解为接口,linux下的pipe))
+		UA 全称是Unified architecture, 即统一架构
+	目前这个技术框架, 是需要付费使用的, 类似vsomeip/fastdds, 主要作用于PLC 的;
+
+
+
+OPC 的目的是什么?
+	OPC 其目的是把PLC特定的协议(如Modbus, Profibus等)抽象成为标准化的接口, 作为"中间人"的角色把其通用的"读写"要求转换成具体的设备协议,
+	反之亦然, 以便HMI/SCADA系统可以对接, 
+	通过使用OPC协议, 终端用户就可以毫无障碍地使用最好的产品来进行系统操作;
+
+	最开始OPC UA可以简单理解为是新一代的OPC标准;
+	实际上类似someip/dds, 都是新一代工业网络标准下, 再建一个付费框架, 要求下属企业付费使用!!
+	只不过OPC UA 面向的是PLC, 而不是车载ETH;
