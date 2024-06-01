@@ -1,0 +1,77 @@
+1.GPIO 仿真库的安装:
+	现在有wiringPi, bcm2835, python的RPi.GPIO 三种库可以使用, 其中:
+		* bcm2835库是树莓派cpu芯片的库函数, 相当于stm32的固件库一样, 底层是直接操作寄存器
+		* wiringPi库, python的RPi.GPIO库, 其底层都是通过读写linux系统的设备文件, 进行设备操作的, 只能用作仿真
+
+	安装PythonGPIO库:
+		sudo apt-get install python-rpi.gpio
+	安装GPIO工具:
+		sudo apt-get install gpio
+
+
+
+
+
+2.c 语言安装GPIO 仿真库:
+	c 语言中, GPIO 仿真库一般称之为: gpiod
+
+c 语言list:
+# gpiod 设备
+gpiod - Tools for interacting with Linux GPIO character device - binary
+# gpiod 编码库(这种编程只能用来仿真, 或者linux 内核有i2c 模块时, 也可以用这种模式, 但MCU 里面是没有gpiod 库的, 需要自己手写i2c 协议)
+libgpiod-dev - C library for interacting with Linux GPIO device - static libraries and headers
+libgpiod-doc - C library for interacting with Linux GPIO device - library documentation
+libgpiod2 - C library for interacting with Linux GPIO device - shared libraries
+
+# 树莓派专用(忽略)
+libpigpiod-if-dev - Development headers for client libraries for Raspberry Pi GPIO control
+libpigpiod-if1 - Client library for Raspberry Pi GPIO control (deprecated)
+libpigpiod-if2-1 - Client library for Raspberry Pi GPIO control
+
+python3-libgpiod - Python bindings for libgpiod (Python 3)
+
+
+
+# 安装gpiod
+apt-get install gpiod libgpiod2 libgpiod-dev 
+
+# debian/ubuntu 默认是看不到/dev/gpiodchip0 了
+ls /dev | grep gpiodchip
+
+# 判断是否安装了gpiod 的正确办法
+ls /sys/class/gpio/
+
+
+
+
+
+3.GPIO 常见操作(需要root权限)
+# 导出编号为192的gpio(导出成功会多出一个文件夹/sys/class/gpio/gpio192/)
+echo 192 > /sys/class/gpio/export
+
+# 取消导出
+echo 192 > /sys/class/gpio/unexport
+
+
+# 设置为输出
+echo out > /sys/class/gpio/gpio192/direction
+
+# 输出高电平
+echo 1 > /sys/class/gpio/gpio192/value
+
+# 输出低电平
+echo 0 > /sys/class/gpio/gpio192/value
+
+
+# 设置为输入
+echo in > /sys/class/gpio/gpio192/direction
+
+# 读取输入值
+cat /sys/class/gpio/gpio192/value
+
+
+
+
+
+
+
