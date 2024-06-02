@@ -1,0 +1,45 @@
+#
+# 在debian 上部署can 开发环境的攻略
+#
+
+
+
+#
+# 1.安装
+#
+# 安装can 编程库
+can-utils - SocketCAN userspace utilities and tools
+libsocketcan-dev - library to control some basic functions in SocketCAN from userspace
+libsocketcan-doc - library to control some basic functions in SocketCAN from userspace
+libsocketcan2 - library to control some basic functions in SocketCAN from userspace
+
+apt-get install libsocketcan2 libsocketcan-dev
+
+
+
+# 安装 can-utils(在ip 网络空间中, 虚拟出一个can-socket 设备)
+sudo apt-get install can-utils
+
+
+
+
+
+#
+# 2.配置
+#
+# 配置can-utils 中的CAN 接口(以vcan0 为例, 这是一个虚拟的CAN 接口) -- 每次仿真can 网络时, 都要重新配置, 重启失效
+sudo ip link add dev vcan0 type vcan
+sudo ip link set up vcan0
+
+
+
+
+
+#
+# 3.测试
+#
+# 使用candump 监听vcan0 接口上的CAN 帧 (socket listener)
+candump vcan0
+
+# 使用cansend 发送CAN 帧到vcan0 接口 (socket client)
+cansend vcan0 123#abcd
