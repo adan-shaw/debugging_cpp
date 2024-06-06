@@ -1,5 +1,7 @@
 //编译:
-//    gcc -g3 ./can_recv.c -o r_can
+//		gcc -g3 ./can_recv.c -o r_can
+
+
 
 #include <stdio.h>
 #include <string.h>
@@ -10,55 +12,57 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+const char *if_can_name = "vcan0";		// can 网络空间接口名
+
 int main (void)
 {
-	const char *can_interface = "vcan0";	// 根据您的系统和硬件配置选择适当的接口名称
+	struct sockaddr_can addr;						//can 地址info 载体
+	struct can_frame frame;							//can 数据帧载体
+	struct ifreq ifr;										//can 设备名专用载体
 
-	int socket_fd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
-	if (socket_fd == -1)
+	int i, sfd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
+	if (sfd == -1)
 	{
-		perror ("Socket creation error");
-		return 1;
+		perror ("socket()");
+		return -1;
 	}
 
-	struct ifreq ifr;
-	strncpy (ifr.ifr_name, can_interface, IFNAMSIZ - 1);
-	if (ioctl (socket_fd, SIOCGIFINDEX, &ifr) == -1)
+	strncpy (ifr.ifr_name, if_can_name, IFNAMSIZ - 1);// 设置can 接口名: vcan0
+	if (ioctl (sfd, SIOCGIFINDEX, &ifr) == -1)				// 绑定socket 到vcan0 设备上(send/recv 双端都需要通过ioctl() 把sfd 绑定到vcan0 设备上)
 	{
-		perror ("ioctl error");
-		close (socket_fd);
-		return 1;
+		perror ("ioctl()");
+		close (sfd);
+		return -1;
 	}
 
-	struct sockaddr_can addr;
+	// 填充can socket info
 	addr.can_family = AF_CAN;
 	addr.can_ifindex = ifr.ifr_ifindex;
 
-	if (bind (socket_fd, (struct sockaddr *) &addr, sizeof (addr)) == -1)
-	{
-		perror ("Binding error");
-		close (socket_fd);
-		return 1;
+	if (bind (sfd, (struct sockaddr *) &addr, sizeof (addr)) == -1)
+	{																									// 绑定socket 到vcan0 设备上(send/recv 双端都需要通过bind() 把sfd 绑定到vcan0 设备上)
+		perror ("bind()");
+		close (sfd);
+		return -1;
 	}
 
-	struct can_frame frame;
-
+	//can 数据读取循环
 	while (1)
 	{
-		if (read (socket_fd, &frame, sizeof (struct can_frame)) == -1)
+		if (read (sfd, &frame, sizeof (struct can_frame)) == -1)
 		{
-			perror ("Read error");
-			close (socket_fd);
-			return 1;
+			perror ("read()");
+			close (sfd);
+			return -1;
 		}
-		printf ("Received: can_id = 0x%X, len = %d\n", frame.can_id, frame.can_dlc);
+		printf ("Received: can_id = 0x%X, len = %d\n", frame.can_id, frame.can_dlc);//打印can 数据的id + can_dlc 数据帧的数量(单帧64bit)
 
-		for (int i = 0; i < frame.can_dlc; ++i)
+		for (i = 0; i < frame.can_dlc; ++i)//根据can_dlc 数据帧的数量(单帧64bit), 遍历can 数据
 		{
 			printf ("can data:\n\t0x%X \n", frame.data[i]);
 		}
 	}
 
-	close (socket_fd);
+	close (sfd);
 	return 0;
 }
