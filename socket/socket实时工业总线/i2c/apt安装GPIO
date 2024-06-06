@@ -7,7 +7,8 @@
 		sudo apt-get install python-rpi.gpio
 	安装GPIO工具:
 		sudo apt-get install gpio
-
+	安装linux-headers(内核开发基本都需要用到linux-headers):
+		sudo apt-get install linux-headers-amd64 linux-headers-cloud-amd64 linux-headers-rt-amd64
 
 
 
@@ -18,7 +19,7 @@
 c 语言list:
 # gpiod 设备
 gpiod - Tools for interacting with Linux GPIO character device - binary
-# gpiod 编码库(这种编程只能用来仿真, 或者linux 内核有i2c 模块时, 也可以用这种模式, 但MCU 里面是没有gpiod 库的, 需要自己手写i2c 协议)
+# gpiod 编码库(这种编程只能用来仿真, 如果你需要修改gpiod 仿真器, 你才需要这个库!! 一般MCU 里面是需要自己手写i2c 协议的, 即手摇信号发出去/接收)
 libgpiod-dev - C library for interacting with Linux GPIO device - static libraries and headers
 libgpiod-doc - C library for interacting with Linux GPIO device - library documentation
 libgpiod2 - C library for interacting with Linux GPIO device - shared libraries
@@ -46,6 +47,7 @@ ls /sys/class/gpio/
 
 
 3.GPIO 常见操作(需要root权限)
+
 # 导出编号为192的gpio(导出成功会多出一个文件夹/sys/class/gpio/gpio192/)
 echo 192 > /sys/class/gpio/export
 
