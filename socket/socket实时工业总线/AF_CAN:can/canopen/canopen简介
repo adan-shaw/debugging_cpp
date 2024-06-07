@@ -1,11 +1,11 @@
-1.什么是canopen 协议?
-	实际上, canopen 类似于ETH 中的someip, dds, 是一种应用层协议!!
-	由于can 退出时间比较早, canopen 诞生的时间也比较早;
-	canfd 在2015 年才推出, canopenfd 也是在canfd 推出之后才有的;
+1.什么是CANopen 协议?
+	实际上, CANopen 类似于ETH 中的someip, dds, 是一种应用层协议!!
+	由于can 退出时间比较早, CANopen 诞生的时间也比较早;
+	canfd 在2015 年才推出, CANopenFD 也是在canfd 推出之后才有的;
 	随着CAN FD的推出, CANopen FD作为下一代CANopen标准, 可能会发挥着越来越重要的作用(具体细节, 欢迎到CiA官网中查看)
 
-	总的来说, canopen/canopenfd, 都是应用层协议, 底层必须建立在can/canfd 物理层+链路层之上!!
-	canopen/canopenfd 是面向对象设计思维的, 甚至可能会有类似vsomeip, fastdds, opendds 之类的框架出现, 这里不做详述;
+	总的来说, CANopen/CANopenFD, 都是应用层协议, 底层必须建立在can/canfd 物理层+链路层之上!!
+	CANopen/CANopenFD 是面向对象设计思维的, 甚至可能会有类似vsomeip, fastdds, opendds 之类的框架出现, 这里不做详述;
 
 	CANopen是一个基于CAN总线的"高层协议", 
 	这意味着CAN总线(ISO 11898)就像集装箱的卡车一般作为CANopen信息的"运输工具"; 
@@ -18,7 +18,7 @@
 
 
 
-2.canopen 协议的应用:
+2.CANopen 协议的应用:
 	目前, CANopen通讯协议已经在工业领域得到了广泛的使用, 
 	由于其面向对象的设计思路, CANopen协议已成为欧洲等国家的自动化公司标配的通讯接口之一; 
 	CANopen协议的基础内容, 包括:
@@ -39,7 +39,7 @@
 
 
 
-3.canopen 协议的细节:
+3.CANopen 协议的细节:
 	相较于CAN总线和J1939协议, CANopen协议新增了6个核心概念: 
 		* 通信模式:    设备/节点的通信有3种模式: 主/从站、客户端/服务器和生产者/消费者; 
 		* 通信协议:    用于通信的协议, 如配置节点(SDO)或传输实时数据(PDO)等; 
