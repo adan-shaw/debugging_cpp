@@ -1,0 +1,52 @@
+1.概述
+	CAN-FD 可以理解成CAN协议的升级版, 只升级了协议(报文内容不一样了), 但CANFD 的物理层布局, 并未改变; 
+	CAN与CAN-FD主要区别: 
+		* 传输速率不同
+		* 数据长度不同
+		* 帧格式不同
+		* ID长度不同
+	因此, 传统CAN转移到CANFD, 可以无缝衔接, 直接改一下协议报文的内容即可, 比较方便;
+
+
+
+2.传输速率不同(canfd 增强的点):
+	CAN:    最大传输速率1Mbps; 
+	CAN-FD: 速率可变, 仲裁比特率最高1Mbps(与CAN相同), 数据比特率最高8Mbps;
+
+
+
+3.数据域长度不同(canfd 增强的点):
+	CAN:    一帧数据最长8字节
+	CAN-FD: 一帧数据最长64字节;
+
+
+
+4.协议内容改变:
+	CAN 头:
+		1  bit SOF 起始位
+		11 bit ID  位
+		1  bit RTR/SRR 远程帧位(Tranmission Request Bit)/替代远程请求位(Substitutes for Remote Requests Bit)
+		1  bit IDE 标识符扩展位(Identifier Extension Bit)
+		1  bit r   保留位
+		4  bit DLC 数据长度(指示数据字节数, 0-8 字节一帧)
+		...(data)
+		15 bit CRC
+		7  bit EOF
+
+	CANFD 头:
+		1  bit SOF 起始位
+		11 bit ID  位
+		1  bit r1  ID保留位
+		1  bit RRS 
+		1  bit IDE 标识符扩展位(Identifier Extension Bit)
+		1  bit FDF 
+		1  bit r   保留位
+		1  bit BRS 速率转换位(Bit Rate Switch)
+		1  bit ESI 节点错误状态指示(Error State Indicator)
+		4  bit DLC 数据长度(指示数据字节数, 0-64 字节一帧)
+		...(data)
+		17 bit CRC(21 bit CRC)
+		7  bit EOF
+		3  bit IFS
+
+
