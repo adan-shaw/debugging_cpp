@@ -12,6 +12,18 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+//can_frame 帧详细定义
+/*
+	struct can_frame {
+		canid_t can_id;  // 32 bit CAN_ID + EFF/RTR/ERR flags
+		__u8    can_dlc; // frame payload length in byte (0 .. CAN_MAX_DLEN)
+		__u8    __pad;   // padding
+		__u8    __res0;  // reserved / padding
+		__u8    __res1;  // reserved / padding
+		__u8    data[CAN_MAX_DLEN] __attribute__((aligned(8)));
+	};
+*/
+
 const char *if_can_name = "vcan0";		// can 网络空间接口名
 
 int main (void)
@@ -55,9 +67,9 @@ int main (void)
 			close (sfd);
 			return -1;
 		}
-		printf ("Received: can_id = 0x%X, len = %d\n", frame.can_id, frame.can_dlc);//打印can 数据的id + can_dlc 数据帧的数量(单帧64bit)
+		printf ("Received: can_id = 0x%X, len = %d\n", frame.can_id, frame.can_dlc);//打印can 数据的id + can_dlc 数据帧的数量(单帧0-8 字节, 8*8=64bit=max)
 
-		for (i = 0; i < frame.can_dlc; ++i)//根据can_dlc 数据帧的数量(单帧64bit), 遍历can 数据
+		for (i = 0; i < frame.can_dlc; ++i)//根据can_dlc 数据帧的数量(单帧0-8 字节, 8*8=64bit=max), 遍历can 数据
 		{
 			printf ("can data:\n\t0x%X \n", frame.data[i]);
 		}

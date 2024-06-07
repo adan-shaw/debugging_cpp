@@ -1,11 +1,16 @@
 支持socketcan 库的编程:
 	如果你可以使用socketcan 库编程, 那么是方便的, 这样意味着你不需要自己手动组装can 报文;
 	socketcan 库已经帮你封装好大部分操作, 直接拿来就用的感觉, 是愉快的, 跟posix socket 一样轻松;
+	ps:
+		socketcan 库使用的是sock_raw 原始套接字编程, 并不需要使用SOCK_PACKET 链路层套接字!!
+		一般情况下, MCU 则需要使用SOCK_PACKET 链路层套接字!!
 
 
 
 不支持socketcan 库的MCU 编程:
 	如果你不可以使用socketcan 库编程, 那么只能像ETH 链路层那样, 自己手动凭装每一帧数据, 比较麻烦, 但也不复杂, 自己看着办;
+	(一般情况下, MCU 则需要使用SOCK_PACKET 链路层套接字, 
+	 而且rtos 系统一般也会支持socket 套接字编程协议栈, 一般会有对应的实现, 否则更麻烦!! 操作更复杂)
 
 
 
