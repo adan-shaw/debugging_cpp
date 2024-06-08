@@ -30,6 +30,8 @@ sudo apt-get install can-utils
 #
 # 配置can-utils 中的CAN 接口(以vcan0 为例, 这是一个虚拟的CAN 接口) -- 每次仿真can 网络时, 都要重新配置, 重启失效
 sudo ip link add dev vcan0 type vcan
+# 假设设置为125kbit/s的位速率(这一步可以省略, 如果只是为了仿真模拟CAN 网络的话)
+sudo ip link set vcan0 type can bitrate 125000 
 sudo ip link set up vcan0
 
 
