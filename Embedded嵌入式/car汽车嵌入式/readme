@@ -9,6 +9,10 @@
 	* 座舱(MCU+android)
 	* 行车记录仪
 
+	ps:
+		soc os: 一般以qnx/ros 为主, linux 可以打rt 补丁, 应用齐全, 但貌似实时性, 便捷性达不到要求, 用得不多;
+		rots os: rtos 的种类就更多了, freertos 等一系列物联网rtos 都被抛弃, 汽车行业一般使用autosar/osek;
+
 
 
 # adas自动驾驶AI:
