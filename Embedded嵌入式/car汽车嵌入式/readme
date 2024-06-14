@@ -3,7 +3,7 @@
 	* 编译工具链(以: bazel/cmake 为例)
 	* 操作系统(以: soc=qnx/ros/linux, rtos=autosar/osek 为例)
 	* 虚拟化技术(以: qnx/ros/linux的kvm/qemu 为例)
-	* tbox+ota+信息安全
+	* tbox终端+ota服务+信息安全框架
 	* 通信层, 信号控制层(ap+cp autosar)
 	* 信号控制层的'仿真&诊断'软件(以vector/etas/eb 工具链为例)
 	* 座舱(MCU+android)
@@ -23,13 +23,16 @@
 
 
 
-# adas后端支援:
-	* V2X[Vehicle to X]
+# adas后端支援(V2X[Vehicle to X]车联网数据后端服务群):
+	... 系统层server
+	* OTA(严格来说OTA也属于V2X的一部分)
+	* tbox终端
+	... 应用层server
 	* 交通数据(道路是否阻塞, 交通繁忙情况等, 包括收费站收费路段, 容易拍照罚款的路段等等)
 	* 天气数据(能见度, 是否下雨等)
 	* 市政数据(是否在修路)
 	* 公安数据(是否发生交通事故, 造成阻塞)
-	* ...
+	...
 
 
 
