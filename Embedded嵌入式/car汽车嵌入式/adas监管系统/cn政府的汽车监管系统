@@ -25,17 +25,17 @@ cn 政府对汽车的监管, 主要分两个方向实施:
 # adas操作系统:
 	* 车规芯片(车规SoC + 车规MCU + 安全专用芯片[一般只是小型存储芯片])
 	* 编译工具链(以: bazel/cmake 为例)
-	* 操作系统(以: soc=qnx/ros/linux, bsw=autosar/osek 为例)
+	* 车控系统(以: soc=qnx/ros/linux, bsw=autosar/osek 为例)
 	* 虚拟化技术(以: qnx/ros/linux的kvm/qemu 为例)
 	* 通信层(vsomeip/fastdds/opendds)
 	* bsw 信号控制层(autosar/osek)
 	* bsw 信号控制层的'仿真&诊断'软件(以vector/etas/eb 工具链为例)
-	* tbox终端+ota服务+信息安全框架(实际就是座舱系统)
-	* 座舱(MCU + android 改造版[通过aosp 重新编译, 重新将完整的tcp/ip 协议栈, 实现重新定制aosp 镜像]) [在tbox 里面运行]
+	* tbox终端+ota服务+信息安全保障技术服务+远程遥控业务(实际就是V2X 前端, 做一些远程遥控+信息安全保障服务)[linux/android]
+	* 座舱系统(MCU + android 改造版[通过aosp 重新编译, 重新将完整的tcp/ip 协议栈, 实现重新定制aosp 镜像])
 	* 行车记录仪
 
 	这部分监管, 比较复杂:
-		+ 传感器数据(cp/ap autosar):
+		+ 传感器数据(bsw 控制信号层/ETH 通信层):
 			政府会强制车企安装'用户态/内核态'的插件, 进行数据抽查分析, 上报, 进而分析大面积的传感器数据是否合规;
 			[ETH 车域网数据抽查, 网络包监控过滤分析(iptables), 统一在ETH 层完成这项任务]
 		+ 入网信息安全校验:
