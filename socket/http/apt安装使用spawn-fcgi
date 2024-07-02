@@ -50,5 +50,28 @@ spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -C 2 -u www-data -g www-data -f /home/adan
 # spawn-fcgi 报错: spawn-fcgi: child exited with: 126 (主进程退出, why)
 spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -F 2 -u www-data -g www-data -f /home/adan/fcgi_home/cgi_demo.exe -S
 
+注意:
+	在c/c++ 的fcgi 模式下, 一个cgi_demo.exe 程序, 就需要一个spawn-fcgi 进程, 去维护这个cgi_demo.exe 响应支撑!!
+	当然你可以把这个cgi_demo.exe 程序写成你想要的模式!!
+	把这个cgi_demo.exe 装载一个lua 机, 然后做html 模板编程, 应用编程, 都可以;
+	但原则上, 一个cgi_demo.exe, 就是一个后台server 进程, 处理一个业务;
+	一个nginx 可以指向多个cgi_demo.exe, 配置Nginx 时, 只需要一个location{} 块就行, demo:
+	location ~ \.cgi$
+	{
+		fastcgi_pass  127.0.0.1:9213;
+		fastcgi_index cgi_demo.exe;
+		fastcgi_param SCRIPT_FILENAME /scripts$fastcgi_script_name;
+		include fastcgi_params;
+	}
+
+
+
+
+
+
+
+
+
+
 
 
