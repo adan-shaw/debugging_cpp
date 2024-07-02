@@ -1,0 +1,51 @@
+#
+# 1.安装spawn-fcgi(节省时间)
+#
+# 安装spawn-fcgi(默认版本: spawn-fcgi v1.6.4 (ipv6) - spawns FastCGI processes)
+apt-get install spawn-fcgi
+
+# 安装fcgi 编码库
+apt-get install libcgicc-dev libcgicc-doc libcgicc3 libfcgi-bin libfcgi-dev libfcgi0ldbl
+
+
+
+
+
+#
+# 2.spawn-fcgi 的使用
+#
+Options:
+ -f <path>      filename of the fcgi-application (deprecated; ignored if <fcgiapp> is given; needs /bin/sh)
+ -d <directory> chdir to directory before spawning
+ -a <address>   bind to IPv4/IPv6 address (defaults to 0.0.0.0)
+ -p <port>      bind to TCP-port
+ -s <path>      bind to Unix domain socket
+ -M <mode>      change Unix domain socket mode (octal integer, default: allow read+write for user and group as far as umask allows it) 
+ -C <children>  (PHP only) numbers of childs to spawn (default: not setting
+                the PHP_FCGI_CHILDREN environment variable - PHP defaults to 0)
+ -F <children>  number of children to fork (default 1)
+ -b <backlog>   backlog to allow on the socket (default 1024)
+ -P <path>      name of PID-file for spawned process (ignored in no-fork mode)
+ -n             no fork (for daemontools)
+ -v             show version
+ -?, -h         show this help
+
+(root only)     强烈建议(可以限制用户的访问搜索路径, chroot 限制访问区域)
+ -c <directory> chroot to directory
+ -S             create socket before chroot() (default is to create the socket in the chroot)
+ -u <user>      change to user-id
+ -g <group>     change to group-id (default: primary group of user if -u is given)
+ -U <user>      change Unix domain socket owner to user-id
+ -G <group>     change Unix domain socket group to group-id
+
+
+
+# 常用组合(php only, -C 2 = 两个工作线程)
+spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -C 2 -u www-data -g www-data -f /home/adan/fcgi/ -S
+
+
+
+# 常用组合(c/c++, -F 2 = 两个工作线程)
+# spawn-fcgi 显示: child spawned successfully: PID: 4240 (最好保留至少2 个进程, 一个子进程, 否则看不到spawn-fcgi 的状态)
+# spawn-fcgi 报错: spawn-fcgi: child exited with: 126 (主进程退出, why)
+spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -F 2 -u www-data -g www-data -f /home/adan/fcgi/fcgi.conf -S

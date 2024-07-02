@@ -1,0 +1,17 @@
+#
+# 1.安装fcgi 编码库
+#
+# 安装spawn-fcgi(默认版本: spawn-fcgi v1.6.4 (ipv6) - spawns FastCGI processes)
+apt-get install spawn-fcgi
+
+# 安装fcgi 编码库
+apt-get install libcgicc-dev libcgicc-doc libcgicc3 libfcgi-bin libfcgi-dev libfcgi0ldbl
+
+
+
+#
+# 2.fcgi 编码库手册(没找到手册, 只能自己从examples 里面learn how to programming with fcgi2)
+#
+ps:
+	其实fcgi2 的功能也很简单, 不需要详细的SDK, 直接用就行了;
+	主要功能无非就是打开url 选中的*.exe 文件, 然后执行, 然后把stdout 结果返回到上游http proxy 即可, 标准的cgi 实现规律;

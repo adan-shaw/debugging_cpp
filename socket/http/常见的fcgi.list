@@ -1,0 +1,97 @@
+apt-cache search fastcgi
+apt-cache search  fastcgi | grep python
+apt-cache search  fastcgi | grep php
+apt-cache search  fastcgi | grep lua
+apt-cache search  fastcgi | grep nodejs
+apt-cache search  fastcgi | grep node
+
+
+
+
+
+#
+# 1.proxy 网关
+#
+lighttpd - fast webserver with minimal memory footprint
+
+libnginx-mod-http-cache-purge - Purge content from Nginx caches
+nginx-extras - nginx web/proxy server (extended version)
+nginx-full - nginx web/proxy server (standard version)
+nginx-light - nginx web/proxy server (basic version)
+
+apache2-utils - Apache HTTP Server (utility programs for web servers)
+libapache2-mod-fcgid - FastCGI interface module for Apache 2
+libapache2-mod-mapcache - tile caching server - Apache module
+# apache2 for scgi (python 特有的)
+libapache2-mod-scgi - Apache module implementing the SCGI protocol
+
+
+
+
+
+#
+# 2.常见语言的fastcgi
+#
+nodejs:
+	node-fastcgi - FastCGI server for Node.js
+	node-fastcgi-stream - Node.js module to read and write FastCGI records
+
+lua:
+	lua-wsapi - Web server API abstraction layer for the Lua language
+	lua-wsapi-fcgi - Web server API fastcgi backend
+	lua-wsapi-fcgi-dev - wsapi fastcgi development files for the Lua language
+
+c/c++:
+	spawn-fcgi - FastCGI process spawner
+	libcgicc-dev - C++ class library for writing CGI applications (development files)
+	libcgicc-doc - C++ class library for writing CGI applications (documentation)
+	libcgicc3 - C++ class library for writing CGI applications (library)
+	libfcgi-bin - FastCGI bridge from CGI
+	libfcgi-dev - header files of FastCGI
+	libfcgi0ldbl - shared library of FastCGI
+
+php:
+	php-cgi - server-side, HTML-embedded scripting language (CGI binary) (default)
+
+python:
+	python-flup - Implements Python Web Server Gateway Interface (WSGI)
+	python-fcgi - Simple FastCGI module for Python
+	python-scgi - Server-side implementation of the SCGI protocol
+
+
+
+
+
+#
+# 3.不常见语言的fastcgi
+#
+ASP.NET(废弃):
+	libfpm-helper0 - ASP.NET backend for FastCGI Process Manager - helper lib
+	mono-fastcgi-server - ASP.NET backend for FastCGI webservers - default version
+	mono-fastcgi-server4 - ASP.NET 4.0 backend for FastCGI webservers
+	mono-fpm-server - ASP.NET backend for FastCGI Process Manager
+
+Perl(废弃):
+	libembperl-perl - system for building dynamic websites with Perl
+	libanyevent-fcgi-perl - Perl non-blocking FastCGI server
+	libmojo-server-fastcgi-perl - Mojolicious FastCGI Server
+	libnet-async-fastcgi-perl - FastCGI engine using IO::Async
+	libnet-fastcgi-perl - Perl toolkit to write FastCGI applications
+	libfcgi-async-perl - FastCGI engine based on IO::Async
+	libfcgi-client-perl - Perl client library for FastCGI protocol
+	libfcgi-ev-perl - module to support FastCGI protocol in EV-based applications
+	libfcgi-perl - helper module for FastCGI
+	libfcgi-procmanager-perl - Perl module to help manage FastCGI applications
+	libhtml-template-compiled-perl - Perl template system compiling HTML::Template files to Perl code
+	libipc-run-safehandles-perl - Use IPC::Run and IPC::Run3 safely
+	libmojo-server-fastcgi-perl - Mojolicious FastCGI Server
+	libnet-async-fastcgi-perl - FastCGI engine using IO::Async
+	libnet-fastcgi-perl - Perl toolkit to write FastCGI applications
+	libnetsds-perl - Service Delivery Suite framework
+	libplack-handler-anyevent-fcgi-perl - asynchronous FCGI handler for PSGI using AnyEvent::FCGI
+	libtitanium-perl - strong, lightweight web application framework for Perl
+
+
+
+
+

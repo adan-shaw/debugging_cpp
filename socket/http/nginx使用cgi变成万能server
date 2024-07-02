@@ -1,0 +1,65 @@
+安装:
+	apt-get install spawn-fcgi libcgicc-dev libcgicc-doc libcgicc3 libfcgi-bin libfcgi-dev libfcgi0ldbl
+
+
+
+nginx 如何支持cgi 开发?
+	nginx默认不支持cgi, 也因此nginx 是反向代理proxy server, 
+	而apache默认支持cgi, apache 默认是正向代理proxy server;
+
+	因此, 要让nginx 支持cgi, 需要做以下动作:
+		* 安装spawn-fcgi 作为中转server(php/python/java server 都需要中转server, 就是这个原因)
+
+
+
+spawn-fcgi 简介:
+	spawn-fcgi 是一个独立server, 独立运行, 原理也很简单, 就是直接运行*.exe 程序, 将stdout 返回给nginx;
+	spawn-fcgi 需要改造成一个daemon shell, 跑在后台, 可以被systemd 维护;
+
+	spawn-fcgi 升级改造:
+		如果你熟悉lua 源码, 熟悉spawn-fcgi, 你甚至可以将spawn-fcgi 改造成类似php 一样的响应server, 只是这样做的意义不大;
+		现在市场上充斥着这种project, 再造一个的可能性, 没有什么必要;
+
+	spawn-fcgi 的cgi 功能:
+		spawn-fcgi 默认只打开*.exe 程序, 直接将*.exe 程序的stdout 返回给nginx;
+		你可以让spawn-fcgi 打开lua 机, 不过大概率会卡死, 因为执行lua 机之后一直卡住不动, 会有问题;
+
+	spawn-fcgi 改造成lua 机cgi server:
+		* 往spawn-fcgi 中植入lua 机, 让spawn-fcgi 常驻一个lua 机, 让spawn-fcgi 变成一个只打开lua 文件的翻译机,
+		* 每次只打开lua 文件, disk io 压力不大!!
+		* 只在spawn-fcgi 初始化时装载一次lua 机, 避免让lua 机下放到*.exe cgi 程序中, 这样每次触发cgi 都需要重新装载一次lua 机, 非常耗时;
+		* 利用lua 的template 模板编程, 让spawn-fcgi 变成一个lua web/app server, 让spawn-fcgi-lua server成真;
+
+
+
+市场潜力:
+	这样做的市场潜力是很小的, 还不如openresty, 但好处是: 真正让spawn-fcgi 成为一个lua web/app server;
+	openresty 跑应用, 万一崩溃, 系统也会跟着崩溃;
+	让spawn-fcgi 成为一个lua web/app server, 跑应用时, 就可以兼容崩溃, 崩溃了也没关系;
+	这样可以真正做到:
+		nginx + lua = openresty;
+		spawn-fcgi + lua = web/app server;
+	打造一个万能web/app 应用/网关服务器方案, 小型, 但万能, 跨平台, 跨芯片, 或者会适合物联网;
+
+	至于使用lua/luajit? 建议使用两者都使用, 提高兼容能力(其实也不难);
+
+
+
+openresty 分析:
+	openresty 本身也是一个单lua 机运行的破烂产品, 相对于skynet 的高性能, lua 内部穿底, openresty 只能说是一个简单傻瓜程序, 直接解析http 业务;
+	所以openresty 会使用luajit 增强性能, 但实际上lua 的研究, 肯定还是网易云风这家伙, 研究得比较深;
+	如何扭转软件市场, 需要在这些基础技术上, 进行彻底扭转盘子的;
+	lua 具备这样的潜力, 但是这破玩儿也很容易被人剽窃, 也是一个问题;
+	小到容易操控, 小到容易被剽窃;
+	成也箫何, 败也箫何;
+
+
+
+lua-wsapi-fcgi-dev:
+	lua-wsapi-fcgi-dev - wsapi fastcgi development files for the Lua language
+	lua 本身就有fcgi project, 这种事情肯定早就有人想到了, 
+	所以连移植lua fcgi 都不需要了, 直接用lua-wsapi-fcgi-dev;
+	spawn-fcgi 只为c/c++ 而造!!
+
+
+
