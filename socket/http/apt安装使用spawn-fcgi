@@ -41,11 +41,14 @@ Options:
 
 
 # 常用组合(php only, -C 2 = 两个工作线程)
-spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -C 2 -u www-data -g www-data -f /home/adan/fcgi/ -S
+spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -C 2 -u www-data -g www-data -f /home/adan/fcgi_home/php.exe -S
 
 
 
 # 常用组合(c/c++, -F 2 = 两个工作线程)
 # spawn-fcgi 显示: child spawned successfully: PID: 4240 (最好保留至少2 个进程, 一个子进程, 否则看不到spawn-fcgi 的状态)
 # spawn-fcgi 报错: spawn-fcgi: child exited with: 126 (主进程退出, why)
-spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -F 2 -u www-data -g www-data -f /home/adan/fcgi/fcgi.conf -S
+spawn-fcgi -a 0.0.0.0 -p 9213 -b 1024 -F 2 -u www-data -g www-data -f /home/adan/fcgi_home/cgi_demo.exe -S
+
+
+

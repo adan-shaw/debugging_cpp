@@ -1,5 +1,5 @@
 //编译:
-//		gcc -g3 ./demo.c -o x -l fcgi
+//		gcc -g3 ./fcgi2_demo.c -o x -l fcgi
 
 
 
