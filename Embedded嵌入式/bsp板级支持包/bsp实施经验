@@ -1,4 +1,25 @@
 #
+# 0.前言
+#
+由于yocto 的出现, linux-bsp 开发的历史遗留问题被解决, 
+因此目前bsp 开发, 基本上都是conf 配置好之后, 直接一个project, 编译即出img 镜像, 非常方便, 支持直接编译出img 的project 有:
+	* aosp
+	* yocto
+	* openwrt
+	* freertos/rt-thread
+
+这几个常见的os 都已经囊括了, 包括了大中小操作系统, 包括了实时/分时操作系统;
+详细bsp 编译配置, 需要自己手动修改, 例如: 
+	我想给Linux os 打入RT实时补丁, 用作车载SoC-OS 的主控OS, 这时候就很有可能会打入RT 实时内核补丁;
+	你需要做的是: 
+		在yocto 编译之前, 进行conf 配置, 直接配置yocto-linux-kernel 内核相关的参数, 
+		最终得出一个具有RT 实时性能的linux OS
+
+
+
+
+
+#
 # 1.bsp 实施策略:
 #
 大型分时系统(按照纯手工lfs 路线定制):

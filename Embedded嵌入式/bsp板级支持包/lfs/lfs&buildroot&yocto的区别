@@ -19,6 +19,16 @@ lfs, busybox, buildroot, yocto 等工具链的本质, 都是为了让我们编�
 
 
 
+yocto 新一代全自动工具链:
+	新一代的yocto 工具链, 也像openwrt, freertos 一样, 编译完之后, 直接出img 镜像, 非常方便;
+	这样做bsp 开发时, 只需要直接配置编译conf list 即可, 控制需要编译的软件, 编译参数, 部署参数等等, 最终部署好之后, 直接编译出img 镜像;
+	这样一来, 目前的bsp 开发工作, 基本上都是直接出img 镜像的了(手工定制时代落幕了):
+		* aosp
+		* yocto
+		* openwrt
+		* freertos/rt-thread
+
+
 
 
 
@@ -31,7 +41,7 @@ lfs, busybox, buildroot, yocto 等工具链的本质, 都是为了让我们编�
 		- lfs 纯手工工具链
 		- busybox
 		- buildroot
-		- yocto 新一代全自动工具链
+		- yocto 新一代全自动工具链(新一代的yocto 工具链, 也像openwrt, freertos 一样, 编译完之后, 直接出img 镜像, 非常方便)
 
 		# 其他非linux 的操作系统工具链:
 			- aosp: android 系统工具链(需要补充交叉编译工具链)
