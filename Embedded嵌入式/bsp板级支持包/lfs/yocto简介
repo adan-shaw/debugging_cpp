@@ -1,0 +1,63 @@
+1.yocto 简介:
+	yocto 是新一代lfs 全自动化编译工具链, 旨在解决linux-bsp 开发的复杂历史遗留问题, 
+	向aosp, openwrt, freertos 这类project 看齐, 一个project 编译, 直接出img 镜像, 简单方便;
+	因此, 如果考虑做linux-bsp 开发, yocto 则是一个非常不错的选择, 极大地节省了开发时间, 
+	而且提高了linux-bsp 的效率, 可靠性, 可用性, 稳定性, 安全性, 等等都得到了极大限度的提高(肯定是自动化工具好啦, 毫无悬念);
+
+
+
+
+
+2.yocto project 的小技巧:
+	yocto project 实际上只是一个project name, 跟aosp 一样, 最终产品名叫android;
+	yocto project 的实际master project, 就叫:poky;
+	当然yocto 还有其它project 来支撑linux-bsp 开发, 具体常见的yocto project 有:
+		* poky-yocto(主项目)
+		* poky-kirkstone
+		* poky-scarthgap
+		* poky-dunfell
+	其他从项目, 副项目, 用途未明;
+
+	yocto 也跟lfs 一样, 每一代lfs, 都指定了gcc/glibc/kernel 等工具的版本, 版本不能修改!! 这点yocto 也一样!!
+
+以Yocto Project 5.0为例, 该版本工具链固定的工具版本(软件版本), 如下:
+	Recipe Versions:
+		Jump to navigationJump to search
+		This page lists the expected versions of major packages that will be in the Yocto Project 5.0 "Scarthgap" release (at the time of writing).
+		For further details, please contact the relevant maintainer.
+
+	工具版本号list:
+		Recipe			Version	Maintainer																Notes
+		binutils		2.42		Khem Raj <raj.khem@gmail.com>
+		gcc					13.2		Khem Raj <raj.khem@gmail.com>							GCC 14 scheduled after YP
+		glibc				2.39		Khem Raj <raj.khem@gmail.com>							Due 2024-02-01
+		linux-yocto	6.6.x		Bruce Ashfield <bruce.ashfield@gmail.com>	LTS until December 2026
+		python3			3.12		Trevor Gamblin <tgamblin@baylibre.com>		3.13 scheduled 2024-10-01
+
+	Key recipe versions by release(副项目版本list):
+		Release						linux-yocto(kernel)	gcc				binutils	glibc		python3
+		scarthgap	(5.0)		6.6.x								13.2			2.42			2.39		3.12.x
+		kirkstone	(4.0)		5.10.x / 5.15.x			11.4			2.38			2.35		3.10.x
+		dunfell		(3.1)		5.4.x								9.5				2.34			2.31		3.8.x
+	ps:
+		python 版本是绑定linux-os 的, 别幻想更换/更新python 版本了, 不切实际!!(难度非常大)
+
+
+
+
+
+3.yocto 目前发行的版本(2024):
+	自己看截图, 这个类似lfs 一样, 一个版本维持几年, 差不多都是这样子;
+
+
+
+
+
+4.yocto 下载资源和网速:
+	很遗憾的是, yocto 在国内还没有齐全的镜像站, 因此网速非常慢;
+	而且yocto 所需要的包, 非常多(跟lfs 一样多, 而你又不能一一下载, 这时候就会非常麻烦了, 很难做实现);
+	lfs 你可以一个一个包下载下来做实验, yocto 只能先做一次之后, 你有了源码包, 才能进行编译, 否则自己下载的话, 需要vpn;
+	另外:
+		不要再考虑lfs 工具链来纯手工定制linux-os 了, 你自己做过也知道, 可靠率并不高;
+		你还要逐个包修改bug, 修改内核补丁, 还有编译过程中, 出现任何错误, 都要纠正, 非常不划算;
+		你需要做的就是: 直接使用命中率, 效率更高的yocto 工具链, 直接编译出linux-os img 镜像, 省事, 高效!!
