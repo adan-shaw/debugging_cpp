@@ -78,7 +78,96 @@ L2+: NOA横空出世
 
 
 *
-* 2.'AD自动驾驶系统'实施:
+* 2.'ADAS/AD系统'详细功能list:
+*
+简写						english															chinese
+FCW						Front Collision Warning							前向碰撞预警
+PCW						Pedestrian Collision Warning				行人碰撞预警
+LDW						Lane Departure Warning							车道偏离预警
+BSW						Blind Spot Warning									盲点报警
+DOW						Doors Opening Warning								开门报警
+LCA						Lane Changing Assist								变道辅助
+RCTA					Rear Crossing Traffic Alert					后向十字交通预警
+RCW						Rear Collision Warning							后向碰撞预警
+SCW						Side Collision Warning							侧向碰撞预警
+BSD						Blind Spot Detection								车辆盲区侦测系统					
+AEB-R					AEB Reverse													后向AEB
+AEB						Autonomous Emergency brake					自动紧急制动
+AEB-V					AEB-Vehicle													AEB车辆
+AEB-P					AEB-Pedestrian											AEB行人
+AEB-C					AEB-Cyclist													AEB骑车人
+AEB-Junction	AEB十字路口
+FCTA/B				Front Crossing Traffic Alert/Brake	前向十字交通路口报警/制动
+RCTA/B				Rear Crossing Traffic Alert/Brake		后向十字交通路口报警/制动
+AEB-Reserve										后向AEB
+LDW						Lane Departure Warning							车道偏离预警
+LKA						Lane Keeping Assist									车道保持辅助也叫LDP
+LDP						Lane Departure Prevention						车道偏离修正
+LCC						Lane Centering Control							车道居中控制
+ELK						Emergent Lane Keeping								紧急车道保持
+LFP						Lane Following Pilot 								车道跟随辅助驾驶
+OLC						Overtaking Lane Change 							超车自动变道
+NLC						Navigation Lane Change 							导航自动变道
+ILC						Interactive Lane Change							自动辅助变道					 
+CIPV					Closest In Path Vehicle 						路境内最近车辆
+EMA																								紧急避让辅助
+AES						Automatic Emergency Steering				自动紧急转向避让
+TSR						Traffic Sign Recognition						交通标志识别
+ISA						Intelligent Speed Adaptation				智能车速控制
+IHC						Intelligent High-beam Control				智能远光灯控制也叫AHBC
+AHBC					Automated High-Beam Control
+ADB						Adaptive Driving Beam								自适应大灯系统也叫Matrix Beam 矩阵大灯控制
+ACC						Adaptive Cruise Control							自适应巡航
+FSRA					Full Speed Range ACC								全速域自适应巡航
+ACC S&G				ACC stop&go													即FSRA 
+iACC					智能自适应巡航(带限速控制)
+TACC					Traffic-Aware Cruise Control				特斯拉的ACC
+TJA						Traffic Jam Assit										交通拥堵辅助
+ICA						Integrated Cruise Assist						集成巡航辅助(TJA全速域升级版)
+ALC						Automated Lane Change								转向灯自动变道
+HBA						High Beam Assist										远光灯辅助控制
+HWA						Highway Assist											高速公路辅助, 一般包括ALC功能甚至有些feature无需驾驶员进行转向灯确认直接变道
+SHWA					Super-HWA														可脱手得高速公路辅助, 需要高精度定位系统(高精地图+GNSS等方案)
+NOA						Navigate on Autopilot								导航自动驾驶辅助(L2+) 特斯拉的类似HWA的功能
+H-NOP					Highway Navigation on Pilot 				高速导航辅助驾驶
+AVM						Around View Monitoring							全景环视监控
+APA						Automated Parking Assist						自动泊车辅助
+FAPA					Fusion APA													带视觉感知的融合泊车辅助
+RPA						Remote Parking Assist								远程泊车辅助
+MPP						Memory Parking Pilot								记忆泊车
+HPP						Home-zone Parking Pilot							家庭区域泊车(与MPP同一功能不同称谓)
+Summon																						召唤(从车外操控车辆自动泊车和恢复行使或在指定地点取回车辆)
+TJP						Traffic Jam Pilot										交通拥堵领航(L3)
+HWP						Highway Pilot												高速公路领航(封闭道路L3)
+City-Pilot: CP																		城市领航(开放道路L4)或者UP UrbanPilot
+AVP						Automated Valet Parking							自动代客泊车(L4)
+Localization																			定位系统 如GNSS定位,或者VisualLocalization视觉定位
+VED						Vehicle Dynamic											车辆动力
+ABS						antilock brake system								防抱死制动系统					
+ADAS					Advanced Driver Assistance System		高级驾驶辅助系统
+APS						Automated Parking System						自动泊车辅助
+BCW						Blind Collision Warning							盲点碰撞预警
+DAW						Driver Attention Warning						驾驶员注意力警示系统
+DMS						Driver Monitoring System						驾驶员状态监测
+ESC						Electronic Stability Controller			车身稳定控制
+ESP						Electronic Stability Program				车身稳定控制
+EPS						Electronic Power Steering						电动转向
+FCA						Front Collision Assist							前方防撞辅助
+HUD						Head Up Display											抬头显示系统
+ISS						Intelligent Start/Stop							智能启停
+ITS						Intelligent Transportation Systems	智能运输系统
+NVS						Night Vision System									夜视系统
+SCC																								智能自适应巡航
+RSR						Road Sign Recognition								交通信号及标志牌识别
+SVC						Surround View Cameras								全景泊车停车辅助系统
+TLR						Traffic Light Recognition						交通信号灯识别
+
+
+
+
+
+*
+* 3.'AD自动驾驶系统'实施:
 *
 1.'AD自动驾驶系统'的实现:
 	一般情况下, 'AD自动驾驶系统'会包含大量服务器数据支援:
