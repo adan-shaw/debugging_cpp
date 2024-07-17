@@ -59,16 +59,16 @@
 	ps:
 		soc os:
 			一般以qnx/linux 为主(linux 可以打rt 补丁, 应用齐全, 但貌似linux 的实时性, 便捷性达不到设计要求, 市场份额不大);
-			(ros 也是基于linux 进行改造的unix 实时变种系统, 当然qnx 也是unix 实时变种系统, 但用在车载系统中, 应用比较少)
-			[ps: 只要ros 支持Hypervisor 虚拟化技术, 应该也可以用的]
-			最终车控系统, 可能采用的方案只会是:
-				qnx/ros/linux
+			(ros 也是基于linux 进行改造的unix 实时变种系统, 当然qnx 也是unix 实时变种系统, 但用在车载系统中, qnx 的应用比较少, 需要做较多的应用移植工作)
+			[ps: 只要ros 支持Hypervisor 虚拟化技术, 应该也可以用作车控系统的]
+			最终车控系统, 可能采用的方案只会是: qnx/ros/linux
 
 		android 为什么不能成为车控soc os(车控系统)?
 			* 首先google 公司貌似放弃了汽车市场;
 			* 其次是: android 本身是一个被剪裁的比较多的分时系统, 突然改造成实时车控系统, 改造难度太大, 没必要!!
 				而且socket 套接字默认也是不支持原始套接字的, 如果要改成车控os, 改造压力较大;
-				因此, 与其将android 改成车控os, 还不如直接用linux 改成车控os(android 只适合于座舱系统);
+				因此, 与其将android 改成车控os, 还不如直接用linux 改成车控os;
+				因此, android 一般只用在座舱系统中;
 
 		为什么需要Hypervisor 虚拟化技术?
 			无论qnx/ros/linux 作为车控母系统, 都需要Hypervisor 虚拟化技术, 都必须使用kvm 虚拟化技术, 虚拟出linux 系统来跑AI 自动驾驶-机器学习框架;
@@ -121,10 +121,10 @@
 	* 视频数据
 	...
 
-	- adas: Advanced Driver Assistance Systems 高级驾驶辅助系统
-	- noa: Navigate on Autopilot 导航辅助驾驶NOA
-	- ads: Automated Driving Systems 自动驾驶系统
-	- adas/ad: Advanced Driver Assistance Systems + Automated Driving Systems
+	- adas:    Advanced Driver Assistance Systems 高级驾驶辅助系统
+	- noa:     Navigate on Autopilot              导航辅助驾驶NOA
+	- ads:     Automated Driving Systems          自动驾驶系统
+	- adas/ad: Advanced Driver Assistance Systems / Automated Driving Systems
 
 
 
@@ -149,3 +149,4 @@
 
 # 汽车仿真模拟软件(驾驶撞击模拟, 姿态模拟, 物理模拟, 仿真测试):
 	...(略, 不做深入介绍)
+
