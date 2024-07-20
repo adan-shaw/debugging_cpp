@@ -1,0 +1,30 @@
+car汽车嵌入式list:
+
+	* adas.ad后端支援(V2X):
+		OTA
+		TBOX
+		V2X
+		MAP
+		...
+
+	* adas.ad操作系统:
+		ADAS/AD 软硬件平台
+		autosar/osek
+		ASPICE标准
+		EB工具链/ETAS工具链/vector工具链
+		ap autosar(ADAS.AD通信层)
+		座舱
+		行车记录仪
+		...
+
+	* adas.ad监管系统:
+		车联网信息安全
+		...
+
+	* ad自动驾驶AI:
+		adas高级辅助驾驶功能
+		ad自动驾驶功能
+		ad自动驾驶AI前端:传感器
+		ad自动驾驶-仿真
+		ad自动驾驶-后端数据(V2X)
+		...
