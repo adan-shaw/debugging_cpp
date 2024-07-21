@@ -1,6 +1,23 @@
 前言
 	在没有ADAS/AD 系统之前, 汽车域控制器的功能需求, 可能比较简单, 单一;
-	但现在进入到ADAS/AD系统时代, 汽车域控制器的需求, 也跟着ADAS/AD系统业务, 新增了大量新的需求, 详情如下;
+	但现在进入到ADAS/AD系统时代, 汽车域控制器的需求, 也跟着ADAS/AD系统业务, 新增了大量新的需求, 详情自己细读本文内容;
+	注意:
+		Building Block 列表里面的内容, 只是一个标题目录, 这些标题目录还能二级展开(大概一个标题目录就是一个project);
+		不过有些是驱动需求, 如果驱动移植成功的话, 就可以了;
+		(这些条目是bsp 需要做的工作, 貌似压力在移植, 不在开发; 
+		 但目前bsw 开发基本上都靠autosar/osek 工具链, 直接配置就行, 减少很多开发压力, 也提高了准确率!!
+		 但实际上, 现在bsp 开发, 都有yacto 工具链, 提高lfs 命中率!!
+		 所以都一样的, 这种复杂的工作, 早就有自动化工具取代了, 综合经验更重要, 综合开发经验更好)
+
+	问:
+		为什么驱动/业务需求, 是连在一起的?
+		实际上这都是autosar/osek 直接配置得到的bsw 层os, 一个小型realtime os, 通常来说, 对这种realtime os, 是没有'驱动/应用'的区分的;
+		只有linux 这种大型系统, 才会区分应用层, 内核层应用, 但realtime os 一般来说, 是没有这种划分的, 参考更大型的qnx 也是这样的;
+		因此, 在autosar/osek 工具链面前, 反正都是通过配置生成的, '驱动/应用'本质上也是直接配置, 配置之后直接烧写img 镜像, 
+		因此, 在autosar/osek 工具链面前, 应该是不区分'驱动/应用'的;
+		最后, 在母系统应用层, 再套一个adaptive autosar, 对autosar/osek 的信号进行管理, 做信号中转, 就能实现系统层对bsw 层向下管理了;
+
+
 
 	为了方便描述, 以后对下列名称用行业内通用缩写代替: 
 		系统构成要素 - Building Blocks              - BB
@@ -25,16 +42,17 @@
 
 	ADAS/AD的产品一般可以划分出30-60个BB模块, 每个BB都会对应一个PDD用来描述开发需求; 
 	现以智能前视摄像头模块(IFC)为例, 列举ADAS ECU中常见的各个BB: 
+	(ps: BB 需求部分驱动/业务需求, 如果是驱动, 就如I2C 之类的, 如果是业务需求, 就如: 坐标系统, )
 		System Architecture Design 系统架构设计
 		Hardware Design 硬件设计
 		Host(MCU) Software Architecture Design 主芯片的软件架构设计(硬件一般以MCU单片机为主)
 		SoC Software Architecture Design 其他片上系统芯片的软件架构设计
 		Functional Safety 功能安全(基于ISO26262标准)
 		Cyber Security 网络安全
-		Signal Coordinate Systems 坐标系系统(传感器、控制器、车辆及大地坐标系的转换)
+		Signal Coordinate Systems 坐标系统(传感器、控制器、车辆 & 大地坐标系的转换)
 		Configuration Strategy 配置策略(产品的各种系统配置参数)
-		NVM&KAM 非易失存储器(Non-Volatile Memory)及磨损修正系数存储管理员(Keep-Alive Memory Manager)
-		Bootloader & Reprogramming Bootloader及烧录
+		NVM & KAM 非易失存储器(Non-Volatile Memory) & 磨损修正系数存储管理员(Keep-Alive Memory Manager)
+		Bootloader & Reprogramming 引导 & 烧录
 		Power Mode Manager 电源管理模块
 		Safety Protection Module 安全保护模块(产品自保护、安全机制)
 		Manufacturing 制造(一般指向ERP生产系统导入的相关工程信息)
@@ -48,16 +66,16 @@
 		Ethernet Communication 以太网通信
 		Inter Processor Communication 内部芯片间通信
 		Factory(EOL)/Service/Online(Auto) Alignment 工厂(下线)/服务站/在线(自动)校准(一般指智能前视摄像头模块或者毫米波雷达模块的传感器外参校准)
-		CCP & XCP CCP标定协议及XCP标定协议
+		CCP & XCP CCP标定协议 & XCP标定协议
 		Features 各种功能点(基于Simulink模型搭建, 如ACC/AEB/LKA/TJA等功能)
 		Feature Calibration 功能标定
 		Feature Interface 功能接口(模型参数与嵌入式软件参数的接口mapping信息)
-		Debug Interface & I-CAN & Video Output 调试接口、调试CAN及各种视频输出接口(基于LVDS/CVBS/USB等接口)
+		Debug Interface & I-CAN & Video Output 调试接口、调试CAN & 各种视频输出接口(基于LVDS/CVBS/USB等接口)
 		Hardware Interface 硬件接口
 		HMI 人机交互界面(Human-Machine Interface, 显示信息)
-		eHorizon & HD-Map 电子地平线及高精地图
+		eHorizon & HD-Map 电子地平线 & 高精地图
 		Location 定位
-		Camera Module (Lens&Imager) 摄像头模组(镜头及图像传感器)
+		Camera Module (Lens & Imager) 摄像头模组(镜头 & 图像传感器)
 		Camera Blockage Detection Algorithm 摄像头遮挡探测算法
 		Radar Blockage Detection Algorithm 毫米波雷达遮挡探测算法
 		Lane/Objects Detection Algorithm 车道线/目标检测算法(基于视觉)
@@ -73,7 +91,7 @@
 		System Test 系统测试(包括台架测试和实车测试, 需要编写CAPL脚本等工作)
 
 	综上可以看出, 整个BB大致可分为:
-		架构、功能安全、网络安全、坐标系系统、电源管理、存储管理、配置管理、安全保护、刷写、通信、诊断、接口、算法、制造、包装&安装、高精地图、定位、EyeQ芯片等模块; 
+		架构、功能安全、网络安全、坐标系系统、电源管理、存储管理、配置管理、安全保护、刷写、通信、诊断、接口、算法、制造、包装 & 安装、高精地图、定位、EyeQ芯片等模块; 
 
 
 
@@ -97,7 +115,7 @@
 	Software Requirement 软件需求
 	System Test Requirement 系统测试需求
 	Environment Requirement 环境需求
-	Recyclability / Substance of Concern Requirement 再循环利用及关注物需求
+	Recyclability / Substance of Concern Requirement 再循环利用/关注物需求
 	Validation Requirement 验证需求
 	Manufacturing Requirement 制造需求
 	Logistic Requirement 逻辑需求
