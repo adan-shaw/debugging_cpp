@@ -57,7 +57,7 @@ void mmap_madvise(void){
 	//修改mmap 内存块的访问策略
 	posix_madvise(pmap, PAGE_COUNT, POSIX_MADV_NORMAL);
 
-	strncpy(pmap, "hello fuckers", sizeof("hello fuckers"));
+	strncpy(pmap, "hello loveers", sizeof("hello loveers"));
 	printf("%s\n", pmap);
 
 	//释放mmap
