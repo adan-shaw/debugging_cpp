@@ -45,4 +45,5 @@ MCU '仿真测试 && OS'平台:
 
 anyway, 下面列出常见的MCU 方案:
 	* NXP-s32k系列
-
+	* 英飞凌Cypress.Traveo.II系列
+	* 意法半导体Stellar32系列
