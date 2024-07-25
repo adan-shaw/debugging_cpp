@@ -1,0 +1,48 @@
+chip域控MCU:
+	1.[美]德州仪器TI Jacinto 7处理器
+	2.[美]恩智浦S32K汽车级MCU
+	3.[欧]意法半导体Stellar 32位汽车MCU
+	4.[日]瑞萨RH850使用笔记
+	5.[德]英飞凌Cypress Traveo II汽车MCU
+
+
+
+MCU-os域控:
+	1.autosar
+	2.osek
+	3.FreeRTOS
+
+
+
+MCU '仿真测试 && OS'平台:
+	1.'vector 工具链'(万能MCU 仿真测试平台, 行业标准)
+	2.'EB tresos 工具链'(服务于nxp恩智浦 && 瑞萨, 美日系芯片)
+	3.'ETAS 工具链'(服务于英飞凌 && 意法半导体, 欧洲芯片)
+
+
+
+
+
+汽车域控MCU 选择:
+	一般现在座舱域控, 都是nxp, 因为现在高通的舱驾一体方案, 内部都集成了一个MCU 模块, 又因为高通已经全资收购了nxp, 
+	所以座舱域控大概率是nxp, 也就是'EB tresos 工具链'比较多, 大概率也是使用autosar-os;
+
+	其他域控MCU, 是否使用autosar, 还是osek, 还是freertos, 主要看你选择什么样的MCU 芯片:
+		* 欧洲系的MCU, 可能会是'ETAS 工具链', osek rtos系统;
+			欧洲系的MCU, 也可能会是'ETAS 工具链', autosar rtos系统;
+			也可以用万能的'vector 工具链', 支持autosar/soek;
+
+		* 美系/日系的MCU, 可能会是'EB tresos 工具链', autosar rtos系统;
+			也可以用万能的'vector 工具链', 支持autosar/soek;
+
+		* 国产的MCU, 可能会:
+				- 使用万能的'vector 工具链', 支持autosar/soek;
+				- 无工具链, 使用freertos/rt-thread;
+				? 'EB tresos 工具链'
+				? 'ETAS 工具链'
+
+
+
+anyway, 下面列出常见的MCU 方案:
+	* NXP-s32k系列
+
