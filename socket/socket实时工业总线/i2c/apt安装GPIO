@@ -13,6 +13,7 @@
 
 
 
+
 2.c 语言安装GPIO 仿真库:
 	c 语言中, GPIO 仿真库一般称之为: gpiod
 
@@ -46,7 +47,7 @@ ls /sys/class/gpio/
 
 
 
-3.GPIO 常见操作(需要root权限)
+3.GPIO 常见的命令操作(需要root权限)
 
 # 导出编号为192的gpio(导出成功会多出一个文件夹/sys/class/gpio/gpio192/)
 echo 192 > /sys/class/gpio/export
