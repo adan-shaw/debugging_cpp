@@ -1,11 +1,21 @@
-SOA:
-	SOA的全称是Service Oriented Architecture, 是一种软件设计方法;
+名词区分:
+	SOA:
+		SOA的全称是Service Oriented Architecture, 是一种软件设计方法;
 
-AUTOSAR:
-	AUTOSAR全称是Automotive Software Architecture, 是一种ADAS 自动驾驶的一种行业设计标准;
+	AUTOSAR:
+		AUTOSAR全称是Automotive Software Architecture, 是一种ADAS 自动驾驶的一种行业设计标准;
 
-adaptive autosar:
-	是一款基于AUTOSAR 标准编写出来的ADAS 自动驾驶解决方案;
+	adaptive autosar:
+		是一款基于AUTOSAR 标准编写出来的ADAS 自动驾驶解决方案;
 
 
 
+
+
+SOA面向服务设计:
+	互联网常见的都是面向对象设计, 汽车行业比较多的就是面向服务设计, 即一个服务解决一个功能问题;
+	这方面跟操作系统, 跟QNX 也有很大的关系(跟实时性要求也有很大关系)
+
+	操作系统本身的设计, 就是面向对象服务设计, 比如说: 操作系统大量的服务, 都是通过daemon server 来实现的;
+	(但操作系统同时支持大量非daemon server 的工具, 还有客户端app)
+	QNX 系统, 是小内核, 驱动&应用等价处理的强实时系统, 这种系统也是面向服务设计的, 一个驱动, 一个应用, 都是一个daemon server, 一个服务;
