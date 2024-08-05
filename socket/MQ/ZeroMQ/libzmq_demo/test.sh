@@ -1,0 +1,4 @@
+#!/bin/sh
+
+./server &
+./client
