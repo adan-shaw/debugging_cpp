@@ -1,0 +1,68 @@
+#
+# 1.ZeroMQ 介绍:
+#
+ZeroMQ 是一个MQ 编程库, 非MQ server 的实现, 没有MQ server 的实现, 类似于boost::asio 库, 只不过ZeroMQ 面向MQ 编程业务而已;
+(注意: 不存在ZeroMQ server, 没有这种东西, 你可以自己写一个简单的ZeroMQ 收发server && client, 但ZeroMQ 不存在类似nginx 之类的server 程序)
+
+ZeroMQ MQ 编程库支持多种语言, 非常友好(只是功能相对简单):
+	c/c++:
+		# czmq
+		libczmq-dev - High-level C binding for ZeroMQ (development files)
+		libczmq4 - High-level C binding for ZeroMQ
+		# libzmq
+		libzmq3-dev - lightweight messaging kernel (development files)
+		libzmq5 - lightweight messaging kernel (shared library)
+		# cppzmq
+		# (需要自己手动安装, 也就一个头文件而已, 内容不多, 全是test 代码, 禁用test 模块后, 根本不需要编译任何内容, 只有c++ 对libzmq 的二次封装, 呵呵)
+
+	javaZeroMQ:
+		libjeromq-java - Java implementation of the ZeroMQ messaging library
+		libzmq-java - ZeroMQ Java bindings (jzmq)
+		libzmq-java-doc - Documentation for ZeroMQ Java bindings (jzmq)
+		libzmq-jni - ZeroMQ Java bindings (jzmq)
+
+	pyZeroMQ:
+		pypy-zmq - PyPy bindings for 0MQ library
+		python-zmq - Python bindings for 0MQ library
+		python-zmq-dbg - Python bindings for 0MQ library - debugging files
+		python3-zmq - Python3 bindings for 0MQ library
+		python3-zmq-dbg - Python3 bindings for 0MQ library - debugging files
+		python-txzmq - ZeroMQ binding for the Twisted framework (Python2 version)
+		python3-txzmq - ZeroMQ binding for the Twisted framework (Python3 version)
+
+	phpZeroMQ:
+		php-zmq - ZeroMQ messaging bindings for PHP
+
+
+
+
+
+#
+# 2.ZeroMQ 应用场景:
+#
+异步MQ 需求:
+	一般需要mq 中间件的企业, 如果没有高实时性需求, 都不会需要c/c++ ZeroMQ, 直接用java ZeroMQ就可以省掉很多功夫了;
+	例如:
+		传输ffmepg, 大文件等, 使用mq 有何用? 反而成为负累, 这种情况就是直接裸奔c/c++ 做传输控制;
+		一般使用mq 都是高性能app 应用数据回弹!!
+
+异步MQ 需求:
+	无人机, 无人船, 无人车, 飞行器, 自动驾驶等等, 高性能ETH 应用数据回弹业务, 可能会用到zmq;
+	但zmq 比较原始, 简陋, 软件规模很小, 复杂的软件框架, 一般是someip/DDS;
+
+
+ZeroMQ 是一个socket 底层的简单封装, 或者可以传输大文件(但不推荐).
+虽然所有异步数据, 无论大小, 都可能可以用ZeroMQ 来传输, 但实际上, 怎么使用, 还是以应用app 零碎数据为主的业务好用;
+(如果是实时系统, 则需要考虑ZeroMQ 的网络性能, 响应速度, 是否在合理的实时需求范围内!!)
+
+
+性能比较:
+	ZeroMQ 是一个比redis 回弹性能还要高的框架, 但ZeroMQ 是一个编程框架, 而redis 是一个server;
+	ZeroMQ 优缺点:
+		ZeroMQ 没有数据落盘, 没有现成的server, 纯编程框架, 复杂难用; 优点是: 性能好, 并发能力, 分布式编码等支持方便, 可拓展性强;
+
+	Redis 优缺点:
+		Redis 并发性能较低, 分布式性能更低; 优点是: 简单易用
+
+	选哪个, 看业务需求;
+
