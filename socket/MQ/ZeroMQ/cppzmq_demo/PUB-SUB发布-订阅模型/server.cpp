@@ -10,7 +10,7 @@ int main(void){
 	std::string str2cli = "hello client!";
 	zmq::message_t msg;
 	zmq::context_t zmq_context(1);									//获取zmq上下文
-	zmq::socket_t zmq_socket(zmq_context,ZMQ_PUB);	//创建ZMQ_PUB模式的socket
+	zmq::socket_t zmq_socket(zmq_context, ZMQ_PUB);	//创建ZMQ_PUB模式的socket
 
 	zmq_socket.bind("tcp://*:6666");								//绑定端口号
 	msg.rebuild(str2cli.data(), str2cli.size());

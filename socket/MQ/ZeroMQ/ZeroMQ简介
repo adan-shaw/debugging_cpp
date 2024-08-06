@@ -4,6 +4,9 @@
 ZeroMQ 是一个MQ 编程库, 非MQ server 的实现, 没有MQ server 的实现, 类似于boost::asio 库, 只不过ZeroMQ 面向MQ 编程业务而已;
 (注意: 不存在ZeroMQ server, 没有这种东西, 你可以自己写一个简单的ZeroMQ 收发server && client, 但ZeroMQ 不存在类似nginx 之类的server 程序)
 
+cppzmq 编码风格:
+	cppzmq 的编码风格, 十分类似boost:asio 库
+
 ZeroMQ MQ 编程库支持多种语言, 非常友好(只是功能相对简单):
 	c/c++:
 		# czmq
