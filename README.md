@@ -1,5 +1,7 @@
 # debugging_cpp
-# just some demo i written in this few months
+# just some demo i written in this few months.
+# have some fun here, young students, good luck.
+#
 #   AI人工智能      = python & 人工智能基础
 #   Embedded嵌入式  = 嵌入式基础库
 #   boost          = 跨平台c++ 系统编码库
@@ -12,7 +14,7 @@
 #   qt             = 跨平台c++ 可视化编码库
 #   socket         = socket 编码库
 #   win系统的环境部署 = windows 系统的部署gcc/python/lua/shell 开发环境
-# have some fun here, young students, good luck.
+#
 # 2022/07/25[the start]
 # 2023/07/06[landmark]
 # 2023/07/08[]
@@ -25,6 +27,7 @@
 # 2024/07/05[landmark-freeze]
 # 2024/07/27[landmark-freeze]
 #
+# author: adan_shaw@qq.com
 # affix:
 #   https://gitee.com/adan_shaw/debugging_cpp
 #   https://github.com/adan-shaw/debugging_cpp
