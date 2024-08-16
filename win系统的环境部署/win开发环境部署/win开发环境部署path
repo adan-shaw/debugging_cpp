@@ -1,5 +1,5 @@
 #
-# 1.创建一个c:\adan_app_home 文件夹, 用作存放所有的编码app
+# 1.创建一个c:\adan_app_home 文件夹, 用作存放所有的编码app 文件(相当于安装路径)
 #
 mkdir c:\adan_app_home
 
@@ -12,6 +12,9 @@ windows 系统中的linux 子内核版本:
 	cygwin:       shell 环境最齐全, 但编译器还得依赖mingw
 	msys2:        基于cygwin, 最像linux 的shell 平台(msys2 搞了一个pacman 包管理器, 非常像apt-get 包管理系统)
 	mingw:        唯一的gcc 编译器, 支持c++20
+
+ps:
+	这样做的好处是: 方便windows 系统配置全局变量path, 实现类似linux 系统的各种操作, shell 功能, 编译器功能等;
 
 
 
@@ -60,7 +63,7 @@ C:\adan_app_home\boost\lib64-msvc-14.1
 # cmake (需要在安装时, 先指定安装路径, 此软件带安装包)
 C:\adan_app_home\CMake\bin;
 
-# gamek (需要在安装时, 先指定安装路径, 此软件带安装包)
+# gmake (需要在安装时, 先指定安装路径, 此软件带安装包)
 C:\adan_app_home\GnuWin32\bin;
 
 # adb

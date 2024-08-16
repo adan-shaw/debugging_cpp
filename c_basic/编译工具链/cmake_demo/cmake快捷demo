@@ -1,0 +1,13 @@
+#
+# 1.判断当前系统的类型
+#
+if(CMAKE_HOST_WIN32)
+	set(WINDOWS 1)
+elseif(CMAKE_HOST_APPLE)
+	set(MACOS 1)
+elseif(CMAKE_HOST_UNIX)
+	set(LINUX 1)
+else()
+	message(FATAL_ERROR "不支持的操作系统类型")
+endif()
+

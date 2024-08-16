@@ -1,0 +1,24 @@
+win支持std::thread的简介:
+	windows 是支持std::thread, 只不过windows 的cl.exe 编译器十分难用, 
+	一般情况下, 你并不能像gcc 那样使用cl.exe, 
+	没办法使用cl.exe, 也就没办法真正驾驭windows c++ 开发!!
+	ps:
+		详情, 请自己阅读: cl.exe常见用法
+		或者自行阅读, 使用命令: cl.exe /?
+
+	另外:
+		windows 只支持c++11, 只支持std::thread, 但不支持c11 的线程库!!
+		#include <stdatomic.h>
+		#include <threads.h>
+		这两个关键头文件都是找不到的!!
+
+
+
+重点1:
+	cl.exe 中是没有-std=c++11 的, vc++ 安装之后, 就确认最高支持的c++ 版本, 自动识别, 自动向下兼容, 不能手动指定的, 这点和unix 不同;
+	也就是windows 默认支持的c++ 版本是固定的, 不能随意修改, 也会自动识别;
+
+重点2:
+	windows 对std::thread 不是通过mingw 实现的, 
+	只是你习惯使用了-pthread 编译选项, 而cl.exe 编译器找不到这个选项, 
+	所以导致你没办法编译出程序, 而你产生了理解差异, 认为: windows 对std::thread 的实现, 是通过mingw 实现的(这是一个理解误区)

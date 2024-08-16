@@ -1,9 +1,10 @@
 //编译:
 //		g++ -g3 -std=c++2a -pthread ./c++11线程同步mutex.cpp -o x
+//		cl.exe ./c++11线程同步mutex.cpp -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 
-//判断编译器是否支持c11 原子操作库
+//判断编译器是否支持c++11 线程库
 #ifdef __STDC_NO_THREADS__
 	#error [ Not Support C11 <thread> ]
 #else
@@ -17,6 +18,7 @@
 	#include <iomanip>
 #endif
 
+//判断编译器是否支持c++11 原子操作库
 #ifdef __STDC_NO_ATOMICS__
 	#error [ Not Support C11 <atomic> ]
 #else

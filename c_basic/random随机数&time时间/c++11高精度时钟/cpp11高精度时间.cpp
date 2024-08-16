@@ -1,11 +1,12 @@
 //编译:
 //		g++ -g3 ./cpp11高精度时间.cpp -o x
+//		cl.exe ./cpp11高精度时间.cpp -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 
 #include <cstdio>
 
-//判断编译器是否支持c++11 原子操作库
+//判断编译器是否支持c++11 线程库
 #ifdef __STDC_NO_THREADS__
 	#error [ Not Support c++11 <thread> ]
 #else
@@ -17,6 +18,7 @@
 	#include <iomanip>
 #endif
 
+//判断编译器是否支持c++11 原子操作库
 #ifdef __STDC_NO_ATOMICS__
 	#error [ Not Support c++11 <atomic> ]
 #else

@@ -1,5 +1,6 @@
 //编译:
 //		g++ -g3 -pthread ./c++11原子操作.cpp -o x
+//		cl.exe ./c++11原子操作.cpp -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 
@@ -11,6 +12,7 @@
 	#include <atomic>
 #endif
 
+//判断编译器是否支持c++11 线程库
 #ifdef __STDC_NO_THREADS__
 	#error [ Not Support c++11 <thread> ]
 #else

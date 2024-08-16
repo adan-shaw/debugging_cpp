@@ -1,9 +1,10 @@
 //编译:
 //		g++ -g3 -std=c++2a -pthread ./c++11线程同步cnd.cpp -o x
+//		cl.exe ./c++11线程同步cnd.cpp -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 
-//判断编译器是否支持c11 原子操作库
+//判断编译器是否支持c++11 线程库
 #ifdef __STDC_NO_THREADS__
 	#error [ Not Support C11 <thread> ]
 #else
@@ -17,6 +18,7 @@
 	#include <iomanip>
 #endif
 
+//判断编译器是否支持c++11 原子操作库
 #ifdef __STDC_NO_ATOMICS__
 	#error [ Not Support C11 <atomic> ]
 #else
@@ -24,8 +26,20 @@
 	#include <atomic>
 #endif
 
+//判断操作系统类型, 非目标平台, 终止编译
+#if defined(_WIN32) || defined(_WIN64)
+	#pragma message("Support Windows")
+	#include <windows.h>
+	//Sleep() 函数改名为: sleep(), 对齐unix
+	#define sleep Sleep
+#elif defined(__APPLE__) || defined(__MACH__) || defined(__linux__) || defined(__FreeBSD__) || defined(__unix) || defined(__unix__)
+	#pragma message("Support Unix")
+	#include <unistd.h>
+#else
+	#error [ Unknow System Type !! ]
+#endif
+
 #include <cstdio>
-#include <unistd.h>
 
 
 

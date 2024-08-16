@@ -1,0 +1,204 @@
+boost::asio 简介:
+	boost::asio 是下一代跨平台socket 库, 准备像pthread 线程库一样, 融入标准c++;
+	所以, 准备好做boost::asio, 将会非常有用!!
+
+	qt + c++线程库 + boost::asio + cmake, 可以轻松做一个跨平台应用;
+	跨平台 = 线程, 网络, 文件, io复用, qt, cmake
+
+	跨平台client 多路复用, 用select 即可, 不需要考虑太多;
+	服务器, 多半都是linux epoll, 多路复用非常方便;
+
+
+
+
+
+boost::system::error_code									//系统错误码, 头文件: #include <boost/system/error_code.hpp>
+boost::asio::error_code										//貌似被弃用了, 尽量不用
+
+boost::asio 常用到的类/函数[没括号()是类, 有括号()是函数]:
+
+
+
+boost::asio 常见的socket 类型:
+	boost::asio::ip::tcp::socket
+	boost::asio::ip::udp::socket
+	boost::asio::ip::icmp::socket
+	boost::asio::ip::tcp::type
+	boost::asio::ip::udp::type
+	boost::asio::ip::icmp::type
+	boost::asio::ip::tcp::close()
+	boost::asio::ip::udp::close()
+	boost::asio::ip::icmp::close()
+
+	boost::asio::ip::raw::socket						//可能不存在
+	boost::asio::ip::raw::type
+	boost::asio::ip::icmp::close()
+
+其他socket 类型无关的函数如下(隶属于tcp/udp/icmp/raw socket, 任何socket 都可以调用的接口):
+	local_endpoint()												//这个方法返回套接字本地连接的地址;
+	remote_endpoint()												//这个方法返回套接字连接到的远程地址;
+	native_handle()													//这个方法返回原始套接字的处理程序;你只有在调用一个Boost.Asio不支持的原始方法时才需要用到它;
+	non_blocking()													//如果套接字是非阻塞的, 这个方法返回true, 否则false;
+	native_non_blocking()										//如果套接字是非阻塞的, 这个方法返回true, 否则返回false;
+																						但是, 它是基于原生的套接字来调用本地的api;
+																						所以通常来说, 你不需要调用这个方法(non_blocking()已经缓存了这个结果);
+																						你只有在直接调用native_handle()这个方法的时候才需要用到这个方法;
+	at_mark()																//如果套接字要读的是一段OOB数据, 这个方法返回true;这个方法你很少会用到;
+
+
+
+boost::asio 域:
+	boost::asio::buffer()										//socket data buf缓冲区管理API
+	boost::asio::mutable_buffer
+	boost::asio::streambuf
+	boost::asio::buffered_stream()
+	boost::asio::buffered_read_stream()
+	boost::asio::buffered_write_stream()
+	boost::asio::buffers_begin()
+	boost::asio::buffers_end()
+	boost::asio::buffer_sequence_begin()
+	boost::asio::buffer_sequence_end()
+	boost::asio::buffers_iterator
+	boost::asio::buffer_cast
+	boost::asio::buffer_copy()
+	boost::asio::buffer_size()
+	boost::asio::dispatch()
+	boost::asio::post()
+	boost::asio::defer()
+	boost::asio::any_io_executor
+	boost::asio::strand
+	boost::asio::connect()
+	boost::asio::async_connect()
+	boost::asio::read()
+	boost::asio::write()
+	boost::asio::async_read()
+	boost::asio::async_write()
+	boost::asio::transfer_at_least()
+
+	//boost::asio::io_service								//弃用(io_context这个类是用来替代io_service的, 所以建议以后都直接使用io_context即可) -- Boost1.66 版本后弃用
+	boost::asio::io_context									//socket 内置io 读写buf 管理类, 相当于通过socketopt 强制指定了新的socket buf
+	boost::asio::io_context::run()
+	boost::asio::io_context::poll()
+	boost::asio::io_context::work()
+
+
+
+boost::asio::ip:
+	boost::asio::ip::address								//ip 地址info 转换类(只做转换, 不做组装/管理)
+	boost::asio::ip::address::from_string()	//字符串to ip address API函数(返回一个boost::asio::ip::address)
+
+
+
+boost::asio::ip::tcp:
+	boost::asio::ip::tcp::socket						//tcp socket 管理类
+	boost::asio::ip::tcp::socket::open()
+	boost::asio::ip::tcp::socket::close()
+	boost::asio::ip::tcp::socket::bind()
+	boost::asio::ip::tcp::socket::connect()
+	boost::asio::ip::tcp::socket::async_connect()
+	boost::asio::ip::tcp::socket::io_control()
+	boost::asio::ip::tcp::socket::read_some()
+	boost::asio::ip::tcp::socket::write_some()
+	boost::asio::ip::tcp::socket::async_read_some()
+	boost::asio::ip::tcp::socket::async_write_some()
+	boost::asio::ip::tcp::socket::available()
+
+	boost::asio::ip::tcp::acceptor					//监听者类
+	boost::asio::ip::tcp::acceptor::non_blocking_io
+	boost::asio::ip::tcp::acceptor::open()
+	boost::asio::ip::tcp::acceptor::close()
+	boost::asio::ip::tcp::acceptor::bind()
+	boost::asio::ip::tcp::acceptor::listen()
+	boost::asio::ip::tcp::acceptor::set_option()
+	boost::asio::ip::tcp::acceptor::get_option()
+	boost::asio::ip::tcp::acceptor::cancel()
+	boost::asio::ip::tcp::acceptor::local_endpoint()
+	boost::asio::ip::tcp::acceptor::wait()
+	boost::asio::ip::tcp::acceptor::async_wait()
+	boost::asio::ip::tcp::acceptor::accept()
+	boost::asio::ip::tcp::acceptor::async_accept()
+	boost::asio::ip::tcp::endpoint					//tcp ip/port 网络信息管理API(相当于把网络信息写入socket)
+	boost::asio::ip::tcp::v4()							//返回一个可用的tpc ipv4 boost::asio::ip::address, 相当于ip 地址 = 0.0.0.0 混杂模式
+	boost::asio::ip::tcp::v6()
+
+
+
+boost::asio::ip::udp:
+	boost::asio::ip::udp::socket						//udp socket 管理类
+	boost::asio::ip::udp::socket::open()
+	boost::asio::ip::udp::socket::close()
+	boost::asio::ip::udp::socket::bind()
+	boost::asio::ip::udp::socket::connect()
+	boost::asio::ip::udp::socket::async_connect()
+	boost::asio::ip::udp::socket::io_control()
+	boost::asio::ip::udp::socket::read_some()
+	boost::asio::ip::udp::socket::write_some()
+	boost::asio::ip::udp::socket::receive_from()
+	boost::asio::ip::udp::socket::send_to()
+	boost::asio::ip::udp::socket::async_read_some()
+	boost::asio::ip::udp::socket::async_write_some()
+	boost::asio::ip::udp::socket::async_receive_from()
+	boost::asio::ip::udp::socket::async_send_to()
+	boost::asio::ip::udp::socket::available()
+	boost::asio::ip::udp::endpoint					//udp ip/port 网络信息管理API(相当于把网络信息写入socket)
+	boost::asio::ip::udp::v4()
+	boost::asio::ip::udp::v6()
+
+
+
+boost::bind:
+	boost::bind()														//tcp/udp bind() 绑定函数(这个函数在boost 中有大量的用法, 尽量弃用这种写法, 语义不明确)
+
+
+
+下面是对它们的使用:
+	tcp::endpoint ep(address::from_string("127.0.0.1"), 80);
+	tcp::socket sock(service);
+	sock.connect(ep);
+
+	tcp::socket::reuse_address ra(true);
+	sock.set_option(ra);										// 设置tcp socket 重用地址
+
+	tcp::socket::receive_buffer_size rbs;
+	sock.get_option(rbs);
+	std::cout << rbs.value() << std::endl;	// 获取tcp socket 的recv 缓冲区大小
+
+	tcp::socket::send_buffer_size sbs(8192);
+	sock.set_option(sbs);										// 把tcp socket 的send 缓冲区大小设置为8192
+
+
+
+send/recv flags:
+	0													同步发送
+	message_peek							recv, recvfrom 有效, 读出数据后, 不清除缓冲区(偷看数据)
+	message_out_of_band				加急数据(发送接收都有效)
+	message_do_not_route			不让数据包路由转发(局域网内发数据)
+
+
+
+boost asio 的所有API, 都会自动打印boost::system::error_code err;
+因此, 其实可以省略大部分报错输出:
+
+	//标准的c++ 编码标准是
+	std::size_t n;
+	boost::system::error_code err;
+	io_context io;
+	tcp::socket sfd(io);
+
+	if((n = sfd.send(buffer(buf), 0, err)) <= 0){					//发送数据(不能输入常量字符串缓冲区, 必须为变量字符串缓冲区)
+		if(n == 0)
+			std::cout << "send(): client sfd has closed." << std::endl;
+		else
+			std::cout << "send(): " << err << std::endl;
+	}
+
+但boost 遇到任何执行错误, 都会自动抛出try{} catch(std::exception& e){};
+因此, 你不需要多管闲事, 直接叠逻辑即可;
+报错例子:
+	//报错断点
+	terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::system::system_error> >'
+	//报错原因what()
+	what():  receive: End of file
+	//报错的执行操作: 中断
+	Aborted
+

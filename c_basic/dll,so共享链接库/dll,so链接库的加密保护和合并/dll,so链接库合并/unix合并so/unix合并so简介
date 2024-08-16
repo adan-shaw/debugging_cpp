@@ -1,0 +1,21 @@
+# 1.多个静态链接库.a, 合并到一个动态链接库.so 中:
+gcc -shared -o c.so -Wl,--whole-archive a.a b.a -Wl,--no-whole-archive
+
+
+
+
+
+# 2.多个.so(动态库), 合并为一个.so:
+#		(没办法用gcc 进行合并, 需要使用额外的工具合并, 还需要保证各个.so 动态库中的API 没有冲突, 有冲突会合并失败)
+
+# 安装patchelf
+sudo apt-get install patchelf
+
+# 查看.so 动态库, 看看是否有冲突API
+ldd your_binary.so
+
+# 合并多个.so(动态库):
+patchelf --replace-needed original.so libmerged.so your_binary.so
+
+
+

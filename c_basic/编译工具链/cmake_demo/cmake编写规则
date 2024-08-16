@@ -87,6 +87,9 @@
 		# 输出到<FATAL_ERROR>频道: 打印字符串, 并终止cmake
 		#MESSAGE(FATAL_ERROR "stop MESSAGE")
 
+	10.拷贝文件到指定位置(最好以CMakeLists.txt 的当前位置为定位锚点, ${CMAKE_CURRENT_LIST_DIR})
+		file(COPY Exec.xml DESTINATION ../../sys/conf/)
+
 
 
 
@@ -235,7 +238,7 @@
 	3.怎样在执行CMAKE时打印消息
 		message([SEND_ERROR | STATUS | FATAL_ERROR] "message to console" ...)
 
-	4.怎样指定'头文件&库文件'的搜索路径
+	4.怎样添加指定'头文件&库文件'的搜索路径
 		include_directories()
 		link_directories()
 

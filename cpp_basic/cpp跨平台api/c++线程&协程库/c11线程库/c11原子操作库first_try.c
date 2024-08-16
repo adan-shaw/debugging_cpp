@@ -1,9 +1,10 @@
 //编译:
 //		gcc -g3 -pthread ./c11原子操作库first_try.c -o x 
+//		[win不支持]cl.exe ./c11原子操作库first_try.c -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 
-//判断编译器是否支持c11 原子操作库
+//判断编译器是否支持c11 原子操作库[win不支持]
 #ifdef __STDC_NO_ATOMICS__
 	#error [ Not Support C11 stdatomic.h ]
 #else

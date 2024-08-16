@@ -1,0 +1,32 @@
+1.Catch2 简介:
+	Catch2 一个简单易用的C++开源测试开源库(C++ Automated Test Cases in Headers);
+	Catch2 的开源许可证是Boost license, 当前版本是基于C++11开发的, 最初版本Catch1.x是基于C++03/98;
+
+
+
+
+
+2.为什么需要catch
+	在catch的文档指出, 对于C++单元测试框架, 目前已经有 Google Test, Boost.Test, CppUnit, Cute, 以及其它的一些c++ 单元测试框架了, 
+	那么catch有什么优势呢, 文档主要列举了以下这些优势: 
+		* 简单易用:
+				只需要下载catch.hpp,包含到你的工程就可以了
+		* 不依赖外部库:
+				只要你可以编译C++11, 有C++的标准库就可以了
+		* 测试case可以分割为sections:
+				每个setcion都是独立的运行单元
+		* 提供了BDD式的测试模式:
+				可以使用Given-When-Then section来做BDD测试
+		* 只用一个核心的assertion宏来做比较, 用标准的C++运算符来做比较, 但是可以分解表达式, 记录表达式等号左侧和右侧的值
+		* 可以用任何形式的字符串给测试命名, 不用担心名字是否合法
+
+	其它一些关键特性有: 
+		* 可以给test case打tag, 因而可以很容易的只跑某个tag组的test cases
+		* 输出通过reporter对象完成, 支持基本的文本和XML格式输出测试结果, 也支持自定义reporter
+		* 支持JUnit xml输出, 这样可以和第三方工具整合, 如CI服务器等
+		* 提供默认的main()函数, 用户也可以使用自己的main()函数
+		* 提供一个命令行解析工具, 用户在使用自己的main()函数的时候可以添加命令行参数
+		* catch软件可以做自测试
+		* 提供可选的assertion宏, 可以报告错误但不终止test case
+		* 通过内置的Approx()语法支持可控制精度的浮点数比较
+		* 通过Matchers支持各种形式的比较, 也支持自定义的比较方法

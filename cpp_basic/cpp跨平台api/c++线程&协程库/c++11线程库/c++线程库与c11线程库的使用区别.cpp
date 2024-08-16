@@ -1,5 +1,6 @@
 //编译:
 //		g++ -std=c++11 -g3 -pthread ./c++线程库与c11线程库的使用区别.cpp -o x 
+//		cl.exe ./c++线程库与c11线程库的使用区别.cpp -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 

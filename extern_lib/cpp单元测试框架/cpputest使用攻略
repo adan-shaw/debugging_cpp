@@ -1,0 +1,94 @@
+#
+# 1.cpputest 简介
+#
+cpputest 是一个第三方cpp 单元测试框架库, 
+cpputest 取代的目标: assert() 断言 + 通用printf(), 但实际上也可以不用cpputest;
+
+
+
+与assert() 断言不一样, cpputest 并不是内嵌到cpp 程序中的.
+assert() 断言:
+	在release发行版中, 可以通过引入-D NDEBUG 来禁用assert()函数.
+
+
+cpputest:
+	在makefile 中, 重新生成一个新的make targer.
+	也不需要在.cpp 代码中, 植入测试语句, 
+	而是写一个新的test.cpp 文件, 
+	在test.cpp文件中,使用cpputest宏or函数,以'测试目标function函数'为元素,进行逐个测试
+	然后生成一个test make targer, 跑外部测试程序.
+	这样一来, 发行程序和test 程序, 完全分开.
+	注意:
+		编译测试程序的时候, 需要依赖'测试目标编译的.o'文件!
+		也就是, 测试目标, 必然是:
+			先编译.exe 程序, 并且不能删掉'测试目标编译的.o'文件,
+			再生成test 程序.
+
+
+
+
+
+
+
+
+#
+# 2.如何生成cpputest 测试程序:
+#
+
+# 2.1 编写test.cpp 文件:
+	>>1.引用'CPPUTest'中的2个头文件
+			# 注意: CppUTest 所在的路径是在/usr/local/CppUTest
+			#      如果你mkdir /usr/local/cpputest 是小写, 你就需要改一下路径名了.
+			#include <CppUTest/CommandLineTestRunner.h>
+			#include <CppUTest/TestHarness.h>
+
+
+	>>2.使用extern "C" {}, 引入'测试目标的函数API-头文件'.
+			# 被测试目标,必须在'.h'文件中, 声明:".cpp中所有待测试的函数"
+			# 这也是cpp的类定义的约定规则.
+			extern "C" {
+				//包含'测试目标的函数API'头文件
+				#include "sample.h"
+			}
+
+	>>3.test.cpp时, 用到的cpputest API 很少, 只有几个函数, 详情请看:
+		cpputest-API.png
+
+
+
+
+
+# 2.2 如何生成test.exe 可执行测试程序:
+# gcc 编译器: 开启-g3 
+CFLAGS := -g3 -Wall
+
+# g++ 编译器: 开启-g3 
+CPPFLAGS := -g3 -Wall
+
+
+# 定义cpputest 安装路径
+CPPUTEST_HOME=/usr/local/cpputest
+
+# 添加cpputest编译宏
+CFLAGS += -D CPPUTEST
+
+# 添加cpputest头文件
+CPPFLAGS  += -I$(CPPUTEST_HOME)/include
+
+# 添加cpputest .so 动态共享链接库, 还有链接库编译选项-lCppUTest
+LDFLAGS := -L$(CPPUTEST_HOME)/lib -lCppUTest
+
+
+# 追加make targer:
+test: test.o sample.o
+    $(CPP) -o $@ test.o sample.o $(LDFLAGS)
+
+
+
+
+
+
+
+
+
+

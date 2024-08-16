@@ -1,26 +1,20 @@
 boost 编程时, 不同平台的差异如下:
 
+	windows:
+		在windows 平台使用boost 库, 一般需要自己指定boost 库的dll 动态链接库文件路径, cmake 才能正确找到dll 动态链接库;
+		一般情况下, 使用boost 都是直接使用cmake 比较好, 使用nmake, makefile 编写较为复杂;
 
-
-windows:
-	在windows 平台使用boost 库, 一般需要自己指定boost 库的dll 动态链接库文件路径, cmake 才能正确找到dll 动态链接库;
-	一般情况下, 使用boost 都是直接使用cmake 比较好, 使用nmake, makefile 编写较为复杂;
-
-
-
-unix:
-	一般情况下, unix系统的.so 动态链接库, 是存在于/usr/lib, /usr/local/lib 中的,
-	因此, 安装boost 之后, 可以直接通过对应的编译链接选项, 直接找到boost 对应的动态链接库.so 文件, 非常方便!!
-	ps:
-		-l boost_system
-		-l boost_thread
-		...
-		这些编译链接选项, 是unix 系统特有的功能!!
-		windows 系统是没有这种东西的, 也就Unix 系统会这么方便, gcc/clang 编译器, 都是比较先进的编译器!! 才有这么方便的功能!!
-		windows 系统, cl 编译器 + vs IDE, 商业捆绑太严重, 不会把编译器搞得太简单!!
-		只有使用vs IDE 时, 一切才会很简单易用, 离开vs IDE, cl 编译器就是一块屎坑石, 又臭又难用, 这是微软的小心思, 你要懂!!
-
-
+	unix:
+		一般情况下, unix系统的.so 动态链接库, 是存在于/usr/lib, /usr/local/lib 中的,
+		因此, 安装boost 之后, 可以直接通过对应的编译链接选项, 直接找到boost 对应的动态链接库.so 文件, 非常方便!!
+		ps:
+			-l boost_system
+			-l boost_thread
+			...
+			这些编译链接选项, 是unix 系统特有的功能!!
+			windows 系统是没有这种东西的, 也就Unix 系统会这么方便, gcc/clang 编译器, 都是比较先进的编译器!! 才有这么方便的功能!!
+			windows 系统, cl 编译器 + vs IDE, 商业捆绑太严重, 不会把编译器搞得太简单!!
+			只有使用vs IDE 时, 一切才会很简单易用, 离开vs IDE, cl 编译器就是一块屎坑石, 又臭又难用, 这是微软的小心思, 你要懂!!
 
 总结:
 	以上, 就是编程使用boost 库时, unix 平台和windows 平台的差异!!
@@ -36,6 +30,13 @@ unix:
 
 # 安装所有boost 编程依赖库
 apt-get install libboost-all-dev
+apt-get install libboost-*
+
+# 刷新ld链接器(一定要强制刷新一下ldconfig, 否则boost 极度容易找不到)
+sudo ldconfig
+
+# ps:
+#   -l boost_system 编译选项非常奇怪!! 一定要放在 -l pthread -l boost_system -o 前面, 否则死活找不到!!
 
 
 

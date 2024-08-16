@@ -1,9 +1,10 @@
 //编译:
 //		g++ -std=c++11 -g3 -pthread ./c++11线程库.cpp -o x
+//		cl.exe ./c++11线程库.cpp -EHsc -w -Zi -Ox -link -out:x.exe
 
 
 
-//判断编译器是否支持c++11 原子操作库
+//判断编译器是否支持c++11 线程库
 #ifdef __STDC_NO_THREADS__
 	#error [ Not Support c++11 <thread> ]
 #else
@@ -15,6 +16,7 @@
 	#include <iomanip>
 #endif
 
+//判断编译器是否支持c++11 原子操作库
 #ifdef __STDC_NO_ATOMICS__
 	#error [ Not Support c++11 <atomic> ]
 #else
