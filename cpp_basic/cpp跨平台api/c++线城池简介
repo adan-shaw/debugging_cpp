@@ -21,4 +21,11 @@ boost 库也没有实现标准的threadpool, 但有非常多的threadpool 开源
 	* openharmony->threadpool
 
 
+c++11虽然加入了线程库thread, 然而c++ 对于多线程的支持还是比较低级, 稍微高级一点的用法都需要自己去实现;
+比如备受期待的网络库至今标准库里还没有支持, 常用acl或asio替代;
+鸿蒙OpenHarmony源码中的网络栈模块部分, 也是十分漂亮的实现, 值得学习研究;
 
+c++的ThreadPool实现, 网上有很多个版本, 文章的末尾就有两种不同的实现;
+然而经过对比发现, 还是OpenHarmony源码的实现最优雅;
+只是使用起来稍麻烦些, 比如不支持lambda的写法;
+后续可基于此改造, 使其支持lambda函数的调用;

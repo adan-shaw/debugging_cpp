@@ -1,0 +1,37 @@
+openharmony 简介:
+	openharmony 是一个类似aosp 的项目, 但应该不会包含aosp, 而是面向物联网, 小型rtos 的大型集成系统;
+	当然, openharmony 主打的是rtos, linux, openharmony 除了面向rtos 之外, 实际上在linux 服务器开发和跨平台c++ 客户端, 也有不少建树, 很惊人的开发量;
+
+	面向物联网(主体rtos):
+		https://gitee.com/openharmony/kernel_liteos_m
+		https://gitee.com/openharmony/kernel_liteos_a
+
+	面向js(通用前端语言):
+		https://gitee.com/openharmony/arkui_ace_engine_lite
+
+	面向linux 后端(nodejs+nodejs 的拓展库):
+		https://gitee.com/openharmony/third_party_node
+		https://gitee.com/openharmony/third_party_libuv
+
+	第三方支撑库二次封装(包含: 多媒体, 信息加密,校验,压缩库, 数据库, 等等):
+		https://gitee.com/openharmony/third_party_sqlite
+		https://gitee.com/openharmony/third_party_ffmpeg
+		https://gitee.com/openharmony/third_party_openssl
+		https://gitee.com/openharmony/third_party_curl
+		https://gitee.com/openharmony/third_party_zlib
+		...
+
+
+
+	跨平台c++ 客户端(需要自己从nodejs 的拓展库中剥离, 支持的系统超级多, 可以去掉nodejs 支撑, 衔接的部分, 独立起来):
+		https://gitee.com/openharmony/third_party_libuv
+
+
+
+总结:
+	openharmony 是一个集合rtos, linux, 跨平台c++ 客户端于一体, 庞大的'操作系统 + sdk接口封装库'软件集合;
+	基本上除了android 不做之外, 什么都做;
+	当然, 华为可能会将庞大的aosp 库单独成一个project 管理, 这样一来, 就会是两套庞大的软件集合了, aosp + openharmony;
+	足以应对:
+		物联网 + 移动互联网(也包括传统互联网), 
+		车联网是另外一个产业, 目前hw 在这边的布局如何, 不好评论;
