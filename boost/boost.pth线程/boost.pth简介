@@ -1,0 +1,122 @@
+#
+# 1.boost.pth 类简介
+#
+#include <boost/thread/thread.hpp>
+namespace boost
+{
+	class thread;
+	void swap(thread& lhs,thread& rhs) noexcept;//无异常抛出函数(noexcept), 表示绝对正确, 不会出错的函数;
+
+	namespace this_thread
+	{
+		thread::id get_id() noexcept;
+		template<typename TimeDuration>
+		void yield() noexcept;
+		template <class Clock, class Duration>
+		void sleep_until(const chrono::time_point<Clock, Duration>& abs_time);
+		template <class Rep, class Period>
+		void sleep_for(const chrono::duration<Rep, Period>& rel_time);
+
+		namespace no_interruption_point						// EXTENSION(重复, 对标高精度chrono 时间进行休眠)
+		{
+			template <class Clock, class Duration>
+			void sleep_until(const chrono::time_point<Clock, Duration>& abs_time);
+			template <class Rep, class Period>
+			void sleep_for(const chrono::duration<Rep, Period>& rel_time);
+		}
+
+		template<typename Callable>
+		void at_thread_exit(Callable func);				// EXTENSION
+
+		void interruption_point();								// EXTENSION
+		bool interruption_requested() noexcept;		// EXTENSION
+		bool interruption_enabled() noexcept;			// EXTENSION 
+		class disable_interruption;								// EXTENSION
+		class restore_interruption;								// EXTENSION
+
+	#if defined BOOST_THREAD_USES_DATETIME
+		template <TimeDuration>
+		void sleep(TimeDuration const& rel_time);	// DEPRECATED(重复, 对标低精度posix 时间进行休眠)
+		void sleep(system_time const& abs_time);	// DEPRECATED
+	#endif
+	}
+	class thread_group;													// EXTENSION
+
+
+
+	class thread::attributes {
+	public:
+			attributes() noexcept;
+			~ attributes()=default;
+			void set_stack_size(std::size_t size) noexcept;
+			std::size_t get_stack_size() const noexcept;
+
+	#if defined BOOST_THREAD_DEFINES_THREAD_ATTRIBUTES_NATIVE_HANDLE
+			typedef platform-specific-type native_handle_type;
+			native_handle_type* native_handle() noexcept;
+			const native_handle_type* native_handle() const noexcept;
+	#endif
+	};
+}
+
+
+
+
+
+#
+# 2.精简阅读版
+#
+类名:
+	boost::thread;			//单个线程
+	boost::this_thread;	//单个线程的this 指针
+	boost::thread_group;//一组线程
+
+	boost::thread::attributes attrs;//线程栈data 载体类
+
+API:
+	void swap(thread& lhs,thread& rhs);		//交换两个线程的线程栈data(主要: 靠换不等于拷贝, 如果想拷贝boost::thread, 应该用类的深度拷贝)
+	thread::id get_id();									//获取pid
+	void yield();													//挂起
+	void at_thread_exit(Callable func);		//退出前的工作
+
+休眠API(很多重复的休眠API, 选用最通用的休眠API 即可):
+	void sleep_until(const chrono::time_point<Clock, Duration>& abs_time);//相对时间-休眠(都需要高精度时钟chrono 类作为参数传入)
+	void sleep_for(const chrono::duration<Rep, Period>& rel_time);				//真实时间-休眠
+
+总结:
+	boost::thread 其实也没有多少东西, 可以很快拿下;
+
+
+
+
+
+#
+# 3.boost::thread 线程调度
+#
+boost::thread::attributes attrs;
+// set portable attributes
+// ...
+attrs.set_stack_size(4096*10);
+#if defined(BOOST_THREAD_PLATFORM_WIN32)
+    // ... window version
+#elif defined(BOOST_THREAD_PLATFORM_PTHREAD)
+    // ... pthread version
+    pthread_attr_setschedpolicy(attrs.native_handle(), SCHED_RR);
+#else
+#error "Boost threads unavailable on this platform"
+#endif
+boost::thread th(attrs, find_the_question, 42);
+
+boost::thread 线程调度总结:
+	'boost::thread 线程调度策略'是默认的, 固定的, 根据系统而定, 如果想修改'boost::thread 线程调度策略', 比较麻烦, 会用到c++ 里面的pthread_attr_setschedpolicy() 函数;
+	boost::thread 默认是不能修改'boost::thread 线程调度策略', 
+	因此boost::thread 线程的实用意义, 实际不大, boost::thread_pool + std::thread 的实用意义更大, 更实际;
+
+ps:
+	boost 库也没有实现标准的threadpool, 但有非常多的threadpool 开源版本代码, 比较出名的有:
+		* https://threadpool.sourceforge.net/
+		* openharmony->threadpool
+
+因此, 你并不需要关注太多boost::thread 库, 意义不大;
+还不如直接去搞std::thread;
+
