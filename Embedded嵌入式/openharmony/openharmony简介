@@ -35,3 +35,14 @@ openharmony 简介:
 	足以应对:
 		物联网 + 移动互联网(也包括传统互联网), 
 		车联网是另外一个产业, 目前hw 在这边的布局如何, 不好评论;
+
+
+
+选中的重点项目:
+	可作为跨平台开发库(可单独抽调出来, 作为通用pc 跨平台开发库):
+		https://gitee.com/openharmony/third_party_libuv
+
+	rtos(先有这两个项目, 才有其他openharmony 项目, 其他openharmony 项目都是为这两个project 服务):
+		https://gitee.com/openharmony/kernel_liteos_m
+		https://gitee.com/openharmony/kernel_liteos_a
+
