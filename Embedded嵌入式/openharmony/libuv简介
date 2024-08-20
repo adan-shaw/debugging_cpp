@@ -26,24 +26,24 @@ libuv API documentation:
 	Version-checking macros and functions			版本检查宏和函数
 
 	句柄类型(struct 结构体)
-		uv_loop_t — Event loop									事件循环
-		uv_handle_t — Base handle								基本句柄
-		uv_req_t — Base request									基本请求
-		uv_timer_t — Timer handle								定时器句柄
-		uv_prepare_t — Prepare handle						准备手柄
-		uv_check_t — Check handle								检查手柄
-		uv_idle_t — Idle handle									空闲句柄
-		uv_async_t — Async handle								异步句柄
-		uv_poll_t — Poll handle									轮询句柄
-		uv_signal_t — Signal handle							信号手柄
-		uv_process_t — Process handle						进程句柄
-		uv_stream_t — Stream handle							流句柄
-		uv_tcp_t — TCP handle										tcp句柄
-		uv_pipe_t — Pipe handle									管道手柄
-		uv_tty_t — TTY handle										tty手柄
-		uv_udp_t — UDP handle										udp句柄
-		uv_fs_event_t — FS Event handle					fs事件句柄
-		uv_fs_poll_t — FS Poll handle						fs轮询句柄
+		uv_loop_t     -- Event loop							事件循环
+		uv_handle_t   -- Base handle						基本句柄
+		uv_req_t      -- Base request						基本请求
+		uv_timer_t    -- Timer handle						定时器句柄
+		uv_prepare_t  -- Prepare handle					准备手柄
+		uv_check_t    -- Check handle						检查手柄
+		uv_idle_t     -- Idle handle						空闲句柄
+		uv_async_t    -- Async handle						异步句柄
+		uv_poll_t     -- Poll handle						轮询句柄
+		uv_signal_t   -- Signal handle					信号手柄
+		uv_process_t  -- Process handle					进程句柄
+		uv_stream_t   -- Stream handle					流句柄
+		uv_tcp_t      -- TCP handle							tcp句柄
+		uv_pipe_t     -- Pipe handle						管道手柄
+		uv_tty_t      -- TTY handle							tty手柄
+		uv_udp_t      -- UDP handle							udp句柄
+		uv_fs_event_t -- FS Event handle				fs事件句柄
+		uv_fs_poll_t  -- FS Poll handle					fs轮询句柄
 
 	File system operations										文件系统操作
 	Thread pool work scheduling								线程池工作调度
