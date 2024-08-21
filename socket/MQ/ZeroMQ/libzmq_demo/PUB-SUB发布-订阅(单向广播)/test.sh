@@ -1,4 +1,5 @@
 #!/bin/sh
 
 ./server &
-./client
+./client1 &
+./client2
