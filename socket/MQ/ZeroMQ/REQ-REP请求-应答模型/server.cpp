@@ -1,20 +1,21 @@
 #include <zmq.hpp>
 #include <iostream>
 
+
+
 int main(void){
-	zmq::message_t request;
-	zmq::message_t reply(5);
-	zmq::context_t context(1);
-	zmq::socket_t socket(context, zmq::socket_type::rep);
-	socket.bind("tcp://*:5555");
+	zmq::message_t zmq_msg;
+	zmq::context_t zmq_text(1);
+	zmq::socket_t zmq_sock(zmq_text, zmq::socket_type::rep);
+	zmq_sock.bind("tcp://127.0.0.1:5555");
 
 	while (true) {
-		socket.recv(request, zmq::recv_flags::none);
+		zmq_msg.rebuild(128);
+		zmq_sock.recv(zmq_msg, zmq::recv_flags::none);//阻塞接收
+		std::cout << "srv received REQ: " << zmq_msg.to_string() << std::endl;
 
-		std::cout << "Received request: " << request.to_string() << std::endl;
-
-		memcpy(reply.data(), "Reply", 5);
-		socket.send(reply, zmq::send_flags::none);
+		memcpy(zmq_msg.data(), "Reply cli", 9);
+		zmq_sock.send(zmq_msg, zmq::send_flags::none);//阻塞发送
 	}
 
 	return 0;
