@@ -1,3 +1,3 @@
 #!/bin/sh
-g++ server.cpp -o server -lzmq
-g++ client.cpp -o client -lzmq
+g++ server.c -o server -lzmq
+g++ client.c -o client -lzmq

@@ -1,8 +1,7 @@
-#include<iostream>
-#include<zmq.h>
-#include<Windows.h>
+#include <stdio.h>
+#include <zmq.h>
 
-using namespace std;
+
 
 int main(void)
 {

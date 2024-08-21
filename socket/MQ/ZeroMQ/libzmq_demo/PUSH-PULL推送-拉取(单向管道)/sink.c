@@ -1,9 +1,9 @@
 //client（sink）
 
-#include<iostream>
-#include<zmq.h>
-#include<assert.h>
-using namespace std;
+#include <stdio.h>
+#include <zmq.h>
+#include <assert.h>
+
 
 int main(void)
 {
