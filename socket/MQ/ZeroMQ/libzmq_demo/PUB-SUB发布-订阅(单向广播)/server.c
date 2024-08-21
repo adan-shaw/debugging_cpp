@@ -13,37 +13,38 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <string.h>
 #include <zmq.h>
 #include <assert.h>
 
-
-
 int main(void)
 {
-	void *context = zmq_ctx_new();
-	void *socket = zmq_socket(context,ZMQ_PUB);
-	int ret = zmq_bind(socket, "tcp://*:6666");
-	assert(ret == 0);
-	ret = zmq_bind(socket, "tcp://*:5555");//绑定另一个端口5555
-	assert(ret == 0);
+	char buf_s[128] = {0};
+	int tmp, count, sentBytes;
+	void *zmq_text, *zmq_sock;
 
-	int i = 0;//消息计数器
+	zmq_text = zmq_ctx_new();
+	zmq_sock = zmq_socket(zmq_text, ZMQ_PUB);
+
+	tmp = zmq_bind(zmq_sock, "tcp://*:6666");
+	assert(tmp == 0);
+	tmp = zmq_bind(zmq_sock, "tcp://*:5555");//绑定另一个端口5555
+	assert(tmp == 0);
+
+	count = 0;//消息计数器
 	while (1)
 	{
-		sleep(10);
-		char sendBuf[1024] = {0};
-		sprintf(sendBuf, "[Server]: server = %d", i++);
-		int sentBytes = zmq_send(socket, sendBuf, strlen(sendBuf), 0);
+		sleep(1);
+		sprintf(buf_s, "[Server]: server = %d", count++);
+		sentBytes = zmq_send(zmq_sock, buf_s, strlen(buf_s), 0);
 		if (sentBytes > 0)
 		{
-			printf("%s\n", sendBuf);
+			printf("[Server]: %s\n", buf_s);
 		}
 	}
 
-	zmq_close(socket);
-	zmq_ctx_destroy(context);
-
-	system("pause");
+	zmq_close(zmq_sock);
+	zmq_ctx_destroy(zmq_text);
 	return 0;
 }
 
