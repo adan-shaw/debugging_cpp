@@ -1,31 +1,31 @@
 #include <stdio.h>
+#include <string.h>
 #include <zmq.h>
-
-
 
 int main(void)
 {
-	void *context = zmq_ctx_new();
-	void *socket = zmq_socket(context, ZMQ_REQ);
-	zmq_connect(socket, "tcp://localhost:6000");
+	void *zmq_text, *zmq_sock;
+	int count, num, bytes;
+	char buf_r[16] = { 0 }, *buf_s = "hello srv";
 
-	int i = 1;//消息计数
-	for(int num = 0;num<10;num++)
+	zmq_text = zmq_ctx_new();									//创建'zmq_text 上下文'
+	zmq_sock = zmq_socket(zmq_text, ZMQ_REQ);	//在'zmq_text 上下文'中, 创建zmq_sock
+
+	zmq_connect(zmq_sock, "tcp://localhost:6000");
+
+	count = 1;//消息计数
+	for(num = 0;num<10;num++)
 	{
-		char recvBuf[10] = { 0 }, *sendBuf = "hello";
+		bytes = zmq_send(zmq_sock, buf_s, strlen(buf_s) + 1, 0);
+		printf("[Client] ---<%d>--- sendMessage: %s   size = %d bytes\n", count, buf_s, bytes);
 
-		int bytes = zmq_send(socket, sendBuf, strlen(sendBuf) + 1, 0);
-		printf("[Client] ---<%d>--- sendMessage: %s   size = %d bytes\n", i, sendBuf,bytes);
-
-		bytes = zmq_recv(socket, recvBuf, sizeof(recvBuf), 0);
-		recvBuf[bytes] = '\0';
-		printf("[Client] ---<%d>--- recvMessage: %s   size = %d bytes\n", i++, recvBuf, bytes);
+		bytes = zmq_recv(zmq_sock, buf_r, sizeof(buf_r), 0);
+		//buf_r[bytes] = '\0';//防止字符串不终结? (这个可能没必要)
+		printf("[Client] ---<%d>--- recvMessage: %s   size = %d bytes\n", count++, buf_r, bytes);
 	}
 
-	zmq_close(socket);
-	zmq_ctx_destroy(context);
-
-	system("pause");
+	zmq_close(zmq_sock);											//关闭zmq_sock
+	zmq_ctx_destroy(zmq_text);								//释放'zmq_text 上下文'
 	return 0;
 }
 
