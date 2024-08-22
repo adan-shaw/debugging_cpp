@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <zmq.h>
+#include <errno.h>
 #include <assert.h>
 
 int main(void)
@@ -40,6 +41,10 @@ int main(void)
 		if (sentBytes > 0)
 		{
 			printf("[Server]: %s\n", buf_s);
+		}
+		else{
+			printf ("zmq_send(): %s\n", zmq_strerror (errno));
+			break;
 		}
 	}
 

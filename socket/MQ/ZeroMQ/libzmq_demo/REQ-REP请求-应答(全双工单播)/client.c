@@ -16,7 +16,7 @@ int main(void)
 	count = 1;//消息计数
 	for(num = 0;num<10;num++)
 	{
-		bytes = zmq_send(zmq_sock, buf_s, strlen(buf_s) + 1, 0);
+		bytes = zmq_send(zmq_sock, buf_s, strlen(buf_s) + 1, 0);//第四参数=0=阻塞socket
 		printf("[Client] ---<%d>--- sendMessage: %s   size = %d bytes\n", count, buf_s, bytes);
 
 		bytes = zmq_recv(zmq_sock, buf_r, sizeof(buf_r), 0);

@@ -7,11 +7,10 @@
 static unsigned short msg_count = 0;
 
 int main(void){
-	char szMsg[128] = {0};
 	const char* addr_info = "tcp://*:8888";//使用tcp协议, 目标IP/PORT为0.0.0.0:8888
+	char szMsg[128] = {0};
 	int tmp;
-	void * pCtx = NULL;
-	void * pSock = NULL;
+	void *pCtx = NULL, *pSock = NULL;
 
 	//创建context
 	if((pCtx = zmq_ctx_new()) == NULL){

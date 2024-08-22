@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <thread>
 #include <zmq.h>
+#include <errno.h>
 #include <assert.h>
 
 //客户端接收线程1
@@ -32,6 +33,10 @@ void Recv1(void *arg)
 		if (recvBytes > 0)
 		{
 			printf("[Client1]: Recv1--------------:%s\n", buf_r);
+		}
+		else{
+			printf ("zmq_recv(): %s\n", zmq_strerror (errno));
+			break;
 		}
 	}
 	return;
@@ -51,6 +56,10 @@ void Recv2(void *arg)
 		if (recvBytes > 0)
 		{
 			printf("[Client1]: Recv2--------------:%s\n", buf_r);
+		}
+		else{
+			printf ("zmq_recv(): %s\n", zmq_strerror (errno));
+			break;
 		}
 	}
 	return;
