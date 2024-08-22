@@ -16,35 +16,38 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <zmq.h>
+#include <errno.h>
 #include <assert.h>
 
 
 int main(void)
 {
-	void *context = zmq_ctx_new();
-	assert(context != NULL);
+	char buf_s[64] = { 0 };
+	void *zmq_text, *sender;
+	int tmp, count, bytes;
 
-	void *sender = zmq_socket(context,ZMQ_PUSH);
+	zmq_text = zmq_ctx_new();
+	assert(zmq_text != NULL);
+
+	sender = zmq_socket(zmq_text, ZMQ_PUSH);//ZMQ_PUSH = zmq_send() only
 	assert(sender != NULL);
 
-	int ret = zmq_bind(sender, "tcp://*:6666");
-	assert(ret == 0);
+	tmp = zmq_connect(sender, "tcp://localhost:5555");//注意端口号, 也必须对齐info, ZMQ_PUSH/ZMQ_PULL
+	assert(tmp == 0);
 
-	printf("Pleas put down Enter,when the works are ready:\n");
-	getchar();
-
-	int i = 0;
+	count = 0;
 	while (1)
 	{
-		sleep(1000);
-		char sendBuf[64] = { 0 };
-		sprintf(sendBuf,"this if from ventilator's message-%d",i++);
-		int bytes = zmq_send(sender, sendBuf, sizeof(sendBuf), 0);
+		sleep(1);
+		sprintf(buf_s,"this if from ventilator's message-%d",count++);
+		bytes = zmq_send(sender, buf_s, sizeof(buf_s), 0);
 		if (bytes <= 0)
 		{
+			printf ("zmq_send(): %s\n", zmq_strerror (errno));
 			return -1;
 		}
-		printf("[Server] Sended Reply Message content == %s\n", sendBuf);
+		else
+			printf("[worker1] Sended Reply Message content == %s\n", buf_s);
 	}
 
 	return 0;
