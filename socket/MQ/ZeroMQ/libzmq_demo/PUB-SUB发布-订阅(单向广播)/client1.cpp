@@ -27,11 +27,11 @@ void Recv1(void *arg)
 
 	while(1)
 	{
-		sleep(1);
+		//sleep(1);
 		recvBytes = zmq_recv(zmq_sock, buf_r, sizeof(buf_r) - 1, 0);
 		if (recvBytes > 0)
 		{
-			printf("[Client]: Recv1--------------:%s\n", buf_r);
+			printf("[Client1]: Recv1--------------:%s\n", buf_r);
 		}
 	}
 	return;
@@ -46,11 +46,11 @@ void Recv2(void *arg)
 
 	while (1)
 	{
-		sleep(1);
+		//sleep(1);
 		recvBytes = zmq_recv(zmq_sock, buf_r, sizeof(buf_r) - 1, 0);
 		if (recvBytes > 0)
 		{
-			printf("[Client]: Recv2--------------:%s\n", buf_r);
+			printf("[Client1]: Recv2--------------:%s\n", buf_r);
 		}
 	}
 	return;
@@ -60,6 +60,7 @@ int main(void)
 {
 	void *zmq_text, *zmq_sock;
 	int tmp;
+	std::thread *pth1 = NULL, *pth2 = NULL;
 
 	zmq_text = zmq_ctx_new();
 	assert(zmq_text != NULL);
@@ -73,11 +74,14 @@ int main(void)
 	tmp = zmq_setsockopt(zmq_sock, ZMQ_SUBSCRIBE, "[Server]", 8);
 	assert(tmp == 0);
 
-	std::thread th1(Recv1,zmq_sock);
-	std::thread th2(Recv2,zmq_sock);
+	pth1 = new std::thread(Recv1,zmq_sock);
+	pth2 = new std::thread(Recv2,zmq_sock);
 
-	th1.join();
-	th2.join();
+	pth1->join();
+	pth2->join();
+
+	delete pth1;
+	delete pth2;
 
 	zmq_close(zmq_sock);
 	zmq_ctx_destroy(zmq_text);
