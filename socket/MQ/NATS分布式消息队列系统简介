@@ -1,0 +1,73 @@
+1.NATS分布式消息队列系统:
+	这种系统, 其实就是MQ类的基础应用, message queue;
+	跟IBM-MQ, ActiveMQ 类似, 只不过是Go 语言实现的而已;
+
+	NATS(Message bus): 
+		从CloudFoundry的总架构图看, 位于各模块中心位置的是一个叫nats的组件; 
+		NATS是由CloudFoundry的架构师Derek开发的一个开源的、轻量级、高性能的, 支持发布、订阅机制的分布式消息队列系统; 
+		它的核心基于EventMachine开发, 代码量不多, 可以下载下来慢慢研究;
+		其核心原理就是基于消息发布订阅机制:
+			每个台服务器上的每个模块会根据自己的消息类别, 向MessageBus发布多个消息主题; 
+			而同时也向自己需要交互的模块, 按照需要的信息内容的消息主题订阅消息;
+
+	NATS原来是使用Ruby编写, 可以实现每秒150k消息, 
+	后来使用Go语言重写, 能够达到每秒8-11百万个消息, 整个程序很小只有3M Docker image, 
+	NATS不支持持久化消息, 如果你离线, 你就不能获得消息; 
+
+	NATS适合云基础设施的消息通信系统、IoT设备消息通信和微服务架构; 
+	Apcera团队负责维护NATS服务器(Golang语言开发)和客户端(包括Go、Python、Ruby、Node.js、Elixir、Java、Nginx、C和C#), 
+	开源社区也贡献了一些客户端库, 包括Rust、PHP、Lua等语言的库; 
+	目前已经采用了NATS系统的公司有: 爱立信、HTC、百度、西门子、VMware; 
+
+
+
+
+
+2.常见的message queue服务器系统, 都是用哪些语言写的:
+	ActiveMQ   (Java编写)
+	KafKa      (Scala编写)
+	RabbitMq   (Erlang编写)
+	Kestrel    (Scala编写不常用)
+
+	NATS       (之前是Ruby编写, 现已修改为Go)
+	NSQ        (Go语言编写)
+
+	Redis      (C语言编写)
+	libzmq     (C语言编写, 非server, 只是一个MQ 编程库)
+
+	vsomeip    (c++编写, 基于boost 实现跨平台)
+	fastdds    (c++编写, 基于boost 实现跨平台)
+	opendds    (c++编写, 基于ACE 实现跨平台)
+
+	NATS vs NSQ(同为Go 语言的MQ 库, 因此做一下比较):
+		nsq和nats都是实时消息队列, 由于nsq大量使用chan, 这就必然导致大量使用select对多chan操作, 结果是性能不高;
+
+
+
+
+
+3.NATS的设计目标
+	NATS的设计原则是: 高性能、可伸缩能力、易于使用, 基于这些原则, NATS的设计目标包括:  
+		1)高性能(fast) 
+		2)一直可用(dial tone) 
+		3)极度轻量级(small footprint) 
+		4)最多交付一次(fire and forget, 消息发送后不管) 
+		5)支持多种消息通信模型和用例场景(flexible)
+
+	NATS应用场景:
+		* NATS理想的使用场景有: 
+			1)寻址、发现 
+			2)命令和控制(控制面板) 
+			3)负载均衡 
+			4)多路可伸缩能力 
+			5)定位透明 
+			6)容错
+
+		* NATS设计哲学认为, 高质量的QoS应该在客户端构建, 故只建立了请求-应答, 不提供: 
+			1)持久化 
+			2)事务处理 
+			3)增强的交付模式 
+			4)企业级队列 
+
+
+
