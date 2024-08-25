@@ -51,10 +51,10 @@ client kill 127.0.0.1:9213
 
 # 测试redis-server 是否正常(成功返回PONG / 字符串原地返回):
 	PING
-	PING "love you"
+	PING "fuck you"
 
 # 回显命令:
-	echo "idiotes"
+	echo "bitches"
 
 # 退出redis-cli
 quit
@@ -96,5 +96,6 @@ config rewrite
 
 # 清空redis 统计寄存器中所有的统计数据
 config resetstat
+
 
 
