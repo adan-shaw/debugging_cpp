@@ -1,0 +1,29 @@
+OpenDDS 简介
+	OpenDDS是用C++语言针对"对象管理组织"(OMG)关于数据分发服务(Data Distribution Service, DDS)规范的开源实现; 
+
+	OpenDDS采用C++语言实现, 但也提供JAVA和JMS的开发接口, 这意味着JAVA程序开发也可以使用OpenDDS; 
+	OpenDDS 支持的语言很杂, 对python/java/c++ 都提供编码支持;
+
+	OpenDDS是构建在ACE(Adaptive Communication Environment 自适应通信环境)上, 通过ACE保证跨平台和可移植性(CE 是一套基于C++语言的开源网络可开发库); 
+
+	OpenDDS同时利用了TAO(The ACE ORB, 基于ACE基础上的CORBA实现框架), 提供IDL编译器等功能作为OpenDDS的DCPS信息仓库; 
+
+	OpenDDS遵循OMG的DDSV1.2规范, 同时采用和ACE/TAO相同的license, 允许开发者在保留版权申明的前提下在各种场合(包括商用)使用和修改源代码; 
+
+
+
+
+
+OpenDDS vs FastDDS:
+	由于OpenDDS 是基于ACE 跨平台网络库实现的, vsomeip/fastdds 都是基于boost 跨平台网络库开发的,
+	因此, 后续论维护能力, boost 一般都会比ace 好一点, 
+	ace 在intel 芯片上运行效率可能很高, 但目前大量新的硬件, 都是直接支持c++11/boost 库, 这样ace 很容易会失去市场的;
+
+	但OpenDDS 毕竟建立得比较早, 对多语言支持比较广泛, 成熟一点;
+	FastDDS 可能就支持c/c++ 了, OpenDDS 可以支持python/java, 优势不能说没有;
+	(ps: 如果要自己封装对python/java 等语言的SDK 支持, 还不如直接用OpenDDS, 更省事)
+
+	总的来说:
+		OpenDDS 更适合跨平台应用, FastDDS 更适合类-Unix 系统的c/c++ 开发(高效, 高准确率);
+
+
