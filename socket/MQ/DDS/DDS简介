@@ -1,0 +1,38 @@
+1.DDS与MQ的区别
+	DDS(Data Distribution Service)和MQ(Message Queue)以及Kafka 都是用于消息传递的中间件, 但它们有以下区别: 
+		数据模型: 
+			DDS支持复杂数据类型和关系型数据模型, MQ和Kafka则更适合处理简单的消息数据; 
+		传输方式: 
+			DDS使用点对点通信模式, 而MQ和Kafka则使用发布/订阅模式比较多(这个不一定, 主要看业务实现的方法有什么不同); 
+		实时性: 
+			DDS的实时性比MQ和Kafka更高, 并且可以提供可预测性的延迟和带宽; 
+		可靠性: 
+			DDS提供了更高级别的消息可靠性和事务支持, 而MQ和Kafka则更注重高吞吐量和可扩展性; 
+		应用场景: 
+			DDS主要应用在实时控制、工业自动化等需要高实时性和可靠性的领域; MQ和Kafka则更适合大规模分布式系统、日志收集等领域; 
+
+
+
+
+
+2.FastDDS与openDDS对比
+	FastDDS和OpenDDS都是用于实现数据分发服务(DDS)的开源软件框架, 它们之间的主要区别在于: 
+		性能: 
+			FastDDS使用了一些优化技术(如多线程、内存池等)来提高性能, 因此通常比OpenDDS更快; 
+		支持的平台: 
+			FastDDS主要支持Linux和Windows操作系统, 而OpenDDS可以在更广泛的平台上运行, 包括Linux、Windows、macOS、Solaris等; 
+		社区活跃度: 
+			FastDDS的社区相对较新, 但是发展迅速, 并且得到了很多用户的支持; OpenDDS的社区则更加成熟和稳定, 已经有许多年的历史; 
+		许可证: 
+			FastDDS使用的是Apache 2.0许可证, 而OpenDDS使用的是LGPLv2.1许可证; 
+
+	总的来说, 选择FastDDS还是OpenDDS取决于具体的应用场景和需求; 如果需要更高的性能, 可以考虑使用FastDDS; 
+	如果需要跨平台支持和更稳定的解决方案, 则可以选择OpenDDS; 
+
+	vsomeip    (c++编写, 基于boost 实现跨平台)
+	fastdds    (c++编写, 基于boost 实现跨平台)
+	opendds    (c++编写, 基于ACE 实现跨平台)
+
+	由于opendds 是基于ace 实现的, 也没有什么稳定性和跨平台的优点, 只是旧式平台适合, 新式平台还是fastdds 优质, 
+	但opendds 可能功能比较多, 积累比较多(一般不存在这种情况),
+	因此, fastdds 仍然是最优选择!!

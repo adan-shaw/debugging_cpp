@@ -11,6 +11,11 @@ OpenDDS 简介
 	OpenDDS遵循OMG的DDSV1.2规范, 同时采用和ACE/TAO相同的license, 允许开发者在保留版权申明的前提下在各种场合(包括商用)使用和修改源代码; 
 
 
+	vsomeip    (c++编写, 基于boost 实现跨平台)
+	fastdds    (c++编写, 基于boost 实现跨平台)
+	opendds    (c++编写, 基于ACE 实现跨平台)
+
+
 
 
 
