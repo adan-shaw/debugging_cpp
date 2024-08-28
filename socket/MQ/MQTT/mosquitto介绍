@@ -1,0 +1,12 @@
+1.mosquitto 介绍:
+	mosquitto 比较像nginx, 直接配置之后, 就可以直接用了, 也是一个proxy, 只不过是MQ proxy!!
+	现成的mosquitto 安装包, 直接安装后, 修改配置文件就可以用了;
+	eclipse-paho:
+		这个只是一个mqtt socket library, 可以直接编写client & server(需要自己实现, 请看demo);
+
+
+
+
+
+2.mosquitto 简单使用(简单配置):
+	略
