@@ -1,0 +1,26 @@
+eclipse_paho 的mqtt cli 的实现简介:
+	eclipse_paho 是mqtt client 的实现, 支持多种语言, 具体只是一个mqtt 协议对接库, 类似一个socket library, 用作对接mqtt 通信的;
+	eclipse_paho 支持的语言如下:
+		mqtt.c
+		mqtt.cpp
+		mqtt.golang
+		mqtt.java
+		mqtt.javascript
+		mqtt.py
+
+	特殊版本(MCU 嵌入式设备):
+		mqtt.embedded-c
+		mqtt-sn.embedded-c
+		MQTTSNGateway
+
+	信息安全:
+		mqtt-spy
+
+	test:
+		mqtt.testing
+
+
+
+	ps:
+		国产的OpenHarmony MCU, 也有自己的OpenHarmony_mqtt, 主要是OpenHarmony MCU 针对mqtt 标准做的一个前端通信socket library, 
+		其实和官方的eclipse_paho 是一样的, 都是一个socket library, 用作对接mqtt 通信的;

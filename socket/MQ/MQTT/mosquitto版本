@@ -1,0 +1,16 @@
+mosquitto 版本解析:
+	mosquitto 是mqtt 的server 实现, 一般只有c/c++ 版本;
+	官方提供的mosquitto 二进制包, 版本差异很大!!
+	这意味着最新版的源码(只有windows 是最新版, 其他cygwin, linux, qnx 都是旧版), 需要自己tarball!!
+	如果tarball 出错, 需要自己屏蔽差异!!
+
+	各个版本支持如下:
+		cygwin: mosquitto-1.3.5
+		linux: mosquitto-0.5.3
+		qnx: mosquitto-0.11.3
+		win: mosquitto-2.0.18
+
+	ps:
+		mosquitto 比较像一款proxy gateway 网关+Server 产品(小型server 可以直接和gateway 合并, 参考openresty);
+		如果物联网功能过多, server 系统过于复杂, 一般会再建一个server 跑业务, 这时候才会和mqtt gateway 独立开来(请参考互联网系统的设计);
+
