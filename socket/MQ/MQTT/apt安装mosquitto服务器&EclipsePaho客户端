@@ -1,0 +1,43 @@
+#
+# 1.安装mosquitto(debian 10 只有3.1.x 版本)
+#
+root@eva:/home/adan# apt-cache search mosquitto
+libmosquitto-dev - MQTT version 3.1/3.1.1 client library, development files
+libmosquitto1 - MQTT version 3.1/3.1.1 client library
+libmosquittopp-dev - MQTT version 3.1 client C++ library, development files
+libmosquittopp1 - MQTT version 3.1/3.1.1 client C++ library
+mosquitto - MQTT version 3.1/3.1.1 compatible message broker
+mosquitto-clients - Mosquitto command line MQTT clients
+mosquitto-dev - Development files for Mosquitto
+
+# 全部mosquitto 功能安装
+apt-get install libmosquitto-dev libmosquitto1 libmosquittopp-dev libmosquittopp1 mosquitto mosquitto-clients mosquitto-dev
+
+
+
+#
+# 2.二进制码包安装(略)
+#
+(略, 自己看/home/adan/svn2/p2Server工具源码包/MQ/mqtt/srv/*, 里面的二进制包很多, 版本差异很大, 不推荐!!)
+
+
+
+#
+# 3.自己tarball 源码(推荐, 但不做细节描述了, 自己搞吧)
+#
+
+
+
+#
+# 4.去ppa 官网, 跟着ubuntu 更新最新版deb 包(推荐, 但不做细节描述了, 自己搞吧)
+#
+
+
+
+
+
+#
+# 题外话
+#
+EclipsePaho 是一个socket library 客户端网络编码库, 一般只能自己tarball 源码, 跨平台, 跨芯片移植的场景特别多, 没有特定的二进制封装版本!!
+这个真的只能自己tarball 源码了, 没人能帮你, 自己根据交叉编译工具链tarball 源码吧;
