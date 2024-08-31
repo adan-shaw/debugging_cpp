@@ -1,0 +1,130 @@
+1.FiM功能禁止管理器(Function Inhibition Manager)简介:
+	在AUTOSAR软件架构中, FiM模块是诊断的一部分(棣属关系); 
+
+	诊断, 通俗来讲, 就是程序的自检; 
+	如果汽车发生故障, 程序会把故障信息的数据存储下来, 为后期维修的离线诊断提供分析的依据; 
+	严重的故障则实时地通过点亮报警灯提示驾驶员; 
+	当出现影响功能的故障时, 应对功能禁止或功能降级以保护ECU, 这时就需要用到FiM 功能禁止管理器; 
+	下面举两个例子: 
+		1、功能禁止: 电机短地故障, 应该关断输出; 
+		2、功能降级: 车窗反复操作导致车窗电机温度升高故障, 将温度分为几个保护level, 在这几个level中分别禁止相应的功能(如自动上升、自动下降等); 
+
+	通过FiM模块就可以建立起各Event ID与FID的关系, 应用层只需要调用FiM_GetFunctionPermission()接口来轮询FID的抑制状态来控制相应功能是否禁止即可; 
+	很多开发者可能觉得SW-C层会主动上报故障, 自己识别到故障自己主动禁止, 不需要用到FiM模块; 
+	但这样做就需要应用层自己设计逻辑模型, 监测故障的同时, 还要对故障进行处理, 从而做出功能降级反应, 大大增加了开发的复杂度; 
+	还有就是当同时出现多个不同的故障时, 系统就没法知道是哪个故障导致的系统降级, 不便于排查问题; 
+
+
+
+
+
+2.FiM模块的基本功能
+	FiM即功能禁止管理器(Function Inhibition Manager), 它负责为软件组件及其功能提供控制机制; 
+	在这种情况下, 功能组(Functionality)可以是由具有相同允许/禁止条件集的一个、几个或部分可运行实体(runnable entities)的内容构成; 
+	通过FiM可以配置禁止这些功能组, 甚至在运行时修改这些功能组使能或禁止; 
+	FiM旨在满足当ECU检测到故障时对系统响应的集中处理的设计要求; 
+
+	FiM依赖的其他模块有:
+		* 诊断事件管理器(Dem)、
+		* 具有FID接口的软件组件(SW-C)、
+		* ECU状态管理器(EcuM)、
+		* RTE、
+		* 支持被FiM抑制功能的BSW模块; 
+
+
+
+
+
+3.FiM对软件组件及其功能控制
+	FiM的服务专注于软件组件SW-C中的功能组, 但是它们不仅限于这些功能组; 
+	BSW的功能组也可以使用FiM服务; 
+	功能组可以被分配给一个标识符FID(Function Identifier), 以及包含此特定标识符的禁止条件(Dem的事件及其状态信息作为禁止条件的输入); 
+	FiM应使用软件组件提供的FID - EventIDs - Inhibition Mask关系来确定所有已配置FID的权限状态; 
+	相关功能组在执行前会通过FID来轮询相关的权限状态; 
+	如果此标识符的禁止条件适用时, 则相应的功能组就会被禁止; 
+
+	FiM应用实例: 
+		用特定标识符FID来标识的前左防夹传感器SW-C, 当它检测防夹的Event为Failed(故障), 并将此故障事件(Event)报告给Dem, 
+		Dem会通过某种关系通知到FiM模块, 则FiM会设置此FID状态为抑制, 前左车窗升降的SWC通过此FID状态得知防夹传感器异常, 从而禁止车窗关闭; 
+
+
+
+
+
+4.FiM 与Dem 和SW-C 的交互
+	知道了FiM模块的主要功能, FiM又是如何与其他模块进行交互来完成其上述功能的呢?
+	与FiM交互的模块分别是Dem和SW-C; 
+	其交互流程如下: 
+		Step1、当Event Status发生变化时, Dem通过API函数FiM_DemTriggerOnMonitorStatus()通知到FiM模块; 
+		Step2、在被告知Event Status发生变化时, FiM使用API函数 Dem_GetMonitorStatus()重新计算功能抑制; 
+		Step3、SW-C模块则会调用FiM模块功能可用性接口FiM_GetFunctionPermission()来轮询FID的抑制状态来控制相应功能是否禁止; 
+
+
+
+
+
+5.FiM初始化过程
+	FiM模块的初始化流程如下: 
+		Step1、EcuM模块首先调用函数Dem_Preinit()完成Dem预初始化; 
+		Step2、EcuM模块通过函数NVM_ReadAll()来获取最新存储的所有Event的状态;
+		Step3、EcuM模块调用函数FiM_Init()来完成内部变量的初始化, 但是调用完不能立即被使用; 
+		Step4、EcuM模块调用函数Dem_Init()完成Dem内部变量的初始化, 然后Dem调用FiM_DemInit()来最终完成FiM模块的初始化; 
+		Step5、只有当Dem模块与FiM模块都最终完成初始化后其相关其他函数接口才能够被正常使用; 
+
+
+
+
+
+6.FiM配置
+	6.1 FiM数据结构
+		FiM的配置过程应该在FiM模块中创建数据结构来存储抑制关系(EventID - FID - Inhibition Mask); 
+		FID:
+			FID全称Function Identifier, 取值就是Bool类型 TRUE or FALSE,举例说明如下: 
+				FID_1 == TRUE:  即抑制场景不激活, 功能不禁止; 
+				FID_1 == FALSE: 即抑制场景激活, 功能禁止; 
+		Inhibition Mask: 
+			用于决定什么样的Event Status会触发上述FID置位, 有以下三种取值: 
+				if Failed:     当Event Status Bit0 = 1时, 该值就为1, 否则为0; 
+				if Tested:     当Event Status Bit6 =0时, 该值为1, 否则为0; 
+				if Not Tested: 当Event Status Bit6 =1时, 该值为1, 否则为0; 
+
+		FiM数据结构的实现不能被规定; 
+		一个FID分配可配置数量的EventId和抑制掩码; 
+		每个FID的EventIds和抑制掩码的数量必须匹配, 以便每个配置的事件都有相应的抑制掩码; 
+
+		FiM的配置实际上建立在事件Id(EventId)和分配的功能Id(FunctionId)的关系之上; 
+		每个FID都有一个抑制掩码, 每个FID都有一个特定的EventId; 如果该事件具有一定的状态, 则如果事件状态与配置的掩码匹配, 则FID的抑制将激活; 
+
+		配置时需要考虑: 
+			对于每个FunctionId, FunctionId的状态如何依赖于一个/几个EventIds的状态?
+
+		掩码决定了EventId的状态和FunctionId的禁止状态之间的关系; 
+		如果一个FunctionId依赖于几个EventId, 通过"OR"运算以得出一个FunctionId的总体结果; 
+		在配置过程中, 建立数据结构; 根据实现的不同, 这可能是一个事件到所有受影响FID的映射, 或者相反, 一个FID到所有影响它的事件的映射; 
+
+
+
+	6.2 FiM配置实例
+		FiM模块基于达芬奇开发工具的配置实例: 
+			FID与Event以及Component之间的映射关系, 还有Event statsus对应的Inhibition Mask; 
+
+		受监控组件(Monitored Component)作为一种标识符, 是Dem模块提供标识特定受监控的组件, 包括: 硬件组件或者信号; 
+		受监控组件的FAILED状态代表所有被分配的监控功能和从其他Dem模块继承的故障信息的结果; 
+
+		诊断事件(Diagnostic Event)作为一种标识符, 是为了Dem模块所提供的特定诊断监控功能用来报告错误的; 
+
+		注意: 
+			一般Event和Component不会都配置在FID的引用中, 状态的计算上有重复之处; 
+
+		FiM配置可以支持汇总事件; 
+		汇总事件(Summarized Event)由多个单个诊断事件组成; 
+		配置可以将一类Event合成一个summary event; 
+
+		当与汇总事件相关联的某一个Dem事件被报告给FiM时, 则FiM需要能够一并处理与该汇总事件相关联的所有FID的禁止条件; 
+		因此特定的汇总事件只是作为多个诊断事件的代表; 
+		通过使用汇总事件配置(FiMSummaryEvent), 可以将一组事件选择为FiMInhSumRef, 并将其重用于多个抑制配置, 最终以达到简化配置的目的; 
+
+
+
+
+
