@@ -13,6 +13,7 @@
 #   posix_linux    = posix/sysv 多进程/多线程编码库
 #   qt             = 跨平台c++ 可视化编码库
 #   socket         = socket 编码库
+#   software的设计规划,实施,管理 = 软件工程
 #   win系统的环境部署 = windows 系统的部署gcc/python/lua/shell 开发环境
 #
 # 2022/07/25[the start]
