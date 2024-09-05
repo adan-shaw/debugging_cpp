@@ -1,0 +1,3 @@
+observer观察者模式简介:
+	observer观察者模式, 实际上就是缩减版本的subscription订阅模式, 
+	你可以做一个唯一channel 的subscription订阅模式, 来实现observer观察者模式, 这里不再做详细叙述!!
