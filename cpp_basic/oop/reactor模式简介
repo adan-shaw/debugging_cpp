@@ -1,0 +1,63 @@
+1.什么是Reactor模式:
+	一个普通的select/poll/epoll 多路复用server, 就是Reactor模式, 代码不再展示了, 比较简单, 自己动手写写吧;
+
+	Reactor模式适合描述client/server 关系, 比较常见于互联网web/app 程序中, 
+	而且算是比较简单原始的设计模式, c/c++ 初学者可以试试(也适合python/java/lua 初学者试试), 基本上会socket 异步开发的, 基本上都算是会Reactor模式了;
+
+
+
+
+
+2.常见的Reactor模式:
+	1.单Reactor单线程:
+		单accept(监听/接纳socket client) + 单worker (数据io 读写), 
+		accepter + worker 两者都在同一条线程下, 单纯考研socket io 异步开发能力;
+
+
+	2.单Reactor多线程:
+		- 单accepter(监听/接纳socket client) + 不固定的多个worker (数据io 读写):
+				这种设计一般需要一个线城池, 也可以没有, 直接来任务就新建worker 线程, 处理完任务就销毁worker 线程;
+				优点:
+					简单, 代码逻辑容易实现, 跨平台能力强, 程序简单;
+				缺点:
+					频繁销毁线程, 切换线程, 消耗较大;
+					不适合keepalive 长链接server, 适合单发任务server;
+
+		- 单accepter(监听/接纳socket client) + 固定的多个worker (数据io 读写):
+			[更优, 更复杂, 但可以减少线程切换, 需要有mission list, 比较麻烦]
+				这种设计一般需要一个线城池, 也有一个mission list任务列表, 
+				还要有一定的派任务规则(来任务了, 还得控制任务分配), 处理完任务, 也不需要销毁worker 线程;
+				优点:
+					性能好, 不会频繁销毁线程, 可绑定cpu 内核, 加强cpu cache 命中, 减少线程切换, 消耗很小;
+					适合keepalive 长链接server, 适合复杂任务server;
+				缺点:
+					有一定设计难度, 代码实现难度大;
+					由于程序较为复杂, 跨平台编码时, 部分rtos 的API SDK可能不支持这套复杂的逻辑(当然linux/win 肯定没问题);
+
+		总结:
+			'单Reactor多线程'唯一的缺点是: 
+				'单Reactor多线程'容易被人攻击, 堵住监听accepter, 
+				导致后续listen() 线程在accept() 客户端socket 时, 可能会出现DDOS 攻击等不良因素, 导致server 被攻陷;
+
+			一般情况下, worker 线程是异步io 的, 但你也应该将'accepter(监听/接纳socket client)'变成异步的, 实现全异步的'单Reactor多线程';
+			ps:
+				大部分情况下, 很容易忘了将'accepter(监听/接纳socket client)'变成异步的,
+				如果'accepter(监听/接纳socket client)'不变成异步的, server 的抗压能力就更差了;
+
+
+	3.多Reactor多线程:
+		先要条件:
+			* 要把'accepter(监听/接纳socket client)'变成异步的;
+			* 要把worker 线程里面的socket io 变成异步的;
+		然后建立一个统一的线城池, 可以是:
+			* 不固定的多个worker, 来一个任务, 派一个rworker 线程(经常消耗线程, 切换线程, 损耗大, 适合单发任务server)
+			* 固定的多个worker, 做一个任务list, 进行统一的任务派送, 还要把accept() 任务和io 任务, 统一兼容, 实现一个通用的任务派发, 分配机制;
+				(这种设计各方面都好, 就是较为复杂, 看你的编码能力了)
+
+
+
+
+
+术语差异声明:
+	* 本文中的worker, 有些文章中, 也叫: handler, 也就是worker = handler;
+	* 本文中的accepter, 即listen() 监听线程;
