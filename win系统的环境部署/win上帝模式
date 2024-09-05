@@ -1,0 +1,35 @@
+1.普通上帝模式:
+	* 创建一个新的文件夹
+	* 将这个文件夹命名为特殊名字: name+.{ED7BA470-8E54-465E-825C-99712043E01C}, 进而触发普通上帝模式
+		GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
+
+
+
+
+
+2.特殊上帝模式(需要使用github 代码部署):
+	* git:
+		https://github.com/ThioJoe/Windows-Super-God-Mode/releases
+
+	* 解压:
+		Windows-Super-God-Mode-X.X.X.zip
+
+	* 双击运行'上帝模式自动化'的批处理文件:
+		SuperGodMode-EasyLauncher.bat
+
+	* 在弹出的设置界面中:
+		Alternative Options 保持默认设置, 无需更改。
+		Output Directory (输出目录)和Output Folder Name(输出文件夹名称)需要自行选择&指定;
+		最后, 点击Run Script 运行脚本, 并等待生成完成即可;
+
+
+
+
+
+上帝模式, 是为了让你轻松获取windows 系统的大量配置快捷方式, 让开发人员更轻松掌握windows 系统, 接管windows 系统, 很方便!!
+
+最好在安装完成大部分关键软件之后, 再执行一次上帝模式的自动化脚本, 更新一下上帝模式;
+
+或者你把上帝模式的文件夹删掉, 重新生成也行, 
+
+其实上帝模式, 就是一个自动生成快捷方式的工具, 很方便!!
