@@ -60,4 +60,4 @@
 
 术语差异声明:
 	* 本文中的worker, 有些文章中, 也叫: handler, 也就是worker = handler;
-	* 本文中的accepter, 即listen() 监听线程;
+	* 本文中的accepter, 即listen() 监听线程, 用来进行listen() 监听, 并accept() 客户端的(仅限tcp server, udp server 也大同小异);
