@@ -17,3 +17,14 @@ RPC 设计模式简介:
 		rpc 同样需要信息安全, https, ssl 那些东西的, 
 		当然这些东西, 可以建立在socket 编码上面, 但如果rpc 框架没办法指定openssl API, 没办法指定socket 的实现方式, 那就是: rpc 自己会集成openssl;
 		这种情况下, 你只能使用rpc 框架进行编码, 自己实现的技术成本太大!!
+
+
+
+	rpc 和libzmq 的管道模式, 实际上是"反义词"?
+	rpc:
+		client 调用server API;
+
+	libzmq 的管道模式:
+		server 命令client 接收消息(然后执行操作), 完成之后, 答复一下server;
+
+	真是一个奇妙组合!!
