@@ -1,0 +1,84 @@
+#
+# gRPC 简介
+#
+gRPC 是一套类似libzmq 一样的网络编程框架, 比较低级, 需要自己手动编码实现网络io 互交;
+如果是go 语言, 或许会有golang-grpc-gateway, 
+但一般情况下, 还是当成libzmq 同等级的网络编程库来用, 
+只不过rpc 的软件模型, 和mq 软件模型, 有一定区别而已, 这里不做详细争论了, 点到为止;
+
+
+
+
+
+#
+# 1.apt-get 安装, 最方便
+#
+root@eva:/home/adan# apt-cache search grpc
+collectd-core - statistics collection and monitoring daemon (core system)
+golang-gitaly-proto-dev - Protobuf specifications and client libraries for Gitaly
+ruby-gitaly - Auto-generated gRPC client for gitaly
+golang-github-cockroachdb-cmux-dev - Payload-based connection multiplexer for Golang
+golang-github-containerd-typeurl-dev - Go package for managing marshaled types to protobuf.Any
+golang-github-gogo-googleapis-dev - googleapis generated with gogoprotobuf
+golang-github-googleapis-gax-go-dev - Google API Extensions for Go
+golang-github-grpc-ecosystem-go-grpc-prometheus-dev - Prometheus monitoring for gRPC Go servers
+golang-github-grpc-ecosystem-grpc-gateway-dev - gRPC to JSON proxy generator for Golang -- sources
+golang-grpc-gateway - gRPC to JSON proxy generator for Golang -- binaries
+gogottrpc - GRPC for low-memory environments - utilities
+golang-github-stevvooe-ttrpc-dev - GRPC for low-memory environments
+golang-google-genproto-dev - Generated Go packages for common protocol buffer types
+golang-google-grpc-dev - implementation of gRPC in Go
+
+libgrpc++-dev - high performance general RPC framework (development)
+libgrpc++1 - high performance general RPC framework
+libgrpc-dev - high performance general RPC framework (development)
+libgrpc6 - high performance general RPC framework
+protobuf-compiler-grpc - high performance general RPC framework - protobuf plugin
+
+python-grpcio - GRPC system (Python 2)
+python3-grpcio - GRPC system (Python 3)
+ruby-grpc - GRPC system in Ruby
+ruby-grpc-tools - Development tools for Ruby gRPC
+python-etcd3gw - client for etcd3 grpc-gateway v3 API - Python 2.7
+python-etcd3gw-doc - client for etcd3 grpc-gateway v3 API - doc
+python3-etcd3gw - client for etcd3 grpc-gateway v3 API - Python 3.x
+python3-grpc-tools - Protobuf code generator for gRPC (Python 3)
+libyangrpc-dev - NETCONF/YANG simple client applications development files
+libyangrpc2 - NETCONF/YANG library for simple client applications
+
+
+
+# gRPC for c/c++
+apt-get install libgrpc++-dev libgrpc++1 libgrpc-dev libgrpc6 protobuf-compiler-grpc
+
+# gRPC for python
+python-grpcio - GRPC system (Python 2)
+python3-grpcio - GRPC system (Python 3)
+python-etcd3gw - client for etcd3 grpc-gateway v3 API - Python 2.7
+python-etcd3gw-doc - client for etcd3 grpc-gateway v3 API - doc
+python3-etcd3gw - client for etcd3 grpc-gateway v3 API - Python 3.x
+python3-grpc-tools - Protobuf code generator for gRPC (Python 3)
+libyangrpc-dev - NETCONF/YANG simple client applications development files
+libyangrpc2 - NETCONF/YANG library for simple client applications
+
+# # gRPC for go
+golang-gitaly-proto-dev - Protobuf specifications and client libraries for Gitaly
+golang-github-cockroachdb-cmux-dev - Payload-based connection multiplexer for Golang
+golang-github-containerd-typeurl-dev - Go package for managing marshaled types to protobuf.Any
+golang-github-gogo-googleapis-dev - googleapis generated with gogoprotobuf
+golang-github-googleapis-gax-go-dev - Google API Extensions for Go
+golang-github-grpc-ecosystem-go-grpc-prometheus-dev - Prometheus monitoring for gRPC Go servers
+golang-github-grpc-ecosystem-grpc-gateway-dev - gRPC to JSON proxy generator for Golang -- sources
+golang-grpc-gateway - gRPC to JSON proxy generator for Golang -- binaries
+gogottrpc - GRPC for low-memory environments - utilities
+golang-github-stevvooe-ttrpc-dev - GRPC for low-memory environments
+golang-google-genproto-dev - Generated Go packages for common protocol buffer types
+golang-google-grpc-dev - implementation of gRPC in Go
+
+
+
+
+
+#
+# 2.tarball gRPC(略)
+#
