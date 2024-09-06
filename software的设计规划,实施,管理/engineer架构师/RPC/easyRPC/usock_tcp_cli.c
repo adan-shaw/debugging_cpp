@@ -10,7 +10,6 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include "unix_sock_frame.h"
-#include "marr_copy.h"
 
 
 
@@ -46,19 +45,24 @@ int main(void){
 	}
 
 	//阻塞发送一帧数据
-	frame.type = 0;
-	frame.bak = 0;
-	frame.num = 0;
-	memset(frame.num_arr,0xff,sizeof(frame.num_arr));
-	memsetEx2(frame.num_arr2,0,sizeof(unsigned int),8,8);
-	frame.num_arr2[3][3] = 3333;
-	strncpy(frame.str,"hello world", sizeof(frame.str));
+	strncpy(frame.API,"f_adan", sizeof(frame.API));//有函数名: f_adan
+	strncpy(frame.data,"taylor swift", sizeof(frame.data));//参数: taylor swift
 
 	tmp = write(sfd,&frame,sizeof(utcp_frame_t));
 	if(tmp == -1)
 		perror("write()");
 	else
 		printf("%d byte msg to server(%d):\n",tmp,sfd);
+
+	memset(frame.API, '\0', sizeof(frame.API));
+	memset(frame.data, '\0', sizeof(frame.data));
+	tmp = read(sfd,&frame,sizeof(utcp_frame_t));
+	if(tmp == -1)
+		perror("read()");
+	else{
+		printf("%d byte msg from server(%d):\n",tmp,sfd);
+		printf("RPC return: %s\n",frame.data);
+	}
 
 	//结束回收资源
 	close(sfd);

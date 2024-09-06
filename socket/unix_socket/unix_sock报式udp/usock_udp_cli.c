@@ -50,7 +50,7 @@ int main(void){
 	if(tmp == -1)
 		perror("sendto()");
 	else
-		printf("%d byte msg from client(%d):\n",tmp,sfd);
+		printf("%d byte msg to server(%d):\n",tmp,sfd);
 
 	//结束回收资源
 	close(sfd);

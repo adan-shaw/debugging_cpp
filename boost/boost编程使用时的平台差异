@@ -10,6 +10,9 @@ boost 编程时, 不同平台的差异如下:
 		ps:
 			-l boost_system
 			-l boost_thread
+			-l boost_chrono
+			-l boost_serialization
+			###-l boost_archive###(没有这个编译选项)
 			...
 			这些编译链接选项, 是unix 系统特有的功能!!
 			windows 系统是没有这种东西的, 也就Unix 系统会这么方便, gcc/clang 编译器, 都是比较先进的编译器!! 才有这么方便的功能!!
@@ -93,3 +96,6 @@ sudo ldconfig
 ./x86_64-linux-gnu/libboost_iostreams.so
 ./x86_64-linux-gnu/libboost_mpi_python37.so
 ./x86_64-linux-gnu/libboost_python.so
+
+
+
