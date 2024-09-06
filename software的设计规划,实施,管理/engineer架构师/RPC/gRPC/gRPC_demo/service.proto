@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package example;
+
+//定义一个Greeter 服务
+service Greeter {
+  //发送一个Greeting 消息, 返回一个GreetingResponse
+  rpc Greet (Greeting) returns (GreetingResponse);
+}
+
+//Greeting 消息格式
+message Greeting {
+  string name = 1;
+}
+
+//GreetingResponse 消息格式
+message GreetingResponse {
+  string message = 1;
+}
