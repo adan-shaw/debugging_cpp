@@ -1,0 +1,34 @@
+0.为什么eBPF 如此强大?
+	三方面原因: 
+		* 快速(fast)
+		* 灵活(flexible)
+		* 数据与功能分离(separates data from functionality)
+
+
+
+1.快速
+	eBPF 几乎总是比 iptables 快, 这是有技术原因的; 
+	eBPF 程序本身并不比 iptables 快, 但eBPF 程序更短; 
+	iptables 基于一个非常庞大的内核框架(Netfilter), 这个框架出现在内核 datapath 的多个地方, 有很大冗余; 
+	因此, 同样是实现 ARP drop 这样的功能, 基于 iptables 做冗余就会非常大, 导致性能很低; 
+
+
+
+2.灵活
+	这可能是最主要的原因; 你可以用eBPF 做几乎任何事情; 
+	eBPF 基于内核提供的一组接口, 运行 JIT 编译的字节码, 并将计算结果返回给内核; 
+	例如:
+		内核只关心 XDP 程序的返回是 PASS, DROP 还是 REDIRECT; 至于在 XDP 程序里做什么,  完全看你自己; 
+
+
+
+3.数据与功能分离
+	eBPF separates data from functionality.
+	nftables 和iptables 也能干这个事情, 但功能没有eBPF 强大; 
+	例如:
+		eBPF 可以使 用 per-cpu 的数据结构, 因此能取得更极致的性能; 
+
+	eBPF 真正的优势是将"数据与功能分离"这件事情做地非常干净(clean separation): 
+		可以在eBPF 程序不中断的情况下修改它的运行方式; 
+		具体方式是:
+			修改它访问的配置数据或应用数据, 例如: 黑名单里规定的IP 列表和域名; 
