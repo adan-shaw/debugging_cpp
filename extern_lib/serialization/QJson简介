@@ -1,0 +1,6 @@
+QJson简介:
+	QJson 并没有反射功能, 并不是c++ 第三方带反射的序列化库,
+	QJson 和boost序列化库一样, 大概率只是为了解决跨平台开发过程中, json 遇到的序列化, 反序列化的各种问题;
+	QJson 只能说是一个跨平台json 序列化, 反序列化库, 和boost.Serialization 一样;
+
+	目前支持反射的序列化, 反序列化库, 一般推荐google 的protobuf;
