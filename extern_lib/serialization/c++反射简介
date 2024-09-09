@@ -1,0 +1,47 @@
+1.反射简介: 
+	维基百科的定义: 
+		反射是指计算机程序在运行时可以访问、检测和修改它本身状态或行为的一种能力; 
+
+	这种说法, 有点抽象, 实际上反射就是: 
+		程序在运行时, 动态获取对象信息以及调用对象方法的能力; 
+		可以对比java的运行期反射机制, C++没有自带的反射机制, 需要依赖外部库来实现; 
+
+
+
+
+
+2.c++ 常见的第三方反射库
+	ProtoBuff
+		Google的经典开源序列化/反序列化protocol, 支持C++/python等流行语言, 常用于gRPC场景
+
+	Boost.Serialization
+		Boost.Serialization可以创建或重建程序中的等效结构, 并保存为二进制数据、文本数据、XML或者有用户自定义的其他文件; 
+		该库具有以下吸引人的特性: Serialization - Tutorial (boost.org)
+
+	MFC Serialization
+		Windows平台下可使用MFC中的序列化方法; MFC对CObject 类中的序列化提供内置支持; 
+
+	.Net Framework
+		.NET的运行时环境用来支持用户定义类型的流化的机制; 
+		它在此过程中, 先将对象的公共字段和私有字段以及类的名称(包括类所在的程序集)转换为字节流, 然后再把字节流写入数据流; 
+		在随后对对象进行反序列化时, 将创建出与原对象完全相同的副本; 
+
+	QJSON
+		qt 中的QJSON, 可能会支持反射!!(未验证)
+
+
+
+
+
+3.ProtoBuff 常见的应用场景:
+	gRPC
+	DDS
+	SOMEIP
+
+	由于反射功能比较好用, 估计会自动生成代码的框架, 都会涉及到ProtoBuff, 
+	就比如说:
+		gRPC 就是用ProtoBuff, google 左手倒右手, 都是google 的开源项目, 自然互相利用;
+		gRPC 就大量使用了ProtoBuff, 实现很多自动生成代码的操作;
+
+	相信DDS/SOMEIP 的软件框架, 也会有ProtoBuff 类似的东西, 实现c++ 反射;
+	否则DDS/SOMEIP 不可能实现自动生成代码的功能;
