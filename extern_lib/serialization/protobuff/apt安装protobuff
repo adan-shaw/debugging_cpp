@@ -1,0 +1,104 @@
+#
+# 1.默认搜索的资源
+#
+root@eva:/home/adan# apt-cache search protobuf
+libactivemq-protobuf-java - ActiveMQ Protocol Buffers Maven plugin
+libactivemq-protobuf-java-doc - ActiveMQ Protocol Buffers Maven plugin - documentation
+golang-gitaly-proto-dev - Protobuf specifications and client libraries for Gitaly
+golang-github-containerd-typeurl-dev - Go package for managing marshaled types to protobuf.Any
+golang-github-gogo-googleapis-dev - googleapis generated with gogoprotobuf
+golang-github-kubernetes-gengo-dev - Library for generating code based on Go files
+gogoprotobuf - alternative protocol buffer support for Golang - utilities
+golang-github-gogo-protobuf-dev - alternative protocol buffer support for Golang - sources
+golang-gogoprotobuf-dev - transitional package -- safe to remove
+golang-google-genproto-dev - Generated Go packages for common protocol buffer types
+golang-goprotobuf-dev - Protocol buffer support for the Go programming language
+golang-protobuf-extensions-dev - Protocol Buffer extensions for the Go language
+gradle-plugin-protobuf - Protobuf Plugin for Gradle
+protobuf-compiler-grpc - high performance general RPC framework - protobuf plugin
+libghc-protobuf-dev - Google Protocol Buffers for Haskell
+libghc-protobuf-doc - Google Protocol Buffers for Haskell; documentation
+libghc-protobuf-prof - Google Protocol Buffers for Haskell; profiling libraries
+libhawtbuf-java - HawtBuf rich byte buffer library
+libignition-msgs - Set of message definitions used by robotics apps - Shared library
+libignition-msgs-dev - Set of message definitions used by robotics apps - Dev files
+libignition-transport4 - Ignition Robotics Transport Library - Shared library
+libignition-transport4-dev - Ignition Robotics transport Library - Development files
+libarcus-dev - message queue for Cura based on protobuf (development files)
+libarcus3 - message queue for Cura based on protobuf (shared library)
+python3-arcus - message queue for Cura based on protobuf (Python bindings)
+mapnik-vector-tile - Vector tiles integration with mapnik - development files
+libprotobuf-dev - protocol buffers C++ library (development files) and proto files
+libprotobuf-java - Java bindings for protocol buffers
+libprotobuf-lite17 - protocol buffers C++ library (lite version)
+libprotobuf17 - protocol buffers C++ library
+libprotoc-dev - protocol buffers compiler library (development files)
+protobuf-compiler - compiler for protocol buffer definition files
+python-protobuf - Python bindings for protocol buffers
+python3-protobuf - Python 3 bindings for protocol buffers
+ruby-google-protobuf - Protocol Buffers
+libprotobuf-c-dev - Protocol Buffers C static library and headers (protobuf-c)
+libprotobuf-c1 - Protocol Buffers C shared library (protobuf-c)
+protobuf-c-compiler - Protocol Buffers C compiler (protobuf-c)
+libprotobuf-java-format-java - Library to serialize protobuf messages to XML, JSON and HTML
+libprotozero-dev - Minimalistic protocol buffer decoder and encoder in C++
+libprotozero-doc - Minimalistic protocol buffer decoder and encoder in C++ - docs
+python3-grpc-tools - Protobuf code generator for gRPC (Python 3)
+r-cran-rprotobuf - GNU R package providing an interface to the Protocol Buffers API
+ruby-googleapis-common-protos-types - Common protobuf types used in Google APIs
+
+
+
+
+
+#
+# 2.安装protobuff
+#
+
+# c/c++
+protobuf-compiler-grpc - high performance general RPC framework - protobuf plugin
+libghc-protobuf-dev - Google Protocol Buffers for Haskell
+libghc-protobuf-doc - Google Protocol Buffers for Haskell; documentation
+libghc-protobuf-prof - Google Protocol Buffers for Haskell; profiling libraries
+libarcus-dev - message queue for Cura based on protobuf (development files)
+libarcus3 - message queue for Cura based on protobuf (shared library)
+libprotobuf-dev - protocol buffers C++ library (development files) and proto files
+libprotobuf-lite17 - protocol buffers C++ library (lite version)
+libprotobuf17 - protocol buffers C++ library
+libprotoc-dev - protocol buffers compiler library (development files)
+protobuf-compiler - compiler for protocol buffer definition files
+libprotobuf-c-dev - Protocol Buffers C static library and headers (protobuf-c)
+libprotobuf-c1 - Protocol Buffers C shared library (protobuf-c)
+protobuf-c-compiler - Protocol Buffers C compiler (protobuf-c)
+libprotozero-dev - Minimalistic protocol buffer decoder and encoder in C++
+libprotozero-doc - Minimalistic protocol buffer decoder and encoder in C++ - docs
+r-cran-rprotobuf - GNU R package providing an interface to the Protocol Buffers API
+
+# 安装protobuff for c/c++
+apt-get install protobuf-compiler-grpc libghc-protobuf-dev libghc-protobuf-doc libghc-protobuf-prof libarcus-dev libarcus3 libprotobuf-dev libprotobuf-lite17 libprotobuf17 libprotoc-dev protobuf-compiler libprotobuf-c-dev libprotobuf-c1 protobuf-c-compiler libprotozero-dev libprotozero-doc r-cran-rprotobuf 
+
+# python
+python3-arcus - message queue for Cura based on protobuf (Python bindings)
+python-protobuf - Python bindings for protocol buffers
+python3-protobuf - Python 3 bindings for protocol buffers
+python3-grpc-tools - Protobuf code generator for gRPC (Python 3)
+
+# go
+golang-gitaly-proto-dev - Protobuf specifications and client libraries for Gitaly
+golang-github-containerd-typeurl-dev - Go package for managing marshaled types to protobuf.Any
+golang-github-gogo-googleapis-dev - googleapis generated with gogoprotobuf
+golang-github-kubernetes-gengo-dev - Library for generating code based on Go files
+gogoprotobuf - alternative protocol buffer support for Golang - utilities
+golang-github-gogo-protobuf-dev - alternative protocol buffer support for Golang - sources
+golang-gogoprotobuf-dev - transitional package -- safe to remove
+golang-google-genproto-dev - Generated Go packages for common protocol buffer types
+golang-goprotobuf-dev - Protocol buffer support for the Go programming language
+golang-protobuf-extensions-dev - Protocol Buffer extensions for the Go language
+
+# java
+libactivemq-protobuf-java - ActiveMQ Protocol Buffers Maven plugin
+libactivemq-protobuf-java-doc - ActiveMQ Protocol Buffers Maven plugin - documentation
+libhawtbuf-java - HawtBuf rich byte buffer library
+libprotobuf-java - Java bindings for protocol buffers
+libprotobuf-java-format-java - Library to serialize protobuf messages to XML, JSON and HTML
+
