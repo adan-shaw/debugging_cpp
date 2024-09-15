@@ -1,22 +1,29 @@
-//*.proto 语法类似于 C++ 或 Java
-//例1: 在 xxx.proto 文件中定义 protobuf_t1 message
+//*.proto 语法类似于C++ 或Java
+//例1: 在xxx.proto 文件中定义 test::pbuff_msg 的message 结构
 
-syntax = "proto2";
 
-//指明namespace for c/c++, 方便使用时, 调用命名空间, 就可以找到这个message protobuf_t1;
+
+//[libprotobuf WARNING google/protobuf/compiler/parser.cc:562] No syntax specified for the proto file: 
+//test.proto. Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax version. (Defaulted to proto2 syntax.)
+syntax = "proto2";//必须指定使用一种标准的protobuff 语法, 一般选择最新的proto3(ps: 2/3 的语法差异极大, 吐血了)
+//syntax = "proto3";
+
+
+
+//指明namespace for c/c++, 方便使用时, 调用命名空间, 就可以找到这个message: test::pbuff_msg;
 package test;
 
 //注意:
 //	message {} 里面定义的变量名, 大写会在protobuff 转换后, 全部自动转换小写!! 
 //	因此非常不推荐你使用任何一个大写字母来定义变量名!! 尽量使用下划线, 最佳!!
 message pbuff_msg {
-	optional string m_str = 1;
-	optional bytes m_bytes = 2;
 	message em_msg {
 		optional int32 m_int32 = 1;
 		optional string m_str = 2;
 	}
-	optional em_msg emsg = 3;
+	optional string m_str = 1;
+	optional bytes m_bytes = 2;
+	optional em_msg m_emsg = 3;
 	repeated int32 repeated_int32 = 4;
 	repeated string repeated_str = 5;
 }

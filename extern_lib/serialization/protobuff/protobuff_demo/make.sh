@@ -27,7 +27,7 @@ protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/test.proto
 #
 # 编译测试文件
 #
-g++ -std=c++11 ./main.cpp ./test.pb.cc -o x -lprotobuf
+g++ -std=c++11 ./test.pb.cc ./main.cpp -o x -lprotobuf
 
 
 

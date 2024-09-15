@@ -14,11 +14,11 @@ int main(void) {
 	pff_msg.set_m_str("hello,world");
 	pff_msg.set_m_bytes("are you ok?");
 
-	test::pbuff_msg_em_msg *emsg2 = new test::pbuff_msg_em_msg();
+	test::pbuff_msg_em_msg *m_emsg2 = new test::pbuff_msg_em_msg();
 
-	emsg2->set_m_int32(1);
-	emsg2->set_m_str("embeddedInfo");
-	pff_msg.set_allocated_emsg(emsg2);
+	m_emsg2->set_m_int32(1);
+	m_emsg2->set_m_str("embedded_Info");
+	pff_msg.set_allocated_m_emsg(m_emsg2);
 
 	pff_msg.add_repeated_int32(2);
 	pff_msg.add_repeated_int32(3);
@@ -42,6 +42,6 @@ int main(void) {
 		return -1;
 	}
 
-	delete emsg2;
+	delete m_emsg2;
 	return 0;
 }
