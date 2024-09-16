@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package v2proto;
+
+message Message 
+{
+  enum Humour {
+    UNKNOWN = 0;
+    PUNS = 1;
+    SLAPSTICK = 2;
+    BILL_BAILEY = 3;
+  }
+
+  optional string name = 1;
+  optional Humour hilarity = 2;
+  optional uint32 height_in_cm = 3;
+  optional bytes data = 4;
+  optional int64 result_count = 7;
+  optional bool true_scotsman = 8;
+  optional float score = 9;
+
+  repeated uint64 key = 5 [packed = true];
+  //repeated uint64 key = 5;
+}
+
+message MessageArray
+{
+  map<string, Message> msg_map = 1;
+}
+
