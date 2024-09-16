@@ -1,0 +1,57 @@
+protobuff 的*.proto message 定义文件, 可以使用protoc 命令进行编译(protoc.exe), 详情如下:
+
+	protoc 常用的OPTION选项:
+		--cpp_out=OUT_DIR           指定代码生成目录, 生成C++ 代码
+		--csharp_out=OUT_DIR        指定代码生成目录, 生成C# 代码
+		--java_out=OUT_DIR          指定代码生成目录, 生成java 代码
+		--js_out=OUT_DIR            指定代码生成目录, 生成javascript 代码
+		--objc_out=OUT_DIR          指定代码生成目录, 生成Objective C 代码
+		--php_out=OUT_DIR           指定代码生成目录, 生成php 代码
+		--python_out=OUT_DIR        指定代码生成目录, 生成python 代码
+		--ruby_out=OUT_DIR          指定代码生成目录, 生成ruby 代码
+
+		-I=PROTO_SRC_DIR            指定*.proto 文件所在的目录, 用来搜索更多*.proto
+
+		默认参数                     指定本次protoc 所需的唯一xxx.proto 文件, 用作编译;
+
+
+
+
+
+#
+# *.proto 编译demo
+#
+
+#!/bin/sh
+
+#
+# protobuf 编译语法
+#
+
+# $SRC_DIR:  .proto 所在的源目录
+# --cpp_out: 生成c++ 代码
+# $DST_DIR:  生成代码的目标目录
+# xxx.proto: 要针对哪个proto 文件生成接口代码
+
+# format:
+#protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/xxx.proto
+
+
+
+# demo
+#protoc -I=. --cpp_out=. ./test.proto
+
+# better
+SRC_DIR="."
+DST_DIR="."
+protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/test.proto
+
+
+
+#
+# 编译测试文件
+#
+g++ -std=c++11 ./test.pb.cc ./main.cpp -o x -lprotobuf
+
+
+
