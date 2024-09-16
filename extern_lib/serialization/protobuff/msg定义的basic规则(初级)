@@ -1,0 +1,91 @@
+前言:
+	消息(message), 在protobuf中指的就是我们要定义的数据结构; 
+	定义一个*.proto, 实际上大部分都是在定义一个又一个的meesgae, 多个message 组成一个*.proto;
+
+
+
+
+
+下面详解介绍一下*.proto 的语法:
+
+1.语法版本选择(头声明, 不能省)
+	//syntax关键词定义使用的是proto3语法版本, 如果没有指定默认使用的是proto2; 
+	//注意: proto2/3 的版本差异特别大, 有点水火不容, 谨慎选择, 以新版为好;
+	syntax = "proto3";
+	syntax = "proto2";
+
+	//message关键词, 标记开始定义一个消息, 消息体, 用于定义各种字段类型; 
+	message 消息名 {
+		  消息体
+	}
+
+	ps: 
+		protobuf消息定义的语法结构, 跟我们平时接触的各种语言的类定义, 非常相似; 
+		只是protobuf 通常将protobuf消息定义保存在*.proto为后缀的文件中; 
+	例子: 
+		syntax = "proto3";
+		message SearchRequest {
+			string query = 1;
+			int32 page_number = 2;
+			int32 result_per_page = 3;
+		}
+
+
+2.字段类型
+	支持多种数据类型, 例如: string、int32、double、float等等, 下一章节会有详细的讲解; 
+
+
+3.分配标识号(只做标记, 没有任何特殊意义)
+	通过前面的例子, 在消息定义中, 每个字段后面都有一个唯一的数字, 这个就是标识号; 
+	这些标识号是用来在消息的二进制格式中识别各个字段的, 一旦开始使用就不能够再改变, 每个消息内唯一即可, 不同的消息定义可以拥有相同的标识号; 
+	注意: 
+		[1,15]之内的标识号在编码的时候会占用一个字节; 
+		[16,2047]之内的标识号则占用2个字节; 
+		所以应该为那些频繁出现的消息元素保留[1,15]之内的标识号; 
+	切记: 
+		要为将来有可能添加的、频繁出现的字段预留一些标识号; 
+
+	保留标识号(Reserved):
+		如果你想保留一些标识号, 留给以后用, 可以使用下面语法: 
+
+		message Foo {
+			reserved 2, 15, 9 to 11; // 保留2, 15, 9到11这些标识号
+		}
+	如果使用了这些保留的标识号, protocol buffer编译器会输出警告信息; 
+
+
+4.注释
+	往*.proto文件添加注释, 支持C/C++/java风格的双斜杠(//)语法格式; 
+	例子: 
+	// 定义SearchRequest消息
+	message SearchRequest {
+		string query = 1;
+		int32 page_number = 2;// 页码
+		int32 result_per_page = 3;// 分页大小
+	}
+
+
+5.为消息定义'包名', 为消息定义'命名空间名'(java=包名, c++=命名空间名)
+	例子: 
+	package foo.bar;
+	message Open { ... }
+	定义了一个包:
+		foo.bar
+		foo::bar
+
+
+6.选项
+	下面是一些常用的选项(保留关键字, 别占用): 
+		java_package          单独为java定义包名字; 
+		java_outer_classname  独为java定义, protobuf编译器生成的类名; 
+
+
+7.大小写问题
+	message {} 里面定义的变量名, 大写会在protobuff 转换后, 全部自动转换小写!! 
+	因此非常不推荐你使用任何一个大写字母来定义变量名!! 尽量使用下划线, 最佳!!
+
+
+
+
+
+
