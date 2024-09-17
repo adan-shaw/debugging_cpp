@@ -27,7 +27,7 @@ protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/v3_msg.proto
 #
 # 编译测试文件
 #
-g++ -std=c++11 ./v3_msg.pb.cc ./encoder.cpp -o encoder -lprotobuf
-g++ -std=c++11 ./v3_msg.pb.cc ./decoder.cpp -o decoder -lprotobuf
+g++ -std=c++11 ./v3_msg.pb.cc ./encoder.cpp -o encoder -lprotobuf -pthread
+g++ -std=c++11 ./v3_msg.pb.cc ./decoder.cpp -o decoder -lprotobuf -pthread
 
 
