@@ -1,0 +1,35 @@
+1.标准方法
+	bool IsInitialized() const:                确认required字段是否被设置
+	string DebugString() const:                返回消息的可读表示, 用于调试
+	void CopyFrom(const Person& from):         使用给定消息值copy
+	void Clear():                              清除所有元素为空状态
+
+
+
+2.解析与序列化
+	bool SerializeToString(string* output) const:        序列化消息, 将存储字节的以string方式输出; 注意字节是二进制, 而非文本;
+	bool ParseFromString(const string& data):            解析给定的string     
+	bool SerializeToOstream(ostream* output) const:      写消息给定的c++  ostream中
+	bool ParseFromIstream(istream* input):               从给定的c++ istream中解析出消息
+
+
+
+3.常用小技巧
+	*1.一般的get函数的接口跟你的列名一样即get函数fieldnum, 并且返回的是const 类型; 
+		 set函数的接口的是set_fieldnum; 
+	*2.mutable_fieldnum 如果存在则返回存在的, 不存在返回一个空的对象
+	*3.Protobuf 只要fieldnum 不改, 即使该列的类型名更改也不影响兼容, 老代码同样能兼容新pb文件
+
+更改前
+a.proto
+message Iner_a {}
+message b {
+  optional Iner_a field_name;
+}
+
+更改后
+message Iner_b {}
+message b {
+  optional Iner_b field_name;
+}
+
