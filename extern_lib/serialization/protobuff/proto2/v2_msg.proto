@@ -2,8 +2,18 @@ syntax = "proto2";
 
 package v2proto;
 
+/*
+enum Humour {
+  UNKNOWN = 0;
+  PUNS = 1;
+  SLAPSTICK = 2;
+  BILL_BAILEY = 3;
+}
+*/
+
 message Message 
 {
+  //定义在message 里面, 有local 局限性好处, 避免enum 暴露造成访问冲突
   enum Humour {
     UNKNOWN = 0;
     PUNS = 1;

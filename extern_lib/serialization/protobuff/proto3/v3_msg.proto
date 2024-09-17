@@ -2,6 +2,15 @@ syntax = "proto3";
 
 package v3_proto;
 
+/*
+enum Humour {
+  UNKNOWN = 0;
+  PUNS = 1;
+  SLAPSTICK = 2;
+  BILL_BAILEY = 3;
+}
+*/
+
 message Message 
 {
   enum Humour {
