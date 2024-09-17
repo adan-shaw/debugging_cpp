@@ -16,14 +16,14 @@ package test;
 //注意:
 //	message {} 里面定义的变量名, 大写会在protobuff 转换后, 全部自动转换小写!! 
 //	因此非常不推荐你使用任何一个大写字母来定义变量名!! 尽量使用下划线, 最佳!!
-message pbuff_msg {
-	message em_msg {
+message v2msg_demo {
+	message emsg {
 		optional int32 m_int32 = 1;
 		optional string m_str = 2;
 	}
 	optional string m_str = 1;
 	optional bytes m_bytes = 2;
-	optional em_msg m_emsg = 3;
+	optional emsg m_emsg = 3;
 	repeated int32 repeated_int32 = 4;
 	repeated string repeated_str = 5;
 }

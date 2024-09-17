@@ -1,0 +1,39 @@
+proto内存管理机制简介:
+	在C++中, 使用Protocol Buffers(protobuf) 时, 通常情况下并不需要手动释放消息实体指针, protobuf会自动处理内存管理; 
+	当你使用protobuf的ParseFromString或类似的函数来解析消息时, 它会创建一个新的对象, 并且你负责管理这个对象的生命周期; 
+	当这个对象的引用计数降为0时, 它会自动被删除; 
+
+	如果你使用的是protobuf3.6.0或更高版本, 你可以利用google::protobuf::Arena来一次性分配多个protobuf消息, 并且在Arena销毁时它们都会自动被销毁; 
+	这样可以减少内存分配和释放的次数, 进而提高性能; 
+
+	如果你需要手动释放一个消息实体, 你可以使用delete或者delete[](如果是数组)操作符; 
+	但是, 在大多数情况下, 你应该避免直接使用new来创建protobuf消息, 
+	而是使用上述的Arena机制或者依赖protobuf的自动内存管理; 
+
+
+
+以下是使用Arena的一个简单例子: 
+
+
+#include <google/protobuf/arena.h>
+#include <google/protobuf/arenastring.h>
+
+//创建一个Arena
+google::protobuf::Arena arena;
+
+//使用Arena分配消息
+MyMessage* msg = google::protobuf::Arena::CreateMessage<MyMessage>(&arena);
+
+//解析消息
+msg->ParseFromString(serialized_data);
+
+//当不再需要msg时, 可以直接销毁arena, 它会自动释放arena中的所有对象
+//注意: 不需要手动删除msg, 它会在arena销毁时自动释放
+arena.Reset();
+
+
+
+请注意, 在使用Arena的情况下, 不要在消息离开它的作用域之前将它的指针传递到作用域之外, 因为这可能会导致未定义行为; 
+
+如果你需要在消息体内部管理内存, 例如使用protobuf中的Oneof字段, 那么你需要手动管理这部分的内存; 
+在这种情况下, 你应该遵循protobuf的内存管理规则, 并且在删除消息实体之前手动清理每个被分配的资源; 
