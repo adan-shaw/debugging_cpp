@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package v3_proto;
+package v3proto;
 
 /*
 enum Humour {
