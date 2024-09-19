@@ -30,6 +30,19 @@ protobuff 的*.proto message 定义文件, 可以使用protoc 命令进行编译
 
 
 #
+# protoc 工具的原型
+#
+声明:
+	protoc = protoc-c = protoc-gen-c, 实际上都是一个工具!!
+	cd /usr/bin
+	ln -s ./protoc ./protoc-gen-c
+	ln -s ./protoc-c ./protoc-gen-c
+
+
+
+
+
+#
 # *.proto 编译demo
 #
 
