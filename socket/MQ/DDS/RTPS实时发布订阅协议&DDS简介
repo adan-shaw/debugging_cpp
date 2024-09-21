@@ -1,0 +1,33 @@
+# 实时发布订阅协议(RTPS)-DDS互操作网络协议规范
+RTPS = The Real-time Publish-Subscribe Protocol (RTPS) DDS Interoperability Wire Protocol Specification
+
+
+
+# 数据分发服务互操作性网络协议
+DDS = Data-Distribution Service Interoperability Wire Protocol
+
+
+
+名词list:
+	CDR  Common Data Representation            通用数据表示
+	DDS  Data Distribution Service             数据分发服务
+	EDP  Endpoint Discovery Protocol           端点发现协议
+	GUID Globally Unique Indentifier           全球唯一的标识符
+	PDP  Participant Discovery Protocol        参与者发现协议
+	PIM  Platform Independent Model            平台独立模型
+	PSM  Platform Specific Model               平台特定模型
+	RTPS Real-Time Publish-Subscribe           实时发布/订阅
+	SEDP Simple Endpoint Discovery Protocol    简单的端点发现协议
+
+
+
+实际上, 只有DDS 才能叫RTPS, SOMEIP 并不算是RTPS, MQTT 就更加不算了!!
+在ETH 以太网里面, 只有DDS 才是真正的RTPS(实时性高, 并且完全能满足发布/订阅模式);
+
+RTPS 的技术规范是:
+	RTPS专注于满足实时系统中数据分发服务的需求, 包括性能、容错和可扩展性; 
+	它定义了消息格式和使用场景, 支持多播、无连接的UDP/IP通信, 适用于大规模、动态的分布式系统; 
+	此外, RTPS协议允许动态发现和即插即用连接, 确保类型安全和向下兼容性; 
+
+SOMEIP 并不能完全满足以上规范, 所以不能算是真正的RTPS !!
+(MQTT 就更加不可能了, MQTT 是低速场合下的实时发布/订阅, 适用于物联网, 主打节能)
