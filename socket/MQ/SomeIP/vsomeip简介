@@ -71,6 +71,8 @@ vsomeip 官网简介:
 		* vsomeip uses Boost >= 1.55.0:
 		* For the tests Google's test framework https://code.google.com/p/googletest/[gtest] is needed.
 
+	Build Instructions for Android(略, 但官网表明vsomeip 可以在android 上面做交叉编译, 需要了解AOSP)
+
 	从官位英文介绍来看, vsomeip 实际上也是一个可跨平台移植的mq 网络编码库, 跟libzmq 类似, 只是功能更强大;
 	vsomeip 对c++ 的依赖比DDS 要简单, 没有那么复杂;
 	另外:
