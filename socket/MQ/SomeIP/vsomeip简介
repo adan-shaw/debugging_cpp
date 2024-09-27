@@ -53,3 +53,30 @@ tarball 顺序:
 
 
 
+vsomeip 官网简介:
+	* vsomeip 编译后, 哪些库对应哪些功能模块, 也是显而易见的(当然编译时会经常用到) *
+	The vsomeip stack implements the http://some-ip.com/ (Scalable service-Oriented MiddlewarE over IP (SOME/IP)) protocol. 
+	The stack consists out of:
+		* a shared library for SOME/IP (libvsomeip3.so)
+		* a shared library for SOME/IP's configuration module (libvsomeip3-cfg.so)
+		* a shared library for SOME/IP's service discovery (libvsomeip3-sd.so)
+		* a shared library for SOME/IP's E2E protection module (libvsomeip3-e2e.so)
+	Optional:
+		* a shared library for compatibility with vsomeip v2 (libvsomeip.so)
+
+	Build Instructions for Linux
+	Dependencies:
+		* A C++14 enabled compiler is needed (default for gcc >= v6.1).
+		* vsomeip uses CMake as buildsystem.
+		* vsomeip uses Boost >= 1.55.0:
+		* For the tests Google's test framework https://code.google.com/p/googletest/[gtest] is needed.
+
+	从官位英文介绍来看, vsomeip 实际上也是一个可跨平台移植的mq 网络编码库, 跟libzmq 类似, 只是功能更强大;
+	vsomeip 对c++ 的依赖比DDS 要简单, 没有那么复杂;
+	另外:
+		vsomeip 编译后, 哪些库对应哪些功能模块, 也是显而易见的(当然编译时会经常用到);
+
+
+
+
+
