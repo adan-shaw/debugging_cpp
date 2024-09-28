@@ -126,14 +126,14 @@
 // 定义锁
 //
 //<mutex>(类C++11)
-std::mutex m_mtx;
-std::timed_mutex m_mtx_t;
-std::recursive_mutex m_mtx_rec;
-std::recursive_timed_mutex m_mtx_rec_t;
+std::mutex mtx;
+std::timed_mutex mtx_t;
+std::recursive_mutex mtx_rec;
+std::recursive_timed_mutex mtx_rec_t;
 
 //<shared_mutex>
-std::shared_mutex m_mtx_shared;
-std::shared_timed_mutex m_mtx_shared_t;
+std::shared_mutex mtx_shared;
+std::shared_timed_mutex mtx_shared_t;
 
 
 
@@ -144,17 +144,17 @@ void call_once_func(void){
 	// 定义锁包装器
 	//
 	//使用锁包装器, 包装锁策略(锁策略demo 只使用死等锁做测试, 简单)
-	std::lock_guard<std::mutex> m_mtx_lock(m_mtx, std::adopt_lock);
-	std::lock_guard<std::timed_mutex> m_mtx_t_lock(m_mtx_t, std::adopt_lock);
-	std::lock_guard<std::recursive_mutex> m_mtx_rec_lock(m_mtx_rec, std::adopt_lock);
-	std::lock_guard<std::recursive_timed_mutex> m_mtx_rec_t_lock(m_mtx_rec_t, std::adopt_lock);
+	std::lock_guard<std::mutex> lock_mtx(mtx, std::adopt_lock);
+	std::lock_guard<std::timed_mutex> lock_mtx_t(mtx_t, std::adopt_lock);
+	std::lock_guard<std::recursive_mutex> lock_mtx_rec(mtx_rec, std::adopt_lock);
+	std::lock_guard<std::recursive_timed_mutex> lock_mtx_rec_t(mtx_rec_t, std::adopt_lock);
 
 	//共享锁+普通互斥锁策略
-	std::lock_guard<std::shared_mutex> m_mtx_shared_lock(m_mtx_shared, std::adopt_lock);
-	std::lock_guard<std::shared_timed_mutex> m_mtx_shared_t_lock(m_mtx_shared_t, std::adopt_lock);
+	std::lock_guard<std::shared_mutex> lock_mtx_shared(mtx_shared, std::adopt_lock);
+	std::lock_guard<std::shared_timed_mutex> lock_mtx_shared_t(mtx_shared_t, std::adopt_lock);
 	//共享锁+专用共享锁策略
-	std::shared_lock<std::shared_mutex> m_mtx_shared_lock2(m_mtx_shared, std::adopt_lock);
-	std::shared_lock<std::shared_timed_mutex> m_mtx_shared_t_lock2(m_mtx_shared_t, std::adopt_lock);
+	std::shared_lock<std::shared_mutex> lock_mtx_shared2(mtx_shared, std::adopt_lock);
+	std::shared_lock<std::shared_timed_mutex> lock_mtx_shared_t2(mtx_shared_t, std::adopt_lock);
 
 	std::chrono::high_resolution_clock::time_point now;
 	int tmp = 9999;
@@ -165,27 +165,27 @@ void call_once_func(void){
 
 	//c++ 标准库的锁, 不需要init() 初始化锁, 类构造函数会自动完成init()
 
-	m_mtx.lock();																//简单死等互斥锁(使用: std::mutex)
-	m_mtx.unlock();
+	mtx.lock();																//简单死等互斥锁(使用: std::mutex)
+	mtx.unlock();
 
-	if(m_mtx.try_lock()){												//简单询问性非阻塞互斥锁(使用: std::mutex)
+	if(mtx.try_lock()){												//简单询问性非阻塞互斥锁(使用: std::mutex)
 		printf("try_lock() ok\n");
-		m_mtx.unlock();
+		mtx.unlock();
 	}
 	else
 		printf("cant try_lock()\n");
 
-	if(m_mtx_t.try_lock_for(std::chrono::milliseconds(1000))){
+	if(mtx_t.try_lock_for(std::chrono::milliseconds(1000))){
 		printf("try_lock_for() ok\n");						//简单低精度超时死等互斥锁(使用: std::timed_mutex)
-		m_mtx_t.unlock();
+		mtx_t.unlock();
 	}
 	else
 		printf("cant try_lock_for()\n");
 
 	now = std::chrono::high_resolution_clock::now();
-	if(m_mtx_t.try_lock_until(now + std::chrono::milliseconds(10))){
+	if(mtx_t.try_lock_until(now + std::chrono::milliseconds(10))){
 		printf("try_lock_until() ok\n");					//简单高精度超时死等互斥锁(使用: std::timed_mutex) -- 少用
-		m_mtx_t.unlock();
+		mtx_t.unlock();
 	}
 	else
 		printf("cant try_lock_until()\n");

@@ -26,29 +26,29 @@
 
 atomic_int sum;
 
-mtx_t m_mtx;
+mtx_t mtx;
 
-cnd_t m_cnd;
+cnd_t cnd;
 
 
 
 int thrd_func_cnd(void* parg){
 	struct timespec tt;
 	int tmp = 9999;
-	atomic_exchange(&sum, (int)parg);										//赋值(原子操作)
+	atomic_exchange(&sum, (int)parg);									//赋值(原子操作)
 	for(;tmp > 0;tmp--){
 		atomic_fetch_add(&sum,1);
 		printf("thrd_func_cnd: sum = %d\n", (int)sum);
 	}
 
-	if(cnd_wait(&m_mtx,&m_cnd) != thrd_success){				//阻塞, 死等条件变量
+	if(cnd_wait(&mtx,&cnd) != thrd_success){					//阻塞, 死等条件变量
 		perror("cnd_wait()");
 		return -1;
 	}
 
-	tt.tv_sec = 1;																			//秒
-	tt.tv_nsec = 0;																			//纳秒[1s=1000ms(毫秒)=1000*1000us(微妙)=1000*1000*1000ns(纳秒)]
-	if(cnd_timedwait(&m_mtx,&m_cnd,&tt) == thrd_error){	//阻塞等待条件变量, 超时1 秒
+	tt.tv_sec = 1;																		//秒
+	tt.tv_nsec = 0;																		//纳秒[1s=1000ms(毫秒)=1000*1000us(微妙)=1000*1000*1000ns(纳秒)]
+	if(cnd_timedwait(&mtx,&cnd,&tt) == thrd_error){		//阻塞等待条件变量, 超时1 秒
 		perror("cnd_timedwait()");
 		return -1;
 	}
@@ -64,12 +64,12 @@ void thrd_cnd_test(void){
 	int thrd_stat;
 
 
-	if(mtx_init(&m_mtx, mtx_plain) != thrd_success){		//初始化互斥锁
+	if(mtx_init(&mtx, mtx_plain) != thrd_success){		//初始化互斥锁
 		perror("mtx_init()");
 		return;
 	}
 
-	if(cnd_init(&m_cnd) != thrd_success){								//初始化条件变量
+	if(cnd_init(&cnd) != thrd_success){								//初始化条件变量
 		perror("cnd_init()");
 		return;
 	}
@@ -81,12 +81,12 @@ void thrd_cnd_test(void){
 	}
 
 
-	if(cnd_signal(&m_cnd) != thrd_success){							//唤醒一个等待条件变量的线程
+	if(cnd_signal(&cnd) != thrd_success){							//唤醒一个等待条件变量的线程
 		perror("cnd_signal()");
 		return;
 	}
 
-	if(cnd_broadcast(&m_cnd) != thrd_success){					//唤醒所有等待条件变量的线程
+	if(cnd_broadcast(&cnd) != thrd_success){					//唤醒所有等待条件变量的线程
 		perror("cnd_broadcast()");
 		return;
 	}
@@ -99,8 +99,8 @@ void thrd_cnd_test(void){
 	printf("thrd_join(): thrd_stat=%d\n", thrd_stat);
 
 
-	cnd_destroy(&m_cnd);																//销毁条件变量
-	mtx_destroy(&m_mtx);																//销毁互斥锁
+	cnd_destroy(&cnd);																//销毁条件变量
+	mtx_destroy(&mtx);																//销毁互斥锁
 	return;
 }
 

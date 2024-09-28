@@ -47,8 +47,8 @@
 // 定义锁(条件变量需要最普通的互斥锁即可, 不用太复杂的)
 //
 //<mutex>(类C++11)
-std::mutex m_mtx;
-//std::timed_mutex m_mtx_t;
+std::mutex mtx;
+//std::timed_mutex mtx_t;
 
 std::condition_variable cnd;
 bool ready = false;
@@ -61,8 +61,8 @@ void call_once_func(void){
 	// 定义锁包装器
 	//
 	//使用锁包装器, 包装锁策略, 条件变量默认必须指定为: 互斥锁 + unique_lock 锁包装器(锁策略demo 只使用死等锁做测试, 简单)
-	std::unique_lock<std::mutex> m_mtx_lock(m_mtx, std::adopt_lock);
-	//std::unique_lock<std::timed_mutex> m_mtx_t_lock(m_mtx_t, std::adopt_lock);
+	std::unique_lock<std::mutex> lock_mtx(mtx, std::adopt_lock);
+	//std::unique_lock<std::timed_mutex> lock_mtx_t(mtx_t, std::adopt_lock);
 
 	std::chrono::high_resolution_clock::time_point now;
 	int tmp = 9999;
@@ -75,17 +75,17 @@ void call_once_func(void){
 
 	//c++ 条件变量, 不需要init(), 类构造函数会自动完成init()
 
-	cnd.wait(m_mtx_lock, []{return ready;});					//死等ready = true(调用格式不能更改, c++风格)
+	cnd.wait(lock_mtx, []{return ready;});						//死等ready = true(调用格式不能更改, c++风格)
 	printf("cnd.wait() okay, ready=%d\n",ready);
 
-	cnd.wait_for(m_mtx_lock, std::chrono::milliseconds(1000), []{return ready;});
+	cnd.wait_for(lock_mtx, std::chrono::milliseconds(1000), []{return ready;});
 	printf("cnd.wait_for() okay, ready=%d\n",ready);	//死等ready = true, 超时1s
 
-	cnd.wait_for(m_mtx_lock, std::chrono::milliseconds(1000), []{return ready;});
+	cnd.wait_for(lock_mtx, std::chrono::milliseconds(1000), []{return ready;});
 	printf("cnd.wait_for() okay, ready=%d\n",ready);	//死等ready = true, 超时1s(低精度)
 
 	now = std::chrono::high_resolution_clock::now();
-	cnd.wait_until(m_mtx_lock, now + std::chrono::milliseconds(10), []{return ready;});
+	cnd.wait_until(lock_mtx, now + std::chrono::milliseconds(10), []{return ready;});
 	printf("cnd.wait_until() okay, ready=%d\n",ready);//死等ready = true, 超时1s(高精度)
 
 	//c++ 条件变量, 不需要destory(), 类析构函数会自动完成destory()

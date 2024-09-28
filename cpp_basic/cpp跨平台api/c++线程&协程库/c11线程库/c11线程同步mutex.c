@@ -26,30 +26,30 @@
 
 atomic_int sum;
 
-mtx_t m_mtx;
+mtx_t mtx;
 
 
 
 int thrd_func_mutex(void* parg){
 	struct timespec tt;
 	int tmp = 9999;
-	atomic_exchange(&sum, (int)parg);								//赋值(原子操作)
+	atomic_exchange(&sum, (int)parg);							//赋值(原子操作)
 	for(;tmp > 0;tmp--){
 		atomic_fetch_add(&sum,1);
 		printf("thrd_func_mutex: sum = %d\n", (int)sum);
 	}
 
-	if(mtx_lock(&m_mtx) != thrd_success){						//阻塞, 死等锁
+	if(mtx_lock(&mtx) != thrd_success){						//阻塞, 死等锁
 		perror("mtx_lock()");
 		return -1;
 	}
 
-	if(mtx_unlock(&m_mtx) != thrd_success){					//解锁
+	if(mtx_unlock(&mtx) != thrd_success){					//解锁
 		perror("mtx_unlock()");
 		return -1;
 	}
 
-	tmp = mtx_trylock(&m_mtx);											//非阻塞, 尝试获取锁
+	tmp = mtx_trylock(&mtx);											//非阻塞, 尝试获取锁
 	if(tmp == thrd_error){
 		perror("mtx_trylock()");
 		return -1;
@@ -57,16 +57,16 @@ int thrd_func_mutex(void* parg){
 	if(tmp == thrd_busy)
 		printf("mtx_trylock(): thrd_busy\n");
 	else
-		mtx_unlock(&m_mtx);														//解锁
+		mtx_unlock(&mtx);														//解锁
 
-	tt.tv_sec = 1;																	//秒
-	tt.tv_nsec = 0;																	//纳秒[1s=1000ms(毫秒)=1000*1000us(微妙)=1000*1000*1000ns(纳秒)]
-	if(mtx_timedlock(&m_mtx,&tt) == thrd_error){		//阻塞等待锁, 超时1 秒
+	tt.tv_sec = 1;																//秒
+	tt.tv_nsec = 0;																//纳秒[1s=1000ms(毫秒)=1000*1000us(微妙)=1000*1000*1000ns(纳秒)]
+	if(mtx_timedlock(&mtx,&tt) == thrd_error){		//阻塞等待锁, 超时1 秒
 		perror("mtx_timedlock()");
 		return -1;
 	}
 
-	mtx_unlock(&m_mtx);															//解锁
+	mtx_unlock(&mtx);															//解锁
 
 	return 6666;
 }
@@ -83,7 +83,7 @@ void thrd_mutex_test(void){
 	thrd_t t1;
 	int thrd_stat;
 
-	if(mtx_init(&m_mtx, mtx_plain) != thrd_success){//初始化互斥锁
+	if(mtx_init(&mtx, mtx_plain) != thrd_success){//初始化互斥锁
 		perror("mtx_init()");
 		return;
 	}
@@ -99,7 +99,7 @@ void thrd_mutex_test(void){
 	}
 	printf("thrd_join(): thrd_stat=%d\n", thrd_stat);
 
-	mtx_destroy(&m_mtx);														//销毁互斥锁
+	mtx_destroy(&mtx);														//销毁互斥锁
 	return;
 }
 
