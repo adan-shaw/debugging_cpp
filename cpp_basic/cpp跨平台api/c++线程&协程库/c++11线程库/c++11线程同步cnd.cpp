@@ -60,7 +60,7 @@ void call_once_func(void){
 	//
 	// 定义锁包装器
 	//
-	//使用锁包装器, 包装锁策略, 条件变量默认必须指定为: 互斥锁 + unique_lock 锁包装器(锁策略demo 只使用死等锁做测试, 简单)
+	//使用'锁包装器+包装锁策略', 条件变量默认必须指定为: 互斥锁 + unique_lock 锁包装器(ps: 锁策略demo 只是使用死等锁做测试, 图的就是简单)
 	std::unique_lock<std::mutex> lock_mtx(mtx, std::adopt_lock);
 	//std::unique_lock<std::timed_mutex> lock_mtx_t(mtx_t, std::adopt_lock);
 

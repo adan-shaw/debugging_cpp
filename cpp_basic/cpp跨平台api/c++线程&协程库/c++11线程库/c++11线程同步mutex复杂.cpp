@@ -1,6 +1,10 @@
 //编译:
-//		g++ -g3 -std=c++2a -pthread ./c++11线程同步mutex.cpp -o x
-//		cl.exe ./c++11线程同步mutex.cpp -EHsc -w -Zi -Ox -link -out:x.exe
+//		g++ -g3 -std=c++2a -pthread ./c++11线程同步mutex复杂.cpp -o x
+//		cl.exe ./c++11线程同步mutex复杂.cpp -EHsc -w -Zi -Ox -link -out:x.exe
+
+
+
+//本demo 将详解介绍c++11 线程同步所需的mutex, 包括'锁包装器+包装锁策略'
 
 
 
@@ -165,10 +169,10 @@ void call_once_func(void){
 
 	//c++ 标准库的锁, 不需要init() 初始化锁, 类构造函数会自动完成init()
 
-	mtx.lock();																//简单死等互斥锁(使用: std::mutex)
+	mtx.lock();																	//简单死等互斥锁(使用: std::mutex)
 	mtx.unlock();
 
-	if(mtx.try_lock()){												//简单询问性非阻塞互斥锁(使用: std::mutex)
+	if(mtx.try_lock()){													//简单询问性非阻塞互斥锁(使用: std::mutex)
 		printf("try_lock() ok\n");
 		mtx.unlock();
 	}
