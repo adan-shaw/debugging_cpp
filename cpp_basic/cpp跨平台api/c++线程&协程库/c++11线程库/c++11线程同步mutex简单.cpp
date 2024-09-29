@@ -4,7 +4,7 @@
 
 
 
-//本demo 简介: 把c++ 线程库的mutex, 当成c11 线程库的mutex一样使用, 不考虑'锁包装器+包装锁策略'(怎么简单怎么用)
+//本demo 简介: 把c++ 线程库的mutex, 当成c11 线程库的mutex一样使用, 不考虑'锁包装器+包装锁策略'(手动加锁/解锁, 怎么简单怎么用)
 
 
 
@@ -59,7 +59,7 @@ void call_once_func(void){
 		printf("call_once_func: call_once_sum = %d\n", (int)call_once_sum);
 	}
 
-	//c++ 标准库的锁, 不需要init() 初始化锁, 类构造函数会自动完成init()
+	//c++ 标准库的锁, 不需要init() 初始化锁, 锁包装器的类构造函数会自动完成init()
 
 	mtx.lock();																	//简单死等互斥锁(使用: std::mutex)
 	mtx.unlock();
@@ -86,7 +86,7 @@ void call_once_func(void){
 	else
 		printf("cant try_lock_until()\n");
 
-	//c++ 标准库的锁, 不需要destory() 销毁锁, 类析构函数会自动完成destory()
+	//c++ 标准库的锁, 不需要destory() 销毁锁, 锁包装器的类析构函数会自动完成destory()
 
 	return;
 }

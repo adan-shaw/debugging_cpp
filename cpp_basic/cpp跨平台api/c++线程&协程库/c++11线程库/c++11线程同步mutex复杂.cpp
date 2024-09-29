@@ -4,7 +4,7 @@
 
 
 
-//本demo 将详解介绍c++11 线程同步所需的mutex, 包括'锁包装器+包装锁策略'
+//本demo 将详解介绍c++11 线程同步所需的mutex, 包括'锁包装器+包装锁策略'(局部变量, 自动加锁/解锁)
 
 
 
@@ -53,16 +53,22 @@
 	锁包装器(锁策略包装器: 使用锁包装器, 即默认使用自动解锁):
 		c++ 标准锁, 默认是没有锁策略, 也没有包装器的, 非常接近于posix mutex 锁, 需要自己上锁, 自己解锁;
 		使用锁包装器类模板, 进行二次包装, 可以做到:
-				只需加锁即可, 解锁会自动解锁, 跟智能指针一样;
+			只需加锁即可, 解锁会自动解锁, 跟智能指针一样;
+
 		具体锁包装器如下(智能解锁):
-		lock_guard								实现严格基于作用域的互斥体所有权包装器(C++11)
-		scoped_lock								用于多个互斥体的免死锁RAII 封装器(C++17)
-		unique_lock								实现可移动的互斥体所有权包装器, 条件变量专用(C++11)
-		shared_lock								实现可移动的共享互斥体所有权封装器, <shared_mutex>系列专用(C++14)
+			lock_guard							实现严格基于作用域的互斥体所有权包装器(C++11)
+			scoped_lock							用于多个互斥体的免死锁RAII 封装器(C++17)
+			unique_lock							实现可移动的互斥体所有权包装器, 条件变量专用(C++11)
+			shared_lock							实现可移动的共享互斥体所有权封装器, <shared_mutex>系列专用(C++14)
+
 		使用时(注意):
-			锁包装器, 是不能多线程共享, 而是每个线程必须独享一个包装器类!!
-			锁倒是可以多线程共享, 锁也必须是多线程共享, 才能正常工作的;
-			但锁包装器是不能多线程共享的, 详情请看: c++11线程同步cnd.cpp
+			锁包装器, 是不能多线程共享(否则容易多线程同步时, 出现死锁), 而应该是每个线程必须独享一个包装器类!!
+			锁倒是可以多线程共享(锁也必须是多线程共享, 才能正常工作的);
+
+			不同的锁包装器, 有不同的用法, 例如:
+				* std::unique_lock 是一个灵活但稍复杂的锁管理器, 它允许更多的锁操作, 如延迟锁定、解锁和重新锁定;
+				* std::lock_guard  是一个简单的、轻量级的锁管理器, 它在构造时获取锁, 在析构时释放锁(其主要特点是不能显式地解锁或重新锁定);
+				* std::shared_lock 是一个侧重读时共享, 写时独占的锁管理器, 比较类似c 语言中的读写锁;
 
 
 	锁策略(通用C++11)
@@ -85,7 +91,7 @@
 
 //c++ 互斥锁库本质探讨
 /*
-	本质上, c++ 互斥锁库都是逻辑锁?
+	本质上, c++ 互斥锁库都是逻辑锁? 
 	即c++ 互斥锁库是不会切换线程的, 跟CAS 逻辑锁/自旋锁一样, 死等, cpu 消耗巨大?
 
 	还是c++ 互斥锁库是会切换线程的, 跟posix mutex 一样, 一旦陷入资源抢夺, 就会挂起线程, 节约cpu 开销?
@@ -110,91 +116,58 @@
 	所以, 原则上, 应该自己裁减临界区内的资源, 尽量做到一把锁解决问题;
 	如果实在是业务逼得你没办法, 你可以采取两把锁的加锁方式, 一把快锁, 一把慢锁的方式(尽量少干这种事, 非常烧脑)
 
-	c++ 标准编码手册上面有2 把锁的加锁demo 和策略, 实在迫不得已, 你可以这么干, 但实在是不推荐你这么做;
+	c++ 标准编码手册上面有两把锁的加锁demo 和策略, 实在迫不得已, 你可以这么干, 但实在是不推荐你这么做;
 */
 
 
 
-//关于使用智能解锁, 还是手动解锁
+//关于使用智能解锁(隐晦加锁解锁规则), 还是手动解锁
 /*
 	实际上还是看业务需求, 如果加锁场景比较复杂, 解锁场景比较复杂, 自动解锁有优势;
-	尤其是多把锁的情况下, 只管理加锁即可, 解锁让它自己解锁, 这是智能解锁的好处, c++ 的好处;
-	普通一把锁, 自己加锁, 解锁, 其实语义上更明确;
+	(ps: 自动加锁一般都是以函数为主体进行加锁, 局部类实体变量, 在函数入栈时自动构造加锁, 在函数返回时, 自动析构释放锁)
 
-	使用锁包装器, 即默认使用自动解锁, 复杂-多把锁业务, 推荐使用;
+	尤其是多把锁的情况下, 智能加锁, 解锁可以节省代码, 减少维护成本, 这也是c++ 的好处;
+	(ps: 但普通的锁, 自己加锁, 解锁, 其实语义上更明确, 隐晦语义用多了, 维护时考研技术员的水平)
+
+	c++ 的锁包装器:
+		* std::unique_lock
+		* std::lock_guard
+		* std::shared_lock
+	都会:
+		'锁包装器'的类构造函数会自动完成init(), 不需要init() 初始化锁;
+		'锁包装器'的类析构函数会自动完成destory(), 不需要destory() 销毁锁;
 */
 
 
 
 //
-// 定义锁
-//
 //<mutex>(类C++11)
+//
 std::mutex mtx;
 std::timed_mutex mtx_t;
 std::recursive_mutex mtx_rec;
 std::recursive_timed_mutex mtx_rec_t;
 
-//<shared_mutex>
-std::shared_mutex mtx_shared;
-std::shared_timed_mutex mtx_shared_t;
-
-
-
 std::atomic<int> call_once_sum;
 
 void call_once_func(void){
 	//
-	// 定义锁包装器
+	// 定义'锁包装器+包装锁策略'(锁策略demo 只使用死等锁做测试, 简单)
 	//
-	//使用锁包装器, 包装锁策略(锁策略demo 只使用死等锁做测试, 简单)
-	std::lock_guard<std::mutex> lock_mtx(mtx, std::adopt_lock);
-	std::lock_guard<std::timed_mutex> lock_mtx_t(mtx_t, std::adopt_lock);
-	std::lock_guard<std::recursive_mutex> lock_mtx_rec(mtx_rec, std::adopt_lock);
-	std::lock_guard<std::recursive_timed_mutex> lock_mtx_rec_t(mtx_rec_t, std::adopt_lock);
-
-	//共享锁+普通互斥锁策略
-	std::lock_guard<std::shared_mutex> lock_mtx_shared(mtx_shared, std::adopt_lock);
-	std::lock_guard<std::shared_timed_mutex> lock_mtx_shared_t(mtx_shared_t, std::adopt_lock);
-	//共享锁+专用共享锁策略
-	std::shared_lock<std::shared_mutex> lock_mtx_shared2(mtx_shared, std::adopt_lock);
-	std::shared_lock<std::shared_timed_mutex> lock_mtx_shared_t2(mtx_shared_t, std::adopt_lock);
+	//c++ 标准库的锁, 不需要init() 初始化锁, '锁包装器'的类构造函数会自动完成init()
+	std::lock_guard<std::mutex> auto_lock_guard_mtx(mtx, std::adopt_lock);
+	std::lock_guard<std::timed_mutex> auto_lock_guard_mtx_t(mtx_t, std::adopt_lock);
+	std::lock_guard<std::recursive_mutex> auto_lock_guard_mtx_rec(mtx_rec, std::adopt_lock);
+	std::lock_guard<std::recursive_timed_mutex> auto_lock_guard_mtx_rec_t(mtx_rec_t, std::adopt_lock);
 
 	std::chrono::high_resolution_clock::time_point now;
 	int tmp = 9999;
 	for(;tmp > 0;tmp--){
-		std::atomic_fetch_add(&call_once_sum,1);	//标准的多线程竞争加法运算
+		std::atomic_fetch_add(&call_once_sum,1);//标准的多线程竞争加法运算
 		printf("call_once_func: call_once_sum = %d\n", (int)call_once_sum);
 	}
 
-	//c++ 标准库的锁, 不需要init() 初始化锁, 类构造函数会自动完成init()
-
-	mtx.lock();																	//简单死等互斥锁(使用: std::mutex)
-	mtx.unlock();
-
-	if(mtx.try_lock()){													//简单询问性非阻塞互斥锁(使用: std::mutex)
-		printf("try_lock() ok\n");
-		mtx.unlock();
-	}
-	else
-		printf("cant try_lock()\n");
-
-	if(mtx_t.try_lock_for(std::chrono::milliseconds(1000))){
-		printf("try_lock_for() ok\n");						//简单低精度超时死等互斥锁(使用: std::timed_mutex)
-		mtx_t.unlock();
-	}
-	else
-		printf("cant try_lock_for()\n");
-
-	now = std::chrono::high_resolution_clock::now();
-	if(mtx_t.try_lock_until(now + std::chrono::milliseconds(10))){
-		printf("try_lock_until() ok\n");					//简单高精度超时死等互斥锁(使用: std::timed_mutex) -- 少用
-		mtx_t.unlock();
-	}
-	else
-		printf("cant try_lock_until()\n");
-
-	//c++ 标准库的锁, 不需要destory() 销毁锁, 类析构函数会自动完成destory()
+	//c++ 标准库的锁, 不需要destory() 销毁锁, '锁包装器'的类析构函数会自动完成destory()
 
 	return;
 }
@@ -216,8 +189,50 @@ void mutex_test(void){
 }
 
 
+
+//
+//<shared_mutex>(类C++14)
+//
+std::shared_mutex mtx_shared;
+std::shared_timed_mutex mtx_shared_t;
+
+//<shared_mutex>读共享锁, 使用shared_lock
+int get(void) {
+	std::shared_lock<std::shared_mutex> auto_shared_lock_shared_mtx(mtx_shared);
+	return call_once_sum;
+}
+
+//<shared_mutex>写独占锁, 使用unique_lock
+int set(void) {
+	std::unique_lock<std::shared_mutex> auto_unique_lock_shared_mtx(mtx_shared);
+	call_once_sum++;
+	return call_once_sum;
+}
+
+//<shared_mutex> 的混合锁包装器
+void shared_test(void){
+	//lock_guard+共享锁
+	std::lock_guard<std::shared_mutex> auto_lock_guard_shared_mtx(mtx_shared, std::adopt_lock);
+	std::lock_guard<std::shared_timed_mutex> auto_lock_guard_shared_t_mtx(mtx_shared_t, std::adopt_lock);
+
+	//shared_lock+共享锁
+	std::shared_lock<std::shared_mutex> auto_shared_lock_shared_mtx(mtx_shared, std::adopt_lock);
+	std::shared_lock<std::shared_timed_mutex> auto_shared_lock_shared_t_mtx(mtx_shared_t, std::adopt_lock);
+	return;
+}
+
+void shared_mutex_test(void){
+	get();
+	set();
+	shared_test();
+	return;
+}
+
+
+
 int main(void){
 	mutex_test();
+	shared_mutex_test();
 	return 0;
 }
 

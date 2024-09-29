@@ -57,13 +57,6 @@ bool ready = false;
 std::atomic<int> call_once_sum;
 
 void call_once_func(void){
-	//
-	// 定义锁包装器
-	//
-	//使用'锁包装器+包装锁策略', 条件变量默认必须指定为: 互斥锁 + unique_lock 锁包装器(ps: 锁策略demo 只是使用死等锁做测试, 图的就是简单)
-	std::unique_lock<std::mutex> lock_mtx(mtx, std::adopt_lock);
-	//std::unique_lock<std::timed_mutex> lock_mtx_t(mtx_t, std::adopt_lock);
-
 	std::chrono::high_resolution_clock::time_point now;
 	int tmp = 9999;
 	for(;tmp > 0;tmp--){
@@ -71,9 +64,16 @@ void call_once_func(void){
 		//printf("call_once_func: call_once_sum = %d\n", (int)call_once_sum);
 	}
 
-	//c++ 标准库的锁, 不需要init() 初始化锁, 类构造函数会自动完成init()
+	//
+	// 定义锁包装器
+	//
+	//使用'锁包装器+包装锁策略', 条件变量默认必须指定为: 互斥锁 + unique_lock 锁包装器(ps: 锁策略demo 只是使用死等锁做测试, 图的就是简单)
+	std::unique_lock<std::mutex> lock_mtx(mtx, std::adopt_lock);
+	//std::unique_lock<std::timed_mutex> lock_mtx_t(mtx_t, std::adopt_lock);
 
-	//c++ 条件变量, 不需要init(), 类构造函数会自动完成init()
+	//c++ 标准库的锁, 不需要init() 初始化锁, 锁包装器的类构造函数会自动完成init()
+
+	//c++ 条件变量, 不需要init(), cond的类构造函数会自动完成init()
 
 	cnd.wait(lock_mtx, []{return ready;});						//死等ready = true(调用格式不能更改, c++风格)
 	printf("cnd.wait() okay, ready=%d\n",ready);
@@ -88,9 +88,9 @@ void call_once_func(void){
 	cnd.wait_until(lock_mtx, now + std::chrono::milliseconds(10), []{return ready;});
 	printf("cnd.wait_until() okay, ready=%d\n",ready);//死等ready = true, 超时1s(高精度)
 
-	//c++ 条件变量, 不需要destory(), 类析构函数会自动完成destory()
+	//c++ 条件变量, 不需要destory(), cond的类析构函数会自动完成destory()
 
-	//c++ 标准库的锁, 不需要destory() 销毁锁, 类析构函数会自动完成destory()
+	//c++ 标准库的锁, 不需要destory() 销毁锁, 锁包装器的类析构函数会自动完成destory()
 
 	return;
 }
