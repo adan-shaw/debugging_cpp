@@ -11,30 +11,36 @@
 #include "boost.pth_pool.h"
 
 
-static const size_t CONCURRENCY = 16;
+
+static const size_t CONCURRENCY = 8;//任务数量尽量比线程数量多
 
 
 
 int main (void)
 {
-	std::cout << "Benchmark job reposting of ***asio thread pool***" << std::endl;
+	std::cout << "***boost::asio io_service 调度器 + std::thread = pth_pool***\n" << "Benchmark job reposting of " << std::endl;
 
-	size_t workers_count = std::thread::hardware_concurrency ();//获取硬件的cpu 个数
+	//获取硬件的cpu 个数
+	size_t workers_count = std::thread::hardware_concurrency ();
 	if (0 == workers_count)
 	{
 		workers_count = 1;
 	}
 
-	asioPthPool asio_thread_pool (workers_count);
+	//初始化线城池的max 数量(固定线城池, 减少线程切换) [workers_count != CONCURRENCY]
+	pthPool asio_thread_pool (workers_count);
 
-	std::promise < void >waiters[CONCURRENCY];
+	//初始化pth 任务数量(产生一定的线程抢占, 访问冲突, 最终由io_service 调度器解决访问冲突问题)
+	std::promise<void> waiters[CONCURRENCY];
 
-	for (auto & waiter:waiters)
+	//逐个任务启动
+	for (std::promise<void> & waiter:waiters)
 	{
 		asio_thread_pool.post (RepostJob (&asio_thread_pool, &waiter));
 	}
 
-	for (auto & waiter:waiters)
+	//逐个等待任务结束
+	for (std::promise<void> & waiter:waiters)
 	{
 		waiter.get_future ().wait ();
 	}

@@ -6,13 +6,18 @@
 
 #include <boost/asio.hpp>
 
+//本boost.pth_pool 主要是利用boost::asio::io_service 调度器 + std::thread 标准线程来实现线城池demo;
+//要阅读本demo 代码, 首先要会用boost::asio::io_service 调度器, 还有std::thread 库
 
-
-class asioPthPool
+class pthPool
 {
 public:
-	inline asioPthPool (size_t pth_pool_max);
-	inline ~ asioPthPool ()
+	//初始化线城池的数量(也是线城池的最大值)
+	inline pthPool (size_t pth_pool_max) : pth_pool (pth_pool_max)
+	{
+		start ();
+	}
+	inline ~ pthPool ()
 	{
 		stop ();
 	}
@@ -21,7 +26,7 @@ public:
 
 	template < typename Handler > inline void post (Handler && handler)
 	{
-		asio_io_service.post (handler);
+		m_io_service.post (handler);
 	}
 
 private:
@@ -29,33 +34,29 @@ private:
 	inline void stop ();
 	inline void pth_func_worker ();//设置线程池执行的线程函数
 
-	boost::asio::io_service asio_io_service;
-	std::unique_ptr < boost::asio::io_service::work > asio_io_service_work;
+	boost::asio::io_service m_io_service;
+	std::unique_ptr < boost::asio::io_service::work > m_io_service_work;
 
 	std::vector < std::thread > pth_pool;
 };
 
-inline asioPthPool::asioPthPool (size_t pth_pool_max):pth_pool (pth_pool_max)
-{
-	start ();
-}
 
-inline void asioPthPool::start ()
+
+inline void pthPool::start ()
 {
-	asio_io_service_work.reset (new boost::asio::io_service::work (asio_io_service));
+	m_io_service_work.reset (new boost::asio::io_service::work (m_io_service));
 
 	//从线程池中取出每个std::thread, 逐个启动
 	for (std::thread & pth_tmp:pth_pool)
 	{
-		pth_tmp = std::thread (&asioPthPool::pth_func_worker, this);
+		pth_tmp = std::thread (&pthPool::pth_func_worker, this);
 	}
-
 }
 
-inline void asioPthPool::stop ()
+inline void pthPool::stop ()
 {
-	asio_io_service_work.reset ();
-	asio_io_service.stop ();
+	m_io_service_work.reset ();
+	m_io_service.stop ();
 
 	//从线程池中取出每个std::thread, 逐个停止(阻塞等待)
 	for (std::thread & pth_tmp:pth_pool)
@@ -67,100 +68,40 @@ inline void asioPthPool::stop ()
 	}
 }
 
-inline void asioPthPool::joinPthPool ()
+inline void pthPool::joinPthPool ()
 {
-	asio_io_service.run ();
+	m_io_service.run ();
 }
 
-inline void asioPthPool::pth_func_worker ()
+inline void pthPool::pth_func_worker ()
 {
 	joinPthPool ();
 }
 
 
 
-//Heavy info 统计结构体(带debugging 函数, 实现变量+代码的自我管理, c 语言的struct 竟然可以被用到这个份上, 重新捏造一个c 语言类)
-struct Heavy
-{
-	bool verbose;
-	std::vector < char >resource;
+// 每个任务要执行的指令个数count (数量越大, 任务阻塞的时间越长)
+#define REPOST_COUNT (100000)
 
-	//伪构造函数
-	Heavy (bool verbose = false):verbose (verbose), resource (100 * 1024 * 1024)
-	{
-		if (verbose)
-		{
-			std::cout << "heavy default constructor" << std::endl;
-		}
-	}
-
-	Heavy (const Heavy & o):verbose (o.verbose), resource (o.resource)
-	{
-		if (verbose)
-		{
-			std::cout << "heavy copy constructor" << std::endl;
-		}
-	}
-
-	Heavy (Heavy && o):verbose (o.verbose), resource (std::move (o.resource))
-	{
-		if (verbose)
-		{
-			std::cout << "heavy move constructor" << std::endl;
-		}
-	}
-
-	Heavy & operator== (const Heavy & o)
-	{
-		verbose = o.verbose;
-		resource = o.resource;
-		if (verbose)
-		{
-			std::cout << "heavy copy operator" << std::endl;
-		}
-		return *this;
-	}
-
-	Heavy & operator== (const Heavy && o)
-	{
-		verbose = o.verbose;
-		resource = std::move (o.resource);
-		if (verbose)
-		{
-			std::cout << "heavy move operator" << std::endl;
-		}
-		return *this;
-	}
-
-	~Heavy ()
-	{
-		if (verbose)
-		{
-			std::cout << "heavy destructor. " << (resource.size ()? "Owns resource" : "Doesn't own resource") << std::endl;
-		}
-	}
-};
-
-
-
-#define REPOST_COUNT (1000000)
 struct RepostJob
 {
-	//Heavy heavy;
-
-	asioPthPool *asio_thread_pool;
+	pthPool *asio_thread_pool;
 
 	volatile size_t counter;
-	long long int begin_count;
-	std::promise < void >*waiter;
+	long long int time_count_begin;
+	std::promise<void> *waiter;
 
-	RepostJob (asioPthPool * asio_thread_pool, std::promise < void >*waiter): asio_thread_pool (asio_thread_pool), counter (0), waiter (waiter)
+	RepostJob (pthPool * asio_thread_pool, std::promise<void>* waiter) : 
+		asio_thread_pool (asio_thread_pool), 
+		counter (0), 
+		waiter (waiter)
 	{
-		begin_count = std::chrono::high_resolution_clock::now ().time_since_epoch ().count ();
+		time_count_begin = std::chrono::high_resolution_clock::now ().time_since_epoch ().count ();
 	}
 
 	void operator () ()
 	{
+		long long int time_count_end;
 		if (++counter < REPOST_COUNT)
 		{
 			if (asio_thread_pool)
@@ -171,8 +112,8 @@ struct RepostJob
 		}
 		else
 		{
-			long long int end_count = std::chrono::high_resolution_clock::now ().time_since_epoch ().count ();
-			std::cout << "reposted " << counter << " in " << (double) (end_count - begin_count) / (double) 1000000 << " ms" << std::endl;
+			time_count_end = std::chrono::high_resolution_clock::now ().time_since_epoch ().count ();
+			std::cout << "reposted " << counter << " in " << (double) (time_count_end - time_count_begin) / (double) 1000000 << " ms" << std::endl;
 			waiter->set_value ();
 		}
 	}
