@@ -25,7 +25,7 @@ Stellar系列MCU主要功能特性如下:
 	6. 工作温度: 保证在 -40 至 150C 范围内完全运行; 
 
 	SR6 G7系列Stellar集成MCU: 
-		32 位 Arm Cortex-R52、Cortex-M4 汽车MCU 6x 内核、硬件虚拟化、20.5 MB NVM(带有 2 个 19.5 MB“OTA X2”存储)、HSM、ASIL-D; 
+		32 位 Arm Cortex-R52、Cortex-M4 汽车MCU 6x 内核、硬件虚拟化、20.5 MB NVM(带有 2 个 19.5 MB"OTA X2"存储)、HSM、ASIL-D; 
 		它们可满足域控制器和 ECU 中联网自动更新和电动汽车架构的高度集成要求, 具有卓越的实时性和安全性能(具有最高的 ASIL-D 能力); 
 
 (感觉写得很水, 乱七八糟, 还是自己看官网数据比较准确)

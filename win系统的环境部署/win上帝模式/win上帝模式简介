@@ -18,7 +18,7 @@
 		SuperGodMode-EasyLauncher.bat
 
 	* 在弹出的设置界面中:
-		Alternative Options 保持默认设置, 无需更改。
+		Alternative Options 保持默认设置, 无需更改. 
 		Output Directory (输出目录)和Output Folder Name(输出文件夹名称)需要自行选择&指定;
 		最后, 点击Run Script 运行脚本, 并等待生成完成即可;
 

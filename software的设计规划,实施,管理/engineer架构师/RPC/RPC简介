@@ -82,6 +82,6 @@ RPC 的劣势:
 	RpcProtocol:  负责协议编/解码
 	RpcConnector: 负责维持客户方和服务方的连接通道和发送数据到服务方
 	RpcAcceptor:  负责接收客户方请求并返回请求结果
-	RpcProcessor: 负责在服务方控制调用过程，包括管理调用线程池、超时时间等
+	RpcProcessor: 负责在服务方控制调用过程, 包括管理调用线程池、超时时间等
 	RpcChannel:   数据传输通道
 

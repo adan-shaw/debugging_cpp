@@ -4,7 +4,7 @@
 ini文件是一种常见的配置文件, 它以简单的文字与简单的结构组成;
 INI文件会以不同的扩展名, 如".ini.",".cfg",".conf"等;
 
-INI文件由3个重要的部分组成, 其格式如下：
+INI文件由3个重要的部分组成, 其格式如下: 
 段: [sections]
 参数parameters: key=value
 注释comments: ; 注释

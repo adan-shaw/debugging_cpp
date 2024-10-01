@@ -96,7 +96,7 @@ int main (int argc, char **argv)
 
 	if (argc != 3)
 	{
-		printf ("参数格式错误!正确用法如下：\n\t\t%s IP地址 端口\n\t比如:\t%s 127.0.0.1 443\n", argv[0], argv[0]);
+		printf ("参数格式错误!正确用法如下: \n\t\t%s IP地址 端口\n\t比如:\t%s 127.0.0.1 443\n", argv[0], argv[0]);
 		return -1;
 	}
 

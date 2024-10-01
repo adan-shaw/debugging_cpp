@@ -52,7 +52,7 @@ lua,shell,python 也可以利用expat.exe 出色的xml 解析能力, 做文本�
 		/usr/local/lib/libexpat.so.1.6.7
 		/usr/local/lib/libexpat.so.1
 		/usr/local/lib/libexpat.so
-		expat 编译选项：
+		expat 编译选项: 
 			-lexpat
 
 		# 刷新一下'ld共享链接器'装载的'.a/.so 链接库'
