@@ -17,66 +17,60 @@ public:
 	{
 		start ();
 	}
-	inline ~ pthPool ()
+
+	inline ~pthPool ()
 	{
 		stop ();
 	}
 
-	inline void joinPthPool ();
+	inline void joinPthPool (void)
+	{
+		ioService.run ();
+	}
 
 	template < typename Handler > inline void post (Handler && handler)
 	{
-		m_io_service.post (handler);
+		ioService.post (handler);
 	}
 
 private:
-	inline void start ();
-	inline void stop ();
-	inline void pth_func_worker ();//设置线程池执行的线程函数
-
-	boost::asio::io_service m_io_service;
-	std::unique_ptr < boost::asio::io_service::work > m_io_service_work;
+	boost::asio::io_service ioService;
+	std::unique_ptr < boost::asio::io_service::work > ioService_work;
 
 	std::vector < std::thread > pth_pool;
+
+	inline void start (void)
+	{
+		ioService_work.reset (new boost::asio::io_service::work (ioService));
+
+		//从线程池中取出每个std::thread, 逐个启动
+		for (std::thread & pth_tmp:pth_pool)
+		{
+			pth_tmp = std::thread (&pthPool::pth_func_worker, this);
+		}
+	}
+
+	inline void stop (void)
+	{
+		ioService_work.reset ();
+		ioService.stop ();
+
+		//从线程池中取出每个std::thread, 逐个停止(阻塞等待)
+		for (std::thread & pth_tmp:pth_pool)
+		{
+			if (pth_tmp.joinable ()){
+				pth_tmp.join ();
+			}
+		}
+	}
+
+	inline void pth_func_worker (void)//线程池统一执行的线程函数
+	{
+		joinPthPool ();
+	}
 };
 
 
-
-inline void pthPool::start ()
-{
-	m_io_service_work.reset (new boost::asio::io_service::work (m_io_service));
-
-	//从线程池中取出每个std::thread, 逐个启动
-	for (std::thread & pth_tmp:pth_pool)
-	{
-		pth_tmp = std::thread (&pthPool::pth_func_worker, this);
-	}
-}
-
-inline void pthPool::stop ()
-{
-	m_io_service_work.reset ();
-	m_io_service.stop ();
-
-	//从线程池中取出每个std::thread, 逐个停止(阻塞等待)
-	for (std::thread & pth_tmp:pth_pool)
-	{
-		if (pth_tmp.joinable ())
-		{
-			pth_tmp.join ();
-		}
-	}
-}
-
-inline void pthPool::joinPthPool ()
-{
-	m_io_service.run ();
-}
-
-inline void pthPool::pth_func_worker ()
-{
-	joinPthPool ();
-}
 
 
 
@@ -102,16 +96,13 @@ struct RepostJob
 	void operator () ()
 	{
 		long long int time_count_end;
-		if (++counter < REPOST_COUNT)
-		{
-			if (asio_thread_pool)
-			{
+		if (++counter < REPOST_COUNT){
+			if (asio_thread_pool){
 				asio_thread_pool->post (*this);
 				return;
 			}
 		}
-		else
-		{
+		else{
 			time_count_end = std::chrono::high_resolution_clock::now ().time_since_epoch ().count ();
 			std::cout << "reposted " << counter << " in " << (double) (time_count_end - time_count_begin) / (double) 1000000 << " ms" << std::endl;
 			waiter->set_value ();

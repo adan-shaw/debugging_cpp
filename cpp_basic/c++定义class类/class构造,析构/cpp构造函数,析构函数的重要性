@@ -17,7 +17,9 @@ ps:
 	class A a;							//默认构造函数
 	class *pA = new A();		//赋值构造函数
 	class *pAA = new A(5);	//赋值构造函数+参数传递
-	
+	class A aa(a);					//拷贝构造函数(深拷贝/浅拷贝, 看你的class 类具体是如何设计)
+
+
 
 
 
