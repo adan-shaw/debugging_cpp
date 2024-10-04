@@ -47,12 +47,12 @@ int main(void)
 {
 	unsigned int count = 0;
 	std::string str;
-	task taskApp;
+	taskPth taskApp;
 	taskApp.setTask();
 	while (1){
 		str = "I'm taskApp, count = " + std::to_string(count++);
 		taskApp.post_task(str);
-		std::this_thread::sleep_for(std::chrono::seconds(pth_sleeptime_count));//时间间隔(单位s)
+		//std::this_thread::sleep_for(std::chrono::seconds(pth_sleeptime_count));//时间间隔(单位s)
 	}
 }
 

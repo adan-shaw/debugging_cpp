@@ -10,10 +10,9 @@
 
 
 
-class taskPool
-{
+class taskPool {
 public:
-	taskPool() : taskTimer(ioService), taskTimeout(5) {}
+	taskPool() : taskTimer(ioService) {}
 	~taskPool() {}
 
 	void init(void)
@@ -42,7 +41,7 @@ protected:
 	boost::asio::io_service ioService;
 	std::deque<std::string> deq;
 	boost::asio::deadline_timer taskTimer;
-	int taskTimeout;
+	int taskTimeout = 3;
 	std::mutex mtx;
 
 private:
@@ -71,15 +70,15 @@ private:
 
 
 
-class task {
+class taskPth {
 public:
-	task() {};
-	~task() {};
+	taskPth() {};
+	~taskPth() {};
 
 	void setTask(void)
 	{
 		ptaskPool = std::shared_ptr<taskPool>(new taskPool());
-		boost::thread pth_tmp(&task::run, this);
+		boost::thread pth_tmp(&taskPth::run, this);
 	}
 
 	void post_task(std::string str)
