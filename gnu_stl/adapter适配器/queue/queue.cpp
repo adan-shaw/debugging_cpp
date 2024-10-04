@@ -20,7 +20,7 @@
 
 	修改器
 		push					向队列尾部插入元素
-		emplace				于尾部原位构造元素(c++11)
+		emplace				于尾部原位构造元素(C++11)
 		pop						删除队列头部元素
 		swap					交换内容
 
@@ -37,7 +37,7 @@
 		std::swap(std::queue)							特化 std::swap 算法
 
 	辅助类
-		std::uses_allocator<std::queue>		特化 std::uses_allocator 类型特性(c++11)
+		std::uses_allocator<std::queue>		特化 std::uses_allocator 类型特性(C++11)
 */
 
 
@@ -120,13 +120,13 @@ int main(void){
 	/*
 	//7.1: 顺向迭代器
 	printf("7.1 -- q2+it:");
-	for(it=q2.c.begin(); it!=q2.c.end(); *it++)
+	for(it=q2.begin(); it!=q2.end(); *it++)
 		printf("%d  ", *it);
 	printf("\n");
 
 	//7.2: 逆向迭代器
 	printf("7.2 -- q2+rit:");
-	for(rit=q2.c.rbegin(); rit!=q2.c.rend(); *rit++)
+	for(rit=q2.rbegin(); rit!=q2.rend(); *rit++)
 		printf("%d  ", *rit);
 	printf("\n");
 	*/
@@ -148,7 +148,7 @@ int main(void){
 		printf("9 -- 'q2 queue' is now empty!!\n");
 
 	//测试已损坏的队列
-	printf("9 -- 'q2 queue' back()=%d\n", q2.back());//队列尾=无效值
+	printf("9 -- 'q2 queue' back()=%d\n", q2.back());  //队列尾=无效值
 	printf("9 -- 'q2 queue' front()=%d\n", q2.front());//队列头=无效值
 	q2.push(1);//不会崩溃, 但根据deque 特性, 向已损坏的deque push_back(), 会丢失值, 造成数值错误!!(跟随deque 的特性)
 	q2.push(1);
@@ -157,5 +157,6 @@ int main(void){
 
 	return 0;
 }
+
 
 

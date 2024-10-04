@@ -42,9 +42,8 @@ public:
 	{
 		if (!error){
 			while (!deq.empty()) {
-				std::lock_guard<std::mutex> mut(mtx);
-				std::string str = deq.front();
-				printf("task work %s\n", str.c_str());
+				std::string str = pop_deq_task();
+				printf("handle_task(): %s\n", str.c_str());
 			}
 			taskTimer.expires_from_now(boost::posix_time::seconds(taskTimeout));
 			taskTimer.async_wait(boost::bind(&taskPool::handle_task, this, boost::asio::placeholders::error));
@@ -57,6 +56,15 @@ protected:
 	boost::asio::deadline_timer taskTimer;
 	int taskTimeout;
 	std::mutex mtx;
+
+private:
+	std::string pop_deq_task(void)
+	{
+		std::lock_guard<std::mutex> tmp(mtx);
+		std::string str = deq.front();
+		deq.pop_front();//先进先出
+		return str;
+	}
 };
 
 
@@ -71,20 +79,7 @@ public:
 	void setTask(void)
 	{
 		ptaskPool = std::shared_ptr<taskPool>(new taskPool());
-		ptaskPool->init();
-		boost::thread thrd(&task::run, this);
-	}
-
-	void run(void)
-	{
-		//同步阻塞方式
-		ptaskPool->run();
-		//异步方式
-		/*
-		while (1){
-			ptaskPool->poll();
-		}
-		*/
+		boost::thread pth_tmp(&task::run, this);
 	}
 
 	void post_task(std::string str)
@@ -94,4 +89,18 @@ public:
 
 protected:
 	std::shared_ptr<taskPool> ptaskPool;
+
+private:
+	void run(void)//同步阻塞方式
+	{
+		ptaskPool->init();
+		ptaskPool->run();
+	}
+
+	void runEx(void){//异步非阻塞方式(未完善)
+		ptaskPool->init();
+		while (1){
+			ptaskPool->poll();
+		}
+	}
 };
