@@ -38,18 +38,6 @@ public:
 		deq.push_back(str);
 	}
 
-	void handle_task(const boost::system::error_code& error)
-	{
-		if (!error){
-			while (!deq.empty()) {
-				std::string str = pop_deq_task();
-				printf("handle_task(): %s\n", str.c_str());
-			}
-			taskTimer.expires_from_now(boost::posix_time::seconds(taskTimeout));
-			taskTimer.async_wait(boost::bind(&taskPool::handle_task, this, boost::asio::placeholders::error));
-		}
-	}
-
 protected:
 	boost::asio::io_service ioService;
 	std::deque<std::string> deq;
@@ -64,6 +52,18 @@ private:
 		std::string str = deq.front();
 		deq.pop_front();//先进先出
 		return str;
+	}
+
+	void handle_task(const boost::system::error_code& error)
+	{
+		if (!error){
+			while (!deq.empty()) {
+				std::string str = pop_deq_task();
+				printf("handle_task(): %s\n", str.c_str());
+			}
+			taskTimer.expires_from_now(boost::posix_time::seconds(taskTimeout));
+			taskTimer.async_wait(boost::bind(&taskPool::handle_task, this, boost::asio::placeholders::error));
+		}
 	}
 };
 
