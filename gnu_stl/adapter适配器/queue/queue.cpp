@@ -1,7 +1,13 @@
 //编译:
 //		g++ -std=c++11 -g3 ./queue.cpp -o x 
 
-
+//std::queue 简介
+/*
+	std::queue 是C++ STL中的一个容器适配器, 可更改的数据底座有: vector/deque
+	std::queue 提供了一个FIFO(先进先出)的数据结构;
+	调度权值:
+		只有时间先后的优先级
+*/
 
 //queue api list
 /*

@@ -140,8 +140,8 @@ int main(void){
 
 
 	//12.对空deque 错误弹出操作测试
-	//注意:
 	/*
+	注意:
 		pop_front()只对头操作, 可以pop 成负数;
 		所以任何pop 操作都要检索deque 是否为empty();
 		否则deque 可能会被pop 坏;
@@ -199,4 +199,5 @@ int main(void){
 
 	return 0;
 }
+
 
