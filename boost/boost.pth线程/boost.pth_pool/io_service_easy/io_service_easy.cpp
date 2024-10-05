@@ -41,7 +41,7 @@
 
 #include "io_service_easy.h"
 
-#define pth_sleeptime_count (1)
+#define pth_sleeptime (1)
 
 int main(void)
 {
@@ -52,7 +52,12 @@ int main(void)
 	while (1){
 		str = "I'm taskApp, count = " + std::to_string(count++);
 		taskApp.post_task(str);
-		//std::this_thread::sleep_for(std::chrono::seconds(pth_sleeptime_count));//时间间隔(单位s)
+
+		//once 任务间隔(必须在调用端做一定的使用时间间隔, 否则会存在线程饥饿, 任务分配不均匀等问题)
+		//std::this_thread::sleep_for(std::chrono::seconds(pth_sleeptime));//1 秒
+		std::this_thread::sleep_for(std::chrono::milliseconds(pth_sleeptime));//1 ms 
+		//std::this_thread::sleep_for(std::chrono::microseconds(pth_sleeptime));//1 us
+		//std::this_thread::sleep_for(std::chrono::nanoseconds(pth_sleeptime));//1 ns
 	}
 }
 
