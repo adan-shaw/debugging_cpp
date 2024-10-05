@@ -1,7 +1,15 @@
 //编译:
 //		g++ -std=c++11 -g3 ./priority_queue.cpp -o x
 
-
+//std::priority_queue 简介
+/*
+	std::priority_queue 是C++ STL中的一个容器适配器, 可更改的数据底座有: vector/deque
+	std::priority_queue 提供了一个FIFO(先进先出)的数据结构, 但它保证在任何时间top 元素是最大(或最小)
+	(强制根据值的优先级调度, 不根据时间先后顺序调度)
+	这就意味着, 虽然std::priority_queue 的接口看起来是先进后出, 但实际上它是基于优先级的先出;
+	调度权值:
+		值大小优先级 > 时间先后大小优先级
+*/
 
 //priority_queue api list
 /*
@@ -19,7 +27,7 @@
 
 	修改器
 		push					插入元素,并对底层容器排序
-		emplace				原位构造元素并排序底层容器(c++11)
+		emplace				原位构造元素并排序底层容器(C++11)
 		pop						删除栈顶元素
 		swap					交换内容
 
@@ -31,7 +39,7 @@
 		std::swap(std::priority_queue)						特化 std::swap 算法
 
 	辅助类
-		std::uses_allocator<std::priority_queue>	特化 std::uses_allocator 类型特性(c++11)
+		std::uses_allocator<std::priority_queue>	特化 std::uses_allocator 类型特性(C++11)
 */
 
 
