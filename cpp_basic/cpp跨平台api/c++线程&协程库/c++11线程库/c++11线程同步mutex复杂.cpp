@@ -51,9 +51,10 @@
 
 
 	锁包装器(锁策略包装器: 使用锁包装器, 即默认使用自动解锁):
-		c++ 标准锁, 默认是没有锁策略, 也没有包装器的, 非常接近于posix mutex 锁, 需要自己上锁, 自己解锁;
-		使用锁包装器类模板, 进行二次包装, 可以做到:
-			只需加锁即可, 解锁会自动解锁, 跟智能指针一样;
+		c++ 标准锁, 默认是没有锁策略, 也没有锁包装器的(非常接近于posix mutex 锁, 需要自己上锁, 自己解锁)
+		c++ 标准锁可以使用'锁包装器类', 进行二次包装, 可以做到:
+			- '锁包装器类'创建即加锁, 离开'{}' 即自动解锁(跟智能指针类似, 只需加锁即可, 解锁会自动解锁)
+			- '锁包装器类'支持整个函数加锁, 支持'{}'局部加锁, 比较特殊, 诡异的c++ 语法, 较难看懂;
 
 		具体锁包装器如下(智能解锁):
 			lock_guard							实现严格基于作用域的互斥体所有权包装器(C++11)
@@ -61,14 +62,10 @@
 			unique_lock							实现可移动的互斥体所有权包装器, 条件变量专用(C++11)
 			shared_lock							实现可移动的共享互斥体所有权封装器, <shared_mutex>系列专用(C++14)
 
-		使用时(注意):
-			锁包装器, 是不能多线程共享(否则容易多线程同步时, 出现死锁), 而应该是每个线程必须独享一个包装器类!!
-			锁倒是可以多线程共享(锁也必须是多线程共享, 才能正常工作的);
-
-			不同的锁包装器, 有不同的用法, 例如:
-				* std::unique_lock 是一个灵活但稍复杂的锁管理器, 它允许更多的锁操作, 如延迟锁定、解锁和重新锁定;
-				* std::lock_guard  是一个简单的、轻量级的锁管理器, 它在构造时获取锁, 在析构时释放锁(其主要特点是不能显式地解锁或重新锁定);
-				* std::shared_lock 是一个侧重读时共享, 写时独占的锁管理器, 比较类似c 语言中的读写锁;
+		不同的锁包装器, 有不同的用法, 例如:
+			* std::unique_lock 是一个灵活但稍复杂的锁管理器, 它允许更多的锁操作, 如延迟锁定、解锁和重新锁定;
+			* std::lock_guard  是一个简单的、轻量级的锁管理器, 它在构造时获取锁, 在析构时释放锁(其主要特点是不能显式地解锁或重新锁定);
+			* std::shared_lock 是一个侧重读时共享, 写时独占的锁管理器, 比较类似c 语言中的读写锁;
 
 
 	锁策略(通用C++11)
@@ -160,7 +157,6 @@ void call_once_func(void){
 	std::lock_guard<std::recursive_mutex> auto_lock_guard_mtx_rec(mtx_rec, std::adopt_lock);
 	std::lock_guard<std::recursive_timed_mutex> auto_lock_guard_mtx_rec_t(mtx_rec_t, std::adopt_lock);
 
-	std::chrono::high_resolution_clock::time_point now;
 	int tmp = 9999;
 	for(;tmp > 0;tmp--){
 		std::atomic_fetch_add(&call_once_sum,1);//标准的多线程竞争加法运算
@@ -230,9 +226,28 @@ void shared_mutex_test(void){
 
 
 
+//
+// '锁包装器类'局部加锁(锁包装器只认'{}', 不认函数的, 支持if{}, while{}, for{}, switch{}, 函数{} 等任意地方局部加锁, 加个'{}'即可)
+//
+void local_lock(void){
+	int tmp = 9999;
+	for(;tmp > 0;tmp--)
+	{
+		//c++ 标准库的锁, 不需要init() 初始化锁, '锁包装器'的类构造函数会自动完成init()
+		std::lock_guard<std::mutex> auto_lock_guard_mtx(mtx, std::adopt_lock);
+		std::atomic_fetch_add(&call_once_sum,1);
+		//c++ 标准库的锁, 不需要destory() 销毁锁, '锁包装器'的类析构函数会自动完成destory()
+	}
+	printf("call_once_func: call_once_sum = %d\n", (int)call_once_sum);
+	return;
+}
+
+
+
 int main(void){
 	mutex_test();
 	shared_mutex_test();
+	local_lock();
 	return 0;
 }
 

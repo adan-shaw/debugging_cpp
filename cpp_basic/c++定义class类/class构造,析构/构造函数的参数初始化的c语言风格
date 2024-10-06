@@ -5,21 +5,21 @@ class srv_rep
 {
 public:
 	/*
-	srv_rep (bool use_static_routing) : 
+	srv_rep (bool tmp_use_static_routing) : 
 		someip_app (vsomeip::runtime::get ()->create_application ()), 
-		is_registered (false), 
-		is_use_static_routing (use_static_routing), 
+		isRegistered (false), 
+		use_static_routing (tmp_use_static_routing), 
 		isBlocked (false), 
 		isRunning (true), 
 		pth_offer (std::bind (&srv_rep::run, this))
 	{}
 	*/
 	//等价写法(这种写法更加清晰明了)
-	srv_rep (bool use_static_routing){
-		is_use_static_routing = use_static_routing;
+	srv_rep (bool tmp_use_static_routing){
+		use_static_routing = tmp_use_static_routing;
 
 		someip_app = vsomeip::runtime::get ()->create_application ();
-		is_registered = false;
+		isRegistered = false;
 		isBlocked = false;
 		isRunning = true;
 		pth_offer = std::thread(std::bind (&srv_rep::run, this));
@@ -28,8 +28,8 @@ public:
 
 private:
 	std::shared_ptr <vsomeip::application> someip_app;
-	bool is_registered;
-	bool is_use_static_routing;
+	bool isRegistered;
+	bool use_static_routing;
 
 	std::mutex mtx;
 	std::condition_variable cond;
@@ -38,7 +38,7 @@ private:
 
 	// isBlocked must be initialized before the thread is started.
 	std::thread pth_offer;
-}
+};
 
 
 
