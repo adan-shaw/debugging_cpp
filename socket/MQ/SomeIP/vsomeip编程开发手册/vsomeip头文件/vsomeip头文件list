@@ -1,0 +1,110 @@
+一级元素头文件:
+	defines.hpp						//vsomeip 的关键宏定义
+	export.hpp						//函数入栈方式定义宏(跨平台跨芯片编译可能会用到)
+	deprecated.hpp				//不赞成使用的过去式文件
+
+	vsomeip_sec.h					//service_id, instance_id, member_id, ip_addr, network_port 等关键types
+
+	structured_types.hpp	//结构化的types
+	primitive_types.hpp		//原始的types
+	function_types.hpp		//函数的types(vsomeip 固定的回调函数API)
+	enumeration_types.hpp	//枚举的types
+
+	plugin.hpp						//插件必须的types
+
+	constants.hpp					//常数的types
+	error.hpp							//error 类型的types
+
+
+
+
+
+二级核心API头文件:
+	handler.hpp:
+		#include <vsomeip/deprecated.hpp>
+		#include <vsomeip/primitive_types.hpp>
+		#include <vsomeip/vsomeip_sec.h>
+
+	trace.hpp:
+		#include <vsomeip/constants.hpp>
+		#include <vsomeip/primitive_types.hpp>
+
+	runtime.hpp:
+		#include <vsomeip/export.hpp>
+		#include <vsomeip/primitive_types.hpp>
+
+
+	internal内置API(全员二级API):
+		deserializable.hpp:
+			#include <vsomeip/export.hpp>
+		serializable.hpp:
+			#include <vsomeip/export.hpp>
+
+		logger.hpp:
+			#include <vsomeip/export.hpp>
+
+		policy_manager.hpp:
+			#include <vsomeip/deprecated.hpp>
+			#include <vsomeip/export.hpp>
+			#include <vsomeip/primitive_types.hpp>
+
+
+
+	plugins插件API(全员二级API):
+		application_plugin.hpp:
+			#include <vsomeip/export.hpp>
+
+		pre_configuration_plugin.hpp:
+			#include <vsomeip/export.hpp>
+
+
+
+
+
+三级业务API头文件:
+	message_base.hpp:
+		#include <vsomeip/export.hpp>
+		#include <vsomeip/primitive_types.hpp>
+		#include <vsomeip/enumeration_types.hpp>
+		#include <vsomeip/internal/deserializable.hpp>
+		#include <vsomeip/internal/serializable.hpp>
+
+	message.hpp(和message_base.hpp 合并为一):
+		#include <vsomeip/deprecated.hpp>
+		#include <vsomeip/message_base.hpp>
+		#include <vsomeip/vsomeip_sec.h>
+
+	application.hpp:
+		#include <vsomeip/deprecated.hpp>
+		#include <vsomeip/primitive_types.hpp>
+		#include <vsomeip/enumeration_types.hpp>
+		#include <vsomeip/structured_types.hpp>
+		#include <vsomeip/function_types.hpp>
+		#include <vsomeip/constants.hpp>
+		#include <vsomeip/handler.hpp>
+
+	payload.hpp:
+		#include <vsomeip/export.hpp>
+		#include <vsomeip/primitive_types.hpp>
+		#include <vsomeip/internal/deserializable.hpp>
+		#include <vsomeip/internal/serializable.hpp>
+
+
+
+
+
+四级业务API头文件:
+	vsomeip.hpp:
+		#include <vsomeip/constants.hpp>
+		#include <vsomeip/defines.hpp>
+		#include <vsomeip/application.hpp>
+		#include <vsomeip/message.hpp>
+		#include <vsomeip/payload.hpp>
+		#include <vsomeip/runtime.hpp>
+		#include <vsomeip/trace.hpp>
+
+
+
+
+
+

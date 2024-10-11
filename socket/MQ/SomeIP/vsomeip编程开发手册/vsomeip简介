@@ -1,3 +1,17 @@
+vsomeip 简介:
+	vsomeip 支持跨平台, 支持android/linux/qnx;
+	这样导致vsomeip 可能在航空业, 机器人行业, 可能用得不多, 但vsomeip 在汽车行业一定用得很多,
+	因为vsomeip 可以跨平台编译, 而且代码质量较浅c++, 可靠性高;
+
+	目前的普通商业乘用车, 基本都是ADAS 系统的车辆, 在车控系统部分, 使用vsomeip 应该可以比较好的满足设计需求;
+	后期如果需要做AD 纯自动驾驶车辆, 那是后续发展所需要考虑的情况, 但就目前而言, 可能更偏向于先实现ADAS 商业乘用车;
+
+	vsomeip 和libzmq 差不多, 也是一个库, 这也为了vsomeip 跨平台开发做准备的, 既然它是一个库, 才好跨平台嘛;
+
+
+
+
+
 vsomeip 中间件, 主要包含6 个project:
 	* vsomeip:
 		An implementation of Scalable service-Oriented MiddlewarE over IP

@@ -1,0 +1,67 @@
+一级元素的头文件:
+	dlt_types.h			//dlt 数据类型
+	dlt_protocol.h	//dlt 协议细节
+	dlt_version.h		//版本号info, passed
+
+
+
+
+
+二级核心API的头文件:
+	dlt_common.h:
+		#include "dlt_types.h"
+		#include "dlt_protocol.h"
+
+	dlt_user_macros.h:
+		#include "dlt_version.h"
+		#include "dlt_types.h"
+
+
+
+
+
+三级业务API的头文件:
+	dlt_user.h:
+		#include "dlt_types.h"
+		#include "dlt_shm.h"
+		#include "dlt_user_macros.h"
+
+	dlt_multiple_files.h:
+		#include "dlt_types.h"
+		#include "dlt_common.h"
+
+	dlt_shm.h:
+		#include "dlt_common.h"
+
+
+
+
+
+四级业务API的头文件:
+	dlt.h(核心API):
+		#include "dlt_common.h"
+		#include "dlt_user.h"
+
+	dlt_offline_trace.h(离线追踪API, 就一个API):
+		#include "dlt_multiple_files.h"
+		#include "dlt_types.h"
+
+	dlt_client.h:
+		#include "dlt_types.h"
+		#include "dlt_common.h"
+
+
+
+
+
+五级业务API的头文件:
+	dlt_filetransfer.h:
+		#include "dlt.h"
+
+	dlt_common_api.h:
+		#include "dlt.h"
+
+
+
+
+
