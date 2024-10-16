@@ -74,10 +74,10 @@ libprotozero-dev - Minimalistic protocol buffer decoder and encoder in C++
 libprotozero-doc - Minimalistic protocol buffer decoder and encoder in C++ - docs
 r-cran-rprotobuf - GNU R package providing an interface to the Protocol Buffers API
 
-# 安装protobuff for c/c++
+# 安装protobuff for c/c++ (推荐)
 apt-get install protobuf-compiler-grpc libghc-protobuf-dev libghc-protobuf-doc libghc-protobuf-prof libarcus-dev libarcus3 libprotobuf-dev libprotobuf-lite17 libprotobuf17 libprotoc-dev protobuf-compiler libprotobuf-c-dev libprotobuf-c1 protobuf-c-compiler libprotozero-dev libprotozero-doc r-cran-rprotobuf 
 
-# python
+# python (推荐)
 python3-arcus - message queue for Cura based on protobuf (Python bindings)
 python-protobuf - Python bindings for protocol buffers
 python3-protobuf - Python 3 bindings for protocol buffers

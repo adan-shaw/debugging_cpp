@@ -27,8 +27,8 @@ MyMessage* msg = google::protobuf::Arena::CreateMessage<MyMessage>(&arena);
 //解析消息
 msg->ParseFromString(serialized_data);
 
-//当不再需要msg时, 可以直接销毁arena, 它会自动释放arena中的所有对象
-//注意: 不需要手动删除msg, 它会在arena销毁时自动释放
+//当不再需要msg时, 可以直接销毁arena, 它会自动释放arena中的所有对象;
+//注意: 不需要手动删除msg, 它会在arena销毁时自动释放;
 arena.Reset();
 
 

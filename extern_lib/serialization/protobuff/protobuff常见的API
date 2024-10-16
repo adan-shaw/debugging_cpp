@@ -6,11 +6,15 @@
 
 
 
+
+
 2.解析与序列化
 	bool SerializeToString(string* output) const:        序列化消息, 将存储字节的以string方式输出; 注意字节是二进制, 而非文本;
-	bool ParseFromString(const string& data):            解析给定的string     
-	bool SerializeToOstream(ostream* output) const:      写消息给定的c++  ostream中
+	bool ParseFromString(const string& data):            解析给定的string
+	bool SerializeToOstream(ostream* output) const:      写消息给定的c++ ostream中
 	bool ParseFromIstream(istream* input):               从给定的c++ istream中解析出消息
+
+
 
 
 
@@ -32,4 +36,39 @@ message Iner_b {}
 message b {
   optional Iner_b field_name;
 }
+
+
+
+
+
+4.编译选项:
+	# 两个编译选项, 缺一不可, 否则会报错的(没有-pthread 会编译通过, 但运行时会崩溃, 很奇怪!!)
+	-lprotobuf -pthread
+
+
+
+
+
+5.protobuff 常见的API分析:
+	protobuff 其实跟json,xml 的操作, 都是类似的, 不会有太大的差别, 因为都是序列化工具;
+	相反的, protobuff 比cjson 的API 还要简单很多!!
+	(因为cjson 要靠这些API 去搭建json 树, xml 同样需要靠API 搭建xml 树, 
+	 但protobuff 通过*.proto 就完成了message 的搭建, 不需要重复操作, 这也是优势所在!!)
+
+	所以, protobuff 的API 只需要负责的工作是:
+		* 设置message 中的元素的值(set)
+		* 获取message 中的元素的值(get)
+
+		* 序列化导出到string(实际上导出后是二进制封装的内存buf缓冲区, 但这里仍然叫: string)
+		* 序列化导出到file
+
+		* 序列化导入data from string(实际上导出后是二进制封装的内存buf缓冲区, 但这里仍然叫: string)
+		* 序列化导入data from file
+
+	其它操作, 基本上意义不大!!
+	protobuff 也是一个序列化工具, 能完成序列化工作即可, 不用搞那么复杂!!
+	ps:
+		protobuff 是不支持数据加密的, 只负责数据序列化, 要对数据进行对称加密, 请自己使用openssl, protobuff 是不管这些东西的;
+
+
 

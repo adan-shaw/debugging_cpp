@@ -1,0 +1,15 @@
+protobuf-c: c语言头文件
+protozero:  c++头文件
+
+编码时, 都存放在: 
+	/usr/include/protobuf-c
+	/usr/include/protozero
+
+	/usr/include/local/protobuf-c
+	/usr/include/local/protozero
+
+
+
+# 安装protobuff for c/c++ (推荐)
+apt-get install protobuf-compiler-grpc libghc-protobuf-dev libghc-protobuf-doc libghc-protobuf-prof libarcus-dev libarcus3 libprotobuf-dev libprotobuf-lite17 libprotobuf17 libprotoc-dev protobuf-compiler libprotobuf-c-dev libprotobuf-c1 protobuf-c-compiler libprotozero-dev libprotozero-doc r-cran-rprotobuf 
+
