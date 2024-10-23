@@ -1,0 +1,102 @@
+1.subprocess 简介
+	subprocess 最早在2.4版本引入, 用来生成子进程, 并可以通过管道连接他们的输入/输出/错误, 以及获得他们的返回值; 
+	subprocess 用来替换多个旧模块和函数:
+		* 创建子shell 进程:
+			os.system
+			os.spawn
+			commands.*
+		* 创建管道:
+			os.popen
+			popen2.*
+	这些模块性能都太低了, 基本上都被subprocess 模块取代了, subprocess 模块也属于标准库级别的库, 比较稳定, 安全!!
+	subprocess 会因系统的不同, 会自动采用最优的多进程模型(有fork() 就用fork(), 没有就可能用clone() 或者windows 的深层API 进行进程最小化创建)
+	另外subprocess还提供了一些管理标准流(standard stream)和管道(pipe)的工具, 从而在进程间使用文本通信; 
+
+
+
+
+
+2.subprocess 常见的API.list
+subprocess模块中只定义了一个类: Popen 类, 可以使用Popen() 构造函数来创建进程;
+类似于c++11, subprocess 是一个面向对象封装的进程类, 创建类实体即启动子进程, 后续通过类中的API, 进行proc 的流程控制;
+(创建subprocess 类实体的时候, 就通过Popen() 构造函数, 指定了进程函数, 进程函数参数, 进程属性等info)
+
+
+
+# 导入subprocess 包
+import subprocess
+
+
+
+Popen 类的构造函数如下: 
+	subprocess.Popen(
+		args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, 
+		preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
+
+	参数args:
+		可以是字符串或者序列类型(如: list, 元组), 用于指定进程的可执行文件及其参数; 
+		如果是序列类型, 第一个元素通常是可执行文件的路径; 
+		我们也可以显式的使用executeable参数来指定可执行文件的路径; 
+
+	参数stdin, stdout, stderr:
+		表示程序的标准输入、输出、错误句柄; 
+		他们可以是PIPE, 文件描述符或文件对象, 也可以设置为None, 表示从父进程继承; 
+
+	参数shell:
+		如果设为true, 程序将通过shell来执行; 
+
+	参数env:
+		字典类型, 用于指定子进程的环境变量; 
+		如果env = None, 子进程的环境变量将从父进程中继承; 
+
+
+
+Popen 类的常见的成员:
+	* subprocess.PIPE:
+		在创建Popen对象时, subprocess.PIPE可以初始化stdin, stdout或stderr参数, 表示与子进程通信的标准流; 
+
+	* subprocess.STDOUT:
+		创建Popen对象时, 用于初始化stderr参数, 表示将错误通过标准输出流输出; 
+
+	* Popen.stdin, Popen.stdout , Popen.stderr:
+		官方文档上这么说: 
+			stdin, stdout andstderr specify the executed programs standard input, 
+			standard output and standard error file handles, respectively. Valid values arePIPE,
+			an existing file descriptor (a positive integer), an existing file object, and None.
+
+	* Popen.pid:
+		获取子进程的进程ID; 
+
+	* Popen.returncode:
+		获取进程的返回值(如果进程还没有结束, 则返回None)
+
+
+
+Popen 类的常见的方法: 
+	* Popen.poll()
+		用于检查子进程是否已经结束(可用于设置并返回returncode属性)
+
+	* Popen.wait()
+		等待子进程结束; 设置并返回returncode属性; 
+
+	* Popen.communicate(input=None)
+		与子进程进行交互, 向stdin发送数据, 或从stdout和stderr中读取数据; 
+		可选参数input指定发送到子进程的参数; 
+		Popen.communicate()返回一个元组: (stdoutdata, stderrdata); 
+		注意: 
+			如果希望通过进程的stdin向其发送数据, 在创建Popen对象的时候, 参数stdin必须被设置为PIPE; 
+			同样, 如果希望从stdout和stderr获取数据, 必须将stdout和stderr设置为PIPE; 
+
+	* Popen.send_signal(signal)
+		向子进程发送信号; 
+
+	* Popen.terminate()
+		停止(stop)子进程; 在windows平台下, 该方法将调用Windows API TerminateProcess()来结束子进程; 
+
+	* Popen.kill()
+		杀死子进程; 
+
+
+
+
+
