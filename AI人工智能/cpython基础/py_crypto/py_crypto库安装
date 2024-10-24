@@ -1,0 +1,30 @@
+pip 安装:
+	pip install -i https://pypi.douban.com/simple/ crypto pycrypto pycryptodomex 
+	pip install -i https://pypi.douban.com/simple/ naked crypto pycrypto pycryptodomex shellescape requests pathlib
+
+	pip install -i https://pypi.douban.com/simple/ naked crypto pycrypto pycryptodomex --target ../../runtime/python/lib/python2.7/site-packages/
+
+
+
+apt 安装:
+	apt-get install python-pycryptodome python3-pycryptodome
+
+	python-pycryptodome - cryptographic Python library (Python 2)
+	python3-pycryptodome - cryptographic Python library (Python 3)
+
+
+
+
+
+测试:
+		# 执行
+		python2
+
+		# 导入包测试
+>>> from Cryptodome.Cipher import AES
+
+
+
+
+
+
