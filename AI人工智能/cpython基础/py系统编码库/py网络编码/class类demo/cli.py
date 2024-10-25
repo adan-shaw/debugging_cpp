@@ -26,6 +26,7 @@ class tcp_cli:
 		self.port = port
 		self.__sfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		self.__sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.__sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 		self.__sfd.connect((ip, port))
 
 	# 析构函数

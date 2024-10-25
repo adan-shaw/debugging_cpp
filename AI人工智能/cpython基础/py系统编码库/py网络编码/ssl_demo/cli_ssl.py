@@ -13,6 +13,7 @@ class client_ssl:
 		# 与服务端建立socket连接
 		with socket.create_connection(('127.0.0.1', 9443)) as sfd_cli:
 			sfd_cli.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			sfd_cli.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 			# 将socket打包成SSL socket, 其主要工作是完成密钥协商
 			# 一定要注意的是这里的server_hostname不是指服务端IP, 而是指服务端证书中设置的CN, 我这里正好设置成127.0.1而已
 			with context.wrap_socket(sfd_cli, server_hostname='127.0.0.1') as sfd_ssl_cli:

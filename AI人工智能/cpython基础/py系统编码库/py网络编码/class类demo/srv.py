@@ -30,6 +30,7 @@ class tcp_srv:
 		self.listen_max = listen_max
 		self.__sfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		self.__sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.__sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 		self.__sfd.bind((ip, port))
 		self.__sfd.listen(listen_max)
 		self.__running = True

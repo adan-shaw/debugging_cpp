@@ -14,6 +14,7 @@ class server:
 	def start_listen(self):
 		sfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 		sfd.bind(('127.0.0.1',9922))
 		sfd.listen(5)
 

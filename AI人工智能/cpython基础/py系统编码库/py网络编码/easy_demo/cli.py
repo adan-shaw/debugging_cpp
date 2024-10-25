@@ -15,6 +15,7 @@ class client:
 		# 与服务端建立连接
 		sfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		sfd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 		sfd.connect(('127.0.0.1',9922))
 
 		# 向服务端发送消息

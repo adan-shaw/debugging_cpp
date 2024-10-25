@@ -13,6 +13,7 @@ class server_ssl:
 		# 监听端口
 		with socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) as sfd_srv:
 			sfd_srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			sfd_srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 			sfd_srv.bind(('127.0.0.1', 9443))
 			sfd_srv.listen(5)
 			# 将socket打包成SSL socket, 其主要工作是完成密钥协商
