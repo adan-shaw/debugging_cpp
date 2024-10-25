@@ -16,6 +16,7 @@ y=9.9
 z="fffff"
 
 
+
 print("字符串格式化")
 # 字符串格式化
 print(format('some string'))				# 默认格式化为字符串, 省缺参数, 即None
@@ -27,6 +28,7 @@ print('some string: {}, {}, {} 中文'.format(x,y,z))
 
 # 字符串平接, 类似printf(), 调乱顺序
 print('some string: {2}, {0}, {1} 中文'.format(x,y,z))
+
 
 
 

@@ -75,39 +75,39 @@ print(random.triangular(-100.1,100,-30))
 # python random 模块api
 #
 '''
-seed()				初始化随机数生成器
-getstate()		返回随机数生成器的当前内部状态
-setstate()		恢复随机数生成器的内部状态
+seed()						初始化随机数生成器
+getstate()				返回随机数生成器的当前内部状态
+setstate()				恢复随机数生成器的内部状态
 
 # 随机整形数
-getrandbits()	返回表示随机位的数字
-randrange()		返回给定范围之间的随机数
-randint()			返回给定范围之间的随机数
+getrandbits()			返回表示随机位的数字
+randrange()				返回给定范围之间的随机数
+randint()					返回给定范围之间的随机数
 
 # 随机序列-列表
-choice()			返回给定序列中的随机元素
-choices()			返回一个列表, 其中包含给定序列中的随机选择
-shuffle()			接受一个序列, 并以随机顺序返回此序列
-sample()			返回序列的给定样本
+choice()					返回给定序列中的随机元素
+choices()					返回一个列表, 其中包含给定序列中的随机选择
+shuffle()					接受一个序列, 并以随机顺序返回此序列
+sample()					返回序列的给定样本
 
 # 随机浮点数
-random()			返回0与1之间的浮点数
-uniform()			返回两个给定参数之间的随机浮点数
-triangular()	返回两个给定参数之间的随机浮点数, 
-							您还可以设置模式参数以指定其他两个参数之间的中点
+random()					返回0与1之间的浮点数
+uniform()					返回两个给定参数之间的随机浮点数
+triangular()			返回两个给定参数之间的随机浮点数, 您还可以设置模式参数以指定其他两个参数之间的中点
 
 # 不常用的
-betavariate()			基于 Beta 分布(用于统计学)返回0到1之间的随机浮点数
-expovariate()			基于指数分布(用于统计学), 返回0到1之间的随机浮点数, 
+betavariate()			基于Beta 分布(用于统计学)返回0到1之间的随机浮点数
+expovariate()			基于指数分布(用于统计学), 返回0到1之间的随机浮点数,
 									如果参数为负, 则返回0到-1之间的随机浮点数
-gammavariate()		基于 Gamma 分布(用于统计学)返回0到1之间的随机浮点数
+gammavariate()		基于Gamma 分布(用于统计学)返回0到1之间的随机浮点数
 gauss()						基于高斯分布(用于概率论)返回0到1之间的随机浮点数
 lognormvariate()	基于对数正态分布(用于概率论)返回0到1之间的随机浮点数
 normalvariate()		基于正态分布(用于概率论)返回0到1之间的随机浮点数
-vonmisesvariate()	基于 von Mises 分布(用于定向统计学)返回0到1之间的随机浮点数
-paretovariate()		基于 Pareto 分布(用于概率论)返回0到1之间的随机浮点数
-weibullvariate()	基于 Weibull 分布(用于统计学)返回0到1之间的随机浮点数
+vonmisesvariate()	基于von Mises 分布(用于定向统计学)返回0到1之间的随机浮点数
+paretovariate()		基于Pareto 分布(用于概率论)返回0到1之间的随机浮点数
+weibullvariate()	基于Weibull 分布(用于统计学)返回0到1之间的随机浮点数
 '''
+
 
 
 
