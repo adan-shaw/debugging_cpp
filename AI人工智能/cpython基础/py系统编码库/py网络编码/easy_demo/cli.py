@@ -4,8 +4,10 @@ import socket
 
 # 字符串操作声明(兼容python2/3)
 '''
-	如果你在操作字节串(bytes), 并且想要编码, 请使用*.decode()
-	如果你在操作字符串(str), 并且想要编码成字节串, 请使用*.encode()
+	如果你在操作字节串(bytes), 并且想要编码, 请使用*.decode();
+	(python string 字符串操作, 需要经过*.decode() 的数据)
+	如果你在操作字符串(str), 并且想要编码成字节串, 请使用*.encode();
+	(python socket io 需要发送/接收经过*.encode() 的数据)
 '''
 
 class client:
