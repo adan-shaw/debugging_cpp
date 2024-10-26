@@ -10,33 +10,33 @@ import time
 # os 库
 '''
 1.os 库字符串宏
-	os.linesep                        输出当前平台使用的'行终止符'(即换行符号), win下为: "\t\n", Linux下为: "\n"
-	os.pathsep                        输出驱动器分割符(win 专用, 一般是':')
-	os.sep                            输出操作系统特定的路径分隔符, win下为: "\\", Linux下为: "/"
-	os.curdir                         返回当前目录符('.')
-	os.pardir                         获取当前目录的父目录符('..')
+	os.linesep                            输出当前平台使用的'行终止符'(即换行符号), win下为: "\t\n", Linux下为: "\n"
+	os.pathsep                            输出驱动器分割符(win 专用, 一般是':')
+	os.sep                                输出操作系统特定的路径分隔符, win下为: "\\", Linux下为: "/"
+	os.curdir                             返回当前目录符('.')
+	os.pardir                             获取当前目录的父目录符('..')
 
-	os.name                           输出字符串指示当前使用平台. win->'nt'; Linux->'posix'
-	os.environ                        获取系统环境变量
+	os.name                               输出字符串指示当前使用平台. win->'nt'; Linux->'posix'
+	os.environ                            获取系统环境变量
 
 
 
 2.shell
-	os.system("bash command")         运行shell命令, 结果直接输出到stdout
-	os.popen("bash command")          运行shell命令, 结果保存到python对象中, 可使用readlines() 读出执行结果
+	os.system("bash command")             运行shell命令, 结果直接输出到stdout
+	os.popen("bash command")              运行shell命令, 结果保存到python对象中, 可使用readlines() 读出执行结果
 
 
 
 3.目录
-	os.getcwd()                       获取当前工作目录
-	os.chdir("dirname")               改变当前工作目录
-	os.symlink('path_src','path_des') 创建符号链接, 源需绝对路径
-	os.mkdir('dirname')               创建单级目录
-	os.makedirs('dir1/dir2')          可生成多层递归目录(不需要二次mkdir)
-	os.rmdir('dirname')               删除单级空目录, 若目录不为空则无法删除, 报错(专门删空目录)
-	os.removedirs('dirname1')         自动删除空目录: 若目录为空, 则删除, 并递归到上一级目录, 如若也为空, 则删除, 依此类推;(专门删空目录)
-	os.listdir('path')                列出指定目录下的所有文件和子目录, 包括隐藏文件, 并以列表方式打印
-	os.walk()                         自动遍历文件夹(py_os.path.py 有demo)
+	os.getcwd()                           获取当前工作目录
+	os.chdir("dirname")                   改变当前工作目录
+	os.symlink('path_src','path_des')     创建符号链接, 源需绝对路径
+	os.mkdir('dirname')                   创建单级目录
+	os.makedirs('dir1/dir2')              可生成多层递归目录(不需要二次mkdir)
+	os.rmdir('dirname')                   删除单级空目录, 若目录不为空则无法删除, 报错(专门删空目录)
+	os.removedirs('dirname1')             自动删除空目录: 若目录为空, 则删除, 并递归到上一级目录, 如若也为空, 则删除, 依此类推;(专门删空目录)
+	os.listdir('path')                    列出指定目录下的所有文件和子目录, 包括隐藏文件, 并以列表方式打印
+	os.walk()                             自动遍历文件夹(py_os.path.py 有demo)
 
 
 

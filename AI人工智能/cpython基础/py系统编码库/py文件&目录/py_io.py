@@ -93,6 +93,13 @@ while line:
 	#print(line)
 	line=fd.readline()
 
+line="*** start reading ***"
+while line:
+	line=fd.readline()
+	#print(line)
+	line=fd.readline()
+	#print(line)
+
 # 逐行读取file [实现细节不明确, 慎用, 但精简]
 #for line in open('./py_io.py','rt'):
 	#print(line)

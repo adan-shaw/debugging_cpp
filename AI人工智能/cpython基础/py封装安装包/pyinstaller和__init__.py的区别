@@ -1,0 +1,8 @@
+pyinstaller 和__init__.py的区别:
+	* pyinstaller 把所有py 包和源文件, 全部都编译封装进一个二进制exe 可执行文件中,
+		pyinstaller 编译导出后, 可以直接独立运行, 不需要python 脚本机!!
+		pyinstaller 编译时会把所有依赖环境, 一同编译进exe 可执行文件中;
+
+	* __init__.py 把部分*.py 源文件, 打包成一个py 包, 这个包仍然要依赖python 脚本机才能运行;
+		__init__.py 封装, 相当于把零散源码集合成一个源码依赖包, 但本质上, 只是python 的一个功能包而已, 不能独立运行的;
+

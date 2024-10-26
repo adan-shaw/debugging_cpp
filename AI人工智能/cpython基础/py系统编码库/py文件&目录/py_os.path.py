@@ -31,7 +31,7 @@ import os.path
 	os.path.commonprefix(list)       输入一个path list, 返回该apth list 中, 最长的共有path 路径; (例如: /home/adan /home/eva, 共有路径: /home)
 	os.path.join(path1,path2,...]])  合并多个路径, 共有部分被去除, 最终返回一个最长路径string;
 	os.path.normcase(path)           消除win 系统路径的差异: 在unix下, 该函数会原样返回path; 
-																	 在win 平台上会将路径中所有字符转换为小写, 并将所有斜杠转换为反斜杠;
+                                   在win 平台上会将路径中所有字符转换为小写, 并将所有斜杠转换为反斜杠;
 	os.path.normpath(path)           除路径中多余的分隔符和对上级目录的引用, 返回标准化的路径;
 	os.path.splitdrive(path)         拆分驱动器名和路径, 主要针对win; linux 返回的元组中, 第一个元素总是空的;
 	os.walk(root)                    自动遍历文件夹, 返回比较特殊, 看demo;
