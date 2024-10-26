@@ -1,0 +1,11 @@
+# apt-cache search zmq
+pypy-zmq - PyPy bindings for 0MQ library
+python-zmq - Python bindings for 0MQ library
+python-zmq-dbg - Python bindings for 0MQ library - debugging files
+python3-zmq - Python3 bindings for 0MQ library
+python3-zmq-dbg - Python3 bindings for 0MQ library - debugging file
+
+
+
+# 安装py_zmq
+apt-get install pypy-zmq python-zmq python-zmq-dbg python3-zmq python3-zmq-dbg
