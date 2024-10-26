@@ -8,10 +8,11 @@ class client_ssl:
 		# 生成SSL上下文
 		context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 		# 加载信任根证书
-		context.load_verify_locations('cert/ca.crt')
+		#context.load_verify_locations('ssl.key/ca.crt')
+		context.load_verify_locations('./ssl.key/ca.pem')
 
-		# 与服务端建立socket连接
-		with socket.create_connection(('127.0.0.1', 9443)) as sfd_cli:
+		# 与服务端建立socket连接(证书定义了443 端口, 必须使用443 端口通信)
+		with socket.create_connection(('127.0.0.1', 443)) as sfd_cli:
 			sfd_cli.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			sfd_cli.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, True)
 			# 将socket打包成SSL socket, 其主要工作是完成密钥协商
