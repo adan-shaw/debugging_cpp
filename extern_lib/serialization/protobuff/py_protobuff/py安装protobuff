@@ -1,0 +1,11 @@
+# 搜索包
+root@eva:/home/adan# apt-cache search protobuf | grep python
+python3-arcus - message queue for Cura based on protobuf (Python bindings)
+python-protobuf - Python bindings for protocol buffers
+python3-protobuf - Python 3 bindings for protocol buffers
+python3-grpc-tools - Protobuf code generator for gRPC (Python 3)
+
+
+
+# 安装
+apt-get install python-protobuf python3-protobuf python3-grpc-tools python3-arcus 

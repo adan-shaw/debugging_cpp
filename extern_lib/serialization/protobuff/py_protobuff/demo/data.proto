@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package protobuf;
+
+message demo_data {
+	int32 request_type = 1;
+	int32 tool_type = 2;
+	string data = 3;
+}
+
