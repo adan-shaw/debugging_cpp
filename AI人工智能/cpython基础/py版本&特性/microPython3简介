@@ -1,0 +1,5 @@
+microPython3简介
+	microPython3 本质上也是一个python 解析器, 支持普通的python 基础语法;
+	只不过microPython3 的标准库, 拓展库, 可能就没有那么多了;
+	这要看具体的移植情况, 看嵌入式bsp 剪裁移植组件, 决定这一因素, 
+	标准库的数量, 具体是怎么样的, microPython3 的可剪裁性很大;

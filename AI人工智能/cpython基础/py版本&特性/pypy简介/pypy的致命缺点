@@ -1,0 +1,10 @@
+pypy 的致命缺点:
+	基于rust 语言实现的python JIT 版本, 大部分语法于cpython2/3 兼容,
+	但实际上有不少差异, 难以完全取代cpython;
+
+	pypy 可能没有pyinstaller, 安全保护跟不上, 各种主流功能跟不上;
+	python2 的ssl 通信安全库, 已经跟不上python3 了, 还有更多的配套方案, 跟不上, 这种情况下, pypy 基本上不可能赢cpython;
+
+	你觉得pypy 可以取代cpython 的话, 那就是:
+		你现在脑子进的水, 觉得pypy 可以取代cpython 的, 日后就要流多少泪, 来弥补这种缺陷!!
+		这基本上是不可能扭转过来的, pypy 注定会是小众市场, 面对庞大的cpython, 基本上会输的, 别选错了!!
