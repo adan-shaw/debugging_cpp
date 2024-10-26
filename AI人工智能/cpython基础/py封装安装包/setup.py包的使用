@@ -51,6 +51,9 @@ usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
 
 
 常用的命令:
+	# 显示setup.py 打包帮助命令
+	python setup.py --help-commands
+
 	# 检查包的完整性(检查依赖是否安装正确, 必须第一步执行)
 	python setup.py check
 
@@ -66,10 +69,23 @@ usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
 	# 指定路径安装
 	python setup.py install --prefix=../../lib/python2.7/site-packages/
 
+	# list of packages that provide distutils commands
+	python3 setup.py --command-packages
+
 	# 遗憾的是: 没有卸载命令, 卸载需要手动删除/pip 进行卸载
 
 
 
+	# 创建egg 包:
+	python setup.py sdist.egg
 
+	# 创建tar.gz 包:
+	python setup.py sdist --formats=gztar
+
+	# 安装应用:
+	python setup.py install
+
+	# 开发方式安装:
+	python setup.py develop
 
 

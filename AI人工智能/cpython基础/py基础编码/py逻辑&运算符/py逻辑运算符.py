@@ -50,7 +50,7 @@ else:
 x=1
 if(x == 1):
 	if(x == 1):
-		print("fuck yeah")
+		print("love yeah")
 else:
 	print("x != 1")
 
@@ -84,8 +84,8 @@ if("banana" in x):
 	print("banana in x[]")
 
 # not in: 如果类对象中不存在具有指定值的序列, 则返回True.
-if("fuck" not in x):
-	print("fuck not in x[]")
+if("love" not in x):
+	print("love not in x[]")
 
 
 

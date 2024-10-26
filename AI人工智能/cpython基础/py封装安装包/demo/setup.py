@@ -1,3 +1,7 @@
+#coding=UTF-8
+
+
+
 #
 # setup.py file 编写:
 #

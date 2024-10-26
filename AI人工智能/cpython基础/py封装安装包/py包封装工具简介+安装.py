@@ -1,5 +1,20 @@
 #
-# 1.python 安装包封装工具
+# 1.python 包的组成文件结构:
+#
+'''
+	setup.py				安装文件, 描述压缩方式, pip依赖, 依赖包存放路径, 包含的*.py文件路径等;
+	__init__.py			import 导入封装包时, 自动调用的init 初始化文件;
+	*.py						封装包内的.py 源码文件;
+	MANIFEST.in			指明封装包中各种资源文件的路径(需要在setup.py中设置include_package_data=True)
+
+'''
+
+
+
+
+
+#
+# 2.python 安装包封装工具
 #
 '''
 安装setuptools:
@@ -27,17 +42,4 @@ python 是text 编码语言, 如果你不想代码泄漏, 可以直接用pyo,pyc
 
 
 
-#
-# 2.常用的python 包封装工具命令:
-#
-# 创建egg 包:
-python setup.py bdist_egg
 
-# 创建tar.gz 包:
-python setup.py sdist --formats=gztar
-
-# 安装应用:
-python setup.py install
-
-# 开发方式安装:
-python setup.py develop
