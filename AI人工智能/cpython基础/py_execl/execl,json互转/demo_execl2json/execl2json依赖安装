@@ -1,0 +1,9 @@
+# 可视化图形库tkinter 的安装
+apt-get install python3-tk
+apt-get install python-tk
+
+
+
+# openpyxl 的安装
+sudo apt-get install python3-openpyxl
+sudo apt-get install python-openpyxl
