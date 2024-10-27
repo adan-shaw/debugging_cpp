@@ -30,14 +30,14 @@ if(__name__ == '__main__'):
 
 	# 创建10 个子进程, 统一执行proc_son_func(), 把共享内存变量统一传给子进程
 	# (传递参数时, 必须使用: args=(shared_val,) 多加一个','号在'()'里面, 否则报错: TypeError: 'Synchronized' object is not iterable)
-	proc_son_pool = [multiprocessing.Process(target=proc_son_func, args=(shared_val,)) for tmp in range(10)]
+	proc_pool_son = [multiprocessing.Process(target=proc_son_func, args=(shared_val,)) for tmp in range(10)]
 
 	# 启动每个子进程
-	for son in proc_son_pool:
+	for son in proc_pool_son:
 		son.start()
 
 	# 等待每个子进程结束
-	for son in proc_son_pool:
+	for son in proc_pool_son:
 		son.join()
 
 	# 输出10 (每个子进程都对i+1)
