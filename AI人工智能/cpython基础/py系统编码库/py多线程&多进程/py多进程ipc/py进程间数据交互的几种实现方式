@@ -1,0 +1,21 @@
+python进程间数据交互的几种实现方式:
+	* 共享内存
+	* 管道
+	* 队列(消息队列)
+	* 套接字:
+		(一般使用unix socket 性能好, unix socket + udp 就更完美了, 
+		 但udp 不太好用, unix socket + tcp 用得多一点, 但校验较多, tcp 报头较大,
+		 一般也只会使用127.0.0.1 回环地址, 性能最好)
+	* 文件:
+		(少用, 非常崎岖, 基本不用, 除非是只读config, config 一般也是json/xml/ini 格式化的)
+
+
+
+
+
+python进程的数据离线保存方式:
+	* 文件:
+		(少用, 非常崎岖, 基本不用, 除非是只读config, config 一般也是json/xml/ini 格式化的)
+
+	* joblib/pickle:
+		最优!! python 支持比较高性能的离线app 应用数据存储, 详情请阅读: py应用数据导出到file的好处
