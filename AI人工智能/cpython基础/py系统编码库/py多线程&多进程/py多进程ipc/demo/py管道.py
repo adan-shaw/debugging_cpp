@@ -20,6 +20,7 @@ if(__name__ == '__main__'):
 	pipe_parent, pipe_child = multiprocessing.Pipe()
 
 	# 创建两个子进程, 并且把管道传递给这两个子进程
+	# (传递参数时, 必须使用: args=(shared_val,) 多加一个','号在'()'里面, 否则报错: TypeError: 'Synchronized' object is not iterable)
 	p1 = multiprocessing.Process(target=sender, args=(pipe_parent,))
 	p2 = multiprocessing.Process(target=receiver, args=(pipe_child,))
 

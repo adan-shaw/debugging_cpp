@@ -20,6 +20,7 @@ if(__name__ == '__main__'):
 	q = multiprocessing.Queue()
 
 	# 创建4 个子线程
+	# (传递参数时, 必须使用: args=(shared_val,) 多加一个','号在'()'里面, 否则报错: TypeError: 'Synchronized' object is not iterable)
 	proc_son_pool = [multiprocessing.Process(target=worker, args=(q,)) for tmp in range(4)]
 
 	# 启动这4 个子线程
