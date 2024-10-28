@@ -7,9 +7,9 @@ class server_ssl:
 	def start_listen(self):
 		# 生成SSL上下文
 		context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-		# 加载服务器所用证书和私钥
+		# 加载服务器所用证书和私钥(作者自身的ssl 证书不方便提供)
 		#context.load_cert_chain('ssl.key/srv.crt', 'ssl.key/server_rsa_private.pem.unsecure')
-		context.load_cert_chain('./ssl.key/ca.pem', './ssl.key/priv.key')
+		context.load_cert_chain('./ssl.key/CA.crt', './ssl.key/CA.key')
 
 		# 监听端口(证书定义了443 端口, 必须使用443 端口通信)
 		with socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) as sfd_srv:
