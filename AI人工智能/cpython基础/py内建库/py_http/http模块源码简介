@@ -22,3 +22,42 @@ http3.7:
 # python3.x 的http 模块, 功能比较完善
 # 一切参数默认, 直接打开一个python 默认的http server, 监听端口8000(这种用法, 没有什么实用意义)
 python3 -m http.server --bind 127.0.0.1 8000 --directory /tmp/ &
+
+
+
+
+
+#
+# python3 的http.server 内建模块简介
+#
+http.server 提供了基本的HTTP 请求处理功能, 它包含了以下几个核心类和方法: 
+	http.server.BaseHTTPRequestHandler: 
+		这是所有请求处理类的基类, 提供了处理HTTP 请求的基本框架; 
+		它定义了处理HTTP 请求的方法(如 do_GET、do_POST 等), 这些方法需要在子类中被实现或重写; 
+
+	http.server.SimpleHTTPRequestHandler: 
+		这是BaseHTTPRequestHandler 的一个子类, 专门用于处理简单的GET 和HEAD 请求; 
+		它可以直接用于服务文件系统中的文件, 支持简单的文件目录浏览; 
+
+	http.server.CGIHTTPRequestHandler: 
+		这是SimpleHTTPRequestHandler 的一个子类, 支持CGI 脚本的执行; 
+		它允许通过服务器运行 CGI 脚本, 适用于简单的动态网页服务器; 
+
+	http.server.HTTPServer: 
+		这是一个具体的HTTP 服务器类, 基于socketserver.TCPServer 实现; 
+		它用于处理客户端的请求并生成响应; 
+
+	http.server.ThreadingHTTPServer: 
+		这是HTTPServer 的多线程版本, 每个请求都会由一个单独的线程来处理; 
+
+
+
+关键方法和属性:
+	do_GET(self):															处理GET 请求, 子类可以重写此方法以自定义处理逻辑;
+	do_POST(self):														处理POST 请求, 子类可以重写此方法;
+	send_response(self, code, message=None):	发送HTTP 响应代码和可选的消息;
+	send_header(self, keyword, value):				发送HTTP 标头;
+	end_headers(self):												发送HTTP 响应的结束标记;
+	log_message(self, format, *args):					记录服务器日志信息;
+
+
