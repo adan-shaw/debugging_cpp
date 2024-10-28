@@ -16,9 +16,14 @@ after(c++ 语言标准):
 			line45: auto类型的需求是std::string
 			line56: auto类型的需求是double
 			...
-		但你只定义了一个auto tmp; 实体,
+		但你只定义了一个auto tmp; 实体, 那么则会有:
+			auto tmp = (int)unknow_val;
+			auto tmp = (std::string)unknow_val;
+			auto tmp = (double)unknow_val;
 		这样就算c++ 设计出auto 类型, 让编译器自动识别你需要的变量类型,
-		但编译器也不能用一个tmp 实体, 初始化成int/double/std::string,
+		但编译器也不能用一个tmp 实体, 都初始化成int/double/std::string 类型;
+		这时候, 除了内存消耗较多的弊端之外, 
+		编码时, 你还得想想我这个tmp 变量, 是否被占用过, 如果被占用过, 类型是否匹配, 不匹配的类型可能会引发bug;
 
 		所以, 这里立一个规矩:
 			* c++ 函数局部变量, 如果不打算前置变量, 请使用auto 类型, 使用auto 类型一定不能重用, 只能一次性使用;
