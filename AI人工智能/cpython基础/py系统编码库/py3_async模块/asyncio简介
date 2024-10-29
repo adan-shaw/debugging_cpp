@@ -1,0 +1,23 @@
+# pip 安装asyncio
+pip install -i http://mirrors.cloud.tencent.com/pypi/simple asyncio --target ../../runtime/python/lib/python2.7/site-packages/ --trusted-host mirrors.cloud.tencent.com --trusted-host mirrors.cloud.tencent.com
+
+
+
+asyncio python 3.5 之后才有的(python2 不能用);
+
+jinja2 如果依赖asyncio, 即都是python3 的版本(当然也有python2 的jinja2 版本, 只是比较旧)
+
+
+
+
+
+# dkim库引用asyncio 的例子: 
+# aiodns requires Python 3.5+, so no async before that
+if sys.version_info >= (3, 5) and USE_ASYNC:
+	try:
+		import aiodns
+		from dkim.asyncsupport import verify_async
+		dkim_verify_async = verify_async
+	except ImportError:
+		# If aiodns is not installed, then async verification is not available
+		pass
