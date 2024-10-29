@@ -1,0 +1,69 @@
+声明:
+	web 服务器 = http proxy server [gateway];
+	web 应用服务器 = http app server [app server];
+	(互联网的书籍, 普遍是这样认为的, 只是称呼习惯不同而已, 要注意区分)
+
+
+
+
+
+一.CGI
+	通用网关接口(Common Gateway Interface/CGI), 是'web_app服务器'与'web_proxy服务器'之间的接口标准, 
+	用来规定一个'web_app服务器', 该如何与'web_proxy服务器'程序之间进行通信;
+
+	CGI程序可以用任何脚本语言或者是完全独立编程语言实现, 只要这个语言可以在这个系统上运行;
+	用来规范'web_proxy服务器'传输到php解释器中的数据类型以及数据格式, 
+	包括URL、查询字符串、POST数据、HTTP header等, 也就是为了保证web server传递过来的数据是标准格式的
+
+	总结: CGI是一个标准, 定义了客户端服务器之间如何传数据
+
+
+
+
+
+二.fastCGI
+	快速通用网关接口(Fast Common Gateway Interface／FastCGI), 是一种让交互程序与'web_proxy服务器'通信的协议;
+	它是早期 CGI 的一个增强版本, 
+	像是一个常驻(long-live)型的CGI, 废除了CGI fork-and-execute(来一个请求fork 一个新进程处理, 处理完再把进程 kill 掉)的工作方式, 
+	转而使用一种长生存期的方法, 减少了进程消耗, 从而使服务器可以同时处理更多的网页请求;
+
+
+
+
+
+三.WSGI
+	全称Web Server Gateway Interface 或者称为: Python Web Server Gateway Interface
+	'web_proxy服务器'网关接口, 是为Python 语言定义的'web_proxy服务器'和'web_app服务器'之间的一种简单而通用的接口; 
+	自从WSGI 被开发出来以后, 许多其它语言中也出现了类似接口;
+	WSGI 是作为'web_proxy服务器'和'web_app服务器'之间的一种低级别的接口, 以提升可移植 Web 应用开发的共同点; 
+	WSGI 是基于CGI 标准而设计的;
+	WSGI 的官方定义是: the Python Web Server Gateway Interface; 
+	从名字就可以看出来, 这东西是一个Gateway, 也就是网关: 网关的作用就是在协议之间进行转换;
+
+
+
+四.wsgiref
+	Python中的一个WSGI模块: wsgiref;
+	它是用纯Python编写的WSGI服务器的"参考实现";
+	所谓"参考实现"是指该实现完全符合WSGI标准, 但是不考虑任何运行效率, 仅供开发和测试使用;
+
+
+
+五.uWSGI
+	uWSGI 是一个'web_proxy服务器', 它实现了WSGI、uwsgi、http等协议, 
+	用于接收'web_proxy服务器'转发的动态请求并处理后发给'web_app服务器'
+	uWSGI: 用c语言写的, 性能比较高
+
+
+
+六.spawn-fcgi
+	一个用c 语言实现的'web_proxy服务器'
+
+
+七.libfcgi
+	一个用c 语言实现的, 支持c/c++ 进行fastcgi 编程的库;
+	spawn-fcgi = uWSGI
+	wsgiref = libfcgi
+
+
+

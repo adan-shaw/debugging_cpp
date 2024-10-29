@@ -1,0 +1,16 @@
+参数解释:
+	socket:				socket文件,也可以是地址+端口;
+	master:				是否启动主进程来管理其他进程;
+	chdir:				项目的根目录;
+	module:				wsgi文件相对路径;
+	home:					虚拟环境目录;
+	workers:			开启的进程数量;
+	pid_file:			指定pid文件;
+	harakiri:			请求的超时时间;
+	vacuum:				服务结束后时候删除对应的socket和pid文件;
+	limit_as:			限制每个uwsgi进程占用的虚拟内存数目;
+
+	reload-mercy:	设置在平滑的重启(直到接收到的请求处理完才重启)一个工作子进程中,等待这个工作结束的最长秒数;
+	max_requests:	每个工作进程设置的请求上限;
+	buffer_size:	设置用于uwsgi包解析的内部缓存区大小;
+	daemonize:		进程后台执行,并保存日志到特定路径;如果uwsgi进程被supervisor管理,不能设置该参数;

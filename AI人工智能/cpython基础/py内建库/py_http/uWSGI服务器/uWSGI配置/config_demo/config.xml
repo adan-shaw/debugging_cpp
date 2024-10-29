@@ -1,0 +1,21 @@
+<uwsgi>
+	<!--
+		备注:
+		<cluster>225.1.1.1:3333</cluster>
+		用socket 代表app server:
+		<socket>192.168.60.*:3031</socket>
+		用http 代表web server:
+		<http>127.0.0.1:3031</http>
+	-->
+	<http>127.0.0.1:8001</http>
+	<listen>80</listen>
+	<pythonpath>/home/adan/venv_py311/</pythonpath>
+	<master>true</master>
+	<processes>1</processes>
+	<pidfile>/home/adan/venv_py311/lib_py/uwsgi/uwsgi.pid</pidfile>
+	<logdate>true</logdate>
+	<daemonize>/home/adan/venv_py311/lib_py/uwsgi/uwsgi.log</daemonize>
+	<harakiri>30</harakiri>
+	<buffer-size>16384</buffer-size>
+</uwsgi>
+

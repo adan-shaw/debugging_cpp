@@ -1,0 +1,101 @@
+#
+# 1.fcgi(fast cgi)/scgi(simple cgi)出现
+#
+cgi 是一种接口标准, 其cgi 协议标准定义是:
+	当web 客户端, 选中某个web 文件之后, cgi server 会选中该文件, 并执行该web 文件, 
+	然后将执行结果打印到标准io 输出stdout 中, web app server 会将这个结果返回给cgi server, cgi server 则会进一步返回给web 客户端;
+	(所以http 是以字符串作为数据传输基石的)
+	这就是一个完整的cgi 流程!!
+
+
+
+cgi 有几个高速精简版本:
+	fast cgi    fcgi
+	simple cgi  scgi(Simple Common Gateway Interface, 也是cgi的替代版本, scgi协议很简单, 和fastcgi差不多, 只是没有推广开来)
+
+cgi 改造版本(并不是精简版):
+	WSGI        Web服务器网关接口(Python Web Server Gateway Interface)
+
+cgi server的几个版本:
+	php cgi server    = php-fpm (fast cgi)
+	python cgi server = uWSGI
+
+
+
+nginx 支持fast chi, scgi, wsgi, 等等:
+	nginx对应的配置指令是scgi_pass, 你想用就用, flup也支持.
+
+
+
+
+
+
+
+
+#
+# 2.uWSGI server 的不同之处
+#
+php-fpm server, 使用的是fast cgi:
+	用户点开哪个页面, 就叫php 机器装载哪个页面.php文件, 最终将'返回结果'根据标准io 返回.
+	php-fpm server 一般已经内嵌php 虚拟机了,
+	php-fpm server 转发到php 虚拟机, 是进程内部的数据传输.
+
+
+
+uWSGI server则是:
+	用户点哪个页面, nginx 通过uwsgi协议, 告知uWSGI server, 尽快返还标准io 输出.
+	uWSGI server 通过请求url 就获知用户想要获取的内容.
+	(uWSGI server 不是内嵌的. 不会直接fast cgi)
+
+	uWSGI server 收到请求后, 通过scgi 协议(fastcgi), 重新对web python server发起请求,
+	这个过程中, uWSGI server 可以起到隔绝作用, 增加安全性.
+	(主要是python 太慢了, uWSGI server 可以过滤掉很多无效请求, 减少web python server的运算量,
+	 而且用户请求时, 使用python 特制的uwsgi 协议, 
+	 请求被解析后, 变成了scgi 协议,
+	 这样一来, 极大地增加的穿透成本, 因此python server 实际上算是比较安全的web server)
+
+
+
+uWSGI server 的工作流程:
+	nginx -> uwsgi -> uWSGI server -> scgi -> web app server
+	(scgi类似fastcgi, 也是cgi 的变种)
+
+
+
+
+
+
+
+
+#
+# 3.WSGI,uwsgi协议&&uWSGI服务器的区别
+#
+*1.WSGI
+	WSGI的全称是Web Server Gateway Interface(Web服务器网关接口), 
+	它不是服务器、python模块、框架、API或者任何软件, 
+	只是一种描述web服务器(如nginx, uWSGI等服务器)如何与web应用程序(如用Django、Flask框架写的程序)通信的规范、协议. 
+	server和application的规范在PEP3333中有具体描述, 
+	要实现WSGI协议, 必须同时实现web server和web application, 
+	当前运行在WSGI协议之上的web框架有, Flask, Django. 
+
+
+*2.uWSGI
+	uWSGI是一个全功能的HTTP服务器, 实现了WSGI协议、uwsgi协议、http协议等. 
+	它要做的就是把HTTP协议转化成语言支持的网络协议.
+	比如把HTTP协议转化成WSGI协议, 让Python可以直接使用. 
+
+
+*3.uwsgi
+	与WSGI一样, 是uWSGI服务器的独占通信协议, 用于定义传输信息的类型.
+	每一个uwsgi packet前4byte为传输信息类型的描述, 
+	与WSGI协议是两种东西, 据说该协议是fcgi协议的10倍快. 
+
+
+*4.Nginx
+	http_proxy 网关, 支持cgi, fastcgi, scgi, WSGI, uwsgi 等协议.
+
+
+
+
+
+

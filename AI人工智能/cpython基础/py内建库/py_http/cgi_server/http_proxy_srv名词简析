@@ -1,0 +1,31 @@
+httpd = web服务器 = http_proxy_server = http_gateway;(代理网关)
+
+web应用服务器 = http_app_server = app_server;(应用服务器)
+
+
+
+CGI,fastcgi,wsgi:
+	CGI 是最原始的CGI 协议;
+	fastcgi 是基于cgi 实现的, 主要支持非python 的语言;
+	wsgi 主要是基于cgi 实现的, 主要支持python 语言;
+
+
+
+spawn-fcgi(c/c++ fastcgi服务器) = uWSGI(python wsgi服务器)
+
+wsgiref(python cgi编程库, 可收工实现cgi_server) = libfcgi(c/c++ cgi编程库, 可收工实现cgi_server)
+
+
+
+nginx/apache_httpd/lighttpd:
+	大型httpd = web服务器 = http_proxy_server = http_gateway;(代理网关)
+	这些大型库, 支持二次开发, 但并不支持cgi编程!!
+
+	openresty 支持cgi 编程, 但与'wsgiref/libfcgi' 不一样, 
+	openresty 只做二次cgi 编程, 不会重写一个新的cgi server;
+	'wsgiref/libfcgi' 则是重写一个新的cgi server;
+
+
+
+* openresty = nginx + lua;
+* apache_httpd+mod_php+php = httpd+php
