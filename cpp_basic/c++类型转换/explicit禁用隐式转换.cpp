@@ -1,5 +1,5 @@
 //编译:
-//		g++ -g3 ./explicit关键字\:禁用隐式转换.cpp -o x
+//		g++ -g3 ./explicit禁用隐式转换.cpp -o x
 
 
 
