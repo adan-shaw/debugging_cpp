@@ -1,0 +1,19 @@
+linux 可以通过安装/重新编译kernel, 新增Preempt_RT 模块到kernel 中, 让linux 系统变成一个rt 实时系统;
+
+# 搜索apt 包, 可以看到所有可用的Preempt_RT 资源包
+apt-cache search Preempt_RT
+
+
+
+改造后的linux, 应该是剪裁后的linux 内核, 
+
+如果linux 内核还是PC 机那样臃肿, 那么Preempt_RT 实时模块, 应该会导致linux 系统非常卡;
+
+因为很多资源请求, 都变成rt 实时的话, 
+
+那么你请求一个file 资源, 都可能会导致系统卡死, 还非常容易显然资源死锁, 导致系统卡死甚至崩溃,
+
+所以:
+	* PC 系统基本上不使用linux-Preempt_RT 实时模块, 禁用!!
+	* 嵌入式linux 如果需要使用Preempt_RT 模块, 一定需要将linux 剪裁得比较小, 提高实时性能, 也减少资源访问冲突的可能性!!
+

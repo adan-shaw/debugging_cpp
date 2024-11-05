@@ -1,0 +1,30 @@
+#
+# apt 安装linux 实时模块
+#
+linux-image-rt-amd64 - Linux for 64-bit PCs (meta-package), PREEMPT_RT
+linux-image-rt-amd64-dbg - Debugging symbols for Linux rt-amd64 configuration (meta-package)
+linux-headers-rt-amd64 - Header files for Linux rt-amd64 configuration (meta-package)
+
+linux-headers-4.19.0-17-common-rt - Common header files for Linux 4.19.0-17-rt
+linux-headers-4.19.0-18-common-rt - Common header files for Linux 4.19.0-18-rt
+linux-headers-4.19.0-17-rt-amd64 - Header files for Linux 4.19.0-17-rt-amd64
+linux-headers-4.19.0-18-rt-amd64 - Header files for Linux 4.19.0-18-rt-amd64
+
+linux-image-4.19.0-17-rt-amd64-dbg - Debug symbols for linux-image-4.19.0-17-rt-amd64
+linux-image-4.19.0-18-rt-amd64-dbg - Debug symbols for linux-image-4.19.0-18-rt-amd64
+linux-image-4.19.0-17-rt-amd64-unsigned - Linux 4.19 for 64-bit PCs, PREEMPT_RT
+linux-image-4.19.0-18-rt-amd64-unsigned - Linux 4.19 for 64-bit PCs, PREEMPT_RT
+linux-image-4.19.0-17-rt-amd64 - Linux 4.19 for 64-bit PCs, PREEMPT_RT (signed)
+linux-image-4.19.0-18-rt-amd64 - Linux 4.19 for 64-bit PCs, PREEMPT_RT (signed)
+
+# ps:
+# 普通PC 绝对不要安装PREEMPT_RT 实时模块, 否则PC desktop 系统会报废!!
+# 不过可以在vbox 里面做实验, 做实时系统test;
+
+
+
+# apt安装全功能linux rt 模块(省去自己编译linux kernel的麻烦)
+apt-get install linux-image-rt-amd64 linux-image-rt-amd64-dbg linux-headers-rt-amd64
+
+# 安装全部头文件
+apt-get install linux-headers-4.19.0-17-common-rt linux-headers-4.19.0-18-common-rt linux-headers-4.19.0-17-rt-amd64 linux-headers-4.19.0-18-rt-amd64
