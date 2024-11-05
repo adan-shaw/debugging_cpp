@@ -1,0 +1,31 @@
+freertos 简介:
+	freertos 是一个粒度范围, 规模比rt-thread 更大的系统, 
+	freertos 可以一个系统兼容8/32 bit, 但基本上freertos 也是跑在32bit 芯片上面的, freertos 跑在8 bit 芯片上面, 意义不大;
+	(一般跑在8bit 芯片上面的, 都是'ucosii/ucosiii')
+
+	freertos 跑在8 bit 芯片上面, 并没有什么优势, 因此, freertos 也算是32bit 的rtos, 跟rt-thread 类似;
+
+
+
+	freertos 和rt-thread 都支持多线程模式的, 也就是可以创建简单的线程执行任务, 完美支持SMP 对称多核32 bit 芯片;
+
+
+
+	freertos / rt-thread 都是比较成熟的rtos 系统, 有较多的开发配套方案, 而且技术成熟;
+	但是面对近年来新崛起的rtos, 还有新型物联网, 供电网, 新能源, 海陆空装备, 卫星, 机器人, 智能电话, IPC 摄像头, 等等新需求,
+	老式的rtos 也面临着巨大的技术冲击,
+	新型的rtos 如潮水般涌来, 更多专用新需求, freertos / rt-thread 都将面临新的考验!!
+
+
+
+	事实上, freertos 的规模比较大, 比较老, 比较成熟, 配套多;
+	但rt-thread 的好处是: 纯国产的系统, 自主化程度高, 规模不小, 比较成熟, 配套也多;
+
+
+
+
+
+支持8bit 芯片的rtos:
+	* ucosii
+	* ucosiii
+	* freertos(不推荐, 性能较差, 吃力)
