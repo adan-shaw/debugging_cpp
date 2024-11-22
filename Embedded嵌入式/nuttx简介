@@ -1,0 +1,12 @@
+nuttx 简介:
+	nuttx 是一个新型, 全能的, 带gui, 文件系统等新型需求的rtos, 风格无线接近linux+posix+ANSI C, 做得非常不错, 
+	直接的竞争对手是:
+		nuttx
+		华为liteos
+		小米澎湃os
+		...
+
+
+
+	nuttx 是一个偏linux 风格的rtos, 但大概率也会支持poisx + ANSI C;
+	以及lwip, 文件系统, 蓝牙, wifi, 蜂窝无线电, gps, usb, can 等热门物联网设备标准;
