@@ -1,0 +1,81 @@
+* 整理一个*.zip包, 把所有freertos 依赖库全部补全!!
+	先根据manifest.yml, 把freertos 补全
+	连带.git 文件手动补全了, 如果编译失败, 只能使用:
+		git clone https://github.com/FreeRTOS/FreeRTOS.git --recurse-submodules
+		git clone git@github.com:FreeRTOS/FreeRTOS.git --recurse-submodules
+		git submodule update --init --recursive
+	进行代码补全了!!
+	ps:
+		代码补全带有少量版本差异, 但应该不影响使用的!! 都是近期的接近版本, 应该不会这么苛刻的!!
+
+	这个freertos-202212.01-all.tar.bz2 补全, 存在少量版本差异!!
+	如果编译出错, 没办法进行, 则需要严格100% 遵守manifest.yml 中定义的版本, 进行版本补全!!
+
+
+
+
+
+* 尝试编译x86 版本的freertos-os 镜像!! (有待尝试)
+	然后用qemu 跑起来, 用作调试!!
+
+
+
+
+
+* freertos 代码风格:
+	freertos 一般适用于低级MCU, 不带界面, 不带USB, 不带文件系统的应用场景!!
+	(单片机风格, 单片机管理, 直接一个文件夹一个主板的风格, 跟单片机keil 软件很像, 支持的主板也很多, 主板差异性太大, 也是没办法)
+
+	nuttx 一般适用于高级MCU, 带界面, 带USB, 带文件系统的应用场景!!
+	(接近linux, 风格更像linux, 对高级程序员非常友好)
+
+	freertos 是直接跳入demo 里面的案例进行编译的!!
+	一个demo/*主板, 一个make project !!
+	可能是因为交叉编译 + 跨平台编译的需求, 导致这种编排, 反正就是: 没有在目录的板子, 就没办法编译, 非常垃圾;
+	其实freertos 的代码, 很小, 简直搞笑, 垃圾板;
+	不过目前freertos-plus  版也可以对接posix 了, 这部分可以看看!!
+
+	freertos-plus 可以挽留一部分应用场景, 部分高级一点的物联网MCU, 也可以用(信息安全);
+	(freertos 低级版kernel, 一般用于工控的应用场景, 或者低级dsp 电源之类的, 根本不需要考虑通信, 信息安全, 只需要考虑工控即可)
+
+	但核心部分: 带界面, 带USB, 带文件系统的应用场景, freertos 表示无能为力!!
+	只要是这种高级MCU 的应用场景, 必须是nuttx!!
+
+	ps:
+		freertos 也对linux 用户非常不友好!! 基本上这就是一个windows 项目!! 用keil 开发更方便!!
+		freertos for linux 的Simulator 仿真器, 非常少!! 
+		只有一个Posix_GCC, 支持posix 的部分, 才支持linux 开发, 否则freertos 都应该在windows 平台下开发, 最好是keil 了;
+
+
+
+
+
+* freertos 编译实录:
+	使用补全代码版的freertos, 解压:
+	tar xf ./freertos-202212.01-all.tar.bz2
+
+	cd ./freertos-202212.01-all
+
+	#
+	# 1.编译低级freertos-kernel 的Posix_GCC 版Simulator 仿真器
+	#
+	cd ./FreeRTOS
+	cd ./Demo
+	cd ./Posix_GCC
+
+	make -j4
+
+	cd build
+
+	# 执行编译好的freertos-kernel 的Posix_GCC 版Simulator 仿真器
+	./posix_demo
+
+	#
+	# 2.编译低级freertos-plus 版
+	#
+	(略, 未完成)
+
+
+
+
+

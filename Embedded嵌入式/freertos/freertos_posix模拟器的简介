@@ -1,0 +1,14 @@
+freertos_posix模拟器的作用:
+	freertos_posix模拟器就是一个demo, 主要用来仿真开发的!! (模拟测试)
+
+	如果条件允许, 你可以在qemu 中跑freertos_posix模拟器!!
+	如果不支持posix 版本的低级freertos, 由于这种版本的MCU 对物理环境, 物理主板依赖性比较强, Simulator 仿真器就没有什么用了;
+
+
+
+	在允许的情况下, 你可以在仿真器中开发freertos 程序, 会更方便!!
+
+
+
+	freertos_posix模拟器也可以用来快速检验freertos 代码的完整性, 校验交叉编译工具链的完整性;
+	对于freertos plus 版, freertos_posix模拟器的作用就最大了, 直接把freertos 当成一个普通client host 来用, 非常好;
