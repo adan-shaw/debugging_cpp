@@ -1,0 +1,89 @@
+#
+# 1.安装依赖工具:
+#
+
+# 旧版debian10(kconfig-frontends 包含kconfig-tweak)
+sudo apt-get install kconfig-frontends
+# 新版ubuntu
+sudo apt-get install kconfig-tweak
+
+# 安装qemu
+apt-get install qemu-efi qemu-efi-aarch64 qemu-efi-arm qemu qemu-block-extra qemu-guest-agent qemu-kvm qemu-system qemu-system-arm qemu-system-common qemu-system-data qemu-system-gui qemu-system-mips qemu-system-misc qemu-system-ppc qemu-system-x86 qemu-user qemu-user-binfmt qemu-utils qemu-skiboot qemu-slof
+
+
+
+
+
+#
+# 2.编译nuttx(尽量不要用cmake, 要像linux kernel 一样编译nuttx 即可)
+#
+
+# (有窍门的, 必须保证: ./apps 和./nuttx-nuttx-12.7.0 在同一个文件夹内, 同一个路径下, nuttx 编译时, 会自动找到../apps 进行编译的!! 这是一个隐晦规则!!)
+# nuttx 的apps 默认路径, 就是../apps, 想要修改apps路径, 需要在menu中进行修改;
+
+# 解压apps 的源码
+tar xf ./apache-nuttx-apps-12.7.0.tar.gz
+
+# 解压nuttx 核心源码
+zip -r ./nuttx-nuttx-12.7.0.zip .
+
+
+
+# 查看当前nuttx 支持的arch
+./tools/configure.sh -L
+
+# 清空所有nuttx 残留缓存(清除上一次nuttx 编译产生的垃圾)
+make distclean
+
+# 选择arch(i486 = i386, intel64=amd64, ostest=测试版本img, 带-g)
+./tools/configure.sh qemu-i486:ostest
+./tools/configure.sh qemu-intel64:ostest
+
+# 生成kernel menu(跟linux 一样)
+make menuconfig
+
+# 直接编译nuttx
+make -j4
+
+# 如果nuttx 编译错误, 你修复不了这个错误, 想回滚, 可以执行毁灭一切的命令(清空所有数据)
+# 当然可以修复的情况下, 还是需要修复的!! nuttx编译菜单menu 自己选了什么功能, 要非常清楚才行!!
+# (编译出错大概率是选择nuttx编译菜单menu 选项出错)
+make distclean
+
+
+
+
+
+#
+# 3.启动nuttx
+#
+
+# 创建假disk 文件./sd.bin
+touch ./sd.bin
+
+# 启动./nuttx
+qemu-system-x86_64 -cpu 486 -m 128M -smp 4 -cdrom ./nuttx.elf -nographic \
+-drive if=none,file=./sd.bin,format=raw,id=blk0 \
+-chardev socket,host=127.0.0.1,port=4321,server=on,wait=off,telnet=on,id=console0
+
+
+
+
+
+#
+# 4.nuttx 使用心得
+#
+1.需要选择好cross 交叉编译链工具, 保证gcc/gdb/glibc 等工具, 是targer platform 目标平台所需的编译工具链;
+
+2.先配置arch, 再执行make menuconfig
+
+3.通过make menuconfig 菜单, 选择nuttx 具备的功能!!
+	在菜单中配置的nuttx 功能, 最后都会成为nuttx 的功能的, 就像app 功能菜单shopping一样简单轻松, 选择=编程;
+
+
+
+
+
+
+
+
