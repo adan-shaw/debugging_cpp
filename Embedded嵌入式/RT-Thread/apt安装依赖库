@@ -3,30 +3,8 @@ apt-get install gcc-multilib
 
 
 
-# 安装全功能QEMU, 使用命令: 
-apt-get install qemu-efi # transitional dummy package
-apt-get install qemu-efi-aarch64 # UEFI firmware for 64-bit ARM virtual machines
-apt-get install qemu-efi-arm # UEFI firmware for 32-bit ARM virtual machines
-apt-get install qemu # fast processor emulator, dummy package
-apt-get install qemu-block-extra # extra block backend modules for qemu-system and qemu-utils
-apt-get install qemu-guest-agent # Guest-side qemu-system agent
-apt-get install qemu-kvm # QEMU Full virtualization on x86 hardware
-apt-get install qemu-system # QEMU full system emulation binaries
-apt-get install qemu-system-arm # QEMU full system emulation binaries (arm)
-apt-get install qemu-system-common # QEMU full system emulation binaries (common files)
-apt-get install qemu-system-data # QEMU full system emulation (data files)
-apt-get install qemu-system-gui # QEMU full system emulation binaries (user interface and audio support)
-apt-get install qemu-system-mips # QEMU full system emulation binaries (mips)
-apt-get install qemu-system-misc # QEMU full system emulation binaries (miscellaneous)
-apt-get install qemu-system-ppc # QEMU full system emulation binaries (ppc)
-#apt-get install qemu-system-sparc # QEMU full system emulation binaries (sparc)
-apt-get install qemu-system-x86 # QEMU full system emulation binaries (x86)
-apt-get install qemu-user # QEMU user mode emulation binaries
-apt-get install qemu-user-binfmt # QEMU user mode binfmt registration for qemu-user
-apt-get install qemu-user-static # QEMU user mode emulation binaries (static version)
-apt-get install qemu-utils # QEMU utilities
-apt-get install qemu-skiboot # OpenPower firmware component
-apt-get install qemu-slof # Slimline Open Firmware -- QEMU PowerPC version
+# 安装qemu
+apt-get install qemu-efi qemu-efi-aarch64 qemu-efi-arm qemu qemu-block-extra qemu-guest-agent qemu-kvm qemu-system qemu-system-arm qemu-system-common qemu-system-data qemu-system-gui qemu-system-mips qemu-system-misc qemu-system-ppc qemu-system-x86 qemu-user qemu-user-binfmt qemu-utils qemu-skiboot qemu-slof
 
 
 

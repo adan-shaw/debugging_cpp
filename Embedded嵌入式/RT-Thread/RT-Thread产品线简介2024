@@ -1,3 +1,16 @@
+RT-Thread 简介:
+	RT-Thread 一般支持freertos kernel 级别的工控32bit rtos,
+	RT-Thread 也支持freertos-Plus 版的物联网32bit 高级rtos,
+	RT-Thread 也正在向nuttx 的更高级的物联网32bit 高级rtos 靠拢, 需要具备: 带界面, 带USB, 带文件系统等应用场景!!
+	ps:
+		国产软件, 打磨能力和集合程度, 超乎你的想象, 国内做得更精细,
+		但RT-Thread 的授权协议, 可能没有那么宽裕, 毕竟用心做事, 肯定是想要回报的, 可以理解;
+		RT-Thread 是rtos 里面比较强的国产版本;
+
+
+
+
+
 RT-Thread 版本:       RTT 全套开源代码
 RT-Thread Nano源代码:  一个精简版本, 主要适合资源有限的系统
 RT-Thread Smart:      一个智能的RTOS, 可以自动帮助开发者选择最适合的系统配置
