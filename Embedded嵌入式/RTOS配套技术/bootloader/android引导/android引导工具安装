@@ -1,0 +1,46 @@
+#
+# 1.android usb驱动安装
+#
+高通芯片支持库:(不确定)
+	apt-get install libqmi-glib5 skales gobi-loader
+	apt-get install mkbootimg skales mtp-tools
+
+linux 通用usb驱动for android:
+	apt-get install fastboot adb android-tools-adb
+
+
+
+注意:
+	一般高通芯片, 都不能用linux 进行fastboot 模式刷recovery.
+	因为高通h9008 端口, 可能有专用的软件加密, 
+	所以, 必须在windows 专属的高通工具app 中, 刷入recovery, 然后再刷入android img.
+
+	在linux 系统上刷写android 系统的时候, 
+	那都必须是recovery没有损坏的情况下, 才能正常使用的;
+
+
+
+
+
+#
+# 2.usb 调试模式与adb 的关系
+#
+fastboot: 
+	只是一个img 烧写程序, 并没有什么特别的, 也是一个引导程序.
+	arm 芯片最原始的引导程序, 可以引导:
+		uboot,     arm linux 专属引导程序
+		eEecovery, 全称easy recovery, 厂商的无耻剪裁版本
+		recovery,  全功能recovery
+		twrp,      第三方开源recovery, 功能强大, 但需要解bl锁, 才能刷入, 厂商基本不希望你这样做
+
+
+
+recovery:
+	实际上是一个bios 程序, 有:
+		二次引导,设备基础管理和测试,二次烧写img镜像功能,数据清除功能,恢复出厂配置功能, 等等
+
+
+
+
+
+

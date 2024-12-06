@@ -1,0 +1,26 @@
+1.bootloader 简介:
+	bootloader 是一种嵌入式boot 启动, load装载, '设备自检&启动引导'工具的统称, 类似PC 主板的BIOS;
+	但不同系统的bootloader 启动流程都不一样(android, linux, autosar, freertos, nuttx), 
+	有些小型裸板系统, 如freertos, bootloader 非常简单!!
+	linux, android, nuttx, autosar 等大型or 高度安全的系统, bootloader 流程都可能不一样, 但大致的工作都是(假设使用uboot 实现bootloader):
+		* 根据cpu 架构, 初始化cpu;
+		* 初始化cpu 之后, 根据cpu+内存管理器的规则, 初始化ddr 内存;
+		* 利用uboot 库, 进行自检设备编程(主板有多少设备, 就自检什么设备, 一般都有存储设备);
+		* 设备没问题, 就将设备树(.dtb)搬运到DDR中, 然后启动起来;
+		* 对Linux 镜像进行hash 完整性校验, 对Linux 镜像进行对称加密证书验签(secure boot安全启动);
+		* Linux镜像zImage(uImage)搬运到DDR中, 然后启动起来;
+		* 将cpu 执行权交给Linux, 然后退出;
+
+
+
+
+
+2.uboot 和bootloader 的关系:
+	uboot 是bootloader 的其中一种, 是一种比较好用, 比较流行的bootloader;
+	uboot 是一个bootloader 的一种编码实现标准(编码库), 通过uboot 库, 你可以实现你想要的bootloader 功能!!
+
+	bootloader 的实际工作流程, 比较复杂, 但uboot 最主要的工作就是启动Linux 内核(Linux 启动起来以后他就寿终正寝了, 把CPU的使用权交给Linux);
+	bootloader 和Linux 内核的关系就跟PC 上的BIOS 和Windows 的关系一样, bootloader 就相当于BIOS;
+
+	* 替代uboot 的软件
+		有很多现成的bootloader 软件可以使用, 比如uboot、vivi、RedBoot 等等, 其中以uboot 使用最为广泛;

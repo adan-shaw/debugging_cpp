@@ -1,0 +1,67 @@
+#
+# 1.bootloader
+#
+bootloader 一般是uboot 实现的, 主要步骤有:
+	* 芯片初始化
+	* 内存初始化
+	* 设备自检
+	* 装载文件系统
+	* SecureBoot安全启动
+	* 装载android img
+	* 移交cpu 使用权给img 系统(fastboot/recovery.img/boot.img)
+
+	bootloader 整体引导路线:
+		uboot -> linux kernel -> linux 子模块 -> daemon service
+
+
+
+
+
+#
+# 2.BIOS
+#
+BIOS 传统x86芯片的引导模式:
+	开机由BIOS 负责检查设备, 引导系统img 镜像等工作, 主要步骤有:
+		* 芯片初始化
+		* 内存初始化
+		* 设备自检
+		* 装载文件系统
+		* SecureBoot安全启动
+		* 装载linux img
+		* 移交cpu 使用权给img 系统(linux.img)
+
+	BIOS 整体引导路线:
+		BIOS -> MRB/UEFI -> linux kernel -> linux 子模块 -> daemon service
+		(MRB/UEFI 都是disk 引导子系统, 类似uboot, uboot 是闪存引导子系统)
+
+	ps:
+		x86 镜像实际多半是ISO9660 CD/DVD 封装格式的, 符合那个年代, CD 流行.
+		现在都不用CD 了, 但是U 盘仍然是以这种ISO9660 封装格式进行装载.
+
+
+
+总结:
+	bootloader与PC-BIOS的区别, 区别其实不大!!
+	只是界面功能的差异而已, 传统PC-BIOS, 有主板管理功能, 可以动态调节设备参数, 发烧友主板, 还能超频之类的, 可以强制修改设备参数!!
+	而bootloader 一般不提供这类功能, 用户基本上找不到这种选项;
+
+	另外就是:
+		bootloader与PC-BIOS, 都是跑在主板主控芯片上面的!!
+		PC-BIOS 有'主板主控芯片', 一个芯片管理, 模拟所有的设备主控, 实现一种类似opencpu 的功能!!
+		bootloader 主板可能没有'主板主控芯片', 而是直接由CPU 执行这类功能, 等系统img 装载之后, 直接交出系统使用权, 
+		这点bootloader与PC-BIOS 有本质上的区别!!
+
+	现代android 手机, 基本上都有大核, 小核设计!!
+	相信小核取代的, 就是BIOS 芯片的角色!!
+	麒麟960 及其以前的arm 64bit 手机芯片, 还没出现大小核结构, 这时候的arm 64bit 芯片, 大概率是没有BIOS 芯片的概念的, 也没有'主板主控芯片'的概念!!
+	但麒麟970 开启, 出现arm 64bit 芯片的大小核结构, 也就是说明:
+		arm 64bit 芯片中的小核, 彻底取代了BIOS 芯片的概念, 小核就是BIOS 芯片, 只不过他们把BIOS 芯片直接集成到ARM 芯片里面而已;
+
+	arm 32bit, 或者一些小型arm 64bit 芯片, 是没有小核的概念的;
+	这么说:
+		实际上arm 也在抄袭intel 的作业, 但是很遗憾的是: arm 进一步, intel 就要推一步!! 人家便宜, 你能怎样?
+
+
+
+
+

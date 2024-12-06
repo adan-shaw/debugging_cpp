@@ -1,0 +1,84 @@
+android引导系统简介:
+	android引导系统, 有3 大组件:
+		* bootloader = 引导程序
+		* fastboot = android 镜像维护工具, 一般是一个裸机ARM 程序;
+		* recovery = android 系统维护工具, 一般是精简linux 剪裁版;
+
+	bootloader 引导程序, 可以选择引导3 个镜像:
+		* fastboot = fastboot 裸机ARM 程序
+		* recovery = recovery.img
+		* android系统 = boot.img
+
+
+
+下面详细解析一下这三大组件:
+	android bootloader:
+		android bootloader 一般是uboot 实现的, 主要负责:
+			* 芯片初始化
+			* 内存初始化
+			* 设备自检
+			* 装载文件系统
+			* SecureBoot安全启动
+			* 装载android img
+			* 移交cpu 使用权给img 系统(fastboot/recovery.img/boot.img)
+
+
+	android fastboot:
+		android fastboot 本质上是一个裸机ARM 程序, 没有太多功能, 只有安全线刷android img 的功能, 什么功能都没有!!
+		android fastboot 甚至没有文件系统, 也没有界面(简单界面, 不可操作), 直接用来刷写android img 的, 
+		android fastboot 当然也有img 镜像的hash 校验功能和证书验签能力, 还有usb 驱动,
+		但除此之外, 基本上没有其他功能;
+
+
+
+	android recovery:
+		android recovery 本质上是一个linux 剪裁系统!!
+		android recovery 有文件系统, 方便做数据备份, 也有一个简单的可操作界面, 方便用户清空缓存, 删除数据, 或者备份数据, 等等;
+		android recovery 也有简单的按钮, 界面, tf 卡驱动, usb 驱动, 文件系统, 可以进行卡刷;
+		android recovery 当然也有img 镜像的hash 校验功能和证书验签能力;
+		但除此之外, 基本上没有其他功能;
+
+
+
+	android系统 = boot.img:
+		这没什么可说的, 这是android 系统img 镜像, 正常进入系统, 就读这个boot.img 镜像;
+
+
+
+anyway:
+	无论是fastboot, recovery, boot.img, 这三者都是通过bootloader 进行引导的, 
+	而android bootloader 也是使用uboot 实现的, 仅此而已;
+
+
+
+ps:
+	android 是一个大型现代操作系统, bootloader 肯定会很复杂, 现代linux 的bootloader 同样会很复杂!!
+
+
+
+
+
+Android bootloader 的启动流程通常分为以下几个步骤: 
+
+	* 加电自检:
+			当手机开机时, 首先会进行一些硬件自检, 包括检查存储器、处理器等硬件是否正常; 
+
+	* 加载Bootloader:
+			在硬件自检完成后, 会加载Bootloader程序, Bootloader是负责引导操作系统的软件, 通常存储在设备的启动分区中; 
+
+	* 初始化硬件:
+			Bootloader会初始化设备的硬件, 包括内存、显示器、电源管理等; 
+
+	* 启动内核:
+			Bootloader会加载Android内核, 并将控制权交给内核, 让内核开始运行; 
+
+	* 启动Android系统:
+			内核启动后, 会开始加载Android系统的各个组件, 包括用户空间程序、服务和驱动程序等; 
+
+
+
+总的来说, Android bootloader的启动流程是先进行硬件自检, 加载Bootloader, 初始化硬件, 启动内核, 最终启动Android系统; 
+
+
+
+
