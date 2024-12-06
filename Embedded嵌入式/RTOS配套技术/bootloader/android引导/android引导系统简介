@@ -11,6 +11,20 @@ android引导系统简介:
 
 
 
+	fastboot 与bootloader 的关系:
+		fastboot 不等于uboot, fastboot 是一个android 线刷程序, 并不是android 引导程序;
+		(不过你可以自己实现一个类似fastboot 的线刷程序, 来实现OTA远程更新系统/手动更新系统)
+
+	recovery 与bootloader 的关系:
+		bootloader 是用来引导android 的, 一般也是uboot;
+		recovery 是用来维护android 系统的, 一般也会用到uboot, 但recovery 实际上是一个Linux 系统, 只是一个linux 维护程序而已, 
+		在android 系统中, uboot 装载了recovery.img, 即启动recovery;
+		在android 系统中, uboot 装载了boot.img, 即启动android;
+
+
+
+
+
 下面详细解析一下这三大组件:
 	android bootloader:
 		android bootloader 一般是uboot 实现的, 主要负责:
@@ -36,6 +50,12 @@ android引导系统简介:
 		android recovery 有文件系统, 方便做数据备份, 也有一个简单的可操作界面, 方便用户清空缓存, 删除数据, 或者备份数据, 等等;
 		android recovery 也有简单的按钮, 界面, tf 卡驱动, usb 驱动, 文件系统, 可以进行卡刷;
 		android recovery 当然也有img 镜像的hash 校验功能和证书验签能力;
+
+		Recovery是一个独立的Linux系统, 用于运行各种恢复和更新操作; 
+		它通过recovery.img启动, 主要用于执行系统更新、恢复等操作; 
+		Recovery启动后, 会执行init.rc脚本, 启动一个名为"recovery"的服务程序, 
+		该服务程序负责解析输入的命令行参数或从/cache/recovery/command文件中读取命令‌; 
+
 		但除此之外, 基本上没有其他功能;
 
 
