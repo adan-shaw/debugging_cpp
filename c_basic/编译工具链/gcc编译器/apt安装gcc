@@ -81,7 +81,40 @@
 	C++11:
 		gcc4.8.1及以上可以完全支持. gcc4.3部分支持, gcc4.3以下版本不支持. 
 
-	 
+
+
+
+
+#
+# 6.gcc 常用的相关命令
+#
+# 安装gcc for x86
+apt-get install gcc g++ gcc-multilib g++-multilib
+
+# 安装gcc 配套工具
+apt-get install build-essential gdb make cmake autoconf automake autogen pkg-config 
+
+# 通用的原始gcc for debian(无glibc 依赖)
+/usr/bin/c89-gcc -v
+/usr/bin/c99-gcc -v
+
+# 查看gcc 是否依赖glibc [结果/usr/bin/c89-gcc 还是依赖x86 架构, 无语了, 
+#                      不过即便是这样, 语法仍然可以流通的, 
+#                      只是编译后的*.exe 不能直接移植, 需要用专用的工具链重新编译一次, 才能把rtos img烧写到设备上运行]
+/usr/bin/c89-gcc --print-file-name=libc.a
+/usr/bin/c89-gcc --print-file-name=libc.so
+
+# 查看有多少个交叉编译gcc 
+ls /usr/bin | grep gcc
+
+# 查看当前gcc-arch 的版本
+/usr/bin/x86_64-linux-gnu-gcc -v
+
+# 查询异构平台的gcc编译器
+apt-cache search gcc arm
+apt-cache search gcc mips
+apt-cache search gcc powerpc
+apt-cache search gcc mingw
 
 
 
