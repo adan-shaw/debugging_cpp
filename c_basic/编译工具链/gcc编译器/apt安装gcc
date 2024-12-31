@@ -94,6 +94,14 @@ apt-get install gcc g++ gcc-multilib g++-multilib
 # 安装gcc 配套工具
 apt-get install build-essential gdb make cmake autoconf automake autogen pkg-config 
 
+# 查询异构平台的gcc编译器
+apt-cache search gcc arm
+apt-cache search gcc mips
+apt-cache search gcc powerpc
+apt-cache search gcc mingw
+
+
+
 # 通用的原始gcc for debian(无glibc 依赖)
 /usr/bin/c89-gcc -v
 /usr/bin/c99-gcc -v
@@ -109,12 +117,3 @@ ls /usr/bin | grep gcc
 
 # 查看当前gcc-arch 的版本
 /usr/bin/x86_64-linux-gnu-gcc -v
-
-# 查询异构平台的gcc编译器
-apt-cache search gcc arm
-apt-cache search gcc mips
-apt-cache search gcc powerpc
-apt-cache search gcc mingw
-
-
-
