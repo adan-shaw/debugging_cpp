@@ -1,0 +1,37 @@
+AUTOSAR Tresos Studio软件简介:
+	AUTOSAR Tresos Studio 软件是NXP 的autosar 系统配置, 编辑, 编码的IDE 设计软件, 主要负责:
+		* 根据NXP 芯片 + autosar 标准, 配置, 设计autosar img 镜像+程序
+
+	不同版本的AUTOSAR Tresos Studio 软件, 一般对应不同版本的'NXP芯片+autosar版本', 一般地:
+		* autosar 3.0.x, 普遍使用的AUTOSAR Tresos Studio 版本:
+			AUTOSAR Tresos Studio 13.1.1
+			AUTOSAR Tresos Studio 14.2.1
+			AUTOSAR Tresos Studio 2009a
+			AUTOSAR Tresos Studio 2009a.sr1
+			AUTOSAR Tresos Studio 2010a.sr4
+
+		* autosar 4.0.x, 普遍使用的AUTOSAR Tresos Studio 版本:
+			AUTOSAR Tresos Studio 13.1.1
+			AUTOSAR Tresos Studio 14.2.1
+			AUTOSAR Tresos Studio 21.0.0
+			AUTOSAR Tresos Studio 25.1.1
+
+		* autosar 4.2.x, 普遍使用的AUTOSAR Tresos Studio 版本:
+			AUTOSAR Tresos Studio 21.0.0
+			AUTOSAR Tresos Studio 25.1.1
+
+		* autosar 4.3.x, 普遍使用的AUTOSAR Tresos Studio 版本:
+			AUTOSAR Tresos Studio 21.0.0
+			AUTOSAR Tresos Studio 25.1.1
+
+
+
+	因此, 不同的autosar 版本, 一般对应不同NXP AUTOSAR Tresos Studio 版本;
+	老旧的autosar 版本, 一般是老旧的NXP 芯片, 这部分芯片一般不再更新了;
+	新版本的autosar, 对应的是新的汽车产业需求(基本都是2016-2020 年以后的), 这部分的'autosar 版本 + NXP 芯片 + AUTOSAR Tresos Studio'都是需要付费的, 整体价格不菲;
+	这一个整体, 有比较大的知识产权销售价值, 因为:
+		* 老旧的NXP 芯片大部分是CAN/LIN 协议
+		* 新式的NXP 芯片大部分是ETH/CAN/LIN 协议
+
+	这种差异, 也是目前汽车产业的新革命方向, 老实芯片基本上都开始落后了, 一般也用在非核心方向上面;
+	新的汽车产业, 需要'新的NXP 芯片+新的autosar+新的AUTOSAR Tresos Studio', 都是需要付费的;
