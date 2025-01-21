@@ -63,7 +63,8 @@
 		- camera 视频数据
 		- V2X 后端数据
 	* 机器学习框架(略, 数据深度处理, 判别, 分析, 计算, 执行)
-	...
+		[需要舱驾一体的主控SoC芯片有一定的算力]
+		...
 
 	- adas:    Advanced Driver Assistance Systems 高级驾驶辅助系统
 	- noa:     Navigate on Autopilot              导航辅助驾驶NOA

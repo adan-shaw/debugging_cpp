@@ -1,30 +1,43 @@
 car汽车嵌入式list:
 
-	* adas.ad后端支援(V2X):
-		OTA
-		TBOX
-		V2X
-		MAP
-		...
-
-	* adas.ad操作系统:
+	* adas.ad 汽车电子(前装):
 		ADAS/AD 软硬件平台
-		autosar/osek
-		ASPICE标准
-		EB工具链/ETAS工具链/vector工具链
-		ap autosar(ADAS.AD通信层)
-		座舱
-		行车记录仪
+		autosar MCAL 硬件支撑层
+		autosar/osek 中间件层(ap+cp)
+		EB工具链/ETAS工具链/vector 等autosar 工具链
+		ASPICE 标准
+		车联网信息安全(autosar 安全机制)
 		...
 
-	* adas.ad监管系统:
-		车联网信息安全
+	* adas.ad 座舱OS(后装):
+		adas.ad 座舱OS
+		TBOX 通信终端
+		MDVR 行车记录仪
+		user 远程登陆app
+		OTA 远程在线更新
+		车联网信息安全(座舱OS 安全机制)
+		carlife/carplay 座舱应用汇总
+		...
+
+	* adas.ad后端支援(V2X 车联网):
+		TBOX 入网认证
+		OTA 远程在线更新
+		MAP 地图服务
+		远程登陆服务
+		carlife/carplay 座舱应用后端
+		车联网信息安全(autosar 安全机制+座舱OS 安全机制)
+		adas.ad智驾-后端数据(V2X 智驾数据支撑)
 		...
 
 	* ad自动驾驶AI:
 		adas高级辅助驾驶功能
 		ad自动驾驶功能
-		adas.ad自动驾驶AI前端:传感器
-		ad自动驾驶-仿真
-		ad自动驾驶-后端数据(V2X)
+		adas.ad智驾AI前端:传感器
+		adas.ad智驾系统仿真+3d物理环境仿真
+		adas.ad智驾-后端数据(V2X 智驾数据支撑)
 		...
+
+
+
+ps:
+	汽车产业知识不再更新公开github, 每次都写一个'略'字没意思, 大概需求list 就这样, 转入私有库的更新了, 细节不便公开;
