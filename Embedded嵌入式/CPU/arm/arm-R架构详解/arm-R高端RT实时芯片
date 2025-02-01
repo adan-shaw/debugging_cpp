@@ -1,0 +1,5 @@
+基于Cortex-R52架构的MCU虚拟化特性.html, 高端的arm-R 芯片, 竟然带有Hypervisor 虚拟化指令集, 简直不可思议!!
+
+一个MCU 竟然集成了Hypervisor 虚拟化指令集, 这也太高端了吧?
+
+这么高端, 甚至会有MMU 内存管理器, 跟SoC 毫无区别, 可以说是实时的SoC, 太恐怖了;
