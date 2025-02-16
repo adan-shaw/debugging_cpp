@@ -1,0 +1,71 @@
+#
+# 1.安装wsl
+#
+# 查看是否开启hyper-V 虚拟化
+systeminfo
+
+# 在powershell 中启用Windows10子系统功能(需要管理员权限)
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# 在powershell 中启用虚拟机平台功能(需要管理员权限)
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# 更新wsl
+wsl.exe --update
+
+
+
+# 翻墙/自己填写hosts 绕开DNS 解析限制(需要管理员权限)
+cd C:\Windows\System32\drivers\etc
+geany hosts
+
+# 新增一行(不放心可以查查url 解析出来的实时ip 地址是什么: https://ipchaxun.com/raw.Githubusercontent.com/)
+185.199.110.133 raw.githubusercontent.com
+
+
+
+# 查看当前wsl 支持安装的linux 版本
+wsl --list --online
+
+# 安装指定版本ubuntu-22.04(需要管理员权限)
+wsl --install -d ubuntu-22.04
+
+# 进入到wsl(powershell.exe/cmd.exe 中直接输入bash 即可进入wsl, 注意: wsl-ubuntu 永远只有一个, bash 终端可以有无限个)
+bash
+
+
+
+
+
+#
+# 2.安装vscode + remote 远程登录编辑插件
+#
+remote 远程登录编辑插件, 支持内嵌Xshell 客户端, 还支持远程sftp file 自动匹配!!
+使用remote 远程登录编辑插件, 相当于登录linux 远端系统, 在这个系统上面进行vscode 开发!!
+
+这种办法可以用在维护服务器项目上面(没有GUI 可视化登录界面的服务器, 也非常恰当);
+而且不需要理会平台差异, 只要目标系统有ssh 服务, 即可被登录, 十分便捷!!
+
+vscode + remote 远程登录编辑插件, 是一套远程code 代码编辑的最优方案, 适用于任何平台, 是时代的进步, 彻底取缔vim 等编辑器!! 非常美妙!!
+
+ps:
+	vscode + remote 远程登录编辑插件的安装过程, 就不啰嗦了, 自己看过往的配置记录;
+
+
+
+
+
+#
+# 3.在wsl 中安装ssh 服务
+#
+remote 远程登录编辑插件的实现, 依赖于ssh 服务来支撑!!
+无论是远程登录控制, 还是加密文件传输, ssh 都具备这样的条件;
+
+所以, 一个ssh 服务就能完全支持vscode-remote 远程登录编辑插件的正常运行!!
+
+详细的ssh 服务配置策略, 不啰嗦了, 自己看过往的ssh 配置记录;
+
+
+
+
+

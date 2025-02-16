@@ -1,0 +1,78 @@
+#
+# wsl2 基本配置
+#
+[wsl2]
+
+# wsl 最大线程
+processors=4
+
+# wsl 最大内存
+memory=2GB
+
+# wsl 交换区
+swap=0GB
+
+# 禁止回收分配给wsl 的内存
+#pageReporting=true
+pageReporting=false
+
+# root 用户挂载点
+root = /
+
+# Turn on default connection to bind WSL 2 localhost to Windows localhost
+localhostForwarding=true
+
+# Turns on output console showing contents of dmesg when opening a WSL 2 distro for debugging
+debugConsole=true
+
+
+
+
+
+#
+# user 用户配置
+#
+[user]
+default = adan
+
+
+
+
+
+#
+# boot 自启动配置
+#
+[boot]
+
+# (启动docker 服务)
+#command = service docker start
+# (启动ssh 服务)
+#command = service ssh start
+#
+
+
+
+
+
+#
+# network 网络配置
+#
+[network]
+hostname = adan.wsl
+
+
+
+
+
+#
+# experimental 配置
+#
+[experimental]
+
+# Enable experimental features
+sparseVhd=true
+
+
+
+
+
