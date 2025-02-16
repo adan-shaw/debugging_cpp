@@ -18,3 +18,6 @@
 部署意图:
 	部署完毕之后, 你就可以在windows 系统下, 进行简单的c/c++/python/lua/shell 开发了,
 	这些编程语言, 也是本project 开源的重点.
+
+最新:
+	使用wsl+vscode+ssh联合开发平台, 能更好地在win 平台上进行跨平台开发, 也能更好地在win 平台上进行c/c++/python/lua/shell 开发;
