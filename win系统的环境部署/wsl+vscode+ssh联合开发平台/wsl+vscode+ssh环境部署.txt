@@ -33,6 +33,12 @@ wsl --install -d ubuntu-22.04
 # 进入到wsl(powershell.exe/cmd.exe 中直接输入bash 即可进入wsl, 注意: wsl-ubuntu 永远只有一个, bash 终端可以有无限个)
 bash
 
+# 关闭wsl service
+wsl shutdown
+
+# 启动wsl
+wsl
+
 
 
 
@@ -64,8 +70,6 @@ remote 远程登录编辑插件的实现, 依赖于ssh 服务来支撑!!
 所以, 一个ssh 服务就能完全支持vscode-remote 远程登录编辑插件的正常运行!!
 
 详细的ssh 服务配置策略, 不啰嗦了, 自己看过往的ssh 配置记录;
-
-
 
 
 
