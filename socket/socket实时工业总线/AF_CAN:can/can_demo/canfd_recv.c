@@ -20,7 +20,7 @@ const char *if_can_name = "vcan0";		//can 网络空间接口名
 int main (void)
 {
 	struct sockaddr_can addr;						//can 地址info 载体
-	struct can_frame frame;							//can 数据帧载体
+	struct canfd_frame frame;						//canfd 数据帧载体
 	struct ifreq ifr;										//can 设备名专用载体
 
 	int i, sfd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
@@ -49,7 +49,7 @@ int main (void)
 		return -1;
 	}
 
-	//can 标准帧的数据读取循环
+	//canfd 标准帧的数据读取循环
 	while (1)
 	{
 		if (read (sfd, &frame, sizeof (struct can_frame)) == -1)
@@ -62,10 +62,10 @@ int main (void)
 		//打印can 数据的id + can_dlc 数据帧的数量(单帧0-8 字节, 8*8=64bit=max)
 		if (frame.can_id & CAN_EFF_FLAG){
 			//收到了can 扩展帧
-			printf ("Receive Extended frames CAN_ID: <0x%08x>, can_dlc = %d, data: ", frame.can_id & CAN_EFF_MASK, frame.can_dlc);
+			printf ("Receive Extended frames CAN_ID: <0x%08x>, len = %d, data: ", frame.can_id & CAN_EFF_MASK, frame.len);
 			//打印can 扩展帧数据(最大长度<=8)
-			assert(frame.can_dlc <= CAN_MAX_DLC);
-			for (i = 0; i < frame.can_dlc; ++i)
+			assert(frame.len <= CANFD_MAX_DLC);
+			for (i = 0; i < frame.len; ++i)
 			{
 				printf (" 0x%X ", frame.data[i]);
 			}
@@ -74,10 +74,10 @@ int main (void)
 		}
 		else{
 			//收到了can 标准帧
-			printf ("Receive Standard frames CAN_ID: <0x%03x>, can_dlc = %d\n", frame.can_id & CAN_SFF_MASK, frame.can_dlc);
+			printf ("Receive Standard frames CAN_ID: <0x%03x>, len = %d\n", frame.can_id & CAN_SFF_MASK, frame.len);
 			//打印can 标准帧数据(最大长度<=8)
-			assert(frame.can_dlc <= CAN_MAX_DLC);
-			for (i = 0; i < frame.can_dlc; ++i)
+			assert(frame.len <= CANFD_MAX_DLC);
+			for (i = 0; i < frame.len; ++i)
 			{
 				printf (" 0x%X ", frame.data[i]);
 			}

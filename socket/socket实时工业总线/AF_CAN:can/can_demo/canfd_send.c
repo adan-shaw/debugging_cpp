@@ -15,12 +15,12 @@
 
 
 const char *if_can_name = "vcan0";		//can 网络空间接口名
-const unsigned int my_canid = 0x122;
+const unsigned int my_canid = 0x123;
 
 int main (void)
 {
 	struct sockaddr_can addr;						//can 地址info 载体
-	struct can_frame frame;							//can 数据帧载体
+	struct canfd_frame frame;						//canfd 数据帧载体
 	struct ifreq ifr;										//can 设备名专用载体
 
 	int sfd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
@@ -51,8 +51,8 @@ int main (void)
 
 	//填充can 标准帧的发送数据
 	frame.can_id = my_canid & CAN_SFF_MASK;	//设置can_id 消息的标识符
-	frame.can_dlc = 4;											//设置can_dlc 消息数据长度(每节data 固定为8bit, max=8节)
-	frame.__pad = 0;												//保留位: 填0
+	frame.len = 4;													//设置len 消息数据长度(每节data 固定为8bit, max=15节)
+	frame.flags = 0 & CANFD_BRS;						//flags位: 0 & CANFD_BRS
 	frame.__res0 = 0;												//填充/保留位: 填0
 	frame.__res1 = 0;												//填充/保留位: 填0
 	frame.data[0] = 0x01;										//帧数据(0-8 字节)

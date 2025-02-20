@@ -4,6 +4,8 @@
 gcc -g3 ./can_recv.c -o r_can
 gcc -g3 ./can_send.c -o s_can
 
+gcc -g3 ./canfd_recv.c -o r_canfd
+gcc -g3 ./canfd_send.c -o s_canfd
 
 
 # 测试环境布置(新增一个ip can虚拟网络空间, 并命名为: vcan0):
@@ -17,3 +19,10 @@ sudo ip link set up vcan0
 # 执行测试:
 ./r_can &
 ./s_can
+
+# 需要休眠, 否则即便canid 不一样, 也会发生冲突, PC 的内存比can 总线快多了, 不sleep 1 容易发生test 冲突!!
+sleep 1
+
+# 执行测试:
+./r_canfd &
+./s_canfd
