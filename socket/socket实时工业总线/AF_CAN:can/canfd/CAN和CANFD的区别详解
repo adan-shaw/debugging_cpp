@@ -1,6 +1,6 @@
 1.概述
-	CAN-FD 可以理解成CAN协议的升级版, 只升级了协议(报文内容不一样了), 但CANFD 的物理层布局, 并未改变; 
-	CAN与CAN-FD主要区别: 
+	CANFD 可以理解成CAN协议的升级版, 只升级了协议(报文内容不一样了), 但CANFD 的物理层布局, 并未改变; 
+	CAN与CANFD主要区别: 
 		* 传输速率不同
 		* 数据长度不同
 		* 帧格式不同
@@ -11,23 +11,25 @@
 
 2.传输速率不同(canfd 增强的点):
 	CAN:    最大传输速率1Mbps; 
-	CAN-FD: 速率可变, 仲裁比特率最高1Mbps(与CAN相同), 数据比特率最高8Mbps;
+	CANFD:  速率可变, 仲裁比特率最高1Mbps(与CAN相同), 数据比特率最高8Mbps;
+					(CANFD 新增了BRS 位来控制线路波特率, 可动态调整数据发送速率)
 
 
 
 3.数据域长度不同(canfd 增强的点):
-	CAN:    一帧数据最长8字节
-	CAN-FD: 一帧数据最长64字节;
+	CAN:   一帧数据最长8字节;
+	CANFD: 一帧数据最长64字节;
+				 CANFD采用新的DLC的计算方式, 在0-8位使用线性规则, 在9-64位使用非线性规则(非连续内存的数据?? 最好不要用9-64 byte);
 
 
 
 4.协议内容改变:
 	CAN 头:
 		1  bit SOF 起始位
-		11 bit ID  位
-		1  bit RTR/SRR 远程帧位(Tranmission Request Bit)/替代远程请求位(Substitutes for Remote Requests Bit)
+		11 bit ID 位
+		1  bit RTR/SRR 远程帧位(Tranmission Request Bit) / 替代远程请求位(Substitutes for Remote Requests Bit)
 		1  bit IDE 标识符扩展位(Identifier Extension Bit)
-		1  bit r   保留位
+		1  bit r 保留位
 		4  bit DLC 数据长度(指示数据字节数, 0-8 字节一帧)
 		...(data)
 		15 bit CRC
@@ -35,18 +37,34 @@
 
 	CANFD 头:
 		1  bit SOF 起始位
-		11 bit ID  位
-		1  bit r1  ID保留位
+		11 bit ID 位
+		1  bit r1 ID保留位
 		1  bit RRS 
 		1  bit IDE 标识符扩展位(Identifier Extension Bit)
 		1  bit FDF 
-		1  bit r   保留位
-		1  bit BRS 速率转换位(Bit Rate Switch)
+		1  bit r 保留位
+		1  bit BRS 速率转换位(Bit Rate Switch) [波特率]
 		1  bit ESI 节点错误状态指示(Error State Indicator)
 		4  bit DLC 数据长度(指示数据字节数, 0-64 字节一帧)
 		...(data)
 		17 bit CRC(21 bit CRC)
 		7  bit EOF
 		3  bit IFS
+
+
+
+5.帧格式:
+	CANFD新增了FDF、BRS、ESI位:
+		FDF: FDF为隐性电平, 表示是CAN报文, FDF为显性电平, 表示是CANFD报文; 
+		BRS: 隐性表示转换为可变速率, 显示表示转换为不可变速率; 
+		ESI: 隐性表示发送节点处于被动错误状态, 显性表示处于主动错误状态; 
+
+
+
+6.CRC
+	CAN与CANFD的CRC的计算方式不同, socketcan 不用理会, 但手工封装CAN 报文则需要考虑这个问题;
+
+
+
 
 
