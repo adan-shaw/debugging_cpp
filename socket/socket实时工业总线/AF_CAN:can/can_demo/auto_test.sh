@@ -20,8 +20,11 @@ sudo ip link set up vcan0
 ./r_can &
 ./s_can
 
-# 需要休眠, 否则即便canid 不一样, 也会发生冲突, PC 的内存比can 总线快多了, 不sleep 1 容易发生test 冲突!!
+
+
 sleep 1
+
+
 
 # 执行测试:
 ./r_canfd &

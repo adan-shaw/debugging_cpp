@@ -21,6 +21,7 @@ int main (void)
 {
 	struct sockaddr_can addr;						//can 地址info 载体
 	struct canfd_frame frame;						//canfd 数据帧载体
+	struct can_filter filter;						//can 过滤器
 	struct ifreq ifr;										//can 设备名专用载体
 
 	int sfd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
@@ -29,6 +30,11 @@ int main (void)
 		perror ("socket()");
 		return -1;
 	}
+
+	//设置can 过滤器
+	filter.can_id = my_canid;
+	filter.can_mask = CAN_SFF_MASK;
+	setsockopt (sfd, SOL_CAN_RAW, CAN_RAW_FILTER, &filter, sizeof (struct can_filter));
 
 	strncpy (ifr.ifr_name, if_can_name, IFNAMSIZ - 1);//设置can 接口名: vcan0
 	if (ioctl (sfd, SIOCGIFINDEX, &ifr) == -1)				//绑定socket 到vcan0 设备上(send/recv 双端都需要通过ioctl() 把sfd 绑定到vcan0 设备上)
