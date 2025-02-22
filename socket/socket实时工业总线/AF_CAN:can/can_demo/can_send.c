@@ -56,7 +56,7 @@ int main (void)
 	}
 
 	//填充can 标准帧的发送数据
-	frame.can_id = my_canid ;	//设置can_id 消息的标识符
+	frame.can_id = my_canid & CAN_SFF_MASK;	//设置can_id 消息的标识符
 	frame.can_dlc = 4;											//设置can_dlc 消息数据长度(每节data 固定为8bit, max=8节)
 	frame.__pad = 0;												//保留位: 填0
 	frame.__res0 = 0;												//填充/保留位: 填0

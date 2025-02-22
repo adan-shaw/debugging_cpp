@@ -24,7 +24,7 @@ int main (void)
 	struct can_filter filter;						//can 过滤器
 	struct ifreq ifr;										//can 设备名专用载体
 
-	int sfd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
+	int i, sfd = socket (PF_CAN, SOCK_RAW, CAN_RAW);
 	if (sfd == -1)
 	{
 		perror ("socket()");
@@ -35,6 +35,10 @@ int main (void)
 	filter.can_id = my_canid;
 	filter.can_mask = CAN_SFF_MASK;
 	setsockopt (sfd, SOL_CAN_RAW, CAN_RAW_FILTER, &filter, sizeof (struct can_filter));
+
+	//开启canfd 模式
+	i = 1;
+	setsockopt(sfd, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &i, sizeof(int));
 
 	strncpy (ifr.ifr_name, if_can_name, IFNAMSIZ - 1);//设置can 接口名: vcan0
 	if (ioctl (sfd, SIOCGIFINDEX, &ifr) == -1)				//绑定socket 到vcan0 设备上(send/recv 双端都需要通过ioctl() 把sfd 绑定到vcan0 设备上)
@@ -55,10 +59,10 @@ int main (void)
 		return -1;
 	}
 
-	//填充can 标准帧的发送数据
-	frame.can_id = my_canid ;	//设置can_id 消息的标识符
+	//填充canfd 帧的发送数据
+	frame.can_id = my_canid & CAN_EFF_MASK;	//设置can_id 消息的标识符+掩码
 	frame.len = 4;													//设置len 消息数据长度(每节data 固定为8bit, max=15节)
-	frame.flags = 0 & CANFD_BRS;						//flags位: 0 & CANFD_BRS
+	frame.flags = 0 | CANFD_BRS;						//flags位: 0 | CANFD_BRS
 	frame.__res0 = 0;												//填充/保留位: 填0
 	frame.__res1 = 0;												//填充/保留位: 填0
 	frame.data[0] = 0x01;										//帧数据(0-8 字节)

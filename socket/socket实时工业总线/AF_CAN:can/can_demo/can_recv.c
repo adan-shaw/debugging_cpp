@@ -67,21 +67,9 @@ int main (void)
 		}
 
 		//打印can 数据的id + can_dlc 数据帧的数量(单帧0-8 字节, 8*8=64bit=max)
-		if (frame.can_id & CAN_EFF_FLAG){
-			//收到了can 扩展帧
-			printf ("Receive Extended frames CAN_ID: <0x%08x>, can_dlc = %d, data: ", frame.can_id & CAN_EFF_MASK, frame.can_dlc);
-			//打印can 扩展帧数据(最大长度<=8)
-			assert(frame.can_dlc <= CAN_MAX_DLC);
-			for (i = 0; i < frame.can_dlc; ++i)
-			{
-				printf (" 0x%X ", frame.data[i]);
-			}
-			printf ("\n");
-			break;//只为了演示, 收一条数据就跳出while() 循环
-		}
-		else{
+		if (frame.can_id & CAN_SFF_MASK){
 			//收到了can 标准帧
-			printf ("Receive Standard frames CAN_ID: <0x%03x>, can_dlc = %d\n", frame.can_id & CAN_SFF_MASK, frame.can_dlc);
+			printf ("Receive Standard can frames CAN_ID: <0x%03x>, can_dlc = %d\n", frame.can_id & CAN_SFF_MASK, frame.can_dlc);
 			//打印can 标准帧数据(最大长度<=8)
 			assert(frame.can_dlc <= CAN_MAX_DLC);
 			for (i = 0; i < frame.can_dlc; ++i)
@@ -89,7 +77,7 @@ int main (void)
 				printf (" 0x%X ", frame.data[i]);
 			}
 			printf ("\n");
-			break;//只为了演示, 收一条数据就跳出while() 循环
+			break;//只为了演示, 收一条数据就跳出while() 循环[非常不好的编程习惯, 应当拒绝这样做!! 这个break; 是个深坑, 坑死我了]
 		}
 	}
 

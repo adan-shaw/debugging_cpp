@@ -37,6 +37,10 @@ int main (void)
 	filter.can_mask = CAN_SFF_MASK;
 	setsockopt (sfd, SOL_CAN_RAW, CAN_RAW_FILTER, &filter, sizeof (struct can_filter));
 
+	//开启canfd 模式
+	i = 1;
+	setsockopt(sfd, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &i, sizeof(int));
+
 	strncpy (ifr.ifr_name, if_can_name, IFNAMSIZ - 1);//设置can 接口名: vcan0
 	if (ioctl (sfd, SIOCGIFINDEX, &ifr) == -1)				//绑定socket 到vcan0 设备上(send/recv 双端都需要通过ioctl() 把sfd 绑定到vcan0 设备上)
 	{
@@ -56,7 +60,7 @@ int main (void)
 		return -1;
 	}
 
-	//canfd 标准帧的数据读取循环
+	//canfd 帧的数据读取循环
 	while (1)
 	{
 		if (read (sfd, &frame, sizeof (struct can_frame)) == -1)
@@ -67,9 +71,9 @@ int main (void)
 		}
 
 		//打印can 数据的id + can_dlc 数据帧的数量(单帧0-8 字节, 8*8=64bit=max)
-		if (frame.can_id & CAN_EFF_FLAG){
+		if (frame.can_id & CAN_EFF_MASK){
 			//收到了can 扩展帧
-			printf ("Receive Extended frames CAN_ID: <0x%08x>, len = %d, data: ", frame.can_id & CAN_EFF_MASK, frame.len);
+			printf ("Receive Extended canfd frames CAN_ID: <0x%08x>, len = %d, data: ", frame.can_id & CAN_EFF_MASK, frame.len);
 			//打印can 扩展帧数据(最大长度<=8)
 			assert(frame.len <= CANFD_MAX_DLC);
 			for (i = 0; i < frame.len; ++i)
@@ -77,19 +81,7 @@ int main (void)
 				printf (" 0x%X ", frame.data[i]);
 			}
 			printf ("\n");
-			break;//只为了演示, 收一条数据就跳出while() 循环
-		}
-		else{
-			//收到了can 标准帧
-			printf ("Receive Standard frames CAN_ID: <0x%03x>, len = %d\n", frame.can_id & CAN_SFF_MASK, frame.len);
-			//打印can 标准帧数据(最大长度<=8)
-			assert(frame.len <= CANFD_MAX_DLC);
-			for (i = 0; i < frame.len; ++i)
-			{
-				printf (" 0x%X ", frame.data[i]);
-			}
-			printf ("\n");
-			break;//只为了演示, 收一条数据就跳出while() 循环
+			break;//只为了演示, 收一条数据就跳出while() 循环[非常不好的编程习惯, 应当拒绝这样做!! 这个break; 是个深坑, 坑死我了]
 		}
 	}
 
