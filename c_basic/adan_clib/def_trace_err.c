@@ -4,44 +4,22 @@
 
 
 //
-// DEBUG()/DEBUG_ex() 宏的定义声明:
+// print_debug()/print_debugEx() 宏的定义声明:
 //
 #include<stdio.h>
 #include<errno.h>
 #include<stdlib.h>
-
-
-
-//激活'通用的报错宏'
-#define __DEBUG__ "on"
-//off [正确的取消方法, 这才是空宏定义, 空宏定义不是: #define __DEBUG__ NULL ]
-//#define __DEBUG__
-
-//'通用的报错宏':
-#ifdef __DEBUG__
-	//配置'通用的报错宏'的打印API名
-	#define DEBUG_PRINT_API fprintf
-
-	//报错宏: 只传入一个string
-	#define DEBUG(api_name) \
-		DEBUG_PRINT_API(stderr, "\n[[ %s, %s ]]\n{{ %s, %s(), LINE-%d- }}:\n\terrno=[%d], %s\n\n",\
-		__DATE__, __TIME__, __FILE__, __FUNCTION__, __LINE__, errno, api_name)
-
-	//报错宏: 只传入一个string+一个Number(一般输入API名+返回值tmp)
-	#define DEBUG_EX(api_name,api_int_ret) \
-		DEBUG_PRINT_API(stderr, "\n[[ %s, %s ]]\n{{ %s, %s(), LINE-%d- }}:\n\terrno=[%d], %s, %d\n\n",\
-		__DATE__, __TIME__, __FILE__, __FUNCTION__, __LINE__, errno, api_name, api_int_ret)
-#endif
+#include"def_trace_err.h"
 
 
 
 //
-// DEBUG()/DEBUG_ex() 宏的测试代码:
+// DEBUG()/DEBUG_EX() 宏的测试代码:
 //
 void test_def_trace_err(void) {
 	char str[]="Hello World";
-	DEBUG("love you");
-	DEBUG_EX("love you again", 111);
+	print_debug("love you");
+	print_debugEx("love you again", 111);
 	exit(0);
 }
 
