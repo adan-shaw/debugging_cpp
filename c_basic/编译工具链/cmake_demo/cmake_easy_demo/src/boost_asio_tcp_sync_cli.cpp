@@ -6,7 +6,7 @@
 #include<iostream>
 #include"boost_asioEx.h"
 
-#define tcp_sync_srv_port (8884)
+#define tcp_sync_srv_port (7777)
 const char* pdata4tcp = "hello async/sync tcp server!!";
 
 void test_tcp_sync_srv(void){

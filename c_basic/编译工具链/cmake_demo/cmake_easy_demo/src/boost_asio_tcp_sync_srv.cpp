@@ -6,14 +6,14 @@
 #include<iostream>
 #include"boost_asioEx.h"
 
-#define tcp_sync_srv_port (8884)
+#define tcp_sync_srv_port (7777)
 
 int main(void){
 	char buf[0xFF];
 	io_context io;
 	tcp::socket sfd(io);
 	tcp::acceptor listener(io, tcp::endpoint(tcp::v4(), tcp_sync_srv_port));
-	std::cout << "server start:" << std::endl;
+	std::cout << "[0.0.0.0:" << tcp_sync_srv_port << "]server start:" << std::endl;
 
 	listener.accept(sfd);
 	std::cout << "client:" << sfd.remote_endpoint().address() << std::endl;

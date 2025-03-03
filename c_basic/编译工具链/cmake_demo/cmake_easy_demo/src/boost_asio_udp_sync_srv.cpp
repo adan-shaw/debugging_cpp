@@ -6,14 +6,14 @@
 #include<iostream>
 #include"boost_asioEx.h"
 
-#define udp_sync_srv_port (8886)
+#define udp_sync_srv_port (7777)
 
 int main(void){
 	char buf[0xFF];
 	io_context io;
 	udp::endpoint cliPoint;
 	udp::socket sfd(io, udp::endpoint(udp::v4(), udp_sync_srv_port));
-	std::cout << "server start: " << std::endl;
+	std::cout << "[0.0.0.0:" << udp_sync_srv_port << "]server start:" << std::endl;
 
 	try{
 		while(1){

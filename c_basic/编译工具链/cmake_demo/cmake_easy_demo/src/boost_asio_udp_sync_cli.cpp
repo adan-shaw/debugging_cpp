@@ -6,7 +6,7 @@
 #include<iostream>
 #include"boost_asioEx.h"
 
-#define udp_sync_srv_port (8886)
+#define udp_sync_srv_port (7777)
 const char* pdata4udp = "hello async/sync udp server!!";
 
 void test_udp_sync_srv(void){
