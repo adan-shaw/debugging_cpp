@@ -14,12 +14,20 @@
 
 
 //
-// DEBUG()/DEBUG_EX() 宏的测试代码:
+// PRINT()/print_debug() 宏的测试代码:
 //
 void test_def_trace_err(void) {
 	char str[]="Hello World";
-	print_debug("love you");
-	print_debugEx("love you again", 111);
+
+	//普通禁用printf() test
+	PRINT("fuck you again %d-%d-%d\n", 111, 222, 333);
+
+	//old version
+	//print_debug("fuck you");
+	//print_debugEx("fuck you again", 111);
+
+	//new version(可以传入多参数, 但分开两句话来实现!!)
+	print_debug("fuck you again %d\n", 111);
 	exit(0);
 }
 

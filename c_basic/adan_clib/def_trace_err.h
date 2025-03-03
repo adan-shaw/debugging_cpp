@@ -12,8 +12,47 @@
 
 
 //
-// print_debug()/print_debugEx() 宏的定义声明:
+// 普通禁用printf() 的方法(可以传入多参数)
 //
+#define disenable_printf "on"
+//#define disenable_printf
+
+#ifdef disenable_printf
+	#define PRINT(...) printf(__VA_ARGS__);
+#else
+	#define PRINT(...)
+#endif
+
+
+
+//
+// print_debug() 宏的定义声明(可以传入多参数, 但分开两句话来实现!!):
+//
+//激活'通用的报错宏'
+#define __DEBUG__ "on"
+//off [正确的取消方法, 这才是空宏定义, 空宏定义不是: #define __DEBUG__ NULL ]
+//#define __DEBUG__
+
+//'通用的报错宏':
+#ifdef __DEBUG__
+	//配置'通用的报错宏'的打印API名
+	#define DEBUG_PRINT_API fprintf
+
+	//报错宏
+	#define print_debug(...) \
+		DEBUG_PRINT_API(stderr, "[%s, %s]%s->%s()->LINE-%d-, errno=[%d], ",\
+		__DATE__, __TIME__, __FILE__, __FUNCTION__, __LINE__, errno); \
+		printf(__VA_ARGS__);
+#endif
+
+
+
+
+
+//
+// old version
+//
+/*
 //激活'通用的报错宏'
 #define __DEBUG__ "on"
 //off [正确的取消方法, 这才是空宏定义, 空宏定义不是: #define __DEBUG__ NULL ]
@@ -34,6 +73,4 @@
 		DEBUG_PRINT_API(stderr, "[%s, %s]%s->%s()->LINE-%d-, errno=[%d], %s, %d\n",\
 		__DATE__, __TIME__, __FILE__, __FUNCTION__, __LINE__, errno, api_name, api_int_ret)
 #endif
-
-
-
+*/
