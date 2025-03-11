@@ -1,0 +1,10 @@
+pstree命令:
+	pstree 是进程/进程组的关系查看命令, pstree 可以查看进程组生产的关系树;
+	(pstree 的使用比较简单, 但必须要知道进程/进程组的pid)
+
+	# 查看自身tty的pid 进程树关联(根据pid 查询)
+	pstree -p $$
+
+	# (根据pid 查询)
+	pstree -p 1
+

@@ -1,0 +1,105 @@
+export 命令简介: 
+	单个用户, 设置自身的进程的运行环境变量, 重启失效; 
+	如果在启动配置里面添加export语句, 
+	那么每次启动的时候,都会export该环境变量,也就变成了永久性的进程的运行环境变量export.
+
+	也可以做所有用户都等效的export命令, 主要看你修改哪个系统文件.
+	也有对所有用户都有约束效果的系统文件.
+
+	ps:
+		export 没有取消的, 要取消, 直接重启失效, 是最好的办法.
+
+
+
+注意:
+	1个tty, 只能打开一个进程会话.
+	所以当一个用户执行export 命令的时候, 必然锁定:
+		本用户下的所有export变量.
+		也就是: 本用户下, 所有进程的运行变量.
+
+
+
+# 1.查看当前用户, 已经装载的export 变量:
+export # 查看当前用户, 所有的已经装载的export 变量
+export | grep PWD # 筛选出目标export 变量: PWD
+
+
+
+# 2.export永久性修改的文件, 有多少个:
+	对所有用户有效:
+		/etc/profile
+		/etc/bash.bashrc
+
+	对单个用户本身有效:
+		~/.profile
+		~/.bashrc
+
+	ps: profile or bashrc 都可以内嵌shell 脚本.
+			这意味着, 你可以批量导入export 语句, 批量添加export 命令.
+
+	注意:
+		profile 是bashrc 的上级!! profile 一般通用性较强.
+		但是如果有bashrc 的情况下, 建议修改bashrc!!
+
+	你可以查看:
+		./scrot证据/profile是bashrc的上级的证据.pug
+		./scrot证据/Debian的.bashrc以及.profile的区别
+
+
+
+3.export 变量, key,value 都必须是字符串:
+	export变量, 实际上是一串字符串, 无论是key, 还是value 都是字符串. 如:
+	BOOST_BOOT, BOOST_INCLUDE, BOOST_LIB, JAVA_PATH 等.
+
+	用途:
+		可以载入一些'全局只读字符串'信息, 供各个进程共享.
+		主要还是共享进程之间的只读信息, 不能进行写数据共享.
+
+		一般安装软件的时候, 会设置软件的home信息.
+		或者软件运行的第一件事, 就是设置home信息.
+
+
+
+
+
+
+#!/bin/sh
+#set -x
+
+
+# 注意:
+# 1.用户export:
+# 	你在'哪个登录用户状态下'export 导入环境变量, 
+# 	仅该登录用户, 该次登录内有效(下次登录就会被: 还原所有环境变量)
+# 2.进程export:
+# 	你在进程里面, 或者一个shell 里面export, 
+# 	那么export 的变量只在本次进程内有效, 或者本次shell 内有效
+
+
+#1. 根据环境变量的名, 显示环境变量的值
+echo $HOME
+echo $LOGNAME
+
+echo "显示'所有的'环境变量"
+env
+
+
+
+#2. 添加新的环境变量
+export ADAN_TEST="come love me"
+echo $ADAN_TEST
+
+
+
+#3. ’取消/清除‘环境变量
+unset ADAN_TEST
+echo $ADAN_TEST
+
+
+
+#4. 设置只读环境变量(修改环境变量属性)
+export ADAN_TEST="only read env test"
+readonly ADAN_TEST
+echo $ADAN_TEST
+unset ADAN_TEST # 再次取消环境变量
+

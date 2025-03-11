@@ -1,0 +1,11 @@
+renice 命令:
+	改变当前正在运行的进程的nice 值(需要root 权限)
+
+	echo $$									# 查看自己的pid 
+	pstree -p $$						# 查看自身tty的pid 进程树关联
+
+	renice 2 <pid>					# 直接重置nice 值即可, 最好不要指定用户, 很麻烦, 进程还有属主问题.
+
+	renice 2 <pid> -u adan	# 重置进程pid = 13488 的优先级 = 2, 同时指定只有adan 有效
+	renice -2 <pid> -u root # 重置进程pid = 13488 的优先级 = -2, 同时指定只有root 有效
+

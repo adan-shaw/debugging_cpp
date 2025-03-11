@@ -1,0 +1,59 @@
+ps 命令:
+	ps Linux 中最基础的浏览系统中的进程的命令, 能列出系统中运行的进程, 包括进程号、命令、CPU使用量、内存使用量等;
+	ps 是系统自带的多功能查询命令, 但是组合查询要求比较多;
+
+	ps命令'回显数据'翻译表:
+		TTY 	= tty控制台, 
+		pts/2 = tty 控制台2(实际上这个一个虚拟控制台,不是真实的)
+						真实的tty 控制台只有7 个, 一般默认.
+		STAT 	= 进程状态, ps工具标识进程的5种状态码:
+							D 不可中断 uninterruptible sleep (usually IO) 
+							R 运行 runnable (on run queue) 
+							S 中断 sleeping (Ss 也是类似休眠的意思??)
+							T 停止 traced or stopped 
+							Z 僵死 a defunct ("zombie") process
+		TIME 	= 已经运行的累计时间
+		COMMAND 该进程的运行命令
+
+
+
+1.ps 用作-罗列信息:
+	ps -a				# 列出当前tty 前后台的所有程序, 包括已经停止的Ctrl + c, 暂停的Ctrl + z (ps = ps -a) ??
+	ps -A				# 显示所有进程
+
+	ps -e				# 此参数的效果和指定"-A"参数相同
+	ps e				# 此参数的效果和指定"-A"参数类似, 多显示一个进程状态STAT
+	ps -el			# NI 是系统优先级nice 值(十分详细)
+
+	ps S				# 列出当前tty前后台的,包括已中断的子程序的状态,命令原型等(与ps e相同)
+	ps s				# 采用程序信号的格式, 列出当前tty 前后台的程序状况
+
+
+	ps -au			# 在-a 的基础上, 显示较详细的资讯
+	ps -N				# 显示所有的程序, 除了执行ps指令终端机下的程序之外
+	ps x				# 显示所有程序
+	ps -aux			# 列出所有进程的信息, 包括:如USER, PID, %CPU, %MEM等
+	ps -auxw
+
+
+
+2.ps 用作-查找:
+	ps c				# 类似ps e, 查看TTY, STAT, TIME, COMMAND
+	ps -C gedit	# 查找一个叫gedit 的进程
+
+	tty					# 显示当前自己的tty 编号, 会得到/dev/pts/0, or /dev/pts/1, 跟$$ 得到当前tty pid 差不多
+
+	ps -t 0			# 查看tty 0 的所有程序运行情况(注意, 在黑屏系统里面, 只有6 个tty!! 可视化桌面才有无限个tty, 所以在黑屏系统里面都好办)
+							# 默认等于ps(默认参数)
+
+	ps -u root	# 显示root 用户名下的所有进程信息
+
+
+
+1.ps 用作-显示进程间的关系:
+	(你可以看到有退格形成的树形,表示进程之间的<子父关系>)
+	ps f				# 用ASCII字符显示树状结构, 表达程序间的相互关系
+	ps -H				# 显示树状结构, 表示程序间的相互关系
+
+
+

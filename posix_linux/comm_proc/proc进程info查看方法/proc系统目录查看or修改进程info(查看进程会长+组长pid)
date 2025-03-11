@@ -1,0 +1,112 @@
+#
+# 快速索引
+#
+cat /proc/$$/status | grep NSsid			# 查看会话会长id
+cat /proc/$$/status | grep NSpgid			# 查看进程组长id
+cat /proc/$$/status | grep PPid				# 查看父id
+
+cat /proc/$$/status | grep Uid				# 查看进程属主
+cat /proc/$$/status | grep Gid				# 查看进程属主组
+
+cat /proc/$$/status | grep Threads		# 查看进程一共有多少条线程
+
+
+
+如何进程的'会话会长pid', 进程组长pid, 等信息??
+由于:
+	会话id = 会长pid
+	组gip = 组长pid
+	所以, 你只要知道'会长进程的pid',即知道'会话id'.
+	同理, 你只要知道'进程组的组长pid',即知道'组gip'.
+
+因此:
+	cat /proc/$__pid/status # 查看进程-最全面的信息
+	
+	cat /proc/$$/status # 查看tty 自身的进程信息
+
+	cat /proc/$$/status | grep NSsid		# 查看会话会长id
+	cat /proc/$$/status | grep NSpgid		# 查看进程组长id
+	cat /proc/$$/status | grep PPid			# 查看父id
+
+	cat /proc/$$/status | grep Uid			# 查看进程属主
+	cat /proc/$$/status | grep Gid			# 查看进程属主组
+
+	cat /proc/$$/status | grep Threads	# 查看进程一共有多少条线程
+
+
+	stty tostop													# 关掉tty 回显
+
+
+	pstree -p $$												# 查看自身tty的pid 进程树关联
+
+
+
+
+
+#
+# 翻译表:
+#
+0.用户区(进程从属关系):
+	Name:			程序.exe名
+	Tgid:			线程组的tgid
+	Pid:			进程pid
+	PPid:			父进程Pid
+	Uid:			进程属主-用户id
+	Gid:			进程属主组-组id
+	Groups:		启动这个进程的用户所在的组(可以执行本程序的'用户进程组'?Gid必在Groups里面)
+
+	NStgid:		10894		会话下-线程组的tgid(没有tid !! )
+	NSpid:		10894		会话下-进程组-本进程pid
+	NSpgid:		10894		会话下-进程组gip
+	NSsid:		10889		会长id
+
+
+
+1.数据区-内存使用情况:
+	VmPeak:		代表当前进程运行过程中占用内存的峰值.
+	VmSize:		代表进程现在正在占用的内存
+	VmLck:		代表进程已经锁住的物理内存的大小(锁住的物理内存不能交换到硬盘)
+	VmHWM:		是程序得到分配到物理内存的峰值.
+	VmRSS:		是程序现在使用的物理内存.
+	VmData:		表示进程数据段的大小.
+	VmStk:		表示进程堆栈段的大小.
+	VmExe:		表示进程代码的大小.
+	VmLib:		表示进程所使用LIB库的大小.
+	VmPTE:		占用的页表的大小.
+	VmSwap:		进程占用Swap的大小.
+
+
+
+2.线程区:
+	Threads:	表示当前进程组的线程数量.
+
+
+
+3.信号区:
+	SigPnd:		屏蔽位,存储了该线程的待处理信号,等同于线程的PENDING信号.
+	ShnPnd:		屏蔽位,存储了该线程组的待处理信号,等同于进程组的PENDING信号.
+	SigBlk:		存放被阻塞的信号,等同于BLOCKED信号.
+	SigIgn:		存放被忽略的信号,等同于IGNORED信号.
+	SigCgt:		存放捕获的信号,等同于CAUGHT信号.
+
+
+
+4.能力描述区:
+	CapEff:		当一个进程要进行某个特权操作时,操作系统会检查cap_effective的对应位是否有效, 而不再是检查进程的有效UID是否为0.
+	CapPrm:		表示进程能够使用的能力,在cap_permitted中可以包含cap_effective中没有的能力,
+						这些能力是被进程自己临时放弃的,也可以说cap_effective是cap_permitted的一个子集.
+	CapInh:		表示能够被当前进程执行的程序继承的能力.
+	CapBnd:		是系统的边界能力,我们无法改变它.
+
+
+
+5.cpu部分(线程-附属区):
+	Cpus_allowed:3 							指出该进程可以使用CPU的亲和性掩码,因为我们指定为两块CPU,
+															所以这里就是3, 如果该进程指定为4个CPU(如果有话),这里就是F(1111).
+	Cpus_allowed_list:0-1 			指出该进程可以使用CPU的列表,这里是0-1.
+	voluntary_ctxt_switches:		表示进程主动切换的次数.
+	nonvoluntary_ctxt_switches:	表示进程被动切换的次数.
+
+
+
+

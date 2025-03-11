@@ -1,0 +1,16 @@
+ipcrm 命令:
+	ipcrm 是通用'ipc容器'的删除工具(强制删除)
+	(创建工具没有, 需要进程自己编程创建, 但是删除可以系统命令-强制删除)
+
+	demo: 
+		ipcrm -s 123454(semid 号)			# 表示根据sem id删除这个sem 
+
+	语法:
+		ipcrm [ -m SharedMemoryID ]		根据id 删除共享内存
+					[ -M SharedMemoryKey ]	根据key 删除共享内存
+					[ -q MessageID ]				根据id 删除消息队列
+					[ -Q MessageKey ]				根据key 删除消息队列
+					[ -s SemaphoreID ]			根据id 删除信号量
+					[ -S SemaphoreKey ]			根据key 删除信号量
+
+	也就是说, ipcrm强制删除, 必须指定ipc容器类型, 还有id/key

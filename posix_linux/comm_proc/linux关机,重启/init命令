@@ -1,0 +1,10 @@
+init 命令:
+	init 命令的本质, 就是运行级别的切换;
+
+	init 0 # 停机(千万不能把initdefault 设置为0) 
+	init 1 # 单用户模式 
+	init 2 # 多用户, 没有 NFS(和级别3相似, 会停止部分服务) 
+	init 3 # 完全多用户模式 
+	init 4 # 没有用到 
+	init 5 # x11(Xwindow) 
+	init 6 # 重新启动(千万不要把initdefault 设置为6)

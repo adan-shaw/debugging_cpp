@@ -1,0 +1,22 @@
+pgrep命令简介:
+	pgrep是通过'程序的名字'来查询进程的工具, process grep !!
+	因为每个进程都在内核中, 有各种管理信息:
+		进程属主-用户名, 进程属主组-组名,
+		terminal控制台-名/ID, 
+		pgroup进程组-名/ID, session会话-名/ID, 
+		parent父进程-名/ID
+		等几个关键信息, 因此pgrep 可以很好地从内核中通过grep 工具, 检索出这些信息.
+	最后, 返回检索到的进程Pid !!
+
+
+	例子:
+		pgrep -g adan			# 查看属主组=adan 的所有进程Pid
+		pgrep -u adan			# 查看属主=adan 的所有进程Pid
+		pgrep -u adan sh	# 显示adan 用户下<进程名 = "sh">的进程ID. 
+
+		pgrep ssh					# 根据进程名, 查看pid(默认只显示PID)
+		pgrep -l sshd			# 根据进程名, 查看pid(显示pid+进程名)
+
+
+	pgrep 是一个比较简单轻松的命令, 详情请看:
+		./web网文/linux命令详解:pgrep命令.html

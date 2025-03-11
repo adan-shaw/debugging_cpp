@@ -1,0 +1,53 @@
+1.kill 命令简介:
+	kill 命令就是调用signal, 对目标'pid进程'发送信号的操作(信号范围[1,64])
+	详细kill 信号列表, 请看:
+		./web网文/linux kill信号列表.html
+	or
+		kill -l
+
+	常用signal信号:
+		1->终端断线
+		2->中断(ctrl + c)
+		3->退出(ctrl + \)
+		9->强制终止 -- 进程没办法拒绝这个命令
+		15->终止
+
+		19->暂停(ctrl + z) -- 进程没办法拒绝这个命令
+		18->继续(与19 暂停相反)
+
+
+
+
+
+2.kill命令的使用:
+	*1. kill -l								# 显示系统支持的信号列表(signal list)
+
+
+	*2. kill -s <信号number>		# 发送指定信号<信号number>到指定pid:
+			kill -s 1 2222 				# (发送信号1 到pid=2222)
+			kill -s SIGSEGV 2222	# (发送信号SIGSEGV 到pid=2222, 具体翻译SIGSEGV, 自己查看’kill -l‘)
+
+			kill -s <signal> <pid>
+			kill -s 9 2222				# 必杀信号, 但是子进程不一定关闭, 只是当前进程关闭. 
+														# 如果杀掉了父进程, 子进程成为孤儿进程, 被init pid=1 的进程接管.
+
+
+	*3.killall <software name>
+		 killall nginx					# 关闭nginx进程的所有进程和子线程
+
+
+
+
+
+3.kill 命令的相关命令:
+	*1.
+		$$											# 查看tty自身pid
+	
+	*2. 
+		pstree -p <pid>					# 打印指定pid的进程关系树(子父关系)
+		pstree -p $$						# 查看自身tty的pid 进程树关联
+
+
+
+
+

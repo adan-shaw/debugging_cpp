@@ -1,0 +1,37 @@
+ipcs 命令:
+	ipcs 命令是通用'ipc容器'的info信息查询工具
+	可查询的'ipc容器'信息总览, 有: 
+		Message Queues, 
+		Shared Memory Segments,
+		Semaphore Arrays,
+		等等.
+
+		-m, --shmems      shared memory segments	查看共享内存
+		-q, --queues      message queues					查看消息队列
+		-s, --semaphores  semaphores							查看信号量
+		-a, --all         all (default)
+
+	ps:
+		创建ipc容器的时候, 首先都要创建key id.
+		所以你可以根据key id 来查看ipc容器的信息:
+		# print details on resource identified by <id> 
+		-i, --id <id> 
+
+
+
+	查看消息队列的例子:
+	ipcs -q							#显示所有的'消息队列'容器
+	ipcs -qt						#显示消息队列的创建时间, 发送和接收最后一条消息的时间
+	ipcs -qp						#显示往消息队列中放消息和从消息队列中取消息的进程ID
+	ipcs -q -i msgid		#显示该消息队列结构体中的消息信息
+	ipcs -ql						#显示消息队列的限制信息
+
+	ipcs -q -i <id>			#显示指定pid的消息队列
+	ipcs -qt -i <id>		#显示指定pid的消息队列,的创建时间,发送和接收最后一条消息的时间
+	...
+
+	查看共享内存的例子:
+	ipcs -m							# 显示所有的'共享内存'容器
+
+	查看信号量的例子:
+	ipcs -s							# 显示所有的'信号量'容器

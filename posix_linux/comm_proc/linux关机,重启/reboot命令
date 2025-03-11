@@ -1,0 +1,2 @@
+reboot 命令:
+	reboot 就是重启, 等同于 shutdown -r now;

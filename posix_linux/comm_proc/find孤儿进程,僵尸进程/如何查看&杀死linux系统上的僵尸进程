@@ -1,0 +1,57 @@
+#
+# 1.如何查看linux系统上的僵尸进程, 如何统计有多少僵尸进程?
+#
+
+# 命令查看僵尸进程
+ps -ef | grep defunct
+
+# 统计僵尸进程的数量
+ps -ef | grep defunct | grep -v grep | wc -l
+
+
+
+top/htop 自动统计僵尸进程, 手动统计僵尸进程:
+	打开top/htop, 查找状态为Z的进程, Z就是代表zombie process, 僵尸进程的意思;
+	demo:
+		Tasks: 197 total,   2 running, 191 sleeping,   0 stopped,   4 zombie
+
+
+
+
+
+
+#
+# 2.如何杀死僵尸进程呢?
+#
+一般僵尸进程很难直接kill掉, 不过您可以kill僵尸爸爸;
+父进程死后, 僵尸进程成为"孤儿进程", 过继给1号进程init, init始终会负责清理僵尸进程, 父进程产生的所有僵尸进程也跟着消失;
+
+# 方法1
+#ps -e -o ppid,stat | grep Z | cut -d "" -f2
+ps -e -o ppid,stat | grep Z | cut -d "" -f2 | xargs kill -s 9
+
+# 方法2
+#ps -A -ostat,ppid | grep -e '^[Zz]' | awk '{print $2}'
+kill -HUP `ps -A -ostat,ppid | grep -e '^[Zz]' | awk '{print $2}'`
+
+
+
+不过杀死僵尸进程, 很可能导致父进程闪退, 很麻烦;
+
+
+
+
+
+#
+# 3.创建僵尸进程
+#
+ping 127.0.0.1 &
+ping 127.0.0.1 &
+ping 127.0.0.1 &
+ping 127.0.0.1 &
+ping 127.0.0.1 &
+
+然后关掉xfce4-terminal, 这样比较容易, 制造出ping 僵尸进程;
+
+
+

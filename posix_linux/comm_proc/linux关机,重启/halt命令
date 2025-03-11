@@ -1,0 +1,8 @@
+halt 命令:
+	halt 关闭系统[不好用], 等同于shutdown -h now 和poweroff;
+	halt 只有像tiny linux, live os linux 等系统, 才比较好用;
+	(因为这些live os 没有磁盘, 直接断电关机, 不影响)
+	halt 等价于直接切断电源;
+
+	# 标准情况下是关机 但要手动关闭电源 
+	halt -h
