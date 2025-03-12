@@ -1,0 +1,74 @@
+#
+# 1.objcopy 命令简介
+#
+objcopy 是GNU实用工具程序, objcopy 的作用是拷贝一个目标文件的内容到另一个目标文件中, bjcopy使用GNU BFD库去读或写目标文件; 
+Oobjcopy可以使用不同于源目标文件的格式来写目的目标文件(也即是说可以将一种格式的目标文件转换成另一种格式的目标文件), 通过以上命令行选项可以控制objcopy的具体操作; 
+objcopy在进行目标文件的转换时, 将生成一个临时文件, 转换完成后就将这个临时文件删掉, objcopy使用BFD做转换工作; 
+如果没有明确地格式要求, 则objcopy将访问所有在BFD库中已经描述了的并且它可以识别的格式, 
+请参见<GNUpro Decelopment Tools>中"using ld"一章中"BFD库"部分和"BFD库中规范的目标文件格式"部分; 
+
+
+
+
+
+#
+# 2.objcopy 常用的使用例子
+#
+objcopy 把一种目标文件中的内容复制到另一种类型的目标文件中.
+1.将图像编译到可执行文件内
+	Q: 如何将一个二进制文件, 比如图片, 词典一类的东西做为.o文件, 直接链接到可执行文件内部呢?
+	A:
+		$ objcopy -I binary -O elf32-i386 -B i386 14_95_13.jpg image.o
+		$ gcc image.o tt.o -o tt
+		$ nm tt | grep 14_95
+		0805d6c7 D _binary_14_95_13_jpg_end
+		00014213 A _binary_14_95_13_jpg_size
+		080494b4 D _binary_14_95_13_jpg_start
+
+
+2.使用objcopy把不用的信息去掉: 
+$ objcopy -R .comment -R .note halo halo.min
+
+
+3.使用objcopy一次性去掉多个段:
+$ objcopy -R .note -R .comment -S -O binary xyb xyb.bin
+
+-R .note    表示移掉.note 段
+-R .comment 表示移掉.comment 段
+-S 表示移出所有的标志及重定位信息
+-O binary xyb xyb.bin 表示由xyb生成二进制文件xyb.bin
+
+
+
+
+
+#
+# 3.objcopy 命令list
+#
+objcopy [ -F bfdname | --target=bfdname ]
+[ -I bfdname | --input-target=bfdname ]
+[ -O bfdname | --output-target= bfdname ]
+[ -S | --strip-all ] [ -g | --strip-debug ]
+[ -K symbolname | --keep-symbol= symbolname ]
+[ -N symbolname | --strip-symbol= symbolname ]
+[ -L symbolname | --localize-symbol= symbolname ]
+[ -W symbolname | --weaken-symbol= symbolname ]
+[ -x | --discard-all ] [ -X | --discard-locals ]
+[ -b byte | --byte= byte ]
+[ -i interleave | --interleave= interleave ]
+[ -R sectionname | --remove-section= sectionname ]
+[ -p | --preserve-dates ] [ --debugging ]
+[ --gap-fill= val ] [ --pad-to= address ]
+[ --set-start= val ] [ --adjust-start= incr ]
+[ --change-address= incr ]
+[ --change-section-address= section{=,+,-} val ]
+[ --change-warnings ] [ --no-change-warnings ]
+[ --set-section-flags= section= flags ]
+[ --add-section= sectionname= filename ]
+[ --change-leading char ] [--remove-leading-char ]
+[ --weaken ]
+[ -v | --verbose ] [ -V | --version ] [ --help ]
+input-file [ outfile ]
+
+
+
