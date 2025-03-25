@@ -2,7 +2,6 @@ zephyr简介:
 	zephyr 系统是风河公司把自身的rtos 系统的部分源码, 包装一下, 结合物联网场景设计出来的, 主要投资人有: intel, nxp 等;
 	zephyr 系统比较新, 市场前景堪忧, 使用舒适性可能敌不过nuttx, 对标nuttx, threadx;
 
-
-
 	zephyr 不是一个偏linux 风格的rtos, 但大概率也会支持poisx + ANSI C;
 	以及lwip, 文件系统, 蓝牙, wifi, 蜂窝无线电, gps, usb, can 等热门物联网设备标准;
+
