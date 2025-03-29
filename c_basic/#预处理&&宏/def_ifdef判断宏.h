@@ -7,6 +7,24 @@
 
 
 
+/*
+#define           定义一个预处理宏
+#undef            取消宏的定义
+
+#if               编译预处理中的条件命令, 相当于C语法中的if语句(与c 语言的if 不同的是, 判断条件不能加() 括号)[效果不理想, 慎用, 可能会无效, 很无语的选项, 有些编译器不支持]
+#ifdef            判断某个宏是否被定义, 不能或运算, 若已定义, 执行随后的语句
+#ifndef           与#ifdef相反, 判断某个宏是否未被定义, 不能或运算
+#elif             若#if, #ifdef, #ifndef或前面的#elif条件不满足, 则执行#elif之后的语句, 相当于C语法中的else-if
+#else             与#if, #ifdef, #ifndef对应, 若这些条件不满足, 则执行#else之后的语句, 相当于C语法中的else
+#endif            #if, #ifdef, #ifndef这些条件命令的结束标志.
+
+defined         　与#if, #elif配合使用, 判断某个宏是否被定义
+*/
+
+
+
+
+
 //
 // if 判断宏的常见格式
 //
@@ -25,6 +43,14 @@
 #ifndef xxx
 	//如果不存在xxx宏, 则创建xxx宏
 	#define xxx "x"
+#endif
+
+//判断宏(可惜只能判断number 数字, 不能判断string, 而lua version 记录是"5","1","5" 字符串)
+#define LUA_VERSION_MAJOR_EX 5
+#define LUA_VERSION_MAJOR_EX 1
+
+#if LUA_VERSION_MAJOR == 5 && LUA_VERSION_MINOR == 1
+	#error [lua version 5.1]
 #endif
 
 

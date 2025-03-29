@@ -6,7 +6,9 @@
 	* aosp
 	* yocto
 	* openwrt
-	* freertos/rt-thread
+	* buildroot
+	* rt-thread/luatos
+	* freertos/nuttx (貌似没有引导系统, 需要自己重建引导系统)
 
 这几个常见的os 都已经囊括了, 包括了大中小操作系统, 包括了实时/分时操作系统;
 详细bsp 编译配置, 需要自己手动修改, 例如: 
@@ -27,12 +29,18 @@
 	* 编写bios 自检程序, 移植os 系统引导程序
 	* 使用原始gcc 编译os kernel
 	* 根据原始gcc + os kernel, 编译出c/c++ 运行时库glibc(c/c++两个库是分开编译的), 最后再编译出全功能gcc/g++;
+	...
+	(以下的工作可以用buildroot/yocto 替代)
+	...
 	* os 的disk文件系统, 网络协议栈, 进程管理器(包括内存管理器)的重建;
-	* 根据全功能gcc 编译工具链 + os kernel, 编译出核心底软: bash shell, find, ip 等关键软件工具;
+	* 根据全功能gcc 编译工具链 + os kernel, 编译出核心底软(busybox): bash shell, find, ip 等关键软件工具;
 	* 根据业务需求, 补全业务所需的关键底软+关键编程sdk 库;
-	* 重新烧制img 镜像, 准备发布;
-	* 完成bios 启动, os 镜像引导, 驱动自检, 三大模块的测试任务;
+	* initrd/initramfs 镜像的布局(deamon server)
+	* dtb 设备树镜像(驱动管理)
+	* 重新烧制img 镜像, 准备发布(uboot/grub);
+	* 完成设备自检, os 镜像引导, 驱动启动&自检, 底软服务启动&自检等等的测试任务;
 	* 整个os 启动, 运行, 服务管理的优化(提升);
+	* 信息安全优化(img 镜像安全启动, img 镜像数据安全, 引导锁, 等等);
 	- 补全业务应用(略)
 	...
 
@@ -47,6 +55,7 @@
 
 
 一般来说, 如果你没有什么bsp 开发经验, 你是应付不了复杂, 大型的系统的bsp 的, 例如: linux / android, 这种大型系统的bsp 实施, 比较复杂;
+(但大型系统一般都有自动化工具帮你生成维护, 你只需要熟练这些工具的使用, 也可以轻松维护os img镜像, 但需要补全很多驱动程序倒是真的)
 你可以从比较小型的RT-Thread / openwrt 开始玩bsp, 实际上也是很简单的;
 
 
