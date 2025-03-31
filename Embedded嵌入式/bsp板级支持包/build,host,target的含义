@@ -49,3 +49,6 @@ build、host、target的三种组合:
 			--build=X86, --host=ARM, --target=MIPS
 		解析:
 			在X86下构建gcc交叉编译器, 在ARM上运行gcc交叉编译器, 编译出能在MIPS运行的可执行程序
+
+
+
