@@ -1,0 +1,59 @@
+#
+# 0.gcc-multilib 编译工具链的安装
+#
+(只能编译32bit 程序, 没有运行环境, 
+ linux 不是windows, windows 支持32/64 bit 的运行环境, linux 只支持32/64 bit 单个平台的软件运行)
+
+root@eva:/home/adan# sudo apt-cache search gcc-multilib
+gcc-multilib - GNU C compiler (multilib files)
+gcc-multilib-i686-linux-gnu - GNU C compiler for the i386 architecture
+
+gcc-multilib-mips-linux-gnu - GNU C compiler for the mips architecture
+gcc-multilib-mips64el-linux-gnuabi64 - GNU C compiler for the mips64el architecture
+gcc-multilib-mipsel-linux-gnu - GNU C compiler for the mipsel architecture
+gcc-multilib-s390x-linux-gnu - GNU C compiler for the s390x architecture
+gcc-multilib-mips64-linux-gnuabi64 - GNU C compiler for the mips64 architecture
+gcc-multilib-mipsisa32r6-linux-gnu - GNU C compiler for the mipsr6 architecture
+gcc-multilib-mipsisa32r6el-linux-gnu - GNU C compiler for the mipsr6el architecture
+gcc-multilib-mipsisa64r6-linux-gnuabi64 - GNU C compiler for the mips64r6 architecture
+gcc-multilib-mipsisa64r6el-linux-gnuabi64 - GNU C compiler for the mips64r6el architecture
+gcc-multilib-powerpc-linux-gnu - GNU C compiler for the powerpc architecture
+gcc-multilib-powerpc64-linux-gnu - GNU C compiler for the ppc64 architecture
+gcc-multilib-sparc64-linux-gnu - GNU C compiler for the sparc64 architecture
+gcc-multilib-x86-64-linux-gnux32 - GNU C compiler for the x32 architecture
+
+# 简洁安装
+apt-get install gcc-multilib g++-multilib 
+
+
+
+
+
+#
+# 1.在'x86_64平台', 编译'i386程序'('64bit平台'编译'32bit程序')
+#
+'x86_64平台'编译32 bit程序:
+	* 'x86_64平台', 可以组建i386 平台的编译工具链;
+	* 'x86_64平台', 可以编译'i386程序';
+	* 'x86_64平台', 不可以运行'i386程序'(没有runtime 环境);
+
+# gcc 工具链安装
+apt-get install gcc-multilib g++-multilib 
+
+# 编译时, gcc 需要添加编译选项(最好静态编译, 减少链接glibc 的共享链接库):
+# 动态
+gcc -m32 
+# 静态
+gcc -m32 -static
+
+# 编译时, ld 连接器需要添加的链接选项[不可以用gcc 来替换ld 连接器!!]:
+# 动态(-lc = 链接libc, -lrt链接到实时扩展库librt, -lpthread=标准线程库)
+ld -m elf_i386 -lc -lrt -lpthread 
+# 静态(-m elf_i386 = 强制使用libc.so.6 库(必须的), -l:libc.a = 强制链接静态的libc.so.6)
+ld -m elf_i386 -l:libc.a -lc -lrt -lpthread 
+
+# 32bit 平台专用的ld-32 连接器路径(不同于gcc, ld 连接器切换32 bit 模式较难, 出错时可指定ld-32 的绝对路径):
+	/usr/x86_64-linux-gnux32/bin/ld 
+
+
+
