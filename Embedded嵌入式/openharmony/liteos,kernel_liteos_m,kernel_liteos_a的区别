@@ -1,0 +1,46 @@
+kernel_liteos_m:
+	面向mcu 实现的一个rtos 内核, 类似于freertos_kernel;
+	kernel = 内核;
+	liteos m, m=micro=微小系统=MCU;
+	一般地, kernel_liteos_m 都是对标freertos, 不携带文件系统, 不区分用户态, 内核态的rtos, ...
+	详情看freertos和linux/nuttx 的区别(mcu 系统和soc 系统的区别);
+
+
+
+kernel_liteos_a:
+	面向soc 实现的一个os 内核, 类似于linux/nuttx kernel;
+	kernel = 内核;
+	liteos a, a=a核=SoC;
+	一般地, kernel_liteos_a 都是对标linux/nuttx, 携带文件系统, 区分用户态, 内核态的os, ...
+	(kernel_liteos_a 主要面向多媒体mcu, 例如ipc, 广告屏, 等设备而设计的, 是A 核, 有一定性能和运算能力)
+
+
+
+liteos 系统:
+	华为liteos 全功能系统, 是否支持像nuttx 一样, 剪裁成rtos/SoC 系统, 两面切换, 我觉得应该是类似nuttx 的;
+	一般地, 华为liteos 系统还有几个强大的c库(纯c 语言实现的库, 性能出色):
+		* libuv (c 语言实现的ipc 库, 非常6)
+		* arkui_ace_engine_lite (openharmony的JS-UI框架子系统, 一般只用在kernel_liteos_a 上面, 对标lvgl+luatos)
+		...
+
+
+
+
+
+题外话:
+	* kernel_liteos_m/kernel_liteos_a 是否共用一套liteos kernel ??
+		答:
+			根本不可能, 是分开的!! kernel_liteos_m/kernel_liteos_a 必须依赖MCU/SoC 芯片的HAl 层(HAL 库) 来实现业务逻辑的, 不同芯片差异非常大, 不可能统一的;
+			因此, liteos 官方才会维护两套代码kernel_liteos_m/kernel_liteos_a;
+			(肯定是有需要才会拆分的, 如果不懂什么是bsp+hal, 那基本上也就不懂了)
+
+	* kernel_liteos_m=实时系统, kernel_liteos_a=分时系统?
+		这个还真的不好说, 可以说是, 也可一说不是;
+		kernel_liteos_m=实时系统: 肯定的;
+		kernel_liteos_a=分时系统: 不一定, 可能是分时系统, 也可能是实时系统, 参考ros/qnx/nuttx/linux(具体看设计细节)
+
+
+
+kernel_liteos_a, kernel_liteos_m, 是huawei 开发初期, 对liteos 内核打磨时留下的产物, 只是一个rtos kernel 而已, 并没有什么卵用;
+现在都汇聚成一个通用的os 系统了, 即liteos, url 地址: 
+	https://github.com/LiteOS/LiteOS
