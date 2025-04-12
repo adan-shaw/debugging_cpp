@@ -1,0 +1,74 @@
+#
+# 1.蓝牙协议list
+#
+协议缩写			全称																	作用描述														关键特性
+HCI					Host Controller Interface						主机与蓝牙控制器之间的通信桥梁					标准化命令接口, 硬件无关性
+L2CAP				Logical Link Control & Adaption			数据包分片/重组、协议复用							支持CID通道标识, 提供逻辑链路
+SDP					Service Discovery Protocol					设备间服务发现与属性查询							无连接协议, 基于UUID匹配服务
+RFCOMM			Radio Frequency Communication				模拟串口通信(基于L2CAP)							支持多路复用, 兼容传统串口设备
+HFP					Hands-Free Profile									车载/耳机免提通话控制(依赖RFCOMM)			支持音频传输与电话控制指令
+SPP					Serial Port Profile									基于RFCOMM的串口数据透传							替代传统有线串口
+A2DP				Advanced Audio Distribution					高质量音频流传输(如立体声音乐)					使用AVDTP协议传输编码音频
+AVRCP				Audio/Video Remote Control					媒体播放控制(播放/暂停/音量)					与A2DP配合使用, 支持元数据传输
+AVDTP				Audio/Video Distribution Transport	定义音频流传输的建立、配置和管理				支持同步信道(SCO/eSCO)
+AVCTP				Audio/Video Control Transport				传输AVRCP控制指令(基于L2CAP)					提供可靠指令传输通道
+OBEX				Object Exchange											文件/对象传输(如vCard、图片)					独立于传输层(支持RFCOMM/USB等)
+PBAP				Phone Book Access Profile						同步手机通讯录(基于OBEX)							支持vCard格式数据交换
+
+总结:
+	蓝牙网络的支撑子协议, 就有这么多, 其实也挺复杂的;
+	一个蓝牙设备, 主要用到的蓝牙协议, 有一种或者几种, 最终组成一个设备专用的蓝牙协议栈;
+	具体看设备的工作模式:
+		* 一对一蓝牙设备(简单)
+		* 星型一对多蓝牙设备(稍微复杂一点)
+		* 蓝牙ap 局域网(网状结构, 与以太网无异)[复杂一点, 需要更多的蓝牙配套协议来支撑]
+
+	最终, 根据以上蓝牙协议list 的组合搭配, 实现带有蓝牙网络功能的设备;
+	ps:
+		低功耗设备(相应率和功率, 通信频率, 导致蓝牙协议不一样),
+		广域蓝牙设备(功率较大, 通信频率较高, 距离较远, 导致蓝牙协议不一样),
+		高清语音视频设备(功率较大, 通信频率较高, 数据量较重, 导致蓝牙协议不一样),
+		...
+		不一样的蓝牙设备, 也会根据不同的产品需求, 来选择不一样的蓝牙协议, 这还是挺复杂的;
+
+
+
+
+
+#
+# 2.蓝牙协议分层结构
+#
+分层结构:
+	协议栈按功能划分为主机控制层、逻辑链路层、服务发现层、传输协议层和应用协议层; 
+
+依赖关系: 
+	RFCOMM/A2DP/AVRCP 依赖L2CAP 提供的基础传输能力;
+	AVDTP/AVCTP 是音视频专用的传输协议;
+	OBEX/PBAP 可实现跨传输层的对象交换;
+
+应用场景: 
+	音频场景: A2DP + AVRCP + AVDTP
+	数据传输: SPP + RFCOMM
+	设备控制: HFP + PBAP
+
+
+
+
+
+#
+# 3..蓝牙协议的实现
+#
+* bluetooth_stack:
+	国产蓝牙协议栈(开源个人项目), 支持STM, ESP... 等等嵌入式单片机, 
+	bluetooth_stack 支持的蓝牙协议有: HCI,L2CAP,SDP,RFCOMM,HFP,SPP,A2DP,AVRCP,AVDTP,AVCTP,OBEX,PBAP等协议;
+
+* bluez:
+	linux/android 最出名的全功能蓝牙协议栈, 一般跑在SoC 芯片上面, 支持全部蓝牙协议, 功能强大, 配套软件很多;
+
+* bluemagic:
+	商用蓝牙协议栈, 支持全部蓝牙协议, 功能强大, 闭源收费;
+
+
+
+
+
