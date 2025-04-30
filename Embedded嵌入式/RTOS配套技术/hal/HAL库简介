@@ -1,0 +1,27 @@
+hal:
+	STM 芯片的hal 库
+	nxp 芯片的hal 库
+	renesas 日本瑞萨芯片的hal 库
+
+	arm 官网有:
+		keil 套件工具链
+
+	risc-v 官网有:
+		* 未知 *
+
+
+
+	ps:
+		这些芯片都是arm/risc-v 架构的, 但hal 库基本上是二级芯片厂商编写的, arm 厂主要维护gcc,glibc,clang,llvm,qemu,gdb 一般不维护hal 库;
+		hal 涉及到io 口定义, 哪个io 口连接电源, 哪个io 口控制gpio, 是由二级芯片厂商负责设计的;
+		arm 母公司只管arm 架构的指令集, 还有arm 架构规模, 缓存系统等而已, 因此有:
+			* gcc,glibc,clang,llvm,qemu,gdb 这些软件是arm 公司负责维护的!!
+			+ hal 是由二级芯片厂商负责维护的!!
+
+		但arm 公司也收购了一个公司, 叫keil, 专门做hal 库的开发, 具体参考: ./keil套件与STM32CubeMX的区别;
+		因此, 做MCU 的hal 层的公司还真是挺多的(而且各不相同)!!
+		我估计:
+			* 二级IC 芯片厂商, 会先参考keil, 做arm 公版的bsp, 然后再做自己的二级IC 硬件的bsp;
+			* arm 芯片设计商, 则利用keil 输出自己的bsp, 完成对arm 芯片硬件的bsp 维护工作;
+		注意!! bsp 也分arm 公版bsp +  二级芯片厂商的bsp;
+		(一般推荐直接用芯片商的hal 即可, 可以快速覆盖arm 公版的bsp + 二级IC 硬件的bsp)

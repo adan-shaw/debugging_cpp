@@ -1,0 +1,55 @@
+#
+# 1.‌Keil 套件简介
+#
+‌Keil 公司于2005年被ARM公司收购‌, 成为其全资子公司, 目前主要作为ARM旗下微控制器(MCU)开发工具的品牌运营; 
+当前产品与市场定位‌:
+	Keil 的核心产品包括Keil C51(8051单片机开发工具)和MDK-ARM(基于μVision 界面的ARM 微控制器开发套件); 
+	Keil 套件的工具链, 涵盖编译器、调试器、实时操作系统等, 用户覆盖超过10万名微控制器开发人员; 
+
+
+
+
+
+#
+# 2.Keil 套件 vs STM32-CubeMX 套件
+#
+Keil 套件本质上, 是一个类似STM32-CubeMX, 但更底层, 更专一的芯片工具套件;
+但Keil 套件只负责arm 的MCU 微芯片的软件方案, 主要涉及arm-M, arm-R, 不会涉及arm-A(不涉及SoC 芯片);
+
+而STM32-CubeMX 工具主要面向stm32 的芯片, 不一定是arm, 也有可能是risc-v, 
+所以STM32-CubeMX 面向的芯片架构, 不只是arm(虽然大部分是arm), 
+但STM32-CubeMX 也可能有arm/risc-v/mips;
+
+从封装层面来看:
+	Keil 套件更在乎arm 芯片的公版bsp 设计, 对这部分硬件进行bsp 技术支撑;
+	STM32-CubeMX 套件更在乎stm 公司进行的二次封装那部分硬件的bsp 设计, 对这部分硬件进行bsp 技术支撑;
+
+
+
+
+
+#
+# 3.STM32-CubeMX 的HAL 库 vs Keil MDK
+#
+STM32-CubeMX 的HAL 库, 包含:
+	arm 公版硬件的bsp, 
+	stm 芯片二次封装硬件的bsp,
+	bootloader,
+	MCU 常见的算法库(根据具体的stm 芯片来进行优化),
+	...
+
+Keil MDK, 包含:
+	arm 公版硬件的bsp,
+	bootloader,
+	MCU 常见的算法库(根据具体的arm 芯片来进行优化),
+	...
+
+	因此, 做MCU 的hal 层的公司还真是挺多的(而且各不相同)!!
+	我估计:
+		* 二级IC 芯片厂商, 会先参考keil, 做arm 公版的bsp, 然后再做自己的二级IC 硬件的bsp;
+		* arm 芯片设计商, 则利用keil 输出自己的bsp, 完成对arm 芯片硬件的bsp 维护工作;
+	注意!! bsp 也分arm 公版bsp +  二级芯片厂商的bsp;
+	(一般推荐直接用芯片商的hal 即可, 可以快速覆盖arm 公版的bsp + 二级IC 硬件的bsp)
+
+
+
