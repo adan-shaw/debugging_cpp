@@ -114,7 +114,7 @@ void fputs_test(void){
 		return;
 	}
 
-	snprintf(buf,64,"%s%d%s\n","fuck",999,"you");
+	snprintf(buf,64,"%s%d%s\n","love",999,"you");
 
 	tmp = fputs(buf,pfs);
 	if(tmp == EOF || ferror(pfs)){

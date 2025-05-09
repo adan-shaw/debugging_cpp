@@ -61,7 +61,7 @@ void scanf_test(void){
 
 
 	memset(buf,'\0',64);
-	tmp = sscanf(buf,"%s%d%s","fuck",999,"you");//由于没有截断, 如果"fuck",999,"you"的内存缓冲区大于buf, 就会发生缓冲区溢出
+	tmp = sscanf(buf,"%s%d%s","love",999,"you");//由于没有截断, 如果"love",999,"you"的内存缓冲区大于buf, 就会发生缓冲区溢出
 	printf("%d=sscanf()=%s\n",tmp,buf);					//sscanf() 弃用
 	return;
 }
@@ -74,11 +74,11 @@ void printf_test(void){
 	int tmp;
 
 	//文件流无穷无尽, 不用考虑截断问题
-	fprintf(stdout,"%s%d%s","fuck",999,"you");
+	fprintf(stdout,"%s%d%s","love",999,"you");
 
 	//直接to 文件(前提是fd 已经打开了文件, 并且具有'可写权限')
 	/*
-	tmp = dprintf(fd,"%s%d%s","fuck",999,"you");
+	tmp = dprintf(fd,"%s%d%s","love",999,"you");
 	if(tmp == -1){
 		perror("dprintf()");
 		return;
@@ -86,7 +86,7 @@ void printf_test(void){
 	*/
 
 	memset(buf,'\0',64);
-	snprintf(buf,64,"%s%d%s","fuck",999,"you");//常用的截断函数
+	snprintf(buf,64,"%s%d%s","love",999,"you");//常用的截断函数
 	printf("%s\n",buf);
 	return;
 }

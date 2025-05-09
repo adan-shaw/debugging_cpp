@@ -161,7 +161,7 @@ void fio_basic_tmpfile(void){
 
 
 int main(void){
-	fprintf(stderr,"%s","fucking hell");
+	fprintf(stderr,"%s","loveing hell");
 	fio_basic();
 	fio_basic_tmpfile_FILE();
 	fio_basic_tmpfile();
