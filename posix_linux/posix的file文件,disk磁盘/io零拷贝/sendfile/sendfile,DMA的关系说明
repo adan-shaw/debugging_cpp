@@ -1,0 +1,26 @@
+sendfile() API, 是命令'内核网卡驱动'直接从DMA读取文件内容, 
+然后内核态转移到'socket 内核发送缓冲区', 
+然后由网卡直接发送的API, 属于linux 内核态操作的API;
+
+
+
+跟sendfile() 类似的还有mmap() 映射, 也是从disk 直接到RAM 内存;
+sendfile() 是直接disk 到socket 内核内存缓冲区, 也类似mmap();
+
+sendfile() / mmap(), 都属于DMA: 现代的存储器访问优化硬件方案DMA;
+(现在SSD 读取速度超级快, 所以sendfile() 性能更好了, 速度更快)
+
+
+
+sendfile()的工作原理:
+	1.系统调用sendfile()通过DMA把硬盘数据拷贝到kernel buffer,
+		然后数据被kernel 直接拷贝到另外一个与socket 相关的kernel buffer.
+		这里没有'用户态和核心态'之间的切换, 都是内核态内存拷贝, 只拷贝一次,
+		在内核中直接完成了从一个buffer到另一个buffer的拷贝.
+
+	2.DMA 把数据从kernel buffer 直接拷贝给协议栈之后,
+		直接执行发送, 具体拷贝多少data, 由socket 算法和socket 发送buf 决定, 
+		因此: 
+			http server 其实可以适当增大发送buf, 以增强网络性能!!
+			接收缓冲区, 倒是可以设置为默认, 甚至更小(默认即可);
+			普通http server 都是资源下发机器, 发送buf 适当增大2-4 倍, 性能最好!!

@@ -7,9 +7,7 @@
 
 
 
-//需要root 权限, 需要保证source 文件夹存在, target 文件夹存在;
-
-//参考网文, 有需要再整理
+//需要root 权限, 需要保证source 文件夹存在, target 文件夹存在(参考网文, 有需要再深度整理, 这个只是easy demo)
 
 int main(void){
 	unsigned long flags = MS_REMOUNT;

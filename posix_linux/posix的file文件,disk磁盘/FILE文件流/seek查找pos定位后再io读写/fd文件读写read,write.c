@@ -1,5 +1,5 @@
 //编译:
-//		gcc -o x ./fd_read_write.c -g3
+//		gcc -g3 ./fd文件读写read,write.c -o x 
 
 
 /*
@@ -117,3 +117,6 @@ int main(void){
 	close(fd);
 	return 0;
 }
+
+
+

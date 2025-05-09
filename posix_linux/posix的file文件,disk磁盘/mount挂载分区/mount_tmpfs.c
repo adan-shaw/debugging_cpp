@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./mount_tmpfs.c -g3 -o x 
+//		gcc -g3 ./mount_tmpfs.c -o x 
 
 
 #include <stdio.h>

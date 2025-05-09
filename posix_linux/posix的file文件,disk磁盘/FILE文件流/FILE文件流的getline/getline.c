@@ -55,8 +55,7 @@ int main(void){
 //getline() 函数分析(getline()没有fgets()好用):
 /*
 	1.getline()类似于fgets(), 只识别LF, 不会去除LF,
-		遇到'\0'是不会识别的, 以'\n'为行结束标志;
-		不同的是: 
+		遇到'\0'是不会识别的, 以'\n'为行结束标志, 不同的是: 
 			getline() 可以自动分配读取缓冲区的内存;
 
 		函数原型如下:
@@ -79,8 +78,8 @@ int main(void){
 		如果*lineptr是NULL的话, getline函数会自动进行动态内存的分配(忽略*n的大小), 
 		所以使用这个函数非常注意的就使用要注意自己进行内存的释放.
 
-		如果*lineptr分配了内存, 
-		但在使用过程中发现所分配的内存不足的话, getline函数会调用realloc函数来重新进行内存的分配, 同时更新*lineptr和*n
+		如果*lineptr分配了内存, 但在使用过程中发现所分配的内存不足的话, 
+		getline函数会调用realloc函数来重新进行内存的分配, 同时更新*lineptr和*n
 
 
 	2.getline()与fgets的不同
@@ -93,18 +92,19 @@ int main(void){
 		打开一个5M的文本, fgets()200ms, getline() 1000ms, fgets()性能更优!!
 
 
-	4.编译器区分的差异:
-		getline() 是c++ 全局函数.
-		在标准c语言中, getline()函数是不存在的.
-		在gcc编译器中, 对标准c库进行了扩展, 加入了一个getline()函数.
+	4.getline() 在不同编译器中的差异:
+		g++:
+			getline() 是c++ 全局函数.
+		gcc:
+			在标准c语言中, getline()函数是不存在的.
+			在gcc编译器中, 对标准c库进行了扩展, 加入了一个getline()函数.
 
 		C++中读取一行的getline()函数是不读入换行符的(不读入换行符,即遇到换行即当成一串字符串),
 		而C语言中GCC编译器扩展的getline()函数和fgets()都是是读入换行符的.
 
 
-	5.readline() 为什么没有对称的putline(), 写入操作的时候怎么办?
-		c 语言FILE流text数据-序列化写入, 为什么fputs() 就足够了?
-		写入fputs() 就足够了? why??
+	5.readline() 为什么没有对称的putline(), 写入一行的操作, 怎么实现[用fputs() 就足够了]?
+		c 语言FILE流text数据-序列化写入, 为什么用fputs() 就足够了? why??
 
 		因为每次写入数据, 程序员一般都自己封装好格式, 再写入, 
 		所以一般写入数据, '文件数据存放格式'都有序;

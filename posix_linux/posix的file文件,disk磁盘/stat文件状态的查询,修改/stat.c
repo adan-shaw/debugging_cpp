@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./stat.c -g3 -o x 
+//		gcc -g3 ./stat.c -o x 
 
 /*
 	文件状态结构体:

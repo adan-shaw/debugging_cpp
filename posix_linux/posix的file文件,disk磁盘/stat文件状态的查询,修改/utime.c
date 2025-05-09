@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./utime.c -g3 -o x 
+//		gcc -g3 ./utime.c -o x 
 
 
 

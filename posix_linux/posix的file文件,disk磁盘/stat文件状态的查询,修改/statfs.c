@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./statfs.c -g3 -o x 
+//		gcc -g3 ./statfs.c -o x 
 
 
 
@@ -70,3 +70,6 @@ int main(void){
 	statvfs_test(FILEPATH);
 	return 0;
 }
+
+
+

@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./FILE\:seek\&io.c -g3 -o x 
+//		gcc -g3 ./FILE文件流seek+io读写.c -o x 
 
 
 //游标

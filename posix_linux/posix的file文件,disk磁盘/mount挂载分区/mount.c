@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./mount.c -g3 -o x 
+//		gcc -g3 ./mount.c -o x 
 
 
 #include <stdio.h>
@@ -18,9 +18,9 @@
 	MS_NODIRATIME   don't update atime on directories
 	MS_NOEXEC       don't allow executables
 	MS_NOSUID       disable set-user/group-ID programs
-	MS_RDONLY       read-only mount                        只读挂载
+	MS_RDONLY       read-only mount   //只读挂载
 	MS_REC          recursive mount
-	MS_REMOUNT      remount                                重新挂载
+	MS_REMOUNT      remount           //重新挂载
 	MS_SYNCHRONOUS  make writes synchronous
 */
 
@@ -36,7 +36,7 @@
 		nodev			cpuset
 		nodev			cgroup
 		nodev			cgroup2
-		nodev			tmpfs						//tmpfs 经常用
+		nodev			tmpfs                 //tmpfs 经常用
 		nodev			devtmpfs
 		nodev			debugfs
 		nodev			tracefs

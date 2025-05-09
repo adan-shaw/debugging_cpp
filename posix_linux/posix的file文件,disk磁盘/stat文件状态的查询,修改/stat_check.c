@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./stat_check.c -o x 
+//		gcc -g3 ./stat_check.c -o x 
 
 
 
@@ -42,10 +42,10 @@ bool stat_check(char* pfile_name, int* filesize){
 		printf("  st_ino: %lx\n", (u_long)m_stat.st_ino);
 
 		//memset(tmpbuf,'\0',sizeof(tmpbuf));
-		ctime_r(&m_stat.st_mtime, tmpbuf);//打印-最近修改时间
+		ctime_r(&m_stat.st_mtime, tmpbuf);	//打印-最近修改时间
 		printf("  Time modified 最近修改时间: %s\n", tmpbuf);
 
-		*filesize = m_stat.st_size;			//获取值文件大小
+		*filesize = m_stat.st_size;					//获取值文件大小
 		return true;
 	}
 

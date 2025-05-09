@@ -1,5 +1,5 @@
 //编译:
-//		gcc ./access.c -g3 -o x
+//		gcc -g3 ./access.c -o x
 
 #include <stdio.h>
 #include <unistd.h>

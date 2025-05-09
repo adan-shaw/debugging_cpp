@@ -1,5 +1,5 @@
 //编译:
-//		g++ ./fd\:app_data\&binary_data.cpp -g3 -o x 
+//		g++ ./binary_data二进制的文件读写存放app_data.cpp -g3 -o x 
 
 
 //file 存放应用数据:
