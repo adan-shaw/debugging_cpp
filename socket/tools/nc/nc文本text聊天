@@ -1,0 +1,58 @@
+#
+# 1.带前缀提示的建议聊天
+#
+Server 端(TCP):
+	mawk -W interactive '$0="Server: "$0' | nc -l 9999
+
+Client 端(TCP):
+	mawk -W interactive '$0="Client: "$0' | nc localhost 9999
+
+优势:
+	消息收发带前缀, 比较好看, 真的时候聊天, 但不适合数据拷贝!!(无加密)
+
+
+
+Server 端(TCP):
+	mawk -W interactive '$0="Server: "$0' | nc -l 9999 --ssl
+
+Client 端(TCP):
+	mawk -W interactive '$0="Client: "$0' | nc localhost 9999 --ssl
+
+优势:
+	消息收发带前缀, 比较好看, 真的时候聊天, 但不适合数据拷贝!!(无加密)
+
+
+
+
+
+#
+# 2.无前缀提示的建议聊天
+#
+Server 端(TCP):
+	nc -l -p 9999
+
+Client 端(TCP):
+	nc 127.0.0.1 9999
+
+优势:
+	消息收发无前缀, 适合数据拷贝, 用来和手机互传text 数据!!(无加密)
+
+
+
+Server 端(TCP-加密):
+	nc -l -p 9999 --ssl
+
+Client 端(TCP-加密):
+	nc 127.0.0.1 9999 --ssl
+
+优势:
+	消息收发无前缀, 适合数据拷贝, 用来和手机互传text 数据!!(加密)
+
+
+
+
+
+注意:
+	聊天的数据如果不加密的, 而且容易被对方截取, 窃听, 尽量要加密!!
+	可以使用ncat 升级版, 支持ssl 加密通信:
+		apt-get install ncat
