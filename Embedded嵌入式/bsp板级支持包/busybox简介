@@ -1,0 +1,28 @@
+busybox 简介:
+	busybox 就是一套跨平台的shell 命令集合, 大概有300 个常用的shell 命令exe 工具, 而且信息安全保护能力较强!!
+	使用busybox 之后, linux 系统的/bin 目录, 实际只有两个程序:
+		* bash
+		* busybox
+	所有的命令(300 多个linux 系统基础命令), 都通过busybox 获取, 也方便做权限管理!!
+	其它的命令如: 
+		+ ls
+		+ echo
+		+ ip
+		...
+	全部变成link 软链接, 直接链接到busybox 中, 
+	这时候, busy 根据argc, argv 参数, 通过获取用户输入的path, 返回出busybox 内部对应的程序, 再执行!!
+	这样设计的话, 信息安全也非常容易得到保证!!
+
+	busybox 可以用来做一个最小化linux 的底软支撑, 意义重大, 
+	但busybox 也很简单, 不只要交叉编译工具链弄好之后, 直接编译就能得出busybox, 基本上难度不大!!(lfs)
+	如果你使用buildroot 来定制Linux, 那么busybox 是集成到buildroot 中的, 更方便了!!
+
+	因此, 可以直接用buildroot 解决一切问题, 不用搞这么复杂, 
+	使用busybox (lfs 方式), 则还需要自己重建:
+		* 交叉编译工具链
+		* bootloader 引导系统
+		...
+
+	所以目前基本不用lfs 的方式来定制linux 了,
+	而使用buildroot 的话, 由于buildroot 已经内部集成了busybox, 也就不需要特殊处理了, 
+	对于buildroot 来说, busybox 只是其中的一个关键系统底软而已, 全部工作交给buildroot 即可;

@@ -58,6 +58,8 @@ bsp具有以下两个特点:
 # 2.bsp 的开发实践
 #
 不同的os系统的bsp 工具链, 是完全不一样的, 用到的:
+	芯片初始化HAL 层的工具,
+	通用bootloader 的实现方案,
 	编译工具链, 
 	系统内核,
 	系统底软, 
@@ -72,13 +74,17 @@ bsp具有以下两个特点:
 
 (一阶)
 bsp 开发, 主要包含下面的任务量:
-	* 设备自检系统 + os镜像引导系统(bios/syslinux/grub/uboot);
 	* os 编译工具链组建, 调试(gcc+glibc+kernel+make工具);
 	* os 内核芯片适配, 内核模块剪裁, 内核实体编译(内核移植);
+	* HAL 层初始化, 芯片初始化;
+	* 通用bootloader 系统启动, 如: bios/syslinux/grub/uboot;
+	* 利用通用bootloader, 进行设备自检系统 + os镜像引导系统;
+	* os 关键底软初始化, 即init 守护进程和kernel 关键参数, 如果是android, 还有android-framework 层初始化(特有);
+	* qemu 仿真器的仿真启动;
 	...
 	* os 的关键协议栈重建: 
-		disk文件系统(rootfs), 
-		网络协议栈(如: lwip), 
+		rootfs 文件系统(一般用busybox 实现最小系统), 
+		网络协议栈(如: lwip, 常规linux 的tcpip 协议栈), 
 		信息安全库(os 内核的信息安全库差异很大, 不展开), 
 		[进程管理器/内存管理器, 一般属于os 内核的模块, 再小的os 也不会把这部分功能独立出来的]
 		...

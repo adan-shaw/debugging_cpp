@@ -1,17 +1,21 @@
 #
 # 0.前言
 #
-目前bsp 开发, 基本上都是conf 配置好之后, 直接一个project, 编译即出img 镜像, 非常方便, 支持直接编译出img 的project 有:
+目前bsp 开发, 基本上都是一个project 配置好menuconfig 之后, 直接编译即出img 镜像, 非常方便;
+支持直接编译出img 的project 有:
 	* aosp
 	* yocto(linux)
-	* openwrt
+	* openwrt(linux 变种)
 	* buildroot(linux)
-	* rt-thread/luatos
-	* freertos/nuttx (貌似没有引导系统, 需要自己重建引导系统)
+	* rt-thread/luatos (简易bootloader, 深度开发仍需要源码级维护)
+	* freertos/nuttx (默认没有引导系统, 需要源码级维护)
 	...
 	这几个常见的os 都已经囊括了, 包括了大中小操作系统, 包括了实时/分时操作系统;
+	内存占用有MB 级别的, 也有KB 级别的;
+	镜像大小也基本上是MB 级别的, 也有KB 级别的(一般是内存占用的3 倍以上);
 	(由于buildroot/yocto 的出现, linux-bsp 开发的历史遗留问题被解决, 老式lfs 已经被抛弃;
-	 在bsp 过程中, 还需要自己手动修改patch 的情况基本不多了;)
+	 在bsp 过程中, 还需要自己手动修改patch 的情况基本不多了, 也不需要自己手动一个一个包编译, 全是自动化的, 一键出镜像, 
+	 只有出错了才需要看看的报错细节, 这时候才需要把lfs 的部署经验拉出来, 你就能想明白哪里出错了)
 
 '还需要patch 修改源码, 或者增加源码'的bsp 场景, 例如: 
 	我想给Linux os 打入RT实时补丁, 用作车载SoC-OS 的主控OS, 这时候就很有可能会打入RT 实时内核补丁;
