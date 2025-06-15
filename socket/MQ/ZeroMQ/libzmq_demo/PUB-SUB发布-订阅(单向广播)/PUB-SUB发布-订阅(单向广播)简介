@@ -1,0 +1,16 @@
+PUB-SUB发布-订阅(单向广播):
+	libzmq 下的PUB-SUB模式, 消息抢夺, 竞争, 是根据zmq_sock 来决定的,
+	在client1.cpp 文件中, Recv1, Recv2 两条线程, 都在抢同一个zmq_sock, 而且是阻塞死等, 
+	这种抢夺的业务意义何在? 没什么意义, 不用理会;
+
+
+
+总结:
+	libzmq 每次PUB 单向广播, 都会广播给每个connect() 到srv 的zmq_sock;
+	共享zmq_sock 将会产生zmq 消息抢夺, 竞争, 冲突的大麻烦(非常不建议这样做);
+
+
+
+client1.cpp client2.cpp 依赖c++ 的std::pthread, 因此, 必须使用c++ 进行编译;
+$(CC) = gcc
+$(CXX) = g++

@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <string.h>
+#include <zmq.h>
+
 //判断操作系统类型, 非目标平台, 终止编译
 #if defined(_WIN32) || defined(_WIN64)
 	#pragma message("Support Windows")
@@ -10,10 +14,6 @@
 #else
 	#error [ Unknow System Type !! ]
 #endif
-
-#include <stdio.h>
-#include <string.h>
-#include <zmq.h>
 
 int main(void)
 {
